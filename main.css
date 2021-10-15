@@ -1,0 +1,300 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Lato', sans-serif;
+}
+
+nav {
+  width: 100%;
+  display: grid;
+  grid-template: 2fr 1fr / 1fr;
+  justify-items: center;
+  align-items: center;
+}
+
+nav a {
+  color: #000;
+}
+
+.nav-header {
+  width: fit-content;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.list-wrapper {
+  width: 100%;
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr 4fr 1fr;
+}
+
+nav ul {
+  list-style-type: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+nav ul a {
+  margin-left: 1%;
+  margin-right: 1%;
+  padding: 10px 0;
+}
+
+.user a {
+  padding: 10px 0;
+}
+
+.user i {
+  margin-right: 10px;
+  padding: 10px 0;
+}
+
+.user i:last-child {
+  margin-right: 0px;
+}
+
+nav .login-caption {
+  font-weight: 300;
+  transition: color .2s ease;
+}
+
+nav .user:hover .login-caption {
+  color: #60B8FF;
+}
+
+button {
+  background-color: #60B8FF;
+  padding: 10px;
+  width: 100%;
+  margin-bottom: 5%;
+  cursor: pointer;
+  border: 1px solid #000;
+  transition: .2s ease;
+}
+
+button:hover {
+  background-color: #fff;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+main .img {
+  width: 100%;
+  height: 400px;
+  background-image: url("./img/img1.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+main section {
+  margin-top: 10%;
+  margin-bottom: 10%;
+}
+
+main section h1 {
+  font-size: 3em;
+  margin-bottom: 30px;
+}
+
+main section span {
+  font-weight: 300;
+  font-size: 1.2em;
+}
+
+main h2 {
+  font-size: 2em;
+  font-weight: 400;
+  margin-bottom: 30px;
+}
+
+main .cars {
+  display: grid;
+  grid-template: auto / 1fr 1fr 1fr;
+  column-gap: 20px;
+  row-gap: 20px;
+}
+
+main .cars .car {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #000;
+  width: fit-content;
+  overflow: hidden;
+}
+
+main .car .image-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  cursor: pointer;
+}
+
+main .car .img-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0,0,0,.4);
+  z-index: 1;
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+
+main .car .img-overlay:hover {
+  opacity: 1;
+}
+
+main .cars .car>span {
+  margin-top: 5%;
+  margin-bottom: 5%;
+}
+
+main .car-price {
+  margin-top: 5%;
+  margin-bottom: 5%;
+  display: flex;
+  flex-direction: column;
+}
+
+main .car-price span {
+  margin-top: 10px;
+}
+
+main .car-price span:first-child {
+  margin-top: 0;
+}
+
+main .car .car-name {
+  font-weight: 400;
+}
+
+main .car .divider {
+  width: 80%;
+  height: 2px;
+  background: #000;
+}
+
+main .car button {
+  width: 80%;
+  margin-bottom: 5%;
+}
+
+main .contact-wrapper {
+  display: grid;
+  grid-template: 1fr / 1fr 1fr;
+  align-items: center;
+  column-gap: 20px;
+  background-color: aliceblue;
+}
+
+main .contact-wrapper .image-wrapper {
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  position: relative;
+}
+
+main .contact-wrapper img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translateY(-300px);
+}
+
+main .contact-wrapper .contact-text {
+  margin-left: 20px;
+}
+
+footer {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  text-align: center;
+  grid-template: 1fr 1fr / 1fr;
+}
+
+footer .subscription-form {
+  width: 30%;
+  margin-top: 40px;
+  margin-bottom: 30px;
+}
+
+footer .subscription-form h3 {
+  font-size: 1.4em;
+  font-weight: 400;
+}
+
+footer .subscription-form input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  outline: none;
+  margin-top: 10px;
+}
+
+/* footer .subscription-form input:invalid {
+  background: #ffdede;
+  border-color: #ff9d9d;
+} */
+
+footer .subscription-form button {
+  margin-top: 5px;
+}
+
+footer .bottom-content .footer-socials {
+  margin-bottom: 20px;
+}
+
+footer .bottom-content .footer-socials i {
+  margin-right: 10px;
+  font-size: 1.4em;
+  transition: color .2s ease;
+  cursor: pointer;
+}
+
+footer .footer-socials i.fa-facebook:hover {
+  color: #1778F2;
+}
+
+footer .footer-socials i.fa-youtube:hover {
+  color: #FF0000;
+}
+
+footer .footer-socials i.fa-linkedin-in:hover {
+  color: #2867B2;
+}
+
+footer .bottom-content .footer-socials i:last-child {
+  margin-right: 0;
+}
+
+footer .bottom-content .bottom-text {
+  font-weight: 300;
+}
+
+a {
+  color: #60B8FF;
+  text-decoration: none;
+  transition: color .2s ease;
+}
+
+input {
+  border-style: solid;
+}

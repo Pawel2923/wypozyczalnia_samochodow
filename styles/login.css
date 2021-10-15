@@ -1,0 +1,108 @@
+body {
+  height: 100vh;
+  display: grid;
+  align-items: center;
+}
+
+.back {
+  position: fixed;
+  right: 0;
+  top: 0;
+  transform: translate(-100%, 50%);
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+main {
+  display: grid;
+  align-items: center;
+  text-align: unset;
+}
+
+.form-wrapper {
+  width: 100%;
+  display: grid;
+  justify-content: center;
+}
+
+.header-wrapper {
+  text-align: center;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.header-wrapper h1 {
+  font-weight: 400;
+  margin-bottom: 10px;
+  font-size: 40px;
+}
+
+.header-wrapper h3 {
+  font-weight: 300;
+}
+
+form {
+  width: 100%;
+  background-repeat: no-repeat;
+  border-radius: 8px;
+  font-weight: 300;
+}
+
+form input {
+  border: none;
+  border-bottom: 1px solid #000;
+  padding: 2px;
+  font-size: 18px;
+}
+
+form div {
+  margin-top: 10px;
+}
+
+form div:first-child {
+  margin-top: 0;
+}
+
+form div:last-child {
+  margin-top: 0;
+}
+
+form div.password .forgotten-password {
+  color: #000; 
+  display: block; 
+  margin-top: 5px;
+  width: fit-content;
+  transition: color .2s ease;
+}
+
+form div.password .forgotten-password:hover {
+  color: #60B8FF;
+}
+
+form label {
+  display: inline-block;
+  cursor: text;
+  transition: transform .2s ease;
+}
+
+.form-label-transform-start {
+  transform: translate(2px, 18px);
+}
+
+.form-label-transform-end {
+  transform: translate(2px, 18px);
+}
+
+.form-label-transform {
+  cursor: default;
+  transform: translate(2px, -5px);
+}
+
+form input:focus {
+  border-color: #60B8FF;
+  outline: none;
+}
+
+form button {
+  margin-top: 20px;
+}
