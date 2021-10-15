@@ -1,0 +1,27 @@
+body {
+  height: 100vh;
+}
+
+main {
+  display: grid;
+  grid-template: 1fr / 1fr 1fr;
+  align-items: center;
+  height: 100%;
+}
+
+.form-wrapper {
+  width: 100%;
+}
+
+.header-wrapper {
+  text-align: center;
+  width: 100%;
+}
+
+form {
+  width: 60%;
+  background-color: rgb(96, 184, 255);
+  background-repeat: no-repeat;
+  border-radius: 8px;
+  padding: 20px;
+}

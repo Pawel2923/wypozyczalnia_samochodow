@@ -8,16 +8,62 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wypożyczalnia samochodów</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <nav>
-
+        <div class="nav-header">
+            <a href="index.html"><h2>Wypożyczalnia</h2></a>
+        </div>
+        <div class="list-wrapper">
+            <div class="spacer"></div>
+            <ul>
+                <a href="index.html"><li>HOME</li></a>
+                <a href="rezerwacja.html"><li>Rezerwacja online</li></a>
+                <a href="wycena.html"><li>Uzyskaj wycenę</li></a>
+                <a href="pojazdy.html"><li>Nasze pojazdy</li></a>
+                <a href="kontakt.html"><li>Kontakt</li></a>
+            </ul>
+            <div class="user"><a href="login.html"><i class="fas fa-user-circle"></i> <i class="fas fa-chevron-down"></i></a></div>
+        </div>
     </nav>
     <main>
+        <h1>Wypożyczalnia - witamy!</h1>
+        <span>Nowy wymiar wynajmu</span>
+        <div class="img"></div>
+        <section class="info">
+            <h2>Wypożyczalnia samochodów - informacje</h2>
+            <span>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim mollitia, aliquid rem facere quo consequuntur ullam iste voluptatem corporis tempore, consequatur, recusandae beatae! Architecto reprehenderit saepe omnis vero officia ducimus!
+            </span>
+        </section>
+        <section class="cars">
+            <div class="car">
 
+            </div>
+        </section>
+        <section class="contact-with-us"></section>
     </main>
     <footer>
-
+        <section class="subscription-form">
+            <form action="index.php" method="POST">
+                <h3>Formularz subskrypcji</h3>
+                <input type="email" placeholder="Adres e-mail" name="newsletter-mail">
+                <button type="submit">Zapisz się</button>
+            </form>
+        </section>
+        <section>
+            <div class="footer-socials">
+                Fb
+                Yt
+                in
+            </div>
+            <div class="bottom-text">&copy;2021 by Paweł Poremba</div>
+        </section>
     </footer>
 </body>
 </html>
