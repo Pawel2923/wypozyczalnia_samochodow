@@ -289,6 +289,28 @@ footer .bottom-content .bottom-text {
   font-weight: 300;
 }
 
+@media screen and (max-width: 800px) {
+  nav div.list-wrapper {
+    display: none;
+  }
+  main .img {
+    display: none;
+  }
+  main .cars {
+    grid-template: 1fr 1fr 1fr / auto;
+  }
+  main .contact-wrapper {
+    grid-template: 1fr / 1fr;
+    padding: 20px;
+  }
+  main .contact-with-us .image-wrapper {
+    display: none;
+  }
+  footer .subscription-form {
+    width: 60%;
+  }
+}
+
 a {
   color: #60B8FF;
   text-decoration: none;
