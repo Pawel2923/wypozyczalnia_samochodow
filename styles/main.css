@@ -8,7 +8,11 @@ body {
   font-family: 'Lato', sans-serif;
 }
 
-nav {
+nav.mobile-nav {
+  display: none;
+}
+
+nav.desktop-nav {
   width: 100%;
   display: grid;
   grid-template: 2fr 1fr / 1fr;
@@ -16,7 +20,7 @@ nav {
   align-items: center;
 }
 
-nav a {
+nav.desktop-nav a {
   color: #000;
 }
 
@@ -40,7 +44,7 @@ nav ul {
   align-items: center;
 }
 
-nav ul a {
+nav.desktop-nav ul a {
   margin-left: 1%;
   margin-right: 1%;
   padding: 10px 0;
@@ -95,7 +99,7 @@ main {
 main .img {
   width: 100%;
   height: 400px;
-  background-image: url("./img/img1.png");
+  background-image: url("../img/img1.png");
   background-repeat: no-repeat;
   background-position: center;
   background-attachment: fixed;
@@ -196,6 +200,10 @@ main .car button {
   margin-bottom: 5%;
 }
 
+main .contact-with-us {
+  width: 100%;
+}
+
 main .contact-wrapper {
   display: grid;
   grid-template: 1fr / 1fr 1fr;
@@ -209,17 +217,25 @@ main .contact-wrapper .image-wrapper {
   height: 400px;
   overflow: hidden;
   position: relative;
-}
-
-main .contact-wrapper img {
-  position: absolute;
-  left: 0;
-  top: 0;
-  transform: translateY(-300px);
+  background: url("../img/img2.png");
+  background-size: cover;
+  background-position: center;
 }
 
 main .contact-wrapper .contact-text {
   margin-left: 20px;
+}
+
+main .contact-wrapper .contact-text ul {
+  list-style-type: none;
+}
+
+main .contact-text ul li {
+  margin-bottom: 10px;
+}
+
+main .contact-text ul li:last-child {
+  margin-bottom: 0;
 }
 
 footer {
@@ -249,10 +265,14 @@ footer .subscription-form input {
   margin-top: 10px;
 }
 
-/* footer .subscription-form input:invalid {
+.subscription-input-invalid {
   background: #ffdede;
   border-color: #ff9d9d;
-} */
+}
+
+.subscription-input-invalid2 {
+  border-color: #ff9d9d;
+}
 
 footer .subscription-form button {
   margin-top: 5px;
@@ -290,8 +310,101 @@ footer .bottom-content .bottom-text {
 }
 
 @media screen and (max-width: 800px) {
-  nav div.list-wrapper {
+  nav.mobile-nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: rgba(255,255,255,.95);
+    width: 100%;
+    height: 50px;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    left: 0;
+    z-index: 2;
+  }
+  nav.mobile-nav a {
+    color: #000;
+  }
+  nav.mobile-nav .open {
+    width: fit-content;
+    height: fit-content;
+    align-self: end;
+    margin-right: 20px;
+    font-size: 1.8em;
+  }
+  nav.mobile-nav .nav-wrapper {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    transform: translateX(100%);
+    transition: transform .2s ease;
+    top: 0;
+    left: 0;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-weight: 300;
+    font-size: 1.3em;
+    z-index: 3;
+  }
+  nav.mobile-nav .top-content {
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    grid-template: 1fr / 1fr 1fr 1fr;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  nav.mobile-nav .close {
+    margin-top: 10px;
+    margin-right: 20px;
+    justify-self: end;
+    font-size: 1.8em;
+    top: 0;
+    right: 0;
+    order: 1;
+  }
+  @media screen and (max-width: 400px) {
+    nav.mobile-nav .login-caption {
+      display: none;
+    }
+    nav.mobile-nav i.fa-user-circle {
+      margin: 0;
+      font-size: 1.5em;
+    }
+  }
+  nav.mobile-nav .user {
+    margin-top: 15px;
+  }
+  nav.mobile-nav .list-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  nav.mobile-nav .list-wrapper ul {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+  }
+  nav.mobile-nav .list-wrapper a {
+    margin-top: 10px;
+  }
+  nav.mobile-nav .list-wrapper a:first-child {
+    margin-top: 0;
+  }
+  nav.desktop-nav {
+    grid-template-rows: 1fr;
+  }
+  nav.desktop-nav div.list-wrapper {
     display: none;
+  }
+  main .main-header h1 {
+    font-size: 2.5em;
+  }
+  main h2 {
+    font-size: 1.5em;
   }
   main .img {
     display: none;
@@ -303,8 +416,17 @@ footer .bottom-content .bottom-text {
     grid-template: 1fr / 1fr;
     padding: 20px;
   }
+  @media screen and (max-width: 400px) {
+    main .contact-wrapper {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
   main .contact-with-us .image-wrapper {
     display: none;
+  }
+  main .contact-wrapper .contact-text {
+    margin-left: 0;
   }
   footer .subscription-form {
     width: 60%;

@@ -1,0 +1,49 @@
+.page-wrapper {
+    display: grid;
+    grid-template: 1fr / auto 1fr;
+    column-gap: 20px;
+}
+
+.content {
+    margin-top: 20px;
+    margin-right: 20px;
+}
+
+nav.desktop-panel {
+    padding: 20px;
+    width: fit-content;
+    height: 100vh;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    left: 0;
+    background-color: #33393d;
+    color: white;
+    font-size: 1.2em;
+}
+
+nav.desktop-panel .list-wrapper {
+    display: flex;
+}
+
+nav.desktop-panel .list-wrapper ul {
+    display: flex;
+    flex-direction: column;
+    align-items: unset;
+}
+
+nav .list-wrapper ul li {
+    margin-top: 10px;
+}
+
+nav .list-wrapper ul li:first-child {
+    margin-top: 0;
+}
+
+nav.mobile-panel {
+    display: none;
+}
+
+footer {
+    grid-template: 1fr / 1fr;
+}
