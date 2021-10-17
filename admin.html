@@ -20,10 +20,10 @@
         <nav class="desktop-panel">
             <div class="list-wrapper">
                 <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a class="veh-link">Pojazdy</a></li>
-                    <li><a class="users-link">Użytkownicy</a></li>
-                    <li><a class="settings-link">Ustawienia</a></li>
+                    <a href="index.html"><li>Home</li></a>
+                    <a class="veh-link"><li>Pojazdy</li></a>
+                    <a class="users-link"><li>Użytkownicy</li></a>
+                    <a class="settings-link"><li>Ustawienia</li></a>
                 </ul>
             </div>
             <div class="back"><i class="fas fa-angle-double-left"></i> <a href="index.html">Powrót</a></div>
@@ -155,6 +155,7 @@
 
                 if (open != close) {
                     document.querySelector('body').style.overflow = "hidden";
+
                     settings[close].classList.remove('visible-settings');
                     setTimeout(() => {
                         settings[close].style.display = "none";

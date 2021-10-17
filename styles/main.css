@@ -44,7 +44,7 @@ nav ul {
   align-items: center;
 }
 
-nav.desktop-nav ul li {
+nav.desktop-nav ul a {
   margin-left: 1%;
   margin-right: 1%;
   padding: 10px 0;
@@ -236,10 +236,10 @@ footer .bottom-content .bottom-text {
     display: flex;
     flex-direction: column;
   }
-  nav.mobile-nav .list-wrapper li {
+  nav.mobile-nav .list-wrapper a {
     margin-top: 10px;
   }
-  nav.mobile-nav .list-wrapper li:first-child {
+  nav.mobile-nav .list-wrapper a:first-child {
     margin-top: 0;
   }
   nav.desktop-nav {

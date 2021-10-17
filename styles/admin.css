@@ -43,15 +43,15 @@ nav.desktop-panel .list-wrapper ul {
     align-items: unset;
 }
 
-nav.desktop-panel ul li:hover a {
+nav.desktop-panel ul a:hover {
     color: #60B8FF;
 }
 
-nav .list-wrapper ul li {
+nav .list-wrapper ul a {
     margin-top: 10px;
 }
 
-nav .list-wrapper ul li:first-child {
+nav .list-wrapper ul a:first-child {
     margin-top: 0;
 }
 
@@ -83,16 +83,17 @@ nav.mobile-panel {
 }
 
 .all-settings>div {
-    transition: opacity .2s ease, transform .2s ease;
-    transform: translateX(-100%);
-    opacity: 0;
     visibility: hidden;
+    opacity: 0;
+    transform: translateX(-100%);
+    animation-timing-function: ease;
+    animation-duration: .2s;
+    animation-name: none;
+    animation-fill-mode: both;
 }
 
 .all-settings>.visible-settings {
-    visibility: visible;
-    transform: translateX(0);
-    opacity: 1;
+    animation-name: settingsAnim;
 }
 
 main button {
@@ -120,4 +121,17 @@ footer {
     grid-template: 1fr / 1fr;
     margin-top: 40px;
     align-self: end;
+}
+
+@keyframes settingsAnim {
+    0% {
+        visibility: hidden;
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    100% {
+        visibility: visible;
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
