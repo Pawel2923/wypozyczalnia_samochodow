@@ -49,37 +49,7 @@
         document.querySelector('.back').addEventListener('click', () => {
             window.location = './index.html';
         });
-
-        movePlaceholder = (name) => {
-            if (document.querySelector(`input[name="${name}"`).value.length == 0)
-                document.querySelector(`.${name} label`).classList.add('form-label-transform-start');
-            else 
-                document.querySelector(`.${name} label`).classList.remove('form-label-transform-start');  
-
-            document.querySelector(`form input[name="${name}"]`).addEventListener('focus',() => {
-                document.querySelector(`.${name} label`).classList.add('form-label-transform');
-            });
-            document.querySelector(`form input[name="${name}"]`).addEventListener('focusout',() => {
-                if (document.querySelector(`input[name="${name}"`).value == 0) {
-                    document.querySelector(`.${name} label`).classList.remove('form-label-transform');
-                    document.querySelector(`.${name} label`).classList.add('form-label-transform-end');
-                }
-            });
-        };
-
-        movePlaceholder('login');
-        movePlaceholder('password');
-
-        checkInput = (name) => {
-            name.addEventListener('invalid', () => {
-                name.classList.add('subscription-input-invalid2');
-            });
-            name.addEventListener('keyup', () => {
-                name.classList.remove('subscription-input-invalid2');
-            });
-        };
-        checkInput(document.querySelector('form input[name="login"]'));
-        checkInput(document.querySelector('form input[name="password"]'));
     </script>
+    <script src="loginHandler.js"></script>
 </body>
 </html>

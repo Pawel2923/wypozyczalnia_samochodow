@@ -21,37 +21,110 @@
             <div class="list-wrapper">
                 <ul>
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="vehicles.html">Pojazdy</a></li>
-                    <li><a href="users.html">Użytkownicy</a></li>
-                    <li><a href="settings.html">Ustawienia</a></li>
+                    <li><a class="veh-link">Pojazdy</a></li>
+                    <li><a class="users-link">Użytkownicy</a></li>
+                    <li><a class="settings-link">Ustawienia</a></li>
                 </ul>
             </div>
             <div class="back"><i class="fas fa-angle-double-left"></i> <a href="index.html">Powrót</a></div>
         </nav>
         <nav class="mobile-panel"></nav>
         <div class="content">
-            <header>
-                <h1>Panel administracyjny</h1>
-                <h2>Pojazdy</h2>
-            </header>
-            <main>
-                <button class="option-button add-veh">
-                    <h3>Dodawanie nowych pojazdów</h3>
-                    <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                </button>
-                <button class="option-button veh-list">
-                    <h3>Lista pojazdów</h3>
-                    <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                </button>
-                <button class="option-button veh-list">
-                    <h3>Rezerwacja pojazdów</h3>
-                    <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                </button>
-                <button class="option-button del-veh">
-                    <h3>Usuwanie pojazdów</h3>
-                    <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                </button>
-            </main>
+            <div class="all-settings">
+                <header>
+                    <h1>Panel administracyjny</h1>
+                </header>
+                <div class="vehicles">
+                    <header>
+                        <h2>Pojazdy</h2>
+                    </header>
+                    <main>
+                        <button class="option-button add-veh">
+                            <h3>Dodawanie nowych pojazdów</h3>
+                            <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                        </button>
+                        <button class="option-button veh-list">
+                            <h3>Lista pojazdów</h3>
+                            <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                        </button>
+                        <button class="option-button veh-list">
+                            <h3>Rezerwacja pojazdów</h3>
+                            <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                        </button>
+                        <button class="option-button del-veh">
+                            <h3>Usuwanie pojazdów</h3>
+                            <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                        </button>
+                    </main>
+                </div>
+                <div class="users">
+                    <header>
+                        <h2>Użytkownicy</h2>
+                    </header>
+                    <main>
+                        <button class="option-button user-stats">
+                            <h3>Statystyki użytkowników</h3>
+                            <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                        </button>
+                        <h3 style="margin-bottom: 10px;">Lista użytkowników</h3>
+                        <table>
+                            <tr>
+                                <th>ID</th>
+                                <th>Login</th>
+                                <th>Rezerwowane pojazdy</th>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>user1</td>
+                                <td>Nazwa pojazdu</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>user2</td>
+                                <td>Nazwa pojazdu</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>user3</td>
+                                <td>Nazwa pojazdu</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>user4</td>
+                                <td>Nazwa pojazdu</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>user5</td>
+                                <td>Nazwa pojazdu</td>
+                            </tr>
+                        </table>
+                    </main>
+                </div>
+                <div class="settings">
+                    <header>
+                        <h2>Ustawienia</h2>
+                    </header>
+                    <main>
+                        <button class="option-button add-veh">
+                            <h3>Dodawanie nowych pojazdów</h3>
+                            <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                        </button>
+                        <button class="option-button veh-list">
+                            <h3>Lista pojazdów</h3>
+                            <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                        </button>
+                        <button class="option-button veh-list">
+                            <h3>Rezerwacja pojazdów</h3>
+                            <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                        </button>
+                        <button class="option-button del-veh">
+                            <h3>Usuwanie pojazdów</h3>
+                            <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                        </button>
+                    </main>
+                </div>
+            </div>
             <footer>
                 <section class="bottom-content">
                     <div class="footer-socials">
@@ -64,5 +137,47 @@
             </footer>
         </div>
     </div>
+    <script>
+        const settings = document.querySelectorAll('.all-settings>div');
+        for (let i=0; i<settings.length;i++) {
+            settings[i].style.display = "none";
+        }
+        settings[0].classList.add('visible-settings');
+        settings[0].style.display = "block";
+
+        const changeSettings = (open) => {
+            if (open != null) {
+                let close = 0;
+                for (let i=0; i<settings.length; i++) {
+                    if (settings[i].className.indexOf('visible-settings') > -1)
+                        close = i;
+                }
+
+                if (open != close) {
+                    document.querySelector('body').style.overflow = "hidden";
+                    settings[close].classList.remove('visible-settings');
+                    setTimeout(() => {
+                        settings[close].style.display = "none";
+                    }, 200);
+                    
+                    settings[open].style.display = "block";
+                    setTimeout(() => {
+                        settings[open].classList.add('visible-settings');
+                        document.querySelector('body').style.overflow = "initial";
+                    }, 200);
+                }
+            }
+        };
+
+        document.querySelector('nav.desktop-panel .veh-link').addEventListener('click', () => {
+            changeSettings(0);
+        });
+        document.querySelector('nav.desktop-panel .users-link').addEventListener('click', () => {
+            changeSettings(1);
+        });
+        document.querySelector('nav.desktop-panel .settings-link').addEventListener('click', () => {
+            changeSettings(2);
+        });
+    </script>
 </body>
 </html>

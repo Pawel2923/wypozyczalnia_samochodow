@@ -49,61 +49,12 @@
             </form>
         </div>
     </main>
+    <script src="loginHandler.js"></script>
     <script>
         document.querySelector('.back').addEventListener('click', () => {
             window.location = './index.html';
         });
-
-        movePlaceholder = (name) => {
-            if (document.querySelector(`input[name="${name}"`).value.length == 0)
-                document.querySelector(`.${name} label`).classList.add('form-label-transform-start');
-            else 
-                document.querySelector(`.${name} label`).classList.remove('form-label-transform-start');  
-
-            document.querySelector(`form input[name="${name}"]`).addEventListener('focus',() => {
-                document.querySelector(`.${name} label`).classList.add('form-label-transform');
-            });
-            document.querySelector(`form input[name="${name}"]`).addEventListener('focusout',() => {
-                if (document.querySelector(`input[name="${name}"`).value == 0) {
-                    document.querySelector(`.${name} label`).classList.remove('form-label-transform');
-                    document.querySelector(`.${name} label`).classList.add('form-label-transform-end');
-                }
-            });
-        };
-
-        movePlaceholder('login');
-        movePlaceholder('password');
-        movePlaceholder('password-confirm');
-
-        const passwd = document.querySelector('form input[name="password"]');
-        passwd.addEventListener('invalid', () => {
-            (passwd.value.length < 4) ? passwd.setCustomValidity("Hasło powinno mieć przynajmniej 4 znaki") : passwd.setCustomValidity("");
-        });
-
-        passwd.addEventListener('valid', () => {
-            passwd.setCustomValidity("");
-        });
-
-        document.querySelector('form input[name="password-confirm"]').addEventListener('keyup', () => {
-            if (document.querySelector('form input[name="password"]').value != document.querySelector('form input[name="password-confirm"]').value) {
-            document.querySelector('form input[name="password-confirm"]').setCustomValidity("Hasła nie są zgodne");
-            }
-            else {
-                document.querySelector('form input[name="password-confirm"]').setCustomValidity("");
-            }
-        });
-
-        checkInput = (name) => {
-            name.addEventListener('invalid', () => {
-                name.classList.add('subscription-input-invalid2');
-            });
-            name.addEventListener('keyup', () => {
-                name.classList.remove('subscription-input-invalid2');
-            });
-        };
-        checkInput(document.querySelector('form input[name="login"]'));
-        checkInput(document.querySelector('form input[name="password"]'));
-        checkInput(document.querySelector('form input[name="password-confirm"]'));
+        passwdCheck();
     </script>
 </body>
 </html>
