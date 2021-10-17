@@ -4,11 +4,6 @@
     column-gap: 20px;
 }
 
-.content {
-    margin-top: 20px;
-    margin-right: 20px;
-}
-
 nav.desktop-panel {
     padding: 20px;
     width: fit-content;
@@ -20,6 +15,7 @@ nav.desktop-panel {
     background-color: #33393d;
     color: white;
     font-size: 1.2em;
+    position: relative;
 }
 
 nav.desktop-panel .list-wrapper {
@@ -42,6 +38,22 @@ nav .list-wrapper ul li:first-child {
 
 nav.mobile-panel {
     display: none;
+}
+
+.back {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    transform: translate(20px, -20px);
+}
+
+.content {
+    margin-top: 20px;
+    margin-right: 20px;
+}
+
+.content h2 {
+    font-weight: 400;
 }
 
 footer {
