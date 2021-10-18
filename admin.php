@@ -20,7 +20,7 @@
         <nav class="desktop-panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="index.html"><li>Home</li></a>
+                    <a href="index.php"><li>Home</li></a>
                     <a class="veh-link"><li>Pojazdy</li></a>
                     <a class="users-link"><li>Użytkownicy</li></a>
                     <a class="settings-link"><li>Ustawienia</li></a>

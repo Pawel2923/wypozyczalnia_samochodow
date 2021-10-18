@@ -47,7 +47,7 @@
     </main>
     <script>
         document.querySelector('.back').addEventListener('click', () => {
-            window.location = './index.html';
+            window.location = './index.php';
         });
     </script>
     <script src="loginHandler.js"></script>

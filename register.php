@@ -52,7 +52,7 @@
     <script src="loginHandler.js"></script>
     <script>
         document.querySelector('.back').addEventListener('click', () => {
-            window.location = './index.html';
+            window.location = './index.php';
         });
         passwdCheck();
     </script>
