@@ -39,22 +39,45 @@
                         <h2>Pojazdy</h2>
                     </header>
                     <main>
-                        <button class="option-button add-veh">
-                            <h3>Dodawanie nowych pojazdów</h3>
-                            <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                        </button>
-                        <button class="option-button veh-list">
-                            <h3>Lista pojazdów</h3>
-                            <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                        </button>
-                        <button class="option-button veh-list">
-                            <h3>Rezerwacja pojazdów</h3>
-                            <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                        </button>
-                        <button class="option-button del-veh">
-                            <h3>Usuwanie pojazdów</h3>
-                            <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                        </button>
+                        <div class="option">
+                            <button class="option-button add-veh">
+                                <h3>Dodawanie nowych pojazdów</h3>
+                                <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                            </button>
+                            <div class="option-content">
+                                <h3>test</h3>
+                                <span>
+                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia quis officiis provident exercitationem illo culpa praesentium minima quos. Assumenda repellendus quos voluptate, aliquam quis soluta cumque maxime dolores provident ipsa?
+                                </span>
+                            </div>
+                        </div>
+                        <div class="option">
+                            <button class="option-button veh-list">
+                                <h3>Lista pojazdów</h3>
+                                <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                            </button>
+                            <div class="option-content">
+                                test2
+                            </div>
+                        </div>
+                        <div class="option">
+                            <button class="option-button veh-res">
+                                <h3>Rezerwacja pojazdów</h3>
+                                <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                            </button>
+                            <div class="option-content">
+                                test3
+                            </div>
+                        </div>
+                        <div class="option">
+                            <button class="option-button del-veh">
+                                <h3>Usuwanie pojazdów</h3>
+                                <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                            </button>
+                            <div class="option-content">
+                                test4
+                            </div>
+                        </div>
                     </main>
                 </div>
                 <div class="users">
@@ -137,48 +160,6 @@
             </footer>
         </div>
     </div>
-    <script>
-        const settings = document.querySelectorAll('.all-settings>div');
-        for (let i=0; i<settings.length;i++) {
-            settings[i].style.display = "none";
-        }
-        settings[0].classList.add('visible-settings');
-        settings[0].style.display = "block";
-
-        const changeSettings = (open) => {
-            if (open != null) {
-                let close = 0;
-                for (let i=0; i<settings.length; i++) {
-                    if (settings[i].className.indexOf('visible-settings') > -1)
-                        close = i;
-                }
-
-                if (open != close) {
-                    document.querySelector('body').style.overflow = "hidden";
-
-                    settings[close].classList.remove('visible-settings');
-                    setTimeout(() => {
-                        settings[close].style.display = "none";
-                    }, 200);
-                    
-                    settings[open].style.display = "block";
-                    setTimeout(() => {
-                        settings[open].classList.add('visible-settings');
-                        document.querySelector('body').style.overflow = "initial";
-                    }, 200);
-                }
-            }
-        };
-
-        document.querySelector('nav.desktop-panel .veh-link').addEventListener('click', () => {
-            changeSettings(0);
-        });
-        document.querySelector('nav.desktop-panel .users-link').addEventListener('click', () => {
-            changeSettings(1);
-        });
-        document.querySelector('nav.desktop-panel .settings-link').addEventListener('click', () => {
-            changeSettings(2);
-        });
-    </script>
+    <script src="adminHandler.js"></script>
 </body>
 </html>

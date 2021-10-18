@@ -96,8 +96,16 @@ nav.mobile-panel {
     animation-name: settingsAnim;
 }
 
-main button {
+main .option {
     margin-bottom: 30px;
+}
+
+main .option:last-child {
+    margin-bottom: 0;
+}
+
+main .option-button {
+    margin: 0;
     border: 2px solid #000;
     background-color: unset;
     display: flex;
@@ -108,8 +116,24 @@ main button {
     cursor: pointer;
 }
 
-main button:last-child {
-    margin-bottom: 0;
+main .option-button .icon {
+    transition: transform .2s ease;
+}
+
+main .option-content {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-100%);
+    animation-timing-function: ease;
+    animation-duration: .2s;
+    animation-name: none;
+    animation-fill-mode: both;
+    display: none;
+}
+
+main .visible-settings {
+    animation-name: optionContent;
+    animation-direction: normal;
 }
 
 main table {
@@ -133,5 +157,18 @@ footer {
         visibility: visible;
         opacity: 1;
         transform: translateX(0);
+    }
+}
+
+@keyframes optionContent {
+    0% {
+        visibility: hidden;
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+    100% {
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(0);
     }
 }
