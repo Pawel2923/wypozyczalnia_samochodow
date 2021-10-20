@@ -23,7 +23,7 @@
                 <div></div>
                 <div class="close"><i class="fas fa-times"></i></div>
                 <div class="user">
-                    <a href="login.html">
+                    <a href="login.php">
                         <i class="fas fa-user-circle"></i>
                         <span class="login-caption">Zaloguj się</span>
                     </a>
@@ -31,30 +31,30 @@
             </div>
             <div class="list-wrapper">
                 <ul>
-                    <a href="index.html"><li>Home</li></a>
-                    <a href="rezerwacja.html"><li>Rezerwacja online</li></a>
-                    <a href="wycena.html"><li>Uzyskaj wycenę</li></a>
-                    <a href="vehicles.html"><li>Nasze pojazdy</li></a>
-                    <a href="contact.html"><li>Kontakt</li></a>
+                    <a href="index.php"><li>Home</li></a>
+                    <a href="rezerwacja.php"><li>Rezerwacja online</li></a>
+                    <a href="wycena.php"><li>Uzyskaj wycenę</li></a>
+                    <a href="vehicles.php"><li>Nasze pojazdy</li></a>
+                    <a href="contact.php"><li>Kontakt</li></a>
                 </ul>
             </div>
         </div>
     </nav>
     <nav class="desktop-nav">
         <div class="nav-header">
-            <a href="index.html"><h2>Wypożyczalnia</h2></a>
+            <a href="index.php"><h2>Wypożyczalnia</h2></a>
         </div>
         <div class="list-wrapper">
             <div class="spacer"></div>
             <ul>
-                <a href="index.html"><li>Home</li></a>
-                <a href="rezerwacja.html"><li>Rezerwacja online</li></a>
-                <a href="wycena.html"><li>Uzyskaj wycenę</li></a>
-                <a href="vehicles.html"><li>Nasze pojazdy</li></a>
-                <a href="contact.html"><li>Kontakt</li></a>
+                <a href="index.php"><li>Home</li></a>
+                <a href="rezerwacja.php"><li>Rezerwacja online</li></a>
+                <a href="wycena.php"><li>Uzyskaj wycenę</li></a>
+                <a href="vehicles.php"><li>Nasze pojazdy</li></a>
+                <a href="contact.php"><li>Kontakt</li></a>
             </ul>
             <div class="user">
-                <a href="login.html">
+                <a href="login.php">
                     <i class="fas fa-user-circle"></i>
                     <span class="login-caption">Zaloguj się</span>
                 </a>

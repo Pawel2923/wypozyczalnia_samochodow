@@ -23,7 +23,7 @@
         <div class="header-wrapper">
             <header>
                 <h1>Zaloguj się</h1>
-                <h3>Nie masz konta? <a href="register.html">Zarejestruj się</a></h3>
+                <h3>Nie masz konta? <a href="register.php">Zarejestruj się</a></h3>
             </header>
         </div>
         <div class="form-wrapper">
@@ -37,7 +37,7 @@
                     <label for="password-field">Hasło</label>
                     <br>
                     <input type="password" name="password" id="password-field" required>
-                    <a href="passwd.html" class="forgotten-password">Zapomniałeś hasła?</a>
+                    <a href="passwd.php" class="forgotten-password">Zapomniałeś hasła?</a>
                 </div>
                 <div class="form-bottom">
                     <button type="submit">Zaloguj się</button>

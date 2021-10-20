@@ -23,7 +23,7 @@
         <div class="header-wrapper">
             <header>
                 <h1>Zarejestruj się</h1>
-                <h3>Masz już konto? <a href="login.html">Zaloguj się</a></h3>
+                <h3>Masz już konto? <a href="login.php">Zaloguj się</a></h3>
             </header>
         </div>
         <div class="form-wrapper">

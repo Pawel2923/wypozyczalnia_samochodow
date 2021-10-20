@@ -26,7 +26,7 @@
                     <a class="settings-link"><li>Ustawienia</li></a>
                 </ul>
             </div>
-            <div class="back"><i class="fas fa-angle-double-left"></i> <a href="index.html">Powrót</a></div>
+            <div class="back"><i class="fas fa-angle-double-left"></i> <a href="index.php">Powrót</a></div>
         </nav>
         <nav class="mobile-panel"></nav>
         <div class="content">
