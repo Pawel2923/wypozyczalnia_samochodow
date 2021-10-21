@@ -22,7 +22,7 @@
     <main>
         <div class="header-wrapper">
             <header>
-                <h1>Zmień swoje hasło</h1>
+                <h1>Zresetuj zapomniane hasło</h1>
             </header>
         </div>
         <div class="form-wrapper">
