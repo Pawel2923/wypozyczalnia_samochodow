@@ -1,6 +1,16 @@
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.3.6,
+* Autoprefixer: v10.3.1
+* Browsers: last 4 version
+*/
+
 .page-wrapper {
+    display: -ms-grid;
     display: grid;
-    grid-template: 1fr / auto 1fr;
+    -ms-grid-rows: 1fr;
+    -ms-grid-columns: auto 1fr;
+        grid-template: 1fr / auto 1fr;
 }
 
 table,
@@ -17,6 +27,8 @@ table th {
 
 nav.desktop-panel {
     padding: 20px;
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
     width: fit-content;
     height: 100vh;
     position: sticky;
@@ -34,13 +46,22 @@ nav.desktop-panel a {
 }
 
 nav.desktop-panel .list-wrapper {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
 }
 
 nav.desktop-panel .list-wrapper ul {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: column;
-    align-items: unset;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: unset;
+        -ms-flex-align: unset;
+            align-items: unset;
 }
 
 nav.desktop-panel ul a:hover {
@@ -63,13 +84,18 @@ nav.mobile-panel {
     position: absolute;
     left: 0;
     bottom: 0;
-    transform: translate(20px, -20px);
+    -webkit-transform: translate(20px, -20px);
+        -ms-transform: translate(20px, -20px);
+            transform: translate(20px, -20px);
 }
 
 .content {
     margin: 20px;
+    display: -ms-grid;
     display: grid;
-    grid-template: auto 1fr / 1fr;
+    -ms-grid-rows: auto 1fr;
+    -ms-grid-columns: 1fr;
+        grid-template: auto 1fr / 1fr;
     position: relative;
     overflow: hidden;
 }
@@ -85,15 +111,22 @@ nav.mobile-panel {
 .all-settings>div {
     visibility: hidden;
     opacity: 0;
-    transform: translateX(-100%);
-    animation-timing-function: ease;
-    animation-duration: .2s;
-    animation-name: none;
-    animation-fill-mode: both;
+    -webkit-transform: translateX(-100%);
+        -ms-transform: translateX(-100%);
+            transform: translateX(-100%);
+    -webkit-animation-timing-function: ease;
+            animation-timing-function: ease;
+    -webkit-animation-duration: .2s;
+            animation-duration: .2s;
+    -webkit-animation-name: none;
+            animation-name: none;
+    -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
 }
 
 .all-settings>.visible-settings {
-    animation-name: settingsAnim;
+    -webkit-animation-name: settingsAnim;
+            animation-name: settingsAnim;
 }
 
 main .option {
@@ -108,32 +141,50 @@ main .option-button {
     margin: 0;
     border: 2px solid #000;
     background-color: unset;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
     padding: 20px;
     width: 60%;
     cursor: pointer;
 }
 
 main .option-button .icon {
+    -webkit-transition: -webkit-transform .2s ease;
+    transition: -webkit-transform .2s ease;
+    -o-transition: transform .2s ease;
     transition: transform .2s ease;
+    transition: transform .2s ease, -webkit-transform .2s ease;
 }
 
 main .option-content {
     visibility: hidden;
     opacity: 0;
-    transform: translateY(-100%);
-    animation-timing-function: ease;
-    animation-duration: .2s;
-    animation-name: none;
-    animation-fill-mode: both;
+    -webkit-transform: translateY(-100%);
+        -ms-transform: translateY(-100%);
+            transform: translateY(-100%);
+    -webkit-animation-timing-function: ease;
+            animation-timing-function: ease;
+    -webkit-animation-duration: .2s;
+            animation-duration: .2s;
+    -webkit-animation-name: none;
+            animation-name: none;
+    -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
     display: none;
 }
 
 main .visible-settings {
-    animation-name: optionContent;
-    animation-direction: normal;
+    -webkit-animation-name: optionContent;
+            animation-name: optionContent;
+    -webkit-animation-direction: normal;
+            animation-direction: normal;
 }
 
 main table {
@@ -142,21 +193,56 @@ main table {
 
 footer {
     background-color: #fff;
-    grid-template: 1fr / 1fr;
+    -ms-grid-rows: 1fr;
+    -ms-grid-columns: 1fr;
+        grid-template: 1fr / 1fr;
     margin-top: 40px;
-    align-self: end;
+    -ms-grid-row-align: end;
+        align-self: end;
+}
+
+@-webkit-keyframes settingsAnim {
+    0% {
+        visibility: hidden;
+        opacity: 0;
+        -webkit-transform: translateX(-100%);
+                transform: translateX(-100%);
+    }
+    100% {
+        visibility: visible;
+        opacity: 1;
+        -webkit-transform: translateX(0);
+                transform: translateX(0);
+    }
 }
 
 @keyframes settingsAnim {
     0% {
         visibility: hidden;
         opacity: 0;
-        transform: translateX(-100%);
+        -webkit-transform: translateX(-100%);
+                transform: translateX(-100%);
     }
     100% {
         visibility: visible;
         opacity: 1;
-        transform: translateX(0);
+        -webkit-transform: translateX(0);
+                transform: translateX(0);
+    }
+}
+
+@-webkit-keyframes optionContent {
+    0% {
+        visibility: hidden;
+        opacity: 0;
+        -webkit-transform: translateY(-100%);
+                transform: translateY(-100%);
+    }
+    100% {
+        visibility: visible;
+        opacity: 1;
+        -webkit-transform: translateY(0);
+                transform: translateY(0);
     }
 }
 
@@ -164,11 +250,13 @@ footer {
     0% {
         visibility: hidden;
         opacity: 0;
-        transform: translateY(-100%);
+        -webkit-transform: translateY(-100%);
+                transform: translateY(-100%);
     }
     100% {
         visibility: visible;
         opacity: 1;
-        transform: translateY(0);
+        -webkit-transform: translateY(0);
+                transform: translateY(0);
     }
 }

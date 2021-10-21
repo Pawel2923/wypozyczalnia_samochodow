@@ -1,28 +1,46 @@
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.3.6,
+* Autoprefixer: v10.3.1
+* Browsers: last 4 version
+*/
+
 body {
   height: 100vh;
+  display: -ms-grid;
   display: grid;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .back {
   position: fixed;
   right: 0;
   top: 0;
-  transform: translate(-100%, 50%);
+  -webkit-transform: translate(-100%, 50%);
+      -ms-transform: translate(-100%, 50%);
+          transform: translate(-100%, 50%);
   font-size: 2rem;
   cursor: pointer;
 }
 
 main {
+  display: -ms-grid;
   display: grid;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   text-align: unset;
 }
 
 .form-wrapper {
   width: 100%;
+  display: -ms-grid;
   display: grid;
-  justify-content: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
 .header-wrapper {
@@ -71,7 +89,11 @@ form div.password .forgotten-password {
   color: #000; 
   display: block; 
   margin-top: 5px;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
   width: fit-content;
+  -webkit-transition: color .2s ease;
+  -o-transition: color .2s ease;
   transition: color .2s ease;
 }
 
@@ -82,20 +104,30 @@ form div.password .forgotten-password:hover {
 form label {
   display: inline-block;
   cursor: text;
+  -webkit-transition: -webkit-transform .2s ease;
+  transition: -webkit-transform .2s ease;
+  -o-transition: transform .2s ease;
   transition: transform .2s ease;
+  transition: transform .2s ease, -webkit-transform .2s ease;
 }
 
 .form-label-transform-start {
-  transform: translate(2px, 18px);
+  -webkit-transform: translate(2px, 18px);
+      -ms-transform: translate(2px, 18px);
+          transform: translate(2px, 18px);
 }
 
 .form-label-transform-end {
-  transform: translate(2px, 18px);
+  -webkit-transform: translate(2px, 18px);
+      -ms-transform: translate(2px, 18px);
+          transform: translate(2px, 18px);
 }
 
 .form-label-transform {
   cursor: default;
-  transform: translate(2px, -5px);
+  -webkit-transform: translate(2px, -5px);
+      -ms-transform: translate(2px, -5px);
+          transform: translate(2px, -5px);
 }
 
 form input:focus {

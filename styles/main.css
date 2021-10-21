@@ -1,5 +1,13 @@
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.3.6,
+* Autoprefixer: v10.3.1
+* Browsers: last 4 version
+*/
+
 * {
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
@@ -14,10 +22,15 @@ nav.mobile-nav {
 
 nav.desktop-nav {
   width: 100%;
+  display: -ms-grid;
   display: grid;
-  grid-template: 2fr 1fr / 1fr;
+  -ms-grid-rows: 2fr 1fr;
+  -ms-grid-columns: 1fr;
+      grid-template: 2fr 1fr / 1fr;
   justify-items: center;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 nav.desktop-nav a {
@@ -25,6 +38,8 @@ nav.desktop-nav a {
 }
 
 .nav-header {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
   width: fit-content;
   margin-top: 40px;
   margin-bottom: 40px;
@@ -32,16 +47,26 @@ nav.desktop-nav a {
 
 .list-wrapper {
   width: 100%;
+  display: -ms-grid;
   display: grid;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-grid-columns: 1fr 4fr 1fr;
   grid-template-columns: 1fr 4fr 1fr;
 }
 
 nav ul {
   list-style-type: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 nav.desktop-nav ul a {
@@ -65,6 +90,8 @@ nav.desktop-nav ul a {
 
 nav .login-caption {
   font-weight: 300;
+  -webkit-transition: color .2s ease;
+  -o-transition: color .2s ease;
   transition: color .2s ease;
 }
 
@@ -79,6 +106,8 @@ button {
   margin-bottom: 5%;
   cursor: pointer;
   border: 1px solid #000;
+  -webkit-transition: .2s ease;
+  -o-transition: .2s ease;
   transition: .2s ease;
 }
 
@@ -87,11 +116,16 @@ button:hover {
 }
 
 footer {
+  display: -ms-grid;
   display: grid;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   justify-items: center;
   text-align: center;
-  grid-template: 1fr 1fr / 1fr;
+  -ms-grid-rows: 1fr 1fr;
+  -ms-grid-columns: 1fr;
+      grid-template: 1fr 1fr / 1fr;
 }
 
 footer .subscription-form {
@@ -133,6 +167,8 @@ footer .bottom-content .footer-socials {
 footer .bottom-content .footer-socials i {
   margin-right: 10px;
   font-size: 1.4em;
+  -webkit-transition: color .2s ease;
+  -o-transition: color .2s ease;
   transition: color .2s ease;
   cursor: pointer;
 }
@@ -159,9 +195,16 @@ footer .bottom-content .bottom-text {
 
 @media screen and (max-width: 800px) {
   nav.mobile-nav {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
     background: rgba(255, 255, 255, .95);
     width: 100%;
     height: 50px;
@@ -175,9 +218,15 @@ footer .bottom-content .bottom-text {
     color: #000;
   }
   nav.mobile-nav .open {
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
     width: fit-content;
+    height: -webkit-fit-content;
+    height: -moz-fit-content;
     height: fit-content;
-    align-self: end;
+    -ms-flex-item-align: end;
+        -ms-grid-row-align: end;
+        align-self: end;
     margin-right: 20px;
     font-size: 1.8em;
   }
@@ -185,34 +234,55 @@ footer .bottom-content .bottom-text {
     width: 100%;
     height: 100%;
     position: fixed;
-    transform: translateX(100%);
+    -webkit-transform: translateX(100%);
+        -ms-transform: translateX(100%);
+            transform: translateX(100%);
+    -webkit-transition: -webkit-transform .2s ease;
+    transition: -webkit-transform .2s ease;
+    -o-transition: transform .2s ease;
     transition: transform .2s ease;
+    transition: transform .2s ease, -webkit-transform .2s ease;
     top: 0;
     left: 0;
     background: #fff;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     font-weight: 300;
     font-size: 1.3em;
     z-index: 3;
   }
   nav.mobile-nav .top-content {
+    display: -ms-grid;
     display: grid;
-    align-items: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     justify-items: center;
-    grid-template: 1fr / 1fr 1fr 1fr;
+    -ms-grid-rows: 1fr;
+    -ms-grid-columns: 1fr 1fr 1fr;
+        grid-template: 1fr / 1fr 1fr 1fr;
     width: 100%;
     margin-bottom: 20px;
   }
   nav.mobile-nav .close {
     margin-top: 10px;
     margin-right: 20px;
-    justify-self: end;
+    -ms-grid-column-align: end;
+        justify-self: end;
     font-size: 1.8em;
     top: 0;
     right: 0;
-    order: 1;
+    -webkit-box-ordinal-group: 2;
+        -ms-flex-order: 1;
+            order: 1;
   }
   @media screen and (max-width: 400px) {
     nav.mobile-nav .login-caption {
@@ -227,14 +297,26 @@ footer .bottom-content .bottom-text {
     margin-top: 15px;
   }
   nav.mobile-nav .list-wrapper {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
   }
   nav.mobile-nav .list-wrapper ul {
     text-align: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: column;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
   }
   nav.mobile-nav .list-wrapper a {
     margin-top: 10px;
@@ -243,6 +325,7 @@ footer .bottom-content .bottom-text {
     margin-top: 0;
   }
   nav.desktop-nav {
+    -ms-grid-rows: 1fr;
     grid-template-rows: 1fr;
   }
   nav.desktop-nav div.list-wrapper {
@@ -256,6 +339,8 @@ footer .bottom-content .bottom-text {
 a {
   color: #60B8FF;
   text-decoration: none;
+  -webkit-transition: color .2s ease;
+  -o-transition: color .2s ease;
   transition: color .2s ease;
 }
 
