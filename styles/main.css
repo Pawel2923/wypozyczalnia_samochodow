@@ -77,6 +77,7 @@ nav.desktop-nav ul a {
 
 .user a {
   padding: 10px 0;
+  color: #000;
 }
 
 .user i {
@@ -88,15 +89,20 @@ nav.desktop-nav ul a {
   margin-right: 0px;
 }
 
-nav .login-caption {
+.login-caption {
   font-weight: 300;
   -webkit-transition: color .2s ease;
   -o-transition: color .2s ease;
   transition: color .2s ease;
 }
 
-nav .user:hover .login-caption {
+.user a:hover .login-caption {
   color: #60B8FF;
+}
+
+.user .logged {
+  display: none;
+  width: fit-content;
 }
 
 button {

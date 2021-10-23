@@ -25,7 +25,7 @@ table th {
     padding: 10px;
 }
 
-nav.desktop-panel {
+nav.panel {
     padding: 20px;
     width: -webkit-fit-content;
     width: -moz-fit-content;
@@ -38,20 +38,31 @@ nav.desktop-panel {
     background-color: #33393d;
     color: #fff;
     font-size: 1.2em;
+    z-index: 3;
+    transition: transform 0.2s ease;
+    -webkit-transition: transform 0.2s ease;
+    -moz-transition: transform 0.2s ease;
+    -ms-transition: transform 0.2s ease;
+    -o-transition: transform 0.2s ease;
+    transform: translateX(0);
+    -webkit-transform: translateX(0);
+    -moz-transform: translateX(0);
+    -ms-transform: translateX(0);
+    -o-transform: translateX(0);
 }
 
-nav.desktop-panel a {
+nav.panel a {
     color: #fff;
     cursor: pointer;
 }
 
-nav.desktop-panel .list-wrapper {
+nav.panel .list-wrapper {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
 }
 
-nav.desktop-panel .list-wrapper ul {
+nav.panel .list-wrapper ul {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -64,7 +75,7 @@ nav.desktop-panel .list-wrapper ul {
             align-items: unset;
 }
 
-nav.desktop-panel ul a:hover {
+nav.panel ul a:hover {
     color: #60B8FF;
 }
 
@@ -76,8 +87,18 @@ nav .list-wrapper ul a:first-child {
     margin-top: 0;
 }
 
-nav.mobile-panel {
+.mobile-nav {
     display: none;
+}
+
+.mobile-nav .overlay {
+    display: none;
+    opacity: 0;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    -webkit-transition: transform 0.2s ease, opacity 0.2s ease;
+    -moz-transition: transform 0.2s ease, opacity 0.2s ease;
+    -ms-transition: transform 0.2s ease, opacity 0.2s ease;
+    -o-transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 .back {
@@ -100,7 +121,17 @@ nav.mobile-panel {
     overflow: hidden;
 }
 
-.content h2 {
+header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+header a {
+    color: #000;
+}
+
+.content header h2 {
     font-weight: 400;
 }
 
@@ -129,8 +160,45 @@ nav.mobile-panel {
             animation-name: settingsAnim;
 }
 
+.home main {
+    display: grid;
+    grid-template: 1fr / 1fr 1fr 1fr;
+    column-gap: 40px;
+}
+
+main .home-option {
+    text-align: center;
+    display: flex;
+    height: 300px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #000;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    -webkit-transition: background-color 0.2s ease;
+    -moz-transition: background-color 0.2s ease;
+    -ms-transition: background-color 0.2s ease;
+    -o-transition: background-color 0.2s ease;
+}
+
+main .home-option:hover {
+    background-color: #60B8FF;
+}
+
+main .home-option i {
+    font-size: 2rem;
+}
+
 main .option {
+    width: 100%;
     margin-bottom: 30px;
+}
+
+main .option a {
+    display: block;
+    width: 60%;
 }
 
 main .option:last-child {
@@ -145,14 +213,23 @@ main .option-button {
     display: -ms-flexbox;
     display: flex;
     -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
     -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-            justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
     padding: 20px;
-    width: 60%;
+    width: 100%;
     cursor: pointer;
+    transition: background-color 0.2s ease;
+    -webkit-transition: background-color 0.2s ease;
+    -moz-transition: background-color 0.2s ease;
+    -ms-transition: background-color 0.2s ease;
+    -o-transition: background-color 0.2s ease;
+}
+
+main .option-button:hover {
+    background-color: #60B8FF;
 }
 
 main .option-button .icon {
@@ -161,23 +238,6 @@ main .option-button .icon {
     -o-transition: transform .2s ease;
     transition: transform .2s ease;
     transition: transform .2s ease, -webkit-transform .2s ease;
-}
-
-main .option-content {
-    visibility: hidden;
-    opacity: 0;
-    -webkit-transform: translateY(-100%);
-        -ms-transform: translateY(-100%);
-            transform: translateY(-100%);
-    -webkit-animation-timing-function: ease;
-            animation-timing-function: ease;
-    -webkit-animation-duration: .2s;
-            animation-duration: .2s;
-    -webkit-animation-name: none;
-            animation-name: none;
-    -webkit-animation-fill-mode: both;
-            animation-fill-mode: both;
-    display: none;
 }
 
 main .visible-settings {
@@ -258,5 +318,53 @@ footer {
         opacity: 1;
         -webkit-transform: translateY(0);
                 transform: translateY(0);
+    }
+}
+
+@media screen and (max-width: 800px) {
+    nav.panel {
+        position: fixed;
+        transform: translate(-100%);
+        -webkit-transform: translate(-100%);
+        -moz-transform: translate(-100%);
+        -ms-transform: translate(-100%);
+        -o-transform: translate(-100%);
+    }
+    main .option a {
+        width: 100%;
+    }
+    .mobile-nav {
+        width: 100%;
+        height: 50px;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: rgba(255,255,255,.95);
+        z-index: 1;
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+    .home main {
+        grid-template: 1fr 1fr 1fr / 1fr;
+        row-gap: 20px;
+    }
+    .content header {
+        padding-top: 50px;
+    }
+    .content header .user {
+        display: none;
+    }
+    .overlay {
+        display: block;
+        opacity: 1;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,.8);
+        z-index: 2;
     }
 }

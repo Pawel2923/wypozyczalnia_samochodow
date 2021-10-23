@@ -1,3 +1,8 @@
+<?php 
+    session_start();
+    $_SESSION['logged'] = true;
+    $_SESSION['login'] = "Admin";
+?>
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -23,9 +28,13 @@
                 <div></div>
                 <div class="close"><i class="fas fa-times"></i></div>
                 <div class="user">
-                    <a href="login.php">
-                        <i class="fas fa-user-circle"></i>
+                    <a href="login.php" class="login">
+                        <i class="fas fa-sign-in-alt"></i>
                         <span class="login-caption">Zaloguj się</span>
+                    </a>
+                    <a href="admin.php" class="logged">
+                        <i class="fas fa-user"></i>
+                        <span class="login-caption"><?php echo $_SESSION['login'] ?></span>
                     </a>
                 </div>
             </div>
@@ -54,9 +63,13 @@
                 <a href="contact.php"><li>Kontakt</li></a>
             </ul>
             <div class="user">
-                <a href="login.php">
-                    <i class="fas fa-user-circle"></i>
+                <a href="login.php" class="login">
+                    <i class="fas fa-sign-in-alt"></i>
                     <span class="login-caption">Zaloguj się</span>
+                </a>
+                <a href="admin.php" class="logged">
+                    <i class="fas fa-user"></i>
+                    <span class="login-caption"><?php echo $_SESSION['login'] ?></span>
                 </a>
             </div>
         </div>
@@ -124,7 +137,7 @@
                     <div class="divider"></div>
                     <div class="car-price">
                         <span>1 godz.</span>
-                        <span>65,00 zł</span>
+                        <span>80,00 zł</span>
                     </div>
                     <button type="button">Rezerwacja</button>
                 </div>
@@ -175,5 +188,9 @@
         checkInput(subscriptionInput);
     </script>
     <script src="nav.js"></script>
+    <?php 
+        if ($_SESSION['logged'])
+            echo '<script src="logged.js"></script>';
+    ?>
 </body>
 </html>

@@ -1,3 +1,6 @@
+<?php 
+    session_start();
+?>
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -17,66 +20,98 @@
 </head>
 <body>
     <div class="page-wrapper">
-        <nav class="desktop-panel">
+        <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="index.php"><li>Home</li></a>
-                    <a class="veh-link"><li>Pojazdy</li></a>
-                    <a class="users-link"><li>Użytkownicy</li></a>
-                    <a class="settings-link"><li>Ustawienia</li></a>
+                    <a href="admin.php"><li>Home</li></a>
+                    <a class="veh-link" href="admin.php#vehicles"><li>Pojazdy</li></a>
+                    <a class="users-link" href="admin.php#users"><li>Użytkownicy</li></a>
+                    <a class="settings-link" href="admin.php#settings"><li>Ustawienia</li></a>
                 </ul>
             </div>
-            <div class="back"><i class="fas fa-angle-double-left"></i> <a href="index.php">Powrót</a></div>
+            <div class="back"><i class="fas fa-angle-double-left"></i> <a href="index.php">Wyjdź</a></div>
         </nav>
-        <nav class="mobile-panel"></nav>
         <div class="content">
+            <div class="mobile-nav">
+                <div class="open"><i class="fas fa-bars"></i></div>
+                <div class="user">
+                    <a href="login.php" class="login">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span class="login-caption">Zaloguj się</span>
+                    </a>
+                    <a href="admin.php" class="logged">
+                        <i class="fas fa-user"></i>
+                        <span class="login-caption"><?php echo $_SESSION['login'] ?></span>
+                    </a>
+                </div>
+                <div class="overlay"></div>
+            </div>
             <div class="all-settings">
                 <header>
-                    <h1>Panel administracyjny</h1>
+                    <h1><a href="admin.php">Panel administracyjny</a></h1>
+                    <div class="user">
+                        <a href="login.php" class="login">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span class="login-caption">Zaloguj się</span>
+                        </a>
+                        <a href="admin.php" class="logged">
+                            <i class="fas fa-user"></i>
+                            <span class="login-caption"><?php echo $_SESSION['login'] ?></span>
+                        </a>
+                    </div>
                 </header>
+                <div class="home">
+                    <main>
+                        <div class="home-option manage-veh">
+                            <i class="fas fa-car"></i>
+                            <span>Zarządzanie pojazdami</span>
+                        </div>
+                        <div class="home-option manage-users">
+                            <i class="fas fa-users"></i>
+                            <span>Zarządzanie użytkownikami</span>
+                        </div>
+                        <div class="home-option manage-settings">
+                            <i class="fas fa-cog"></i>
+                            <span>Zmiana ustawień serwisu</span>
+                        </div>
+                    </main>
+                </div>
                 <div class="vehicles">
                     <header>
                         <h2>Pojazdy</h2>
                     </header>
                     <main>
                         <div class="option">
-                            <button class="option-button add-veh">
-                                <h3>Dodawanie nowych pojazdów</h3>
-                                <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                            </button>
-                            <div class="option-content">
-                                <h3>test</h3>
-                                <span>
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia quis officiis provident exercitationem illo culpa praesentium minima quos. Assumenda repellendus quos voluptate, aliquam quis soluta cumque maxime dolores provident ipsa?
-                                </span>
-                            </div>
+                            <a href="addvehicles.php">
+                                <button class="option-button add-veh">
+                                    <h3>Dodawanie nowych pojazdów</h3>
+                                    <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                                </button>
+                            </a>
                         </div>
                         <div class="option">
-                            <button class="option-button veh-list">
-                                <h3>Lista pojazdów</h3>
-                                <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                            </button>
-                            <div class="option-content">
-                                test2
-                            </div>
+                            <a href="vehicleslist.php">
+                                <button class="option-button veh-list">
+                                    <h3>Lista pojazdów</h3>
+                                    <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                                </button>
+                            </a>
                         </div>
                         <div class="option">
-                            <button class="option-button veh-res">
-                                <h3>Rezerwacja pojazdów</h3>
-                                <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                            </button>
-                            <div class="option-content">
-                                test3
-                            </div>
+                            <a href="vehreservation.php">
+                                <button class="option-button veh-res">
+                                    <h3>Rezerwacja pojazdów</h3>
+                                    <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                                </button>
+                            </a>
                         </div>
                         <div class="option">
-                            <button class="option-button del-veh">
-                                <h3>Usuwanie pojazdów</h3>
-                                <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                            </button>
-                            <div class="option-content">
-                                test4
-                            </div>
+                            <a href="delvehicle.php">
+                                <button class="option-button del-veh">
+                                    <h3>Usuwanie pojazdów</h3>
+                                    <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                                </button>
+                            </a>
                         </div>
                     </main>
                 </div>
@@ -161,5 +196,9 @@
         </div>
     </div>
     <script src="adminHandler.js"></script>
+    <?php 
+        if ($_SESSION['logged'])
+            echo '<script src="logged.js"></script>';
+    ?>
 </body>
 </html>

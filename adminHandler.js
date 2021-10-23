@@ -1,25 +1,5 @@
-const optionContent = document.querySelectorAll('main .option-content');
 const mainButtons = document.querySelectorAll('main .option-button');
 
-const optionOpen = (open) => {
-    optionContent[open].style.display = "block";
-    optionContent[open].classList.add('visible-settings');
-    let icon = '.' + mainButtons[open].classList[1] + ' .icon';
-    document.querySelector(icon).style.transform = 'rotate(90deg)';
-};
-
-const optionClose = (close) => {
-    optionContent[close].classList.remove('visible-settings');
-    let icon = '.' + mainButtons[close].classList[1] + ' .icon';
-    document.querySelector(icon).style.transform = 'rotate(0)';
-    optionContent[close].style.display = 'none';
-}
-
-for (let i=0; i<mainButtons.length; i++) {
-    mainButtons[i].addEventListener('click', () => {
-        optionOpen(i);
-    });
-}
 const settings = document.querySelectorAll('.all-settings>div');
 for (let i=0; i<settings.length;i++) {
     settings[i].style.display = "none";
@@ -28,10 +8,6 @@ settings[0].classList.add('visible-settings');
 settings[0].style.display = "block";
 
 const changeSettings = (open) => {
-    for (let i=0; i<optionContent.length; i++) {
-        optionClose(i);
-    }
-
     let close = 0;
     for (let i=0; i<settings.length; i++) {
         if (settings[i].className.indexOf('visible-settings') > -1)
@@ -54,12 +30,73 @@ const changeSettings = (open) => {
     }
 };
 
-document.querySelector('nav.desktop-panel .veh-link').addEventListener('click', () => {
-    changeSettings(0);
-});
-document.querySelector('nav.desktop-panel .users-link').addEventListener('click', () => {
+const openMobileNav = () => {
+    document.querySelector('nav.panel').style.transform = "translateX(0)";
+    document.querySelector('.mobile-nav .overlay').style.display = "block";
+    setTimeout(() => {                
+        document.querySelector('.mobile-nav .overlay').style.opacity = 1;
+    }, 2);
+};
+
+const closeMobileNav = () => {
+    document.querySelector('nav.panel').style.transform = "translateX(-100%)";
+    document.querySelector('.mobile-nav .overlay').style.opacity = 0;
+    setTimeout(() => {                
+        document.querySelector('.mobile-nav .overlay').style.display = "none";
+    }, 200);
+};
+
+document.querySelector('nav.panel .veh-link').addEventListener('click', () => {
     changeSettings(1);
+    closeMobileNav();
 });
-document.querySelector('nav.desktop-panel .settings-link').addEventListener('click', () => {
+document.querySelector('nav.panel .users-link').addEventListener('click', () => {
     changeSettings(2);
+    closeMobileNav();
 });
+document.querySelector('nav.panel .settings-link').addEventListener('click', () => {
+    changeSettings(3);
+    closeMobileNav();
+});
+
+const homeSettings = () => {
+    document.querySelector('.home .manage-veh').addEventListener('click', () => {
+        changeSettings(1);
+        window.location.hash = '#vehicles';
+    });
+    document.querySelector('.home .manage-users').addEventListener('click', () => {
+        changeSettings(2);
+        window.location.hash = '#users';
+    });
+    document.querySelector('.home .manage-settings').addEventListener('click', () => {
+        changeSettings(3);
+        window.location.hash = '#settings';
+    });
+};
+
+if (window.location.hash == '#vehicles') {
+    changeSettings(1);
+}
+if (window.location.hash == '#users') {
+    changeSettings(2);
+}
+if (window.location.hash == '#settings') {
+    changeSettings(3);
+}
+
+document.querySelector('.mobile-nav .open').addEventListener('click', () => {
+    openMobileNav();
+});
+document.querySelector('.mobile-nav .overlay').addEventListener('click', () => {
+    closeMobileNav();
+});
+
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 800) 
+        document.querySelector('nav.panel').style.transform = "translateX(0)";
+    else 
+        closeMobileNav();
+});
+
+if (window.location.pathname.indexOf('admin.php') > -1)
+    homeSettings();
