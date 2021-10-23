@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -169,7 +170,7 @@
             </div>
             <div class="all-settings">
                 <header>
-                    <h1>Panel administracyjny</h1>
+                    <h1><a href="admin.php">Panel administracyjny</a></h1>
                 </header>
                 <div class="vehicles">
                     <header>
