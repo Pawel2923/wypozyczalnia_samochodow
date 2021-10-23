@@ -1,7 +1,8 @@
 <?php 
     session_start();
+    $_SESSION['login'] = "admin";
     $_SESSION['logged'] = true;
-    $_SESSION['login'] = "Admin";
+    $_SESSION['admin'] = true;
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -34,7 +35,7 @@
                     </a>
                     <a href="admin.php" class="logged">
                         <i class="fas fa-user"></i>
-                        <span class="login-caption"><?php echo $_SESSION['login'] ?></span>
+                        <span class="login-caption"><?php if (isset($_SESSION['login'])) echo $_SESSION['login']; ?></span>
                     </a>
                 </div>
             </div>
@@ -69,7 +70,7 @@
                 </a>
                 <a href="admin.php" class="logged">
                     <i class="fas fa-user"></i>
-                    <span class="login-caption"><?php echo $_SESSION['login'] ?></span>
+                    <span class="login-caption"><?php if (isset($_SESSION['login'])) echo $_SESSION['login']; ?></span>
                 </a>
             </div>
         </div>

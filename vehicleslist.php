@@ -1,4 +1,10 @@
-<?php session_start(); ?>
+<?php 
+    session_start(); 
+    if (!$_SESSION['logged'] && !$_SESSION['adminMode']) {
+        header('Location: index.php');
+        exit;
+    }
+?>
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -171,6 +177,16 @@
             <div class="all-settings">
                 <header>
                     <h1><a href="admin.php">Panel administracyjny</a></h1>
+                    <div class="user">
+                        <a href="login.php" class="login">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span class="login-caption">Zaloguj się</span>
+                        </a>
+                        <a href="admin.php" class="logged">
+                            <i class="fas fa-user"></i>
+                            <span class="login-caption"><?php echo $_SESSION['login'] ?></span>
+                        </a>
+                    </div>
                 </header>
                 <div class="vehicles">
                     <header>

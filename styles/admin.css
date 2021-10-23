@@ -121,7 +121,7 @@ nav .list-wrapper ul a:first-child {
     overflow: hidden;
 }
 
-header {
+.all-settings>header {
     width: 100%;
     display: flex;
     justify-content: space-between;

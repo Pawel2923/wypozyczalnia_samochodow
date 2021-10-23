@@ -1,5 +1,9 @@
 <?php 
     session_start();
+    if (!$_SESSION['logged'] && !$_SESSION['adminMode']) {
+        header('Location: index.php');
+        exit;
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -41,7 +45,7 @@
                     </a>
                     <a href="admin.php" class="logged">
                         <i class="fas fa-user"></i>
-                        <span class="login-caption"><?php echo $_SESSION['login'] ?></span>
+                        <span class="login-caption"><?php if (isset($_SESSION['login'])) echo $_SESSION['login']; ?></span>
                     </a>
                 </div>
                 <div class="overlay"></div>
@@ -56,7 +60,7 @@
                         </a>
                         <a href="admin.php" class="logged">
                             <i class="fas fa-user"></i>
-                            <span class="login-caption"><?php echo $_SESSION['login'] ?></span>
+                            <span class="login-caption"><?php if (isset($_SESSION['login'])) echo $_SESSION['login']; ?></span>
                         </a>
                     </div>
                 </header>

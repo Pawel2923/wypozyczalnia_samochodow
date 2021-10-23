@@ -48,15 +48,21 @@ const closeMobileNav = () => {
 
 document.querySelector('nav.panel .veh-link').addEventListener('click', () => {
     changeSettings(1);
-    closeMobileNav();
+    if (window.innerWidth < 800) {
+        closeMobileNav();
+    }
 });
 document.querySelector('nav.panel .users-link').addEventListener('click', () => {
     changeSettings(2);
-    closeMobileNav();
+    if (window.innerWidth < 800) {
+        closeMobileNav();
+    }
 });
 document.querySelector('nav.panel .settings-link').addEventListener('click', () => {
     changeSettings(3);
-    closeMobileNav();
+    if (window.innerWidth < 800) {
+        closeMobileNav();
+    }
 });
 
 const homeSettings = () => {
