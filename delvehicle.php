@@ -203,7 +203,7 @@
                     <header>
                         <h2><a href="admin.php#vehicles">Pojazdy</a></h2> 
                         <i class="fas fa-chevron-right"></i> 
-                        <h2>Lista pojazdów</h2>
+                        <h2>Usuwanie pojazdów</h2>
                     </header>
                     <main>
                     <div class="cars">
@@ -218,7 +218,7 @@
                                 <span>1 godz.</span>
                                 <span>65,00 zł</span>
                             </div>
-                            <button type="button">Dostępny</button>
+                            <button type="button">Usuń</button>
                         </div>
                         <div class="car">
                             <div class="image-wrapper">
@@ -231,7 +231,7 @@
                                 <span>1 godz.</span>
                                 <span>55,00 zł</span>
                             </div>
-                            <button type="button">Dostępny</button>
+                            <button type="button">Usuń</button>
                         </div>
                         <div class="car">
                             <div class="image-wrapper">
@@ -244,7 +244,7 @@
                                 <span>1 godz.</span>
                                 <span>65,00 zł</span>
                             </div>
-                            <button type="button">Dostępny</button>
+                            <button type="button">Usuń</button>
                         </div>
                         <div class="car">
                             <div class="image-wrapper">
@@ -257,7 +257,7 @@
                                 <span>1 godz.</span>
                                 <span>80,00 zł</span>
                             </div>
-                            <button type="button">Dostępny</button>
+                            <button type="button">Usuń</button>
                         </div>
                     </div>
                     </main>

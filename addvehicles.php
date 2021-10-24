@@ -19,12 +19,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/admin.css">
+    <link rel="stylesheet" href="styles/panel.css">
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
     <style>
+        input {
+            border: 2px solid #000;
+        }
         .content .vehicles header {
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
-            align-items: center;
+            -webkit-box-align: center;
+                -ms-flex-align: center;
+                    align-items: center;
         }
         .content .vehicles header>* {
             margin-right: 20px;
@@ -37,8 +44,13 @@
         }
         main form {
             width: 60%;
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
-            flex-direction: column;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+                -ms-flex-direction: column;
+                    flex-direction: column;
         }
         main form input,
         main form button {
@@ -79,10 +91,23 @@
                         <i class="fas fa-sign-in-alt"></i>
                         <span class="login-caption">Zaloguj się</span>
                     </a>
-                    <a href="admin.php" class="logged">
+                    <div class="logged">
                         <i class="fas fa-user"></i>
                         <span class="login-caption"><?php if (isset($_SESSION['login'])) echo $_SESSION['login']; ?></span>
-                    </a>
+                        <div class="logged-menu">
+                            <ul>
+                                <?php
+                                    if (isset($_SESSION['login'])) 
+                                    {
+                                        if ($_SESSION['isAdmin'])
+                                            echo '<li><a href="admin.php">Panel administracyjny</a></li>';
+                                    }
+                                ?>
+                                <li><a href="user.php">Panel użytkownika</a></li>
+                                <li><a href="logout.php">Wyloguj się</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
                 <div class="overlay"></div>
             </div>
@@ -94,10 +119,23 @@
                             <i class="fas fa-sign-in-alt"></i>
                             <span class="login-caption">Zaloguj się</span>
                         </a>
-                        <a href="admin.php" class="logged">
+                        <div class="logged">
                             <i class="fas fa-user"></i>
                             <span class="login-caption"><?php if (isset($_SESSION['login'])) echo $_SESSION['login']; ?></span>
-                        </a>
+                            <div class="logged-menu">
+                                <ul>
+                                    <?php
+                                        if (isset($_SESSION['login'])) 
+                                        {
+                                            if ($_SESSION['isAdmin'])
+                                                echo '<li><a href="admin.php">Panel administracyjny</a></li>';
+                                        }
+                                    ?>
+                                    <li><a href="user.php">Panel użytkownika</a></li>
+                                    <li><a href="logout.php">Wyloguj się</a></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </header>
                 <div class="vehicles">
@@ -110,8 +148,12 @@
                         <form action="" method="POST">
                             <label>Nazwa pojazdu</label>
                             <input type="text" name="vehicle-name" required>
-                            <label>Cena za godzinę rezerwacji</label>
+                            <label>Cena za godzinę</label>
                             <input type="text" name="vehicle-price" required>
+                            <label>Link do zdjęcia samochodu</label>
+                            <input type="url" name="vehicle-img">
+                            <label>Prześlij zdjęcie samochodu</label>
+                            <input type="file" name="vehicle-img-upload">
                             <button type="submit">Dodaj</button>
                         </form>
                     </main>

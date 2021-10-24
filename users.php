@@ -23,9 +23,15 @@
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
     <style>
         .content .vehicles header {
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
-            align-items: center;
-            justify-content: flex-start;
+            -webkit-box-align: center;
+                -ms-flex-align: center;
+                    align-items: center;
+            -webkit-box-pack: start;
+                -ms-flex-pack: start;
+                    justify-content: flex-start;
         }
         .content .vehicles header>* {
             margin-right: 20px;
@@ -201,65 +207,12 @@
                 </header>
                 <div class="vehicles">
                     <header>
-                        <h2><a href="admin.php#vehicles">Pojazdy</a></h2> 
+                        <h2><a href="admin.php#users">Użytkownicy</a></h2> 
                         <i class="fas fa-chevron-right"></i> 
-                        <h2>Lista pojazdów</h2>
+                        <h2>Statystyki użytkowników</h2>
                     </header>
                     <main>
-                    <div class="cars">
-                        <div class="car">
-                            <div class="image-wrapper">
-                                <img src="https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjByc3gyc3BrZzQ4YjMtT1RPTU9UT1BMIiwidyI6W3siZm4iOiJ3ZzRnbnFwNnkxZi1PVE9NT1RPUEwiLCJzIjoiMTYiLCJwIjoiMTAsLTEwIiwiYSI6IjAifV19.hXuoemts_h7soE7DwcsvGnYuHhVCV0y0sCWXJ0ZzIVE/image;s=732x488" alt="Zdjęcie samochodu" width="100%" height="100%">
-                                <div class="img-overlay"></div>
-                            </div>
-                            <span class="car-name">Toyota Yaris</span>
-                            <div class="divider"></div>
-                            <div class="car-price">
-                                <span>1 godz.</span>
-                                <span>65,00 zł</span>
-                            </div>
-                            <button type="button">Dostępny</button>
-                        </div>
-                        <div class="car">
-                            <div class="image-wrapper">
-                                <img src="https://i.wpimg.pl/600x0/m.autokult.pl/ford-fusion-4-3ddb5b2d153e08d106.jpg" alt="Zdjęcie samochodu" width="100%" height="100%">
-                                <div class="img-overlay"></div>
-                            </div>
-                            <span class="car-name">Ford Fusion</span>
-                            <div class="divider"></div>
-                            <div class="car-price">
-                                <span>1 godz.</span>
-                                <span>55,00 zł</span>
-                            </div>
-                            <button type="button">Dostępny</button>
-                        </div>
-                        <div class="car">
-                            <div class="image-wrapper">
-                                <img src="https://www.auto-gazda.pl/application/files/8816/2861/3097/1.jpg" alt="Zdjęcie samochodu" width="100%" height="100%">
-                                <div class="img-overlay"></div>
-                            </div>
-                            <span class="car-name">Volkswagen Golf</span>
-                            <div class="divider"></div>
-                            <div class="car-price">
-                                <span>1 godz.</span>
-                                <span>65,00 zł</span>
-                            </div>
-                            <button type="button">Dostępny</button>
-                        </div>
-                        <div class="car">
-                            <div class="image-wrapper">
-                                <img src="https://image.ceneostatic.pl/data/products/95699167/i-mercedes-sprinter-313-2013-r.jpg" alt="Zdjęcie samochodu" width="100%" height="100%">
-                                <div class="img-overlay"></div>
-                            </div>
-                            <span class="car-name">Mercedes Sprinter</span>
-                            <div class="divider"></div>
-                            <div class="car-price">
-                                <span>1 godz.</span>
-                                <span>80,00 zł</span>
-                            </div>
-                            <button type="button">Dostępny</button>
-                        </div>
-                    </div>
+                        Ilość wypożyczonych aut etc.
                     </main>
                 </div>
             </div>

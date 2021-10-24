@@ -1,8 +1,5 @@
 <?php 
     session_start();
-    // $_SESSION['login'] = "admin";
-    // $_SESSION['logged'] = true;
-    // $_SESSION['admin'] = true;
 ?>
 <!DOCTYPE html>
 <html lang="pl">

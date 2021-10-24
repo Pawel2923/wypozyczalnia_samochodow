@@ -83,10 +83,10 @@ const homeSettings = () => {
 if (window.location.hash == '#vehicles') {
     changeSettings(1);
 }
-if (window.location.hash == '#users') {
+else if (window.location.hash == '#users') {
     changeSettings(2);
 }
-if (window.location.hash == '#settings') {
+else if (window.location.hash == '#settings') {
     changeSettings(3);
 }
 

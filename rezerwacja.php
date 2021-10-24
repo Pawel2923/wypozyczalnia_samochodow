@@ -17,16 +17,29 @@
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
     <style>
         main {
-            align-items: unset;
+            -webkit-box-align: unset;
+                -ms-flex-align: unset;
+                    align-items: unset;
         }
         .vehicles {
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
-            flex-direction: column;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+                -ms-flex-direction: column;
+                    flex-direction: column;
         }
         .vehicles .vehicle {
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
-            align-items: center;
-            justify-content: space-evenly;
+            -webkit-box-align: center;
+                -ms-flex-align: center;
+                    align-items: center;
+            -webkit-box-pack: space-evenly;
+                -ms-flex-pack: space-evenly;
+                    justify-content: space-evenly;
             margin-bottom: 20px;
         }
         .vehicles .vehicle:last-child {
@@ -36,6 +49,8 @@
             margin-right: 20px;
         }
         .vehicles .vehicle .vehicle-price {
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
         }
         .vehicles .vehicle .vehicle-price div {
@@ -45,14 +60,21 @@
             width: 400px;
         }
         .vehicles button {
+            width: -webkit-fit-content;
+            width: -moz-fit-content;
             width: fit-content;
             margin: 0;
         }
         @media screen and (max-width: 800px) {
             .vehicles .vehicle,
             .vehicles .vehicle .vehicle-price {
-                flex-direction: column;
-                align-items: center;
+                -webkit-box-orient: vertical;
+                -webkit-box-direction: normal;
+                    -ms-flex-direction: column;
+                        flex-direction: column;
+                -webkit-box-align: center;
+                    -ms-flex-align: center;
+                        align-items: center;
             }
             .vehicles .vehicle .vehicle-image {
                 width: 100%;

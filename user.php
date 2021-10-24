@@ -35,10 +35,9 @@
         <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="admin.php"><li>Home</li></a>
-                    <a class="veh-link" href="admin.php#vehicles"><li>Pojazdy</li></a>
-                    <a class="users-link" href="admin.php#users"><li>Użytkownicy</li></a>
-                    <a class="settings-link" href="admin.php#settings"><li>Ustawienia</li></a>
+                    <a href="user.php"><li>Home</li></a>
+                    <a class="veh-link" href="user.php#vehicles"><li>Pojazdy</li></a>
+                    <a class="settings-link" href="user.php#settings"><li>Ustawienia</li></a>
                 </ul>
             </div>
             <div class="back"><i class="fas fa-angle-double-left"></i> <a href="index.php">Wyjdź</a></div>
@@ -73,7 +72,7 @@
             </div>
             <div class="all-settings">
                 <header>
-                    <h1><a href="admin.php">Panel administracyjny</a></h1>
+                    <h1><a href="user.php">Panel użytkownika</a></h1>
                     <div class="user">
                         <a href="login.php" class="login">
                             <i class="fas fa-sign-in-alt"></i>
@@ -103,10 +102,6 @@
                         <div class="home-option manage-veh">
                             <i class="fas fa-car"></i>
                             <span>Zarządzanie pojazdami</span>
-                        </div>
-                        <div class="home-option manage-users">
-                            <i class="fas fa-users"></i>
-                            <span>Zarządzanie użytkownikami</span>
                         </div>
                         <div class="home-option manage-settings">
                             <i class="fas fa-cog"></i>
@@ -151,54 +146,6 @@
                                 </button>
                             </a>
                         </div>
-                    </main>
-                </div>
-                <div class="users">
-                    <header>
-                        <h2>Użytkownicy</h2>
-                    </header>
-                    <main>
-                        <div class="option">
-                            <a href="users.php">
-                                <button class="option-button user-stats">
-                                    <h3>Statystyki użytkowników</h3>
-                                    <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                </button>
-                            </a>
-                        </div>
-                        <h3 style="margin-bottom: 10px;">Lista użytkowników</h3>
-                        <table>
-                            <tr>
-                                <th>ID</th>
-                                <th>Login</th>
-                                <th>Rezerwowane pojazdy</th>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>user1</td>
-                                <td>Nazwa pojazdu</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>user2</td>
-                                <td>Nazwa pojazdu</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>user3</td>
-                                <td>Nazwa pojazdu</td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>user4</td>
-                                <td>Nazwa pojazdu</td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>user5</td>
-                                <td>Nazwa pojazdu</td>
-                            </tr>
-                        </table>
                     </main>
                 </div>
                 <div class="settings">

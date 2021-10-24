@@ -1,7 +1,7 @@
 <?php 
-    if (isset($_SESSION['logged'])) 
+    if (isset($_SESSION['isLogged'])) 
     {
-        if ($_SESSION['logged'])
-        echo '<script src="logged.js"></script>';
+        if ($_SESSION['isLogged'])
+            echo '<script src="logged.js"></script>';
     }
 ?>

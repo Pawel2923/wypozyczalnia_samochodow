@@ -9,10 +9,23 @@
                     <i class="fas fa-sign-in-alt"></i>
                     <span class="login-caption">Zaloguj się</span>
                 </a>
-                <a href="admin.php" class="logged">
+                <div class="logged">
                     <i class="fas fa-user"></i>
                     <span class="login-caption"><?php if (isset($_SESSION['login'])) echo $_SESSION['login']; ?></span>
-                </a>
+                    <div class="logged-menu">
+                        <ul>
+                            <?php
+                                if (isset($_SESSION['login'])) 
+                                {
+                                    if ($_SESSION['isAdmin'])
+                                        echo '<li><a  href="admin.php">Panel administracyjny</a></li>';
+                                }
+                            ?>
+                            <li><a href="user.php">Panel użytkownika</a></li>
+                            <li><a href="logout.php">Wyloguj się</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="list-wrapper">
@@ -44,10 +57,23 @@
                 <i class="fas fa-sign-in-alt"></i>
                 <span class="login-caption">Zaloguj się</span>
             </a>
-            <a href="admin.php" class="logged">
+            <div class="logged">
                 <i class="fas fa-user"></i>
                 <span class="login-caption"><?php if (isset($_SESSION['login'])) echo $_SESSION['login']; ?></span>
-            </a>
+                <div class="logged-menu">
+                    <ul>
+                        <?php
+                            if (isset($_SESSION['login'])) 
+                            {
+                                if ($_SESSION['isAdmin'])
+                                    echo '<li><a href="admin.php">Panel administracyjny</a></li>';
+                            }
+                        ?>
+                        <li><a href="user.php">Panel użytkownika</a></li>
+                        <li><a href="logout.php">Wyloguj się</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </nav>
@@ -66,28 +92,53 @@
                 <i class="fas fa-sign-in-alt"></i>
                 <span class="login-caption">Zaloguj się</span>
             </a>
-            <a href="admin.php" class="logged">
+            <div class="logged">
                 <i class="fas fa-user"></i>
                 <span class="login-caption"><?php if (isset($_SESSION['login'])) echo $_SESSION['login']; ?></span>
-            </a>
+                <div class="logged-menu">
+                    <ul>
+                        <?php
+                            if (isset($_SESSION['login'])) 
+                            {
+                                if ($_SESSION['isAdmin'])
+                                    echo '<li><a href="admin.php">Panel administracyjny</a></li>';
+                            }
+                        ?>
+                        <li><a href="user.php">Panel użytkownika</a></li>
+                        <li><a href="logout.php">Wyloguj się</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </nav>
 <script>
-    window.addEventListener('resize', () => {
-        const nav = document.querySelectorAll('.desktop-nav');
-        const navHeight = nav.innerHeight;
-    });
-    const nav = document.querySelectorAll('.desktop-nav');
-    const navHeight = nav.innerHeight;
-    if (window.innerWidth > 800) {
-        window.addEventListener('scroll', () => {
+    window.addEventListener('scroll', () => {
+        if (window.innerWidth > 800) {
+            const nav = document.querySelectorAll('.desktop-nav');
+            const navHeight = nav[0].offsetHeight;
             if (window.pageYOffset > navHeight) {
                 document.querySelector('.fixed-nav').style.transform = "translateY(0)";
+                document.querySelector('.fixed-nav').style.webkitTransform = "translateY(0)";
+                document.querySelector('.fixed-nav').style.mozTransform = "translateY(0)";
+                document.querySelector('.fixed-nav').style.msTransform = "translateY(0)";
+                document.querySelector('.fixed-nav').style.oTransform = "translateY(0)";
+                document.querySelector('.fixed-nav').style.opacity = 1;
             }
             else {
                 document.querySelector('.fixed-nav').style.transform = "translateY(-100%)";
+                document.querySelector('.fixed-nav').style.webkitTransform = "translateY(-100%)";
+                document.querySelector('.fixed-nav').style.mozTransform = "translateY(-100%)";
+                document.querySelector('.fixed-nav').style.msTransform = "translateY(-100%)";
+                document.querySelector('.fixed-nav').style.oTransform = "translateY(-100%)";
             }
-        });
-    }
+        }
+        else {
+            document.querySelector('.fixed-nav').style.transform = "translateY(-100%)";
+            document.querySelector('.fixed-nav').style.webkitTransform = "translateY(-100%)";
+            document.querySelector('.fixed-nav').style.mozTransform = "translateY(-100%)";
+            document.querySelector('.fixed-nav').style.msTransform = "translateY(-100%)";
+            document.querySelector('.fixed-nav').style.oTransform = "translateY(-100%)";
+        }
+    });
 </script>
