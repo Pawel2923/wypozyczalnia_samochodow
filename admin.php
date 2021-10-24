@@ -1,9 +1,9 @@
 <?php 
     session_start();
-    if (!$_SESSION['logged'] && !$_SESSION['adminMode']) {
-        header('Location: index.php');
-        exit;
-    }
+    // if (!$_SESSION['logged'] && !$_SESSION['adminMode']) {
+    //     header('Location: index.php');
+    //     exit;
+    // }
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -200,9 +200,6 @@
         </div>
     </div>
     <script src="adminHandler.js"></script>
-    <?php 
-        if ($_SESSION['logged'])
-            echo '<script src="logged.js"></script>';
-    ?>
+    <?php include_once('logged.php'); ?>
 </body>
 </html>

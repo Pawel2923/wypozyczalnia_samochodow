@@ -1,9 +1,9 @@
 <?php 
     session_start(); 
-    if (!$_SESSION['logged'] && !$_SESSION['adminMode']) {
-        header('Location: index.php');
-        exit;
-    }
+    // if (!$_SESSION['logged'] && !$_SESSION['adminMode']) {
+    //     header('Location: index.php');
+    //     exit;
+    // }
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -39,6 +39,26 @@
             color: #000;
         }
 
+        main form {
+            width: 60%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main form input,
+        main form button {
+            width: 50%;
+        }
+
+        main form label,
+        main form button {
+            margin-top: 20px;
+        }
+
+        main form label:first-child {
+            margin-top: 0;
+        }
+
         @media screen and (max-width: 800px) {
             .content .vehicles header>* {
                 margin-right: 10px;
@@ -69,7 +89,7 @@
                     </a>
                     <a href="admin.php" class="logged">
                         <i class="fas fa-user"></i>
-                        <span class="login-caption"><?php echo $_SESSION['login'] ?></span>
+                        <span class="login-caption"><?php if (isset($_SESSION['login'])) echo $_SESSION['login']; ?></span>
                     </a>
                 </div>
                 <div class="overlay"></div>
@@ -84,7 +104,7 @@
                         </a>
                         <a href="admin.php" class="logged">
                             <i class="fas fa-user"></i>
-                            <span class="login-caption"><?php echo $_SESSION['login'] ?></span>
+                            <span class="login-caption"><?php if (isset($_SESSION['login'])) echo $_SESSION['login']; ?></span>
                         </a>
                     </div>
                 </header>
@@ -95,7 +115,13 @@
                         <h2>Dodawanie nowych pojazdów</h2>
                     </header>
                     <main>
-                        Andrzej
+                        <form action="" method="POST">
+                            <label>Nazwa pojazdu</label>
+                            <input type="text" name="vehicle-name" required>
+                            <label>Cena za godzinę rezerwacji</label>
+                            <input type="text" name="vehicle-price" required>
+                            <button type="submit">Dodaj</button>
+                        </form>
                     </main>
                 </div>
             </div>
@@ -112,9 +138,20 @@
         </div>
     </div>
     <script src="adminHandler.js"></script>
-    <?php 
-        if ($_SESSION['logged'])
-            echo '<script src="logged.js"></script>';
-    ?>
+    <script>
+        const checkInput = (name) => {
+            name.addEventListener('invalid', () => {
+                name.classList.add('subscription-input-invalid');
+            });
+            name.addEventListener('keyup', () => {
+                name.classList.remove('subscription-input-invalid');
+            });
+        };
+        const input = document.querySelectorAll('main form input');
+        for (let i=0; i<input.length; i++) {
+            checkInput(input[i]);
+        }
+    </script>
+    <?php include_once('logged.php'); ?>
 </body>
 </html>

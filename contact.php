@@ -17,59 +17,7 @@
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <nav class="mobile-nav">
-        <div class="open"><i class="fas fa-bars"></i></div>
-        <div class="nav-wrapper">
-            <div class="top-content">
-                <div></div>
-                <div class="close"><i class="fas fa-times"></i></div>
-                <div class="user">
-                    <a href="login.php" class="login">
-                        <i class="fas fa-sign-in-alt"></i>
-                        <span class="login-caption">Zaloguj się</span>
-                    </a>
-                    <a href="admin.php" class="logged">
-                        <i class="fas fa-user"></i>
-                        <span class="login-caption"><?php echo $_SESSION['login'] ?></span>
-                    </a>
-                </div>
-            </div>
-            <div class="list-wrapper">
-                <ul>
-                    <a href="index.php"><li>Home</li></a>
-                    <a href="rezerwacja.php"><li>Rezerwacja online</li></a>
-                    <a href="wycena.php"><li>Uzyskaj wycenę</li></a>
-                    <a href="vehicles.php"><li>Nasze pojazdy</li></a>
-                    <a href="contact.php"><li>Kontakt</li></a>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <nav class="desktop-nav">
-        <div class="nav-header">
-            <a href="index.php"><h2>Wypożyczalnia</h2></a>
-        </div>
-        <div class="list-wrapper">
-            <div class="spacer"></div>
-            <ul>
-                <a href="index.php"><li>Home</li></a>
-                <a href="rezerwacja.php"><li>Rezerwacja online</li></a>
-                <a href="wycena.php"><li>Uzyskaj wycenę</li></a>
-                <a href="vehicles.php"><li>Nasze pojazdy</li></a>
-                <a href="contact.php"><li>Kontakt</li></a>
-            </ul>
-            <div class="user">
-                <a href="login.php" class="login">
-                    <i class="fas fa-sign-in-alt"></i>
-                    <span class="login-caption">Zaloguj się</span>
-                </a>
-                <a href="admin.php" class="logged">
-                    <i class="fas fa-user"></i>
-                    <span class="login-caption"><?php echo $_SESSION['login'] ?></span>
-                </a>
-            </div>
-        </div>
-    </nav>
+    <?php require_once("nav.php") ?>
     <main>
         <section class="contact-with-us">
             <div class="contact-wrapper">
@@ -116,9 +64,6 @@
         checkInput(subscriptionInput);
     </script>
     <script src="nav.js"></script>
-    <?php 
-        if ($_SESSION['logged'])
-            echo '<script src="logged.js"></script>';
-    ?>
+    <?php include_once('logged.php'); ?>
 </body>
 </html>

@@ -251,6 +251,14 @@ main table {
     margin-bottom: 30px;
 }
 
+main form input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    outline: none;
+    margin-top: 10px;
+}
+
 footer {
     background-color: #fff;
     -ms-grid-rows: 1fr;
