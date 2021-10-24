@@ -75,8 +75,98 @@ nav.desktop-nav ul a {
   padding: 10px 0;
 }
 
+.logged {
+  position: relative;
+}
+
+.logged-menu {
+  background-color: #fff;
+  position: absolute;
+  transform: translateY(-20%);
+  -webkit-transform: translateY(-20%);
+  -moz-transform: translateY(-20%);
+  -ms-transform: translateY(-20%);
+  -o-transform: translateY(-20%);
+  opacity: 0;
+  -webkit-transition: opacity 0.2s ease, -webkit-transform 0.2s ease;
+  transition: opacity 0.2s ease, -webkit-transform 0.2s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease, -webkit-transform 0.2s ease;
+  -webkit-transition: transform 0.2s ease, opacity 0.2s ease;
+  -moz-transition: transform 0.2s ease, opacity 0.2s ease;
+  -ms-transition: transform 0.2s ease, opacity 0.2s ease;
+  -o-transition: transform 0.2s ease, opacity 0.2s ease;
+  visibility: hidden;
+  padding: 20px;
+  padding-top: 10px;
+  z-index: 3;
+}
+
+.logged-menu a:hover {
+  color: #60B8FF;
+}
+
+.logged-menu ul {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  list-style: none;
+}
+
+.logged-menu li {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.logged-menu li:last-child {
+  margin-bottom: 0;
+}
+
+.logged:hover .logged-menu {
+  opacity: 1;
+  transform: translateY(0);
+  -webkit-transform: translateY(0);
+  -moz-transform: translateY(0);
+  -ms-transform: translateY(0);
+  -o-transform: translateY(0);
+  visibility: visible;
+}
+
+.fixed-nav {
+  background-color: #fff;
+  -ms-grid-rows: 1fr !important;
+  grid-template-rows: 1fr !important;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translateY(-100%);
+  -webkit-transform: translateY(-100%);
+  -moz-transform: translateY(-100%);
+  -ms-transform: translateY(-100%);
+  -o-transform: translateY(-100%);
+  -webkit-transition: -webkit-transform 0.2s ease;
+  transition: -webkit-transform 0.2s ease;
+  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, -webkit-transform 0.2s ease;
+  -webkit-transition: transform 0.2s ease;
+  -moz-transition: transform 0.2s ease;
+  -ms-transition: transform 0.2s ease;
+  -o-transition: transform 0.2s ease;
+  z-index: 2;
+}
+
 .user a {
   padding: 10px 0;
+  color: #000;
 }
 
 .user i {
@@ -88,15 +178,22 @@ nav.desktop-nav ul a {
   margin-right: 0px;
 }
 
-nav .login-caption {
+.login-caption {
   font-weight: 300;
   -webkit-transition: color .2s ease;
   -o-transition: color .2s ease;
   transition: color .2s ease;
 }
 
-nav .user:hover .login-caption {
+.user a:hover .login-caption {
   color: #60B8FF;
+}
+
+.user .logged {
+  display: none;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
 }
 
 button {
@@ -113,6 +210,10 @@ button {
 
 button:hover {
   background-color: #fff;
+}
+
+.contact-with-us a {
+  color: #000;
 }
 
 footer {
@@ -166,7 +267,7 @@ footer .bottom-content .footer-socials {
 
 footer .bottom-content .footer-socials i {
   margin-right: 10px;
-  font-size: 1.4em;
+  font-size: 1.8rem;
   -webkit-transition: color .2s ease;
   -o-transition: color .2s ease;
   transition: color .2s ease;
@@ -284,6 +385,16 @@ footer .bottom-content .bottom-text {
         -ms-flex-order: 1;
             order: 1;
   }
+  nav.mobile-nav .logged-menu li {
+    text-align: center;
+  }
+  .logged:hover .logged-menu {
+    transform: translateX(-45%);
+    -webkit-transform: translateX(-45%);
+    -moz-transform: translateX(-45%);
+    -ms-transform: translateX(-45%);
+    -o-transform: translateX(-45%);
+}
   @media screen and (max-width: 400px) {
     nav.mobile-nav .login-caption {
       display: none;

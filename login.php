@@ -1,3 +1,6 @@
+<?php 
+    session_start();
+?>
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -51,5 +54,21 @@
         });
     </script>
     <script src="loginHandler.js"></script>
+    <?php
+        if (isset($_POST['login']))
+        {
+            if ($_POST['login'] === "admin") {
+                require_once('loginAsAdmin.php');
+            }
+            elseif ($_POST['login'] !== "admin") {
+                require_once('loginAsUser.php');
+            }
+        }
+        if (isset($_SESSION['login']))
+        {
+            header('Location:index.php');
+            exit;
+        }
+    ?>
 </body>
 </html>

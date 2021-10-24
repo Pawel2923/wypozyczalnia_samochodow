@@ -15,22 +15,69 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/index.css">
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
+    <style>
+        section {
+            width: 60%;
+        }
+        section h2 {
+            margin-bottom: 5px;
+        }
+        section p {
+            margin-bottom: 20px;
+        }
+        section form input,
+        section form textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            outline: none;
+            margin-top: 10px;
+            border: 2px solid #000;
+        }
+        section form textarea {
+            resize: none;
+            font-family: inherit;
+            font-size: inherit;
+            height: 200px;
+        }
+        section .contact {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+        }
+        section .contact>* {
+            margin-right: 10px;
+        }
+        section .contact>*:last-child {
+            margin-right: 0;
+        }
+        section form button {
+            margin-top: 20px;
+            width: 50%;
+        }
+        @media screen and (max-width: 800px) {
+            section {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
     <?php require_once("nav.php") ?>
     <main>
-        <section class="contact-with-us">
-            <div class="contact-wrapper">
-                <div class="contact-text">
-                    <h2>Skontaktuj się z nami</h2>
-                    <ul>
-                        <li><a title="Otwórz w mapach Google" target="_blank" href="https://goo.gl/maps/kNkyDjoN2y8zmx7A6">Jana Długosza 40, 33-300 Nowy Sącz</a></li>
-                        <li><a title="Wyślij email" href="mailto:wypoztczalnia123@domena.pl">wypozyczalnia123@domena.pl</a></li>
-                        <li><a title="Zadzwoń" href="tel:+48 123 456 789">+48 123 456 789</a></li>
-                    </ul>
+        <section>
+            <h2>Uzyskaj wycenę</h2>
+            <p>Chcesz wypożyczyć pojazd na swoją następną przygodę? Wpisz poniżej swoje dane, a ktoś z naszego zespołu wkrótce skontaktuje się, aby przekazać Ci wycenę.</p>
+            <form action="" method="POST">
+                <input type="text" name="imie" placeholder="Imię" required>
+                <input type="text" name="nazwisko" placeholder="Nazwisko" required>
+                <div class="contact">
+                    <input type="email" name="email" placeholder="Adres e-mail" required>
+                    <input type="tel" name="tel" placeholder="Nr telefonu">
                 </div>
-                <div class="image-wrapper"></div>
-            </div>
+                <textarea name="comment" placeholder="Wiadomość"></textarea>
+                <button type="submit">Wyślij</button>
+            </form>
         </section>
     </main>
     <footer>

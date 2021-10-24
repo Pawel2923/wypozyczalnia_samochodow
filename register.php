@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -56,5 +57,12 @@
         });
         passwdCheck();
     </script>
+    <?php 
+        if (isset($_SESSION['login'])) 
+        {
+            header('Location:index.php');
+            exit;
+        }
+    ?>
 </body>
 </html>

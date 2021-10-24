@@ -1,3 +1,6 @@
+<?php 
+    session_start();
+?>
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -16,51 +19,7 @@
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <nav class="mobile-nav">
-        <div class="open"><i class="fas fa-bars"></i></div>
-        <div class="nav-wrapper">
-            <div class="top-content">
-                <div></div>
-                <div class="close"><i class="fas fa-times"></i></div>
-                <div class="user">
-                    <a href="login.php">
-                        <i class="fas fa-user-circle"></i>
-                        <span class="login-caption">Zaloguj się</span>
-                    </a>
-                </div>
-            </div>
-            <div class="list-wrapper">
-                <ul>
-                    <a href="index.php"><li>Home</li></a>
-                    <a href="rezerwacja.php"><li>Rezerwacja online</li></a>
-                    <a href="wycena.php"><li>Uzyskaj wycenę</li></a>
-                    <a href="vehicles.php"><li>Nasze pojazdy</li></a>
-                    <a href="contact.php"><li>Kontakt</li></a>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <nav class="desktop-nav">
-        <div class="nav-header">
-            <a href="index.php"><h2>Wypożyczalnia</h2></a>
-        </div>
-        <div class="list-wrapper">
-            <div class="spacer"></div>
-            <ul>
-                <a href="index.php"><li>Home</li></a>
-                <a href="rezerwacja.php"><li>Rezerwacja online</li></a>
-                <a href="wycena.php"><li>Uzyskaj wycenę</li></a>
-                <a href="vehicles.php"><li>Nasze pojazdy</li></a>
-                <a href="contact.php"><li>Kontakt</li></a>
-            </ul>
-            <div class="user">
-                <a href="login.php">
-                    <i class="fas fa-user-circle"></i>
-                    <span class="login-caption">Zaloguj się</span>
-                </a>
-            </div>
-        </div>
-    </nav>
+    <?php require_once("nav.php") ?>
     <main>
         <section class="main-header">
             <h1>Wypożyczalnia — witamy!</h1>
@@ -87,7 +46,7 @@
                         <span>1 godz.</span>
                         <span>65,00 zł</span>
                     </div>
-                    <button type="button">Rezerwacja</button>
+                    <button type="button">Wypożycz</button>
                 </div>
                 <div class="car">
                     <div class="image-wrapper">
@@ -100,7 +59,7 @@
                         <span>1 godz.</span>
                         <span>55,00 zł</span>
                     </div>
-                    <button type="button">Rezerwacja</button>
+                    <button type="button">Wypożycz</button>
                 </div>
                 <div class="car">
                     <div class="image-wrapper">
@@ -113,7 +72,7 @@
                         <span>1 godz.</span>
                         <span>65,00 zł</span>
                     </div>
-                    <button type="button">Rezerwacja</button>
+                    <button type="button">Wypożycz</button>
                 </div>
                 <div class="car">
                     <div class="image-wrapper">
@@ -124,9 +83,9 @@
                     <div class="divider"></div>
                     <div class="car-price">
                         <span>1 godz.</span>
-                        <span>65,00 zł</span>
+                        <span>80,00 zł</span>
                     </div>
-                    <button type="button">Rezerwacja</button>
+                    <button type="button">Wypożycz</button>
                 </div>
             </div>
         </section>
@@ -135,9 +94,9 @@
                 <div class="contact-text">
                     <h2>Skontaktuj się z nami</h2>
                     <ul>
-                        <li>Puławska 11, 96-111 Warszawa</li>
-                        <li>pawelporemba123@gmail.com</li>
-                        <li>(+48) 123 456 789</li>
+                        <li><a title="Otwórz w mapach Google" target="_blank" href="https://goo.gl/maps/kNkyDjoN2y8zmx7A6">Jana Długosza 40, 33-300 Nowy Sącz</a></li>
+                        <li><a title="Wyślij email" href="mailto:wypoztczalnia123@domena.pl">wypozyczalnia123@domena.pl</a></li>
+                        <li><a title="Zadzwoń" href="tel:+48 123 456 789">+48 123 456 789</a></li>
                     </ul>
                 </div>
                 <div class="image-wrapper"></div>
@@ -175,5 +134,6 @@
         checkInput(subscriptionInput);
     </script>
     <script src="nav.js"></script>
+    <?php include_once('logged.php'); ?>
 </body>
 </html>
