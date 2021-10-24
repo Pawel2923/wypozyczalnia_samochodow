@@ -121,6 +121,10 @@ button:hover {
   background-color: #fff;
 }
 
+.contact-with-us a {
+  color: #000;
+}
+
 footer {
   display: -ms-grid;
   display: grid;
@@ -172,7 +176,7 @@ footer .bottom-content .footer-socials {
 
 footer .bottom-content .footer-socials i {
   margin-right: 10px;
-  font-size: 1.4em;
+  font-size: 1.8rem;
   -webkit-transition: color .2s ease;
   -o-transition: color .2s ease;
   transition: color .2s ease;

@@ -49,7 +49,7 @@
                         <span>1 godz.</span>
                         <span>65,00 zł</span>
                     </div>
-                    <button type="button">Rezerwacja</button>
+                    <button type="button">Wypożycz</button>
                 </div>
                 <div class="car">
                     <div class="image-wrapper">
@@ -62,7 +62,7 @@
                         <span>1 godz.</span>
                         <span>55,00 zł</span>
                     </div>
-                    <button type="button">Rezerwacja</button>
+                    <button type="button">Wypożycz</button>
                 </div>
                 <div class="car">
                     <div class="image-wrapper">
@@ -75,7 +75,7 @@
                         <span>1 godz.</span>
                         <span>65,00 zł</span>
                     </div>
-                    <button type="button">Rezerwacja</button>
+                    <button type="button">Wypożycz</button>
                 </div>
                 <div class="car">
                     <div class="image-wrapper">
@@ -88,7 +88,7 @@
                         <span>1 godz.</span>
                         <span>80,00 zł</span>
                     </div>
-                    <button type="button">Rezerwacja</button>
+                    <button type="button">Wypożycz</button>
                 </div>
             </div>
         </section>
@@ -97,9 +97,9 @@
                 <div class="contact-text">
                     <h2>Skontaktuj się z nami</h2>
                     <ul>
-                        <li>Puławska 11, 96-111 Warszawa</li>
-                        <li>pawelporemba123@gmail.com</li>
-                        <li>(+48) 123 456 789</li>
+                        <li><a title="Otwórz w mapach Google" target="_blank" href="https://goo.gl/maps/kNkyDjoN2y8zmx7A6">Jana Długosza 40, 33-300 Nowy Sącz</a></li>
+                        <li><a title="Wyślij email" href="mailto:wypoztczalnia123@domena.pl">wypozyczalnia123@domena.pl</a></li>
+                        <li><a title="Zadzwoń" href="tel:+48 123 456 789">+48 123 456 789</a></li>
                     </ul>
                 </div>
                 <div class="image-wrapper"></div>

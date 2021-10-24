@@ -26,39 +26,31 @@
             display: flex;
             align-items: center;
         }
-
         .content .vehicles header>* {
             margin-right: 20px;
         }
-
         .content .vehicles header>*:last-child {
             margin-right: 0;
         }
-
         .content .vehicles header>* a {
             color: #000;
         }
-
         main form {
             width: 60%;
             display: flex;
             flex-direction: column;
         }
-
         main form input,
         main form button {
             width: 50%;
         }
-
         main form label,
         main form button {
             margin-top: 20px;
         }
-
         main form label:first-child {
             margin-top: 0;
         }
-
         @media screen and (max-width: 800px) {
             .content .vehicles header>* {
                 margin-right: 10px;

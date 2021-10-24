@@ -19,18 +19,19 @@
 <body>
     <?php require_once("nav.php") ?>
     <main>
-        <section class="contact-with-us">
-            <div class="contact-wrapper">
-                <div class="contact-text">
-                    <h2>Skontaktuj się z nami</h2>
-                    <ul>
-                        <li><a title="Otwórz w mapach Google" target="_blank" href="https://goo.gl/maps/kNkyDjoN2y8zmx7A6">Jana Długosza 40, 33-300 Nowy Sącz</a></li>
-                        <li><a title="Wyślij email" href="mailto:wypoztczalnia123@domena.pl">wypozyczalnia123@domena.pl</a></li>
-                        <li><a title="Zadzwoń" href="tel:+48 123 456 789">+48 123 456 789</a></li>
-                    </ul>
-                </div>
-                <div class="image-wrapper"></div>
-            </div>
+        <section>
+            <h2>Uzyskaj wycenę</h2>
+            <form action="" method="POST">
+                <input type="text" name="imie">
+                <br>
+                <input type="text" name="nazwisko">
+                <br>
+                <input type="email" name="email">
+                <input type="tel" name="tel">
+                <br>
+                <input type="text" name="comment">
+                <button type="submit">Wyślij</button>
+            </form>
         </section>
     </main>
     <footer>
