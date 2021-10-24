@@ -15,6 +15,19 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/index.css">
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
+    <style>
+        section form input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            outline: none;
+            margin-top: 10px;
+        }
+
+        section form button {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <?php require_once("nav.php") ?>
@@ -23,12 +36,9 @@
             <h2>Uzyskaj wycenę</h2>
             <form action="" method="POST">
                 <input type="text" name="imie">
-                <br>
                 <input type="text" name="nazwisko">
-                <br>
                 <input type="email" name="email">
                 <input type="tel" name="tel">
-                <br>
                 <input type="text" name="comment">
                 <button type="submit">Wyślij</button>
             </form>

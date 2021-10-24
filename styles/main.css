@@ -75,6 +75,26 @@ nav.desktop-nav ul a {
   padding: 10px 0;
 }
 
+.fixed-nav {
+  background-color: #fff;
+  grid-template-rows: 1fr !important;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translateY(-100%);
+  -webkit-transform: translateY(-100%);
+  -moz-transform: translateY(-100%);
+  -ms-transform: translateY(-100%);
+  -o-transform: translateY(-100%);
+  transition: transform 0.2s ease;
+  -webkit-transition: transform 0.2s ease;
+  -moz-transition: transform 0.2s ease;
+  -ms-transition: transform 0.2s ease;
+  -o-transition: transform 0.2s ease;
+}
+
 .user a {
   padding: 10px 0;
   color: #000;
