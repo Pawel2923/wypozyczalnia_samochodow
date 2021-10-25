@@ -4,14 +4,6 @@
     //     header('Location: index.php');
     //     exit;
     // }
-    if (isset($_SESSION['login']))
-    {
-        if ($_SESSION['login'] !== "admin")
-        {
-            header('Location:index.php');
-            exit;
-        }
-    }
 ?>
 <!DOCTYPE html>
 <html lang="pl">
