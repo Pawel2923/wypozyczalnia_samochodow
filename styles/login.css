@@ -64,6 +64,7 @@ form input {
   border-bottom: 1px solid #000;
   padding: 2px;
   font-size: 18px;
+  width: 100%;
 }
 
 form div {
@@ -130,4 +131,12 @@ form input:focus {
 
 form button {
   margin-top: 20px;
+}
+
+.warning {
+  color: #ff9d9d;
+}
+
+.error {
+  color: #ff6c6c;
 }

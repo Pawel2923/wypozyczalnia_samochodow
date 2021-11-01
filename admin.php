@@ -1,16 +1,8 @@
 <?php 
     session_start();
     if (!$_SESSION['isLogged'] && !$_SESSION['isAdmin']) {
-        header('Location: index.php');
+        header('Location: login.php');
         exit;
-    }
-    if (isset($_SESSION['login']))
-    {
-        if ($_SESSION['login'] !== "admin")
-        {
-            header('Location:index.php');
-            exit;
-        }
     }
 ?>
 <!DOCTYPE html>
@@ -120,7 +112,7 @@
                     </header>
                     <main>
                         <div class="option">
-                            <a href="addvehicles.php">
+                            <a href="admin/addvehicles.php">
                                 <button class="option-button add-veh">
                                     <h3>Dodawanie nowych pojazdów</h3>
                                     <div class="icon"><i class="fas fa-chevron-right"></i></div>
@@ -128,7 +120,7 @@
                             </a>
                         </div>
                         <div class="option">
-                            <a href="vehicleslist.php">
+                            <a href="admin/vehicleslist.php">
                                 <button class="option-button veh-list">
                                     <h3>Lista pojazdów</h3>
                                     <div class="icon"><i class="fas fa-chevron-right"></i></div>
@@ -136,7 +128,7 @@
                             </a>
                         </div>
                         <div class="option">
-                            <a href="vehiclerent.php">
+                            <a href="admin/vehiclerent.php">
                                 <button class="option-button veh-res">
                                     <h3>Rezerwacja pojazdów</h3>
                                     <div class="icon"><i class="fas fa-chevron-right"></i></div>
@@ -144,7 +136,7 @@
                             </a>
                         </div>
                         <div class="option">
-                            <a href="delvehicle.php">
+                            <a href="admin/delvehicle.php">
                                 <button class="option-button del-veh">
                                     <h3>Usuwanie pojazdów</h3>
                                     <div class="icon"><i class="fas fa-chevron-right"></i></div>
@@ -159,7 +151,7 @@
                     </header>
                     <main>
                         <div class="option">
-                            <a href="users.php">
+                            <a href="admin/users.php">
                                 <button class="option-button user-stats">
                                     <h3>Statystyki użytkowników</h3>
                                     <div class="icon"><i class="fas fa-chevron-right"></i></div>

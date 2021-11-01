@@ -1,9 +1,9 @@
 <?php 
     session_start();
-    // if (!$_SESSION['logged'] && !$_SESSION['adminMode']) {
-    //     header('Location: index.php');
-    //     exit;
-    // }
+    if (!$_SESSION['isLogged']) {
+        header('Location: login.php');
+        exit;
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pl">

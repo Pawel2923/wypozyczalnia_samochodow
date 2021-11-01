@@ -5,9 +5,9 @@
             <div></div>
             <div class="close"><i class="fas fa-times"></i></div>
             <div class="user">
-                <a href="login.php" class="login">
+                <a href="register.php" class="login">
                     <i class="fas fa-sign-in-alt"></i>
-                    <span class="login-caption">Zaloguj się</span>
+                    <span class="login-caption">Zarejestruj się</span>
                 </a>
                 <div class="logged">
                     <i class="fas fa-user"></i>
@@ -15,10 +15,10 @@
                     <div class="logged-menu">
                         <ul>
                             <?php
-                                if (isset($_SESSION['login'])) 
+                                if (isset($_SESSION['isAdmin'])) 
                                 {
                                     if ($_SESSION['isAdmin'])
-                                        echo '<li><a  href="admin.php">Panel administracyjny</a></li>';
+                                        echo '<li><a href="admin.php">Panel administracyjny</a></li>';
                                 }
                             ?>
                             <li><a href="user.php">Panel użytkownika</a></li>
@@ -53,9 +53,9 @@
             <a href="contact.php"><li>Kontakt</li></a>
         </ul>
         <div class="user">
-            <a href="login.php" class="login">
+            <a href="register.php" class="login">
                 <i class="fas fa-sign-in-alt"></i>
-                <span class="login-caption">Zaloguj się</span>
+                <span class="login-caption">Zarejestruj się</span>
             </a>
             <div class="logged">
                 <i class="fas fa-user"></i>
@@ -63,7 +63,7 @@
                 <div class="logged-menu">
                     <ul>
                         <?php
-                            if (isset($_SESSION['login'])) 
+                            if (isset($_SESSION['isAdmin'])) 
                             {
                                 if ($_SESSION['isAdmin'])
                                     echo '<li><a href="admin.php">Panel administracyjny</a></li>';
@@ -88,9 +88,9 @@
             <a href="contact.php"><li>Kontakt</li></a>
         </ul>
         <div class="user">
-            <a href="login.php" class="login">
+            <a href="register.php" class="login">
                 <i class="fas fa-sign-in-alt"></i>
-                <span class="login-caption">Zaloguj się</span>
+                <span class="login-caption">Zarejestruj się</span>
             </a>
             <div class="logged">
                 <i class="fas fa-user"></i>
@@ -98,7 +98,7 @@
                 <div class="logged-menu">
                     <ul>
                         <?php
-                            if (isset($_SESSION['login'])) 
+                            if (isset($_SESSION['isAdmin'])) 
                             {
                                 if ($_SESSION['isAdmin'])
                                     echo '<li><a href="admin.php">Panel administracyjny</a></li>';

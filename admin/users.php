@@ -1,9 +1,9 @@
 <?php 
     session_start(); 
-    // if (!$_SESSION['logged'] && !$_SESSION['adminMode']) {
-    //     header('Location: index.php');
-    //     exit;
-    // }
+    if (!$_SESSION['isLogged'] && !$_SESSION['isAdmin']) {
+        header('Location: login.php');
+        exit;
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -18,14 +18,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/panel.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/panel.css">
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
     <style>
         .content .vehicles header {
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
-            align-items: center;
-            justify-content: flex-start;
+            -webkit-box-align: center;
+                -ms-flex-align: center;
+                    align-items: center;
+            -webkit-box-pack: start;
+                -ms-flex-pack: start;
+                    justify-content: flex-start;
         }
         .content .vehicles header>* {
             margin-right: 20px;
@@ -136,19 +142,19 @@
         <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="admin.php"><li>Home</li></a>
-                    <a class="veh-link" href="admin.php#vehicles"><li>Pojazdy</li></a>
-                    <a class="users-link" href="admin.php#users"><li>Użytkownicy</li></a>
-                    <a class="settings-link" href="admin.php#settings"><li>Ustawienia</li></a>
+                    <a href="../admin.php"><li>Home</li></a>
+                    <a class="veh-link" href="../admin.php#vehicles"><li>Pojazdy</li></a>
+                    <a class="users-link" href="../admin.php#users"><li>Użytkownicy</li></a>
+                    <a class="settings-link" href="../admin.php#settings"><li>Ustawienia</li></a>
                 </ul>
             </div>
-            <div class="back"><i class="fas fa-angle-double-left"></i> <a href="index.php">Wyjdź</a></div>
+            <div class="back"><i class="fas fa-angle-double-left"></i> <a href="../index.php">Wyjdź</a></div>
         </nav>
         <div class="content">
             <div class="mobile-nav">
                 <div class="open"><i class="fas fa-bars"></i></div>
                 <div class="user">
-                    <a href="login.php" class="login">
+                    <a href="../login.php" class="login">
                         <i class="fas fa-sign-in-alt"></i>
                         <span class="login-caption">Zaloguj się</span>
                     </a>
@@ -158,14 +164,14 @@
                         <div class="logged-menu">
                             <ul>
                                 <?php
-                                    if (isset($_SESSION['login'])) 
+                                    if (isset($_SESSION['isAdmin'])) 
                                     {
                                         if ($_SESSION['isAdmin'])
-                                            echo '<li><a href="admin.php">Panel administracyjny</a></li>';
+                                            echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
                                     }
                                 ?>
-                                <li><a href="user.php">Panel użytkownika</a></li>
-                                <li><a href="logout.php">Wyloguj się</a></li>
+                                <li><a href="../user.php">Panel użytkownika</a></li>
+                                <li><a href="../logout.php">Wyloguj się</a></li>
                             </ul>
                         </div>
                     </div>
@@ -174,9 +180,9 @@
             </div>
             <div class="all-settings">
                 <header>
-                    <h1><a href="admin.php">Panel administracyjny</a></h1>
+                    <h1><a href="../admin.php">Panel administracyjny</a></h1>
                     <div class="user">
-                        <a href="login.php" class="login">
+                        <a href="../login.php" class="login">
                             <i class="fas fa-sign-in-alt"></i>
                             <span class="login-caption">Zaloguj się</span>
                         </a>
@@ -186,14 +192,14 @@
                             <div class="logged-menu">
                                 <ul>
                                     <?php
-                                        if (isset($_SESSION['login'])) 
+                                        if (isset($_SESSION['isAdmin'])) 
                                         {
                                             if ($_SESSION['isAdmin'])
-                                                echo '<li><a href="admin.php">Panel administracyjny</a></li>';
+                                                echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
                                         }
                                     ?>
-                                    <li><a href="user.php">Panel użytkownika</a></li>
-                                    <li><a href="logout.php">Wyloguj się</a></li>
+                                    <li><a href="../user.php">Panel użytkownika</a></li>
+                                    <li><a href="../logout.php">Wyloguj się</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -201,65 +207,12 @@
                 </header>
                 <div class="vehicles">
                     <header>
-                        <h2><a href="admin.php#vehicles">Pojazdy</a></h2> 
+                        <h2><a href="admin.php#users">Użytkownicy</a></h2> 
                         <i class="fas fa-chevron-right"></i> 
-                        <h2>Usuwanie pojazdów</h2>
+                        <h2>Statystyki użytkowników</h2>
                     </header>
                     <main>
-                    <div class="cars">
-                        <div class="car">
-                            <div class="image-wrapper">
-                                <img src="https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjByc3gyc3BrZzQ4YjMtT1RPTU9UT1BMIiwidyI6W3siZm4iOiJ3ZzRnbnFwNnkxZi1PVE9NT1RPUEwiLCJzIjoiMTYiLCJwIjoiMTAsLTEwIiwiYSI6IjAifV19.hXuoemts_h7soE7DwcsvGnYuHhVCV0y0sCWXJ0ZzIVE/image;s=732x488" alt="Zdjęcie samochodu" width="100%" height="100%">
-                                <div class="img-overlay"></div>
-                            </div>
-                            <span class="car-name">Toyota Yaris</span>
-                            <div class="divider"></div>
-                            <div class="car-price">
-                                <span>1 godz.</span>
-                                <span>65,00 zł</span>
-                            </div>
-                            <button type="button">Usuń</button>
-                        </div>
-                        <div class="car">
-                            <div class="image-wrapper">
-                                <img src="https://i.wpimg.pl/600x0/m.autokult.pl/ford-fusion-4-3ddb5b2d153e08d106.jpg" alt="Zdjęcie samochodu" width="100%" height="100%">
-                                <div class="img-overlay"></div>
-                            </div>
-                            <span class="car-name">Ford Fusion</span>
-                            <div class="divider"></div>
-                            <div class="car-price">
-                                <span>1 godz.</span>
-                                <span>55,00 zł</span>
-                            </div>
-                            <button type="button">Usuń</button>
-                        </div>
-                        <div class="car">
-                            <div class="image-wrapper">
-                                <img src="https://www.auto-gazda.pl/application/files/8816/2861/3097/1.jpg" alt="Zdjęcie samochodu" width="100%" height="100%">
-                                <div class="img-overlay"></div>
-                            </div>
-                            <span class="car-name">Volkswagen Golf</span>
-                            <div class="divider"></div>
-                            <div class="car-price">
-                                <span>1 godz.</span>
-                                <span>65,00 zł</span>
-                            </div>
-                            <button type="button">Usuń</button>
-                        </div>
-                        <div class="car">
-                            <div class="image-wrapper">
-                                <img src="https://image.ceneostatic.pl/data/products/95699167/i-mercedes-sprinter-313-2013-r.jpg" alt="Zdjęcie samochodu" width="100%" height="100%">
-                                <div class="img-overlay"></div>
-                            </div>
-                            <span class="car-name">Mercedes Sprinter</span>
-                            <div class="divider"></div>
-                            <div class="car-price">
-                                <span>1 godz.</span>
-                                <span>80,00 zł</span>
-                            </div>
-                            <button type="button">Usuń</button>
-                        </div>
-                    </div>
+                        Ilość wypożyczonych aut etc.
                     </main>
                 </div>
             </div>
@@ -275,7 +228,7 @@
             </footer>
         </div>
     </div>
-    <script src="js/adminHandler.js"></script>
+    <script src="../js/adminHandler.js"></script>
     <?php include_once('logged.php'); ?>
 </body>
 </html>
