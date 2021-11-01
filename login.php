@@ -47,11 +47,18 @@
                 <div class="password">
                     <label for="password-field">Hasło</label>
                     <br>
-                    <input type="password" name="password" id="password-field" required>
+                    <input type="password" name="password" id="password-field" minlength="4" required>
                     <a href="passwd.php" class="forgotten-password">Zapomniałeś hasła?</a>
                 </div>
                 <div class="form-bottom">
                     <button type="submit">Zaloguj się</button>
+                </div>
+                <br>
+                <div class="error">
+                    <?php 
+                        if (isset($_SESSION['connectionError']))
+                            echo $_SESSION['connectionError'];
+                    ?>
                 </div>
             </form>
         </div>
@@ -67,16 +74,76 @@
         {
             if (!empty($_POST['login']) && !empty($_POST['password']))   // Sprawdzenie czy zmienne login i password istnieją i nie są puste
             {
-                require('db/db_connection.php'); // Ustanowienie połączenia z bazą danych
-
+                // Przygotowanie loginu
                 $login = htmlentities(trim($_POST['login']));
-                $password = htmlentities(trim($_POST['password'])); // Zadeklarowanie zmiennych login i password, przygotowanie wartości
+                // Przygotowanie adresu email
+                if (filter_var($login, FILTER_VALIDATE_EMAIL)) // Sprawdzenie czy login jest adresem email
+                {
+                    $email = filter_var($login, FILTER_SANITIZE_EMAIL);
+                    $login = explode('@', $login);
+                    $login = array_shift($login);
+                }
+                else
+                    $email = '';
+                
+                // Przygotowanie hasła
+                $password = htmlentities(trim($_POST['password']));
 
-                // Sprawdzenie czy login występuje w bazie danych oraz czy podany login ma przypisane takie hasło wraz z zabezpieczeniem przed
-                // SQL injection
-                $query = "SELECT * FROM `users_login` WHERE '$login'=login OR '$login'=email";
+                // Połączenie z bazą danych
+                require('db/db_connection.php');
 
-                $_SESSION['login'] = $_POST['login']; // Dodanie zmiennej sesyjnej login i isLogged i isAdmin
+                // Sprawdzenie czy istnieje taki login/email
+                $query = "SELECT `login`, `email` FROM `users` WHERE `login`=? OR `email`=?";
+
+                $stmt = $db_connection->prepare($query);
+                $stmt->bind_param("ss", $login, $email);
+                $stmt->execute();
+
+                $result = $stmt->get_result();
+
+                if ($result->fetch_assoc())
+                {
+                    $getPasswd = "SELECT `password`, `is_admin` FROM `users` WHERE `login`=? OR `email`=?";
+
+                    $stmt2 = $db_connection->prepare($getPasswd);
+                    $stmt2->bind_param("ss", $login, $email);
+                    $stmt2->execute();
+
+                    $result2 = $stmt2->get_result();
+
+                    $queriedData = $result2->fetch_row();
+
+                    if (password_verify($password, $queriedData[0]))
+                    {
+                        (empty($email)) ? $_SESSION['login'] = $login : $_SESSION['login'] = $email;
+
+                        $_SESSION['isLogged'] = true;
+                        $_SESSION['isAdmin'] = $queriedData[1];
+
+                        $stmt->close();
+                        $db_connection->close();
+
+                        header('Location: index.php');
+                        exit;
+                    }
+                    else 
+                    {
+                        $loginError = "Podane hasło jest nieprawidłowe";
+                        echo '<script>
+                            document.querySelector("div.error").textContent = "'.$loginError.'"
+                        </script>';
+                    }
+                }
+                else 
+                {
+                    $loginError = "Podany login lub email nie istnieje";
+                    echo '<script>
+                        document.querySelector("div.error").textContent = "'.$loginError.'"
+                    </script>';
+                }
+
+                $stmt->close();
+                $db_connection->close();
             }
         }
     ?>

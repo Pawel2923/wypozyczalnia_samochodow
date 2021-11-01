@@ -1,9 +1,9 @@
 const movePlaceholder = (name) => {
     if (document.querySelector(`input[name="${name}"]`) != null) {
-        if (document.querySelector(`input[name="${name}"`).value.length == 0)
-            document.querySelector(`.${name} label`).classList.add('form-label-transform-start');
+        if (document.querySelector(`input[name="${name}"`).value.length != 0 || document.querySelector(`input[name="${name}"`).value != '')
+            document.querySelector(`.${name} label`).classList.remove('form-label-transform-start');
         else 
-            document.querySelector(`.${name} label`).classList.remove('form-label-transform-start');  
+            document.querySelector(`.${name} label`).classList.add('form-label-transform-start');
 
         document.querySelector(`form input[name="${name}"]`).addEventListener('focus',() => {
             document.querySelector(`.${name} label`).classList.add('form-label-transform');

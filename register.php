@@ -38,11 +38,13 @@
             </header>
         </div>
         <div class="form-wrapper">
-            <form action="" method="POST">
+            <form action="register.php" method="POST">
                 <div class="login">
                     <label for="login-field">Login lub adres e-mail</label>
                     <br>
                     <input type="text" name="login" id="login-field" required>
+                    <br>
+                    <div class="warning"></div>
                 </div>
                 <div class="password">
                     <label for="password-field">Hasło</label>
@@ -57,6 +59,12 @@
                 <div class="form-bottom">
                     <button type="submit">Zarejestruj się</button>
                 </div>
+                <div class="error">
+                    <?php 
+                        if (isset($_SESSION['connectionError']))
+                            echo $_SESSION['connectionError'];
+                    ?>
+                </div>
             </form>
         </div>
     </main>
@@ -68,9 +76,86 @@
         passwdCheck();
     </script>
     <?php 
-        if (isset($_POST['password']))
+        if (isset($_POST['password']) && isset($_POST['login']) && isset($_POST['password-confirm']))
         {
-            $hashedpasswd = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            if (!empty($_POST['password']) && isset($_POST['login']) && isset($_POST['password-confirm']))
+            {
+                if ($_POST['password'] === $_POST['password-confirm'])
+                {
+                    // Przygotowanie loginu
+                    $login = htmlentities(trim($_POST['login']));
+                    // Przygotowanie adresu email
+                    if (filter_var($login, FILTER_VALIDATE_EMAIL)) // Sprawdzenie czy login jest adresem email
+                    {
+                        $email = filter_var($login, FILTER_SANITIZE_EMAIL);
+                        $login = explode('@', $login);
+                        $login = array_shift($login);
+                    }
+                    // Przygotowanie hasła
+                    $password = htmlentities(trim($_POST['password']));
+                    $hashedPasswd = password_hash($password, PASSWORD_DEFAULT);
+
+                    // Połączenie z bazą danych
+                    require('db/db_connection.php');
+
+                    // Sprawdzenie czy podany login lub email są już w bazie
+                    $query = "SELECT `login`, `email` FROM `users` WHERE `login`=? OR `email`=?";
+
+                    $stmt = $db_connection->prepare($query);
+                    $stmt->bind_param("ss", $login, $email);
+                    $stmt->execute();
+
+                    $result = $stmt->get_result();
+
+                    if ($result->fetch_assoc() > 1)
+                    {
+                        if (isset($email)) 
+                        {
+                            $loginError = "Podany email jest już zarejestrowany";
+                            echo '<script>
+                                document.querySelector("form div.warning").textContent = "'.$loginError.'"
+                            </script>';
+                        }
+                        else 
+                        {
+                            $loginError = "Podany login jest niedostępny";
+                            echo '<script>
+                                document.querySelector("form div.warning").textContent = "'.$loginError.'"
+                            </script>';
+                        }
+                    }
+                    else
+                    {
+                        // Wprowadzanie danych do bazy
+                        if (isset($email))
+                        {
+                            $query2 = "INSERT INTO `users` (email, password) VALUES(?, ?)";
+    
+                            $stmt2 = $db_connection->prepare($query2);
+                            $stmt2->bind_param("ss", $email, $hashedPasswd);
+                            $stmt2->execute();
+                            $stmt2->close();
+                        }
+                        else 
+                        {
+                            $query2 = "INSERT INTO `users` (login, password) VALUES(?, ?)";
+    
+                            $stmt2 = $db_connection->prepare($query2);
+                            $stmt2->bind_param("ss", $login, $hashedPasswd);
+                            $stmt2->execute();
+                            $stmt2->close();
+                        }
+                        $stmt->close();
+                        $db_connection->close();
+
+                        header('Location: login.php');
+                        exit;
+                    }
+
+                    $stmt->close();
+                    $db_connection->close();
+                }
+            }
         }
     ?>
 </body>

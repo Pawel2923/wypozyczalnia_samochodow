@@ -28,7 +28,7 @@
         <div class="form-wrapper">
             <form action="login.php" method="POST">
                 <div class="login">
-                    <label for="login-field">Adres E-mail</label>
+                    <label for="login-field">Adres e-mail lub login</label>
                     <br>
                     <input type="email" name="login" id="login-field" required>
                 </div>
