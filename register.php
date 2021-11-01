@@ -68,9 +68,40 @@
         passwdCheck();
     </script>
     <?php 
-        if (isset($_POST['password']))
+        if (isset($_POST['password']) && isset($_POST['login']))
         {
-            $hashedpasswd = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            if (!empty($_POST['password']) && isset($_POST['login']))
+            {
+                $login = htmlentities(trim($_POST['login']));
+                // Przygotowanie hasła do wprowadzenia do bazy
+                $password = htmlentities(trim($_POST['password']));
+                $hashedpasswd = password_hash($password, PASSWORD_DEFAULT);
+                unset($_POST['password']);
+
+                // Połączenie z bazą danych
+                require('db/db_login_connection.php');
+
+                // Sprawdzenie czy podany login lub email są już w bazie
+                $query = "SELECT `id`,`login`, `email` FROM `USERS` WHERE `login`=? OR `email`=? GROUP BY `id`";
+                $stmt = $db_connection->prepare($query);
+                $stmt->bind_param("ss", $login, $login);
+                $stmt->execute();
+
+                $result = $stmt->get_result();
+
+                if ($result->fetch_assoc() > 1)
+                {
+                    $_SESSION['error'] = "Podany login jest zajęty";
+                }
+                else 
+                {
+                    // Wprowadzanie danych do bazy danych
+                    $query2 = "INSERT INTO `users` VALUES()";
+                }
+
+                $stmt->close();
+                $db_connection->close();
+            }
         }
     ?>
 </body>

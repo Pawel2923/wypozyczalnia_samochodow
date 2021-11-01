@@ -1,5 +1,5 @@
 <?php 
-    require('db_logind_data.php');
+    require('db_login_data.php');
 
     mysqli_report(MYSQLI_REPORT_STRICT);
     try 

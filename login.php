@@ -70,13 +70,16 @@
                 require('db/db_connection.php'); // Ustanowienie połączenia z bazą danych
 
                 $login = htmlentities(trim($_POST['login']));
-                $password = htmlentities(trim($_POST['password'])); // Zadeklarowanie zmiennych login i password, przygotowanie wartości
+                $password = htmlentities(trim($_POST['password']));
+                unset($_POST['password']);
 
                 // Sprawdzenie czy login występuje w bazie danych oraz czy podany login ma przypisane takie hasło wraz z zabezpieczeniem przed
                 // SQL injection
                 $query = "SELECT * FROM `users_login` WHERE '$login'=login OR '$login'=email";
 
                 $_SESSION['login'] = $_POST['login']; // Dodanie zmiennej sesyjnej login i isLogged i isAdmin
+
+                $db_connection->close();
             }
         }
     ?>
