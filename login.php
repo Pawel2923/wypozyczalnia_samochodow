@@ -1,5 +1,13 @@
 <?php 
     session_start();
+    if (isset($_SESSION['isLogged']))
+    {
+        if ($_SESSION['isLogged'])
+        {
+            header('Location:index.php');
+            exit;
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -53,21 +61,23 @@
             window.location = './index.php';
         });
     </script>
-    <script src="loginHandler.js"></script>
+    <script src="js/loginHandler.js"></script>
     <?php
-        if (isset($_POST['login']))
+        if (isset($_POST['login']) && isset($_POST['password']))
         {
-            if ($_POST['login'] === "admin") {
-                require_once('loginAsAdmin.php');
+            if (!empty($_POST['login']) && !empty($_POST['password']))   // Sprawdzenie czy zmienne login i password istnieją i nie są puste
+            {
+                require('db/db_connection.php'); // Ustanowienie połączenia z bazą danych
+
+                $login = htmlentities(trim($_POST['login']));
+                $password = htmlentities(trim($_POST['password'])); // Zadeklarowanie zmiennych login i password, przygotowanie wartości
+
+                // Sprawdzenie czy login występuje w bazie danych oraz czy podany login ma przypisane takie hasło wraz z zabezpieczeniem przed
+                // SQL injection
+                $query = "SELECT * FROM `users_login` WHERE '$login'=login OR '$login'=email";
+
+                $_SESSION['login'] = $_POST['login']; // Dodanie zmiennej sesyjnej login i isLogged i isAdmin
             }
-            elseif ($_POST['login'] !== "admin") {
-                require_once('loginAsUser.php');
-            }
-        }
-        if (isset($_SESSION['login']))
-        {
-            header('Location:index.php');
-            exit;
         }
     ?>
 </body>

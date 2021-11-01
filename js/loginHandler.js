@@ -36,7 +36,14 @@ const passwdCheck = () => {
     
         if (passwdConfirm != null) {
             passwdConfirm.addEventListener('keyup', () => {
-                (passwd.value != passwdConfirm.value) ? passwdConfirm.setCustomValidity("Hasła nie są zgodne") : passwdConfirm.setCustomValidity("");
+                if (passwd.value != passwdConfirm.value) {
+                    passwd.setCustomValidity("Hasła nie są zgodne");
+                    passwdConfirm.setCustomValidity("Hasła nie są zgodne");
+                }
+                else {
+                    passwd.setCustomValidity("");
+                    passwdConfirm.setCustomValidity("");
+                }
             });
         }
     }

@@ -194,7 +194,7 @@
         const subscriptionInput = document.querySelector('.subscription-form form input[name="newsletter-mail"]');
         checkInput(subscriptionInput);
     </script>
-    <script src="nav.js"></script>
+    <script src="js/nav.js"></script>
     <?php include_once('logged.php'); ?>
 </body>
 </html>

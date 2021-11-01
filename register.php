@@ -1,4 +1,14 @@
-<?php session_start(); ?>
+<?php 
+    session_start();
+    if (isset($_SESSION['isLogged']))
+    {
+        if ($_SESSION['isLogged'])
+        {
+            header('Location:index.php');
+            exit;
+        }
+    }
+?>
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -28,7 +38,7 @@
             </header>
         </div>
         <div class="form-wrapper">
-            <form action="login.php" method="POST">
+            <form action="" method="POST">
                 <div class="login">
                     <label for="login-field">Login lub adres e-mail</label>
                     <br>
@@ -50,7 +60,7 @@
             </form>
         </div>
     </main>
-    <script src="loginHandler.js"></script>
+    <script src="js/loginHandler.js"></script>
     <script>
         document.querySelector('.back').addEventListener('click', () => {
             window.location = './index.php';
@@ -58,10 +68,9 @@
         passwdCheck();
     </script>
     <?php 
-        if (isset($_SESSION['login'])) 
+        if (isset($_POST['password']))
         {
-            header('Location:index.php');
-            exit;
+            $hashedpasswd = password_hash($_POST['password'], PASSWORD_DEFAULT);
         }
     ?>
 </body>

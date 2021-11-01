@@ -1,9 +1,9 @@
 <?php 
     session_start();
-    // if (!$_SESSION['logged'] && !$_SESSION['adminMode']) {
-    //     header('Location: index.php');
-    //     exit;
-    // }
+    if (!$_SESSION['isLogged'] && !$_SESSION['isAdmin']) {
+        header('Location: index.php');
+        exit;
+    }
     if (isset($_SESSION['login']))
     {
         if ($_SESSION['login'] !== "admin")
@@ -245,7 +245,7 @@
             </footer>
         </div>
     </div>
-    <script src="adminHandler.js"></script>
+    <script src="js/adminHandler.js"></script>
     <?php include_once('logged.php'); ?>
 </body>
 </html>

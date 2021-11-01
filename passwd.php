@@ -43,6 +43,6 @@
             window.location = './index.php';
         }); 
     </script>
-    <script src="loginHandler.js"></script>
+    <script src="js/loginHandler.js"></script>
 </body>
 </html>

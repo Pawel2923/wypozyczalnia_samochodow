@@ -171,7 +171,7 @@
             </footer>
         </div>
     </div>
-    <script src="adminHandler.js"></script>
+    <script src="js/adminHandler.js"></script>
     <script>
         const checkInput = (name) => {
             name.addEventListener('invalid', () => {
