@@ -88,7 +88,7 @@
                 
                 // Przygotowanie hasła
                 $password = htmlentities(trim($_POST['password']));
-                // test
+                
                 // Połączenie z bazą danych
                 require('db/db_connection.php');
 
