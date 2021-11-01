@@ -207,7 +207,7 @@
                 </header>
                 <div class="vehicles">
                     <header>
-                        <h2><a href="admin.php#users">Użytkownicy</a></h2> 
+                        <h2><a href="../admin.php#users">Użytkownicy</a></h2> 
                         <i class="fas fa-chevron-right"></i> 
                         <h2>Statystyki użytkowników</h2>
                     </header>
