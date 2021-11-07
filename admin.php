@@ -199,28 +199,13 @@
                     </header>
                     <main>
                         <div class="option">
-                            <a>
-                                <button class="option-button add-veh">
-                                    <h3>Motyw panelu</h3>
-                                    <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                </button>
-                            </a>
+                            <h3>Motyw panelu</h3>
                         </div>
                         <div class="option">
-                            <a>
-                                <button class="option-button veh-list">
-                                    <h3>Zarządzanie panelem użytkownika</h3>
-                                    <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                </button>
-                            </a>
+                            <h3>Zarządzanie panelem użytkownika</h3>
                         </div>
                         <div class="option">
-                            <a>
-                                <button class="option-button del-veh">
-                                    <h3>Zarządzanie dostępem</h3>
-                                    <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                </button>
-                            </a>
+                            <h3>Zarządzanie dostępem</h3>
                         </div>
                     </main>
                 </div>
