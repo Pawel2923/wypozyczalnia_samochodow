@@ -5,9 +5,9 @@
             <div></div>
             <div class="close"><i class="fas fa-times"></i></div>
             <div class="user">
-                <a href="register.php" class="login">
+                <a href="login.php" class="login">
                     <i class="fas fa-sign-in-alt"></i>
-                    <span class="login-caption">Zarejestruj się</span>
+                    <span class="login-caption">Zaloguj się</span>
                 </a>
                 <div class="logged">
                     <i class="fas fa-user"></i>
@@ -53,9 +53,9 @@
             <a href="contact.php"><li>Kontakt</li></a>
         </ul>
         <div class="user">
-            <a href="register.php" class="login">
+            <a href="login.php" class="login">
                 <i class="fas fa-sign-in-alt"></i>
-                <span class="login-caption">Zarejestruj się</span>
+                <span class="login-caption">Zaloguj się</span>
             </a>
             <div class="logged">
                 <i class="fas fa-user"></i>
@@ -88,9 +88,9 @@
             <a href="contact.php"><li>Kontakt</li></a>
         </ul>
         <div class="user">
-            <a href="register.php" class="login">
+            <a href="login.php" class="login">
                 <i class="fas fa-sign-in-alt"></i>
-                <span class="login-caption">Zarejestruj się</span>
+                <span class="login-caption">Zaloguj się</span>
             </a>
             <div class="logged">
                 <i class="fas fa-user"></i>

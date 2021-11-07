@@ -9,7 +9,7 @@
     catch (mysqli_sql_exception $error)
     {
         $_SESSION['connectionError'] = "Błąd połączenia z bazą danych";
-        header('Location: ../login.php');
+        header('Location: login.php');
         exit;
     }
 ?>
