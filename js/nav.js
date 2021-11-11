@@ -8,6 +8,7 @@ openButton.addEventListener('click', () => {
     mobileNav.style.mozTransform = "translateX(0)";
     mobileNav.style.msTransform = "translateX(0)";
     mobileNav.style.oTransform = "translateX(0)";
+    document.querySelector('body').style.overflow = "hidden";
 });
 
 closeButton.addEventListener('click', () => {
@@ -16,4 +17,5 @@ closeButton.addEventListener('click', () => {
     mobileNav.style.mozTransform = "translateX(100%)";
     mobileNav.style.msTransform = "translateX(100%)";
     mobileNav.style.oTransform = "translateX(100%)";
+    document.querySelector('body').style.overflow = "auto";
 });
