@@ -90,125 +90,127 @@
                         </div>
                     </div>
                 </header>
-                <div class="home">
-                    <main>
-                        <div class="home-option manage-veh">
-                            <i class="fas fa-car"></i>
-                            <span>Zarządzanie pojazdami</span>
-                        </div>
-                        <div class="home-option manage-users">
-                            <i class="fas fa-users"></i>
-                            <span>Zarządzanie użytkownikami</span>
-                        </div>
-                        <div class="home-option manage-settings">
-                            <i class="fas fa-cog"></i>
-                            <span>Zmiana ustawień serwisu</span>
-                        </div>
-                    </main>
-                </div>
-                <div class="vehicles">
-                    <header>
-                        <h2>Pojazdy</h2>
-                    </header>
-                    <main>
-                        <div class="option">
-                            <a href="admin/addvehicles.php">
-                                <button class="option-button add-veh">
-                                    <h3>Dodawanie nowych pojazdów</h3>
-                                    <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                </button>
-                            </a>
-                        </div>
-                        <div class="option">
-                            <a href="admin/vehicleslist.php">
-                                <button class="option-button veh-list">
-                                    <h3>Lista pojazdów</h3>
-                                    <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                </button>
-                            </a>
-                        </div>
-                        <div class="option">
-                            <a href="admin/vehiclerent.php">
-                                <button class="option-button veh-res">
-                                    <h3>Rezerwacja pojazdów</h3>
-                                    <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                </button>
-                            </a>
-                        </div>
-                        <div class="option">
-                            <a href="admin/delvehicle.php">
-                                <button class="option-button del-veh">
-                                    <h3>Usuwanie pojazdów</h3>
-                                    <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                </button>
-                            </a>
-                        </div>
-                    </main>
-                </div>
-                <div class="users">
-                    <header>
-                        <h2>Użytkownicy</h2>
-                    </header>
-                    <main>
-                        <div class="option">
-                            <a href="admin/users.php">
-                                <button class="option-button user-stats">
-                                    <h3>Statystyki użytkowników</h3>
-                                    <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                </button>
-                            </a>
-                        </div>
-                        <h3 style="margin-bottom: 10px;">Lista użytkowników</h3>
-                        <table>
-                            <tr>
-                                <th>ID</th>
-                                <th>Login</th>
-                                <th>Rezerwowane pojazdy</th>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>user1</td>
-                                <td>Nazwa pojazdu</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>user2</td>
-                                <td>Nazwa pojazdu</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>user3</td>
-                                <td>Nazwa pojazdu</td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>user4</td>
-                                <td>Nazwa pojazdu</td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>user5</td>
-                                <td>Nazwa pojazdu</td>
-                            </tr>
-                        </table>
-                    </main>
-                </div>
-                <div class="settings">
-                    <header>
-                        <h2>Ustawienia</h2>
-                    </header>
-                    <main>
-                        <div class="option">
-                            <h3>Motyw panelu</h3>
-                        </div>
-                        <div class="option">
-                            <h3>Zarządzanie panelem użytkownika</h3>
-                        </div>
-                        <div class="option">
-                            <h3>Zarządzanie dostępem</h3>
-                        </div>
-                    </main>
-                </div>
+                <main>
+                    <div class="home">
+                        <section>
+                            <div class="home-option manage-veh">
+                                <i class="fas fa-car"></i>
+                                <span>Zarządzanie pojazdami</span>
+                            </div>
+                            <div class="home-option manage-users">
+                                <i class="fas fa-users"></i>
+                                <span>Zarządzanie użytkownikami</span>
+                            </div>
+                            <div class="home-option manage-settings">
+                                <i class="fas fa-cog"></i>
+                                <span>Zmiana ustawień serwisu</span>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="vehicles">
+                        <header>
+                            <h2>Pojazdy</h2>
+                        </header>
+                        <section>
+                            <div class="option">
+                                <a href="admin/addvehicles.php">
+                                    <button class="option-button add-veh">
+                                        <h3>Dodawanie nowych pojazdów</h3>
+                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="option">
+                                <a href="admin/vehicleslist.php">
+                                    <button class="option-button veh-list">
+                                        <h3>Lista pojazdów</h3>
+                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="option">
+                                <a href="admin/vehiclerent.php">
+                                    <button class="option-button veh-res">
+                                        <h3>Rezerwacja pojazdów</h3>
+                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="option">
+                                <a href="admin/delvehicle.php">
+                                    <button class="option-button del-veh">
+                                        <h3>Usuwanie pojazdów</h3>
+                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                                    </button>
+                                </a>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="users">
+                        <header>
+                            <h2>Użytkownicy</h2>
+                        </header>
+                        <section>
+                            <div class="option">
+                                <a href="admin/users.php">
+                                    <button class="option-button user-stats">
+                                        <h3>Statystyki użytkowników</h3>
+                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                                    </button>
+                                </a>
+                            </div>
+                            <h3 style="margin-bottom: 10px;">Lista użytkowników</h3>
+                            <table>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Login</th>
+                                    <th>Rezerwowane pojazdy</th>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>user1</td>
+                                    <td>Nazwa pojazdu</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>user2</td>
+                                    <td>Nazwa pojazdu</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>user3</td>
+                                    <td>Nazwa pojazdu</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>user4</td>
+                                    <td>Nazwa pojazdu</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>user5</td>
+                                    <td>Nazwa pojazdu</td>
+                                </tr>
+                            </table>
+                        </section>
+                    </div>
+                    <div class="settings">
+                        <header>
+                            <h2>Ustawienia</h2>
+                        </header>
+                        <section>
+                            <div class="option">
+                                <h3>Motyw panelu</h3>
+                            </div>
+                            <div class="option">
+                                <h3>Zarządzanie panelem użytkownika</h3>
+                            </div>
+                            <div class="option">
+                                <h3>Zarządzanie dostępem</h3>
+                            </div>
+                        </section>
+                    </div>
+                </main>
             </div>
             <footer>
                 <section class="bottom-content">
@@ -222,7 +224,7 @@
             </footer>
         </div>
     </div>
-    <script src="js/adminHandler.js"></script>
+    <script src="js/panelHandler.js"></script>
     <?php include_once('logged.php'); ?>
 </body>
 </html>

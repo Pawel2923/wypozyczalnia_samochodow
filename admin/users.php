@@ -228,7 +228,7 @@
             </footer>
         </div>
     </div>
-    <script src="../js/adminHandler.js"></script>
+    <script src="../js/panelHandler.js"></script>
     <?php include_once('logged.php'); ?>
 </body>
 </html>

@@ -52,7 +52,6 @@
                 -ms-flex-direction: column;
                     flex-direction: column;
         }
-        main form input,
         main form button {
             width: 50%;
         }
@@ -171,7 +170,7 @@
             </footer>
         </div>
     </div>
-    <script src="../js/adminHandler.js"></script>
+    <script src="../js/panelHandler.js"></script>
     <script>
         const checkInput = (name) => {
             name.addEventListener('invalid', () => {

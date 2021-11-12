@@ -113,14 +113,16 @@
                         {
                             $loginError = "Podany email jest już zarejestrowany";
                             echo '<script>
-                                document.querySelector("form div.warning").textContent = "'.$loginError.'"
+                                document.querySelector("form div.warning").textContent = "'.$loginError.'";
+                                document.querySelector("#login-field").value = "'.$email.'";
                             </script>';
                         }
                         else 
                         {
                             $loginError = "Podany login jest niedostępny";
                             echo '<script>
-                                document.querySelector("form div.warning").textContent = "'.$loginError.'"
+                                document.querySelector("form div.warning").textContent = "'.$loginError.'";
+                                document.querySelector("#login-field").value = "'.$login.'";
                             </script>';
                         }
                     }

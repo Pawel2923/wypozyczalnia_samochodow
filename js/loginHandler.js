@@ -1,6 +1,6 @@
 const movePlaceholder = (name) => {
     if (document.querySelector(`input[name="${name}"]`) != null) {
-        if (document.querySelector(`input[name="${name}"`).value.length != 0 || document.querySelector(`input[name="${name}"`).value != '')
+        if (document.querySelector(`input[name="${name}"`).value != '')
             document.querySelector(`.${name} label`).classList.remove('form-label-transform-start');
         else 
             document.querySelector(`.${name} label`).classList.add('form-label-transform-start');
@@ -17,9 +17,11 @@ const movePlaceholder = (name) => {
     }
 };
 
-movePlaceholder('login');
-movePlaceholder('password');
-movePlaceholder('password-confirm');
+window.onload = () => {
+    movePlaceholder('login');
+    movePlaceholder('password');
+    movePlaceholder('password-confirm');
+};
 
 const passwdCheck = () => {
     const passwd = document.querySelector('form input[name="password"]');
