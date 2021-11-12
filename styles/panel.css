@@ -121,8 +121,8 @@ nav .list-wrapper ul a:first-child {
 }
 
 .content .logged-menu {
-    right: 0;
     text-align: right;
+    right: 0;
 }
 
 .all-settings>header {
@@ -143,11 +143,11 @@ header a {
     font-weight: 400;
 }
 
-.content main {
+.content section {
     margin-top: 40px;
 }
 
-.all-settings>div {
+.all-settings main>div {
     visibility: hidden;
     opacity: 0;
     -webkit-transform: translateX(-100%);
@@ -163,12 +163,12 @@ header a {
             animation-fill-mode: both;
 }
 
-.all-settings>.visible-settings {
+.all-settings main>.visible-settings {
     -webkit-animation-name: settingsAnim;
             animation-name: settingsAnim;
 }
 
-.home main {
+.home section {
     display: -ms-grid;
     display: grid;
     -ms-grid-rows: 1fr;
@@ -352,6 +352,9 @@ footer {
 }
 
 @media screen and (max-width: 800px) {
+    .page-wrapper {
+        grid-template: 1fr / 1fr;
+    }
     nav.panel {
         position: fixed;
         transform: translate(-100%);
@@ -361,17 +364,8 @@ footer {
         -o-transform: translate(-100%);
     }
     .content .logged-menu {
-        left: 0;
-        text-align: left;
-        -webkit-transition: opacity 0.2s ease, -webkit-transform 0s ease;
-        transition: opacity 0.2s ease, -webkit-transform 0s ease;
-        transition: transform 0s ease, opacity 0.2s ease;
-        transition: transform 0s ease, opacity 0.2s ease, -webkit-transform 0s ease;
-        -webkit-transition: transform 0s ease, opacity 0.2s ease;
-        -moz-transition: transform 0s ease, opacity 0.2s ease;
-        -ms-transition: transform 0s ease, opacity 0.2s ease;
-        -o-transition: transform 0s ease, opacity 0.2s ease;
-}
+        right: -20px;
+    }
     main .option a {
         width: 100%;
     }
@@ -394,7 +388,7 @@ footer {
         top: 0;
         left: 0;
     }
-    .home main {
+    .home section {
         -ms-grid-rows: 1fr 20px 1fr 20px 1fr;
         -ms-grid-columns: 1fr;
             grid-template: 1fr 1fr 1fr / 1fr;

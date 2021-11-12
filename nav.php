@@ -5,6 +5,7 @@
             <div></div>
             <div class="close"><i class="fas fa-times"></i></div>
             <div class="user">
+                <div class="mobile-logged-menu-overlay"></div>
                 <a href="login.php" class="login">
                     <i class="fas fa-sign-in-alt"></i>
                     <span class="login-caption">Zaloguj się</span>
