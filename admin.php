@@ -33,7 +33,11 @@
                     <a class="settings-link" href="admin.php#settings"><li>Ustawienia</li></a>
                 </ul>
             </div>
-            <div class="back"><i class="fas fa-angle-double-left"></i> <a href="index.php">Wyjdź</a></div>
+            <div class="back">
+                <a href="index.php">
+                    <i class="fas fa-angle-double-left"></i> Wyjdź
+                </a>
+            </div>
         </nav>
         <div class="content">
             <div class="mobile-nav">
@@ -164,33 +168,40 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Login</th>
-                                    <th>Rezerwowane pojazdy</th>
+                                    <th>E-mail</th>
+                                    <th>Admin</th>
+                                    <!-- <th>Rezerwowane pojazdy</th> -->
                                 </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>user1</td>
-                                    <td>Nazwa pojazdu</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>user2</td>
-                                    <td>Nazwa pojazdu</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>user3</td>
-                                    <td>Nazwa pojazdu</td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>user4</td>
-                                    <td>Nazwa pojazdu</td>
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td>user5</td>
-                                    <td>Nazwa pojazdu</td>
-                                </tr>
+                                <?php 
+                                    // Wylistowanie użytkowników w tabeli
+
+                                    require('db/db_connection.php');
+                                    $query = "SELECT * FROM all_users";
+
+                                    $stmt = $db_connection->prepare($query);
+                                    $stmt->execute();
+
+                                    $result = $stmt->get_result();
+                                    while ($row = $result->fetch_assoc())
+                                    {
+                                        echo '<tr>';
+                                        echo '<td>'.$row['id'].'</td>';
+                                        echo '<td>'.$row['login'].'</td>';
+                                        echo '<td>';
+                                            if ($row['email'] != '') 
+                                                echo $row['email'];
+                                            else 
+                                                echo 'Brak email';
+                                        echo '</td>';
+                                        echo '<td>';
+                                            if ($row['is_admin'])
+                                                echo 'TAK';
+                                            else 
+                                                echo 'NIE';
+                                        echo '</td>';
+                                        echo '<tr>';
+                                    }
+                                ?>
                             </table>
                         </section>
                     </div>

@@ -131,10 +131,10 @@
                         // Wprowadzanie danych do bazy
                         if (isset($email))
                         {
-                            $query2 = "INSERT INTO `users` (email, password) VALUES(?, ?)";
+                            $query2 = "INSERT INTO `users` (login, email, password) VALUES(?, ?, ?)";
     
                             $stmt2 = $db_connection->prepare($query2);
-                            $stmt2->bind_param("ss", $email, $hashedPasswd);
+                            $stmt2->bind_param("sss", $login, $email, $hashedPasswd);
                             $stmt2->execute();
                             $stmt2->close();
                         }
