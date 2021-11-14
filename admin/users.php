@@ -148,7 +148,11 @@
                     <a class="settings-link" href="../admin.php#settings"><li>Ustawienia</li></a>
                 </ul>
             </div>
-            <div class="back"><i class="fas fa-angle-double-left"></i> <a href="../index.php">Wyjdź</a></div>
+            <div class="back">
+                <a href="index.php">
+                    <i class="fas fa-angle-double-left"></i> Wyjdź
+                </a>
+            </div>
         </nav>
         <div class="content">
             <div class="mobile-nav">

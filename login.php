@@ -83,8 +83,6 @@
                     $login = explode('@', $login);
                     $login = array_shift($login);
                 }
-                else
-                    $email = '';
                 
                 // Przygotowanie hasła
                 $password = htmlentities(trim($_POST['password']));
@@ -115,8 +113,7 @@
 
                     if (password_verify($password, $queriedData[0]))
                     {
-                        (empty($email)) ? $_SESSION['login'] = $login : $_SESSION['login'] = $email;
-
+                        $_SESSION['login'] = $login;
                         $_SESSION['isLogged'] = true;
                         $_SESSION['isAdmin'] = $queriedData[1];
 

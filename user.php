@@ -32,7 +32,11 @@
                     <a class="settings-link" href="user.php#settings"><li>Ustawienia</li></a>
                 </ul>
             </div>
-            <div class="back"><i class="fas fa-angle-double-left"></i> <a href="index.php">Wyjdź</a></div>
+            <div class="back">
+                <a href="index.php">
+                    <i class="fas fa-angle-double-left"></i> Wyjdź
+                </a>
+            </div>
         </nav>
         <div class="content">
             <div class="mobile-nav">
@@ -89,88 +93,90 @@
                         </div>
                     </div>
                 </header>
-                <div class="home">
-                    <main>
-                        <div class="home-option manage-veh">
-                            <i class="fas fa-car"></i>
-                            <span>Zarządzanie pojazdami</span>
-                        </div>
-                        <div class="home-option manage-settings">
-                            <i class="fas fa-cog"></i>
-                            <span>Zmiana ustawień serwisu</span>
-                        </div>
-                    </main>
-                </div>
-                <div class="vehicles">
-                    <header>
-                        <h2>Pojazdy</h2>
-                    </header>
-                    <main>
-                        <div class="option">
-                            <a href="addvehicles.php">
-                                <button class="option-button add-veh">
-                                    <h3>Dodawanie nowych pojazdów</h3>
-                                    <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                </button>
-                            </a>
-                        </div>
-                        <div class="option">
-                            <a href="vehicleslist.php">
-                                <button class="option-button veh-list">
-                                    <h3>Lista pojazdów</h3>
-                                    <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                </button>
-                            </a>
-                        </div>
-                        <div class="option">
-                            <a href="vehiclerent.php">
-                                <button class="option-button veh-res">
-                                    <h3>Rezerwacja pojazdów</h3>
-                                    <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                </button>
-                            </a>
-                        </div>
-                        <div class="option">
-                            <a href="delvehicle.php">
-                                <button class="option-button del-veh">
-                                    <h3>Usuwanie pojazdów</h3>
-                                    <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                </button>
-                            </a>
-                        </div>
-                    </main>
-                </div>
-                <div class="settings">
-                    <header>
-                        <h2>Ustawienia</h2>
-                    </header>
-                    <main>
-                        <div class="option">
-                            <a>
-                                <button class="option-button add-veh">
-                                    <h3>Motyw panelu</h3>
-                                    <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                </button>
-                            </a>
-                        </div>
-                        <div class="option">
-                            <a>
-                                <button class="option-button veh-list">
-                                    <h3>Zarządzanie panelem użytkownika</h3>
-                                    <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                </button>
-                            </a>
-                        </div>
-                        <div class="option">
-                            <a>
-                                <button class="option-button del-veh">
-                                    <h3>Zarządzanie dostępem</h3>
-                                    <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                </button>
-                            </a>
-                        </div>
-                    </main>
-                </div>
+                <main>
+                    <div class="home">
+                        <section>
+                            <div class="home-option manage-veh">
+                                <i class="fas fa-car"></i>
+                                <span>Zarządzanie pojazdami</span>
+                            </div>
+                            <div class="home-option manage-settings">
+                                <i class="fas fa-cog"></i>
+                                <span>Zmiana ustawień serwisu</span>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="vehicles">
+                        <header>
+                            <h2>Pojazdy</h2>
+                        </header>
+                        <section>
+                            <div class="option">
+                                <a href="addvehicles.php">
+                                    <button class="option-button add-veh">
+                                        <h3>Dodawanie nowych pojazdów</h3>
+                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="option">
+                                <a href="vehicleslist.php">
+                                    <button class="option-button veh-list">
+                                        <h3>Lista pojazdów</h3>
+                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="option">
+                                <a href="vehiclerent.php">
+                                    <button class="option-button veh-res">
+                                        <h3>Rezerwacja pojazdów</h3>
+                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="option">
+                                <a href="delvehicle.php">
+                                    <button class="option-button del-veh">
+                                        <h3>Usuwanie pojazdów</h3>
+                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                                    </button>
+                                </a>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="settings">
+                        <header>
+                            <h2>Ustawienia</h2>
+                        </header>
+                        <section>
+                            <div class="option">
+                                <a>
+                                    <button class="option-button add-veh">
+                                        <h3>Motyw panelu</h3>
+                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="option">
+                                <a>
+                                    <button class="option-button veh-list">
+                                        <h3>Zarządzanie panelem użytkownika</h3>
+                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="option">
+                                <a>
+                                    <button class="option-button del-veh">
+                                        <h3>Zarządzanie dostępem</h3>
+                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                                    </button>
+                                </a>
+                            </div>
+                        </section>
+                    </div>
+                </main>
             </div>
             <footer>
                 <section class="bottom-content">
