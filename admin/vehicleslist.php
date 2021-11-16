@@ -203,69 +203,71 @@
                         </div>
                     </div>
                 </header>
-                <div class="vehicles">
-                    <header>
-                        <h2><a href="../admin.php#vehicles">Pojazdy</a></h2> 
-                        <i class="fas fa-chevron-right"></i> 
-                        <h2>Lista pojazdów</h2>
-                    </header>
-                    <main>
-                    <div class="cars">
-                        <div class="car">
-                            <div class="image-wrapper">
-                                <img src="https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjByc3gyc3BrZzQ4YjMtT1RPTU9UT1BMIiwidyI6W3siZm4iOiJ3ZzRnbnFwNnkxZi1PVE9NT1RPUEwiLCJzIjoiMTYiLCJwIjoiMTAsLTEwIiwiYSI6IjAifV19.hXuoemts_h7soE7DwcsvGnYuHhVCV0y0sCWXJ0ZzIVE/image;s=732x488" alt="Zdjęcie samochodu" width="100%" height="100%">
-                                <div class="img-overlay"></div>
+                <main>
+                    <div class="vehicles">
+                        <header>
+                            <h2><a href="../admin.php#vehicles">Pojazdy</a></h2> 
+                            <i class="fas fa-chevron-right"></i> 
+                            <h2>Lista pojazdów</h2>
+                        </header>
+                        <section>
+                        <div class="cars">
+                            <div class="car">
+                                <div class="image-wrapper">
+                                    <img src="https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjByc3gyc3BrZzQ4YjMtT1RPTU9UT1BMIiwidyI6W3siZm4iOiJ3ZzRnbnFwNnkxZi1PVE9NT1RPUEwiLCJzIjoiMTYiLCJwIjoiMTAsLTEwIiwiYSI6IjAifV19.hXuoemts_h7soE7DwcsvGnYuHhVCV0y0sCWXJ0ZzIVE/image;s=732x488" alt="Zdjęcie samochodu" width="100%" height="100%">
+                                    <div class="img-overlay"></div>
+                                </div>
+                                <span class="car-name">Toyota Yaris</span>
+                                <div class="divider"></div>
+                                <div class="car-price">
+                                    <span>1 godz.</span>
+                                    <span>65,00 zł</span>
+                                </div>
+                                <button type="button">Dostępny</button>
                             </div>
-                            <span class="car-name">Toyota Yaris</span>
-                            <div class="divider"></div>
-                            <div class="car-price">
-                                <span>1 godz.</span>
-                                <span>65,00 zł</span>
+                            <div class="car">
+                                <div class="image-wrapper">
+                                    <img src="https://i.wpimg.pl/600x0/m.autokult.pl/ford-fusion-4-3ddb5b2d153e08d106.jpg" alt="Zdjęcie samochodu" width="100%" height="100%">
+                                    <div class="img-overlay"></div>
+                                </div>
+                                <span class="car-name">Ford Fusion</span>
+                                <div class="divider"></div>
+                                <div class="car-price">
+                                    <span>1 godz.</span>
+                                    <span>55,00 zł</span>
+                                </div>
+                                <button type="button">Dostępny</button>
                             </div>
-                            <button type="button">Dostępny</button>
+                            <div class="car">
+                                <div class="image-wrapper">
+                                    <img src="https://www.auto-gazda.pl/application/files/8816/2861/3097/1.jpg" alt="Zdjęcie samochodu" width="100%" height="100%">
+                                    <div class="img-overlay"></div>
+                                </div>
+                                <span class="car-name">Volkswagen Golf</span>
+                                <div class="divider"></div>
+                                <div class="car-price">
+                                    <span>1 godz.</span>
+                                    <span>65,00 zł</span>
+                                </div>
+                                <button type="button">Dostępny</button>
+                            </div>
+                            <div class="car">
+                                <div class="image-wrapper">
+                                    <img src="https://image.ceneostatic.pl/data/products/95699167/i-mercedes-sprinter-313-2013-r.jpg" alt="Zdjęcie samochodu" width="100%" height="100%">
+                                    <div class="img-overlay"></div>
+                                </div>
+                                <span class="car-name">Mercedes Sprinter</span>
+                                <div class="divider"></div>
+                                <div class="car-price">
+                                    <span>1 godz.</span>
+                                    <span>80,00 zł</span>
+                                </div>
+                                <button type="button">Dostępny</button>
+                            </div>
                         </div>
-                        <div class="car">
-                            <div class="image-wrapper">
-                                <img src="https://i.wpimg.pl/600x0/m.autokult.pl/ford-fusion-4-3ddb5b2d153e08d106.jpg" alt="Zdjęcie samochodu" width="100%" height="100%">
-                                <div class="img-overlay"></div>
-                            </div>
-                            <span class="car-name">Ford Fusion</span>
-                            <div class="divider"></div>
-                            <div class="car-price">
-                                <span>1 godz.</span>
-                                <span>55,00 zł</span>
-                            </div>
-                            <button type="button">Dostępny</button>
-                        </div>
-                        <div class="car">
-                            <div class="image-wrapper">
-                                <img src="https://www.auto-gazda.pl/application/files/8816/2861/3097/1.jpg" alt="Zdjęcie samochodu" width="100%" height="100%">
-                                <div class="img-overlay"></div>
-                            </div>
-                            <span class="car-name">Volkswagen Golf</span>
-                            <div class="divider"></div>
-                            <div class="car-price">
-                                <span>1 godz.</span>
-                                <span>65,00 zł</span>
-                            </div>
-                            <button type="button">Dostępny</button>
-                        </div>
-                        <div class="car">
-                            <div class="image-wrapper">
-                                <img src="https://image.ceneostatic.pl/data/products/95699167/i-mercedes-sprinter-313-2013-r.jpg" alt="Zdjęcie samochodu" width="100%" height="100%">
-                                <div class="img-overlay"></div>
-                            </div>
-                            <span class="car-name">Mercedes Sprinter</span>
-                            <div class="divider"></div>
-                            <div class="car-price">
-                                <span>1 godz.</span>
-                                <span>80,00 zł</span>
-                            </div>
-                            <button type="button">Dostępny</button>
-                        </div>
+                        </section>
                     </div>
-                    </main>
-                </div>
+                </main>
             </div>
             <footer>
                 <section class="bottom-content">
