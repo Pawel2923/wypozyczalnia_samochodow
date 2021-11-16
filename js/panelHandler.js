@@ -1,7 +1,7 @@
 const mainButtons = document.querySelectorAll('main .option-button');
 
 const settings = document.querySelectorAll('.all-settings main>div');
-for (let i=0; i<settings.length;i++) {
+for (let i=0; i<settings.length; i++) {
     settings[i].style.display = "none";
 }
 settings[0].classList.add('visible-settings');

@@ -20,6 +20,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/panel.css">
+    <?php 
+        if (isset($_COOKIE['theme']))
+        {
+            // dark.css, bright.css, zmiana dla motywu systemowego
+        }
+    ?>
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -211,13 +217,74 @@
                         </header>
                         <section>
                             <div class="option">
+                                <section>
                                 <h3>Motyw panelu</h3>
+                                    <form action="" method="POST">
+                                        <select name="theme">
+                                            <option value="system">Według motywu systemu</option>
+                                            <option value="bright">Jasny</option>
+                                            <option value="dark">Ciemny</option>
+                                        </select>
+                                        <button type="submit">Zmień</button>
+                                    </form>
+                                </section>
+                                <?php 
+                                    if (isset($_POST['theme']))
+                                    {
+                                        $theme = htmlentities($_POST['theme']);
+                                        if ($theme == "system" || $theme == "dark" || $theme == "bright")
+                                            setcookie('theme', $theme, time() + (10 * 365 * 24 * 60 * 60));
+                                    }
+                                ?>
                             </div>
                             <div class="option">
-                                <h3>Zarządzanie panelem użytkownika</h3>
+                                <section>
+                                    <h3>Zarządzanie panelem użytkownika</h3>
+                                </section>
                             </div>
                             <div class="option">
-                                <h3>Zarządzanie dostępem</h3>
+                                <section>
+                                    <h3>Zarządzanie dostępem</h3>
+                                    <form action="" method="POST">
+                                        <input type="text" name="aLogin">
+                                        <button type="submit">Nadaj dostęp</button>                                        
+                                        <!-- <button type="submit">Usuń dostęp</button> -->
+                                    </form>
+                                    <!-- Możliwość wyszukiwania z tabeli -->
+                                    <div class="access-list">
+                                        <h4>Administratorzy</h4>
+                                        <br>
+                                        <table>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Login</th>
+                                                <th>E-mail</th>
+                                            </tr>
+                                            <?php 
+                                                require('db/db_connection.php');
+                                                $query = "SELECT * FROM admins";
+            
+                                                $stmt = $db_connection->prepare($query);
+                                                $stmt->execute();
+            
+                                                $result = $stmt->get_result();
+                                                while ($row = $result->fetch_assoc())
+                                                {
+                                                    echo '<tr>';
+                                                    echo '<td>'.$row['id'].'</td>';
+                                                    echo '<td>'.$row['login'].'</td>';
+                                                    echo '<td>';
+                                                        if ($row['email'] != '') 
+                                                            echo $row['email'];
+                                                        else 
+                                                            echo 'Brak email';
+                                                    echo '</td>';
+                                                    echo '<tr>';
+                                                }
+                                            ?>
+                                        </table>
+                                    </div>
+                                </section>
                             </div>
                         </section>
                     </div>

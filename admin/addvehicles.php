@@ -52,9 +52,6 @@
                 -ms-flex-direction: column;
                     flex-direction: column;
         }
-        main form button {
-            width: 50%;
-        }
         main form label,
         main form button {
             margin-top: 20px;
@@ -141,26 +138,28 @@
                         </div>
                     </div>
                 </header>
-                <div class="vehicles">
-                    <header>
-                        <h2><a href="../admin.php#vehicles">Pojazdy</a></h2> 
-                        <i class="fas fa-chevron-right"></i> 
-                        <h2>Dodawanie nowych pojazdów</h2>
-                    </header>
-                    <main>
-                        <form action="" method="POST">
-                            <label>Nazwa pojazdu</label>
-                            <input type="text" name="vehicle-name" required>
-                            <label>Cena za godzinę</label>
-                            <input type="text" name="vehicle-price" required>
-                            <label>Link do zdjęcia samochodu</label>
-                            <input type="url" name="vehicle-img">
-                            <label>Prześlij zdjęcie samochodu</label>
-                            <input type="file" name="vehicle-img-upload">
-                            <button type="submit">Dodaj</button>
-                        </form>
-                    </main>
-                </div>
+                <main>
+                    <div class="vehicles">
+                        <header>
+                            <h2><a href="../admin.php#vehicles">Pojazdy</a></h2> 
+                            <i class="fas fa-chevron-right"></i> 
+                            <h2>Dodawanie nowych pojazdów</h2>
+                        </header>
+                        <section>
+                            <form action="" method="POST">
+                                <label>Nazwa pojazdu</label>
+                                <input type="text" name="vehicle-name" required>
+                                <label>Cena za godzinę</label>
+                                <input type="text" name="vehicle-price" required>
+                                <label>Link do zdjęcia samochodu</label>
+                                <input type="url" name="vehicle-img">
+                                <label>Prześlij zdjęcie samochodu</label>
+                                <input type="file" name="vehicle-img-upload">
+                                <button type="submit">Dodaj</button>
+                            </form>
+                        </section>
+                    </div>
+                </main>
             </div>
             <footer>
                 <section class="bottom-content">

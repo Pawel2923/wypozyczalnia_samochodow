@@ -142,19 +142,21 @@
                         </div>
                     </div>
                 </header>
-                <div class="vehicles">
-                    <header>
-                        <h2><a href="../admin.php#vehicles">Pojazdy</a></h2> 
-                        <i class="fas fa-chevron-right"></i> 
-                        <h2>Rezerwacja pojazdów</h2>
-                    </header>
-                    <main>
-                        <form action="" method="POST">
-                            Rezerowanie pojazdów
-                            <button type="submit">Zatwierdź</button>
-                        </form>
-                    </main>
-                </div>
+                <main>
+                    <div class="vehicles">
+                        <header>
+                            <h2><a href="../admin.php#vehicles">Pojazdy</a></h2> 
+                            <i class="fas fa-chevron-right"></i> 
+                            <h2>Rezerwacja pojazdów</h2>
+                        </header>
+                        <section>
+                            <form action="" method="POST">
+                                Rezerowanie pojazdów
+                                <button type="submit">Zatwierdź</button>
+                            </form>
+                        </section>
+                    </div>
+                </main>
             </div>
             <footer>
                 <section class="bottom-content">

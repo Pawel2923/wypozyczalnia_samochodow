@@ -227,6 +227,23 @@ main .option:last-child {
     margin-bottom: 0;
 }
 
+main .option section input {
+    margin-bottom: 10px;
+}
+
+main .option section form {
+    width: 60%;
+}
+
+main .option section select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    outline: none;
+    margin-bottom: 10px;
+    border-width: 2px;
+}
+
 main .option-button {
     margin: 0;
     border: 2px solid #000;
@@ -279,6 +296,10 @@ main form input {
     font-size: 16px;
     outline: none;
     margin-top: 10px;
+}
+
+main form button {
+    width: 50%;
 }
 
 footer {
