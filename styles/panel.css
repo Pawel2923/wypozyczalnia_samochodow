@@ -227,15 +227,15 @@ main .option:last-child {
     margin-bottom: 0;
 }
 
-main .option section input {
+main .option input {
     margin-bottom: 10px;
 }
 
-main .option section form {
+main .option form {
     width: 60%;
 }
 
-main .option section select {
+main .option select {
     width: 100%;
     padding: 10px;
     font-size: 16px;

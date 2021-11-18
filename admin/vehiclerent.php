@@ -1,6 +1,17 @@
 <?php 
-    session_start(); 
-    if (!$_SESSION['isLogged'] && !$_SESSION['isAdmin']) {
+    session_start();
+    $exit = false;
+    if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin']))
+    {
+        if (!$_SESSION['isLogged'] && !$_SESSION['isAdmin']) {
+            $exit = true;
+        }
+    }
+    else 
+        $exit = true;
+
+    if ($exit)
+    {
         header('Location: login.php');
         exit;
     }
