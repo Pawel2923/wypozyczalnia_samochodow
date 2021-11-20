@@ -154,9 +154,9 @@
                                     if (isset($_GET['view-mode']))
                                     {
                                         if ($_GET['view-mode'] == "cards")
-                                            printCarInfo("Dostępny", $vehNum, $vehicle);
+                                            printCarInfo("availabilityCheck", $vehNum, $vehicle, true);
                                         elseif ($_GET['view-mode'] == "list")
-                                            printCarInfoList("Dostępny", $vehNum, $vehicle);
+                                            printCarInfoList("availabilityCheck", $vehNum, $vehicle, true);
                                         elseif ($_GET['view-mode'] == "table")
                                             printCarInfoTable($vehNum, $vehicle);
                                     }
@@ -165,14 +165,14 @@
                                         if (isset($_COOKIE['vehList-viewMode']))
                                         {
                                             if ($_COOKIE['vehList-viewMode'] == "cards")
-                                                printCarInfo("Dostępny", $vehNum, $vehicle);
+                                                printCarInfo("availabilityCheck", $vehNum, $vehicle, true);
                                             elseif ($_COOKIE['vehList-viewMode'] == "list")
-                                                printCarInfoList("Dostępny", $vehNum, $vehicle);
+                                                printCarInfoList("availabilityCheck", $vehNum, $vehicle, true);
                                             elseif ($_COOKIE['vehList-viewMode'] == "table")
                                                 printCarInfoTable($vehNum, $vehicle);
                                             }
                                         else 
-                                            printCarInfo("Dostępny", $vehNum, $vehicle);
+                                            printCarInfo("availabilityCheck", $vehNum, $vehicle, true);
                                     }
                                 ?>
                             </div>

@@ -44,16 +44,51 @@ for ($i=0; $i<$vehNum; $i++)
 }
 
 //Wyświetlanie informacji o pojazdach jako karty
-function printCarInfo($buttonCaption, $vehNum, $vehicle, $limit = 0)
+function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = false, $limit = 0)
 {
     if ($limit > 0 && $limit <= $vehNum)
+    {
         $n = $limit;
+        if (!$printUnavailable)
+        {
+            for ($i=0; $i<$limit; $i++)
+            {
+                if (!($vehicle[$i]->isAvailable))
+                {
+                    $n++;
+                }
+            }
+        }
+    }
     else 
+    {
         $n = $vehNum;
+    }
 
     for ($i=0; $i<$n; $i++) 
     {
-        if ($vehicle[$i]->isAvailable) 
+        if (!$printUnavailable)
+        {
+            if ($vehicle[$i]->isAvailable) 
+            {
+?>
+                <div class="car">
+                <div class="image-wrapper">
+                    <img src="<?php echo $vehicle[$i]->img_url ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
+                    <div class="img-overlay"></div>
+                </div>
+                <span class="car-name"><?php echo $vehicle[$i]->brand.' '.$vehicle[$i]->model ?></span>
+                <div class="divider"></div>
+                <div class="car-price">
+                    <span>1 godz.</span>
+                    <span><?php echo $vehicle[$i]->price ?> zł</span>
+                </div>
+                <button><?php echo $buttonCaption ?></button>
+                </div>
+<?php
+            }
+        }
+        else 
         {
 ?>
             <div class="car">
@@ -67,7 +102,19 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $limit = 0)
                 <span>1 godz.</span>
                 <span><?php echo $vehicle[$i]->price ?> zł</span>
             </div>
-            <button type="button"><?php echo $buttonCaption ?></button>
+            <button>
+                <?php 
+                    if ($buttonCaption === "availabilityCheck")
+                    {
+                        if ($vehicle[$i]->isAvailable)
+                            echo 'Dostępny';
+                        else 
+                            echo 'Niedostępny';
+                    } 
+                    else 
+                        echo $buttonCaption;
+                ?>
+            </button>
             </div>
 <?php
         }
@@ -108,16 +155,54 @@ function printCarInfoTable($vehNum, $vehicle, $limit = 0)
 }
 
 //Wyświetlenie informacji o pojazdach jako lista
-function printCarInfoList($buttonCaption, $vehNum, $vehicle, $limit = 0)
+function printCarInfoList($buttonCaption, $vehNum, $vehicle, $printUnavailable = false, $limit = 0)
 {
     if ($limit > 0 && $limit <= $vehNum)
+    {
         $n = $limit;
+        if (!$printUnavailable)
+        {
+            for ($i=0; $i<$limit; $i++)
+            {
+                if (!($vehicle[$i]->isAvailable))
+                {
+                    $n++;
+                }
+            }
+        }
+    }
     else 
+    {
         $n = $vehNum;
+    }
 
     for ($i=0; $i<$n; $i++) 
     {
-        if ($vehicle[$i]->isAvailable) 
+        if (!$printUnavailable) 
+        {
+            if ($vehicle[$i]->isAvailable) 
+            {
+?>
+                <div class="vehicle">
+                    <div class="vehicle-image">
+                    <img src="<?php echo $vehicle[$i]->img_url ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
+                        <div class="vehicle-name">
+                            <?php echo $vehicle[$i]->brand.' '.$vehicle[$i]->model ?>
+                        </div>
+                    </div>
+                    <div class="vehicle-price">
+                        <div>
+                            <span>1 godz.</span>
+                            <br>
+                            <span><?php echo $vehicle[$i]->price ?> zł</span>
+                        </div>
+                        <button><?php echo $buttonCaption ?></button>
+                    </div>
+                </div>
+<?php
+            }
+        }
+        else 
         {
 ?>
             <div class="vehicle">
@@ -133,7 +218,19 @@ function printCarInfoList($buttonCaption, $vehNum, $vehicle, $limit = 0)
                         <br>
                         <span><?php echo $vehicle[$i]->price ?> zł</span>
                     </div>
-                    <button><?php echo $buttonCaption ?></button>
+                    <button>
+                        <?php 
+                            if ($buttonCaption === "availabilityCheck")
+                            {
+                                if ($vehicle[$i]->isAvailable)
+                                    echo 'Dostępny';
+                                else 
+                                    echo 'Niedostępny';
+                            } 
+                            else 
+                                echo $buttonCaption;
+                        ?>
+                    </button>
                 </div>
             </div>
 <?php

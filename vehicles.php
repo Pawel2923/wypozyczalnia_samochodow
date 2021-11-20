@@ -20,11 +20,11 @@
     <?php require_once("inc/nav.php") ?>
     <main>
         <section>
-            <h2>Samochody do rezerwacji</h2>
+            <h2>Nasze pojazdy</h2>
             <div class="cars">
                 <?php 
                     require("inc/veh.php");
-                    printCarInfo("Zobacz szczegóły", $vehNum, $vehicle);
+                    printCarInfo("Zobacz szczegóły", $vehNum, $vehicle, true);
                 ?>
             </div>
         </section>
