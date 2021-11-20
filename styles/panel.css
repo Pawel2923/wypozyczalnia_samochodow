@@ -168,6 +168,11 @@ header a {
             animation-name: settingsAnim;
 }
 
+form.view {
+    position: absolute;
+    right: 0;
+}
+
 .home section {
     display: -ms-grid;
     display: grid;
@@ -236,6 +241,9 @@ main .option form {
 }
 
 main .option select {
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
     width: 100%;
     padding: 10px;
     font-size: 16px;
@@ -300,6 +308,16 @@ main form input {
 
 main form button {
     width: 50%;
+}
+
+main .cars-list .vehicle {
+  -webkit-box-pack: unset;
+  -ms-flex-pack: unset;
+      justify-content: unset;
+}
+
+main .cars-list .vehicle-image {
+    margin-right: 10%;
 }
 
 footer {
@@ -415,11 +433,14 @@ footer {
             grid-template: 1fr 1fr 1fr / 1fr;
         row-gap: 20px;
     }
-    .content header {
+    .all-settings>header {
         padding-top: 50px;
     }
     .content header .user {
         display: none;
+    }
+    form.view {
+        padding-top: 10px;
     }
     .overlay {
         display: block;

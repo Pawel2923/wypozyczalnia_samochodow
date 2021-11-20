@@ -191,6 +191,6 @@
         </div>
     </div>
     <script src="js/panelHandler.js"></script>
-    <?php include_once('logged.php'); ?>
+    <?php include_once('inc/logged.php'); ?>
 </body>
 </html>

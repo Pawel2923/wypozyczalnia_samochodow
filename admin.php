@@ -65,6 +65,7 @@
                         <span class="login-caption">Zaloguj się</span>
                     </a>
                     <div class="logged">
+                        <div class="mobile-logged-menu-overlay"></div>
                         <i class="fas fa-user"></i>
                         <span class="login-caption"><?php if (isset($_SESSION['login'])) echo $_SESSION['login']; ?></span>
                         <div class="logged-menu">
@@ -233,7 +234,7 @@
                                 <h3>Motyw panelu</h3>
                                     <form action="" method="POST">
                                         <select name="theme">
-                                            <option value="system">Według motywu systemu</option>
+                                            <option value="system">Według motywu systemowego</option>
                                             <option value="bright">Jasny</option>
                                             <option value="dark">Ciemny</option>
                                         </select>
@@ -244,7 +245,7 @@
                                     {
                                         $theme = htmlentities($_POST['theme']);
                                         if ($theme == "system" || $theme == "dark" || $theme == "bright")
-                                            setcookie('theme', $theme, time() + (10 * 365 * 24 * 60 * 60));
+                                            setcookie('theme', $theme, time() + (5 * 365 * 24 * 60 * 60));
                                     }
                                 ?>
                             </div>
@@ -286,7 +287,7 @@
                                                     if ($row['email'] != '') 
                                                         echo $row['email'];
                                                     else 
-                                                        echo 'Brak email';
+                                                        echo 'Brak adresu';
                                                 echo '</td>';
                                                 echo '<tr>';
                                             }
@@ -313,6 +314,6 @@
         </div>
     </div>
     <script src="js/panelHandler.js"></script>
-    <?php include_once('logged.php'); ?>
+    <?php include_once('inc/logged.php'); ?>
 </body>
 </html>
