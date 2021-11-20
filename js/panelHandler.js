@@ -127,30 +127,38 @@ document.querySelector('.mobile-nav .overlay').addEventListener('click', () => {
     closeMobileNav();
 });
 
+const mobileLoggedMenuHandler = () => {
+    if (window.innerWidth < 800) {
+        const mobileLogged = document.querySelector('.logged');
+        const mobileLoggedMenu = document.querySelector('.logged-menu');
+        const mLMenuOverlay = document.querySelector('.mobile-logged-menu-overlay');
+
+        if (mobileLogged != null && mobileLoggedMenu != null) {
+            mobileLogged.addEventListener('click', () => {
+                mobileLoggedMenu.classList.toggle('show-logged-menu'); 
+                
+                if (mLMenuOverlay != null) {
+                    mLMenuOverlay.style.display = "block";
+                    mLMenuOverlay.addEventListener('touchend', () => {
+                        mobileLoggedMenu.classList.remove('show-logged-menu');
+                        mLMenuOverlay.style.display = "none";
+                    });
+                }
+            });
+        }
+    }
+}
+
 window.addEventListener('resize', () => {
     if (window.innerWidth > 800) 
         document.querySelector('nav.panel').style.transform = "translateX(0)";
     else 
         closeMobileNav();
+
+    mobileLoggedMenuHandler();
 });
 
 if (window.location.pathname.indexOf('admin.php') > -1)
     homeSettings();
 
-const mobileLogged = document.querySelector('.mobile-nav .logged');
-const mobileLoggedMenu = document.querySelector('.mobile-nav .logged-menu');
-const mLMenuOverlay = document.querySelector('.mobile-logged-menu-overlay');
-
-if (mobileLogged != null && mobileLoggedMenu != null) {
-    mobileLogged.addEventListener('click', () => {
-        mobileLoggedMenu.classList.toggle('show-logged-menu'); 
-        
-        if (mLMenuOverlay != null) {
-            mLMenuOverlay.style.display = "block";
-            mLMenuOverlay.addEventListener('click', () => {
-                mobileLoggedMenu.classList.remove('show-logged-menu');
-                mLMenuOverlay.style.display = "none";
-            });
-        }
-    });
-}
+mobileLoggedMenuHandler();

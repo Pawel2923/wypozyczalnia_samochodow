@@ -89,33 +89,34 @@
                 </ul>
             </div>
             <div class="back">
-                <a href="index.php">
+                <a href="../index.php">
                     <i class="fas fa-angle-double-left"></i> Wyjdź
                 </a>
             </div>
         </nav>
         <div class="content">
-            <div class="mobile-nav">
+        <div class="mobile-nav">
                 <div class="open"><i class="fas fa-bars"></i></div>
                 <div class="user">
-                    <a href="../login.php" class="login">
+                    <a href="login.php" class="login">
                         <i class="fas fa-sign-in-alt"></i>
                         <span class="login-caption">Zaloguj się</span>
                     </a>
                     <div class="logged">
+                        <div class="mobile-logged-menu-overlay"></div>
                         <i class="fas fa-user"></i>
                         <span class="login-caption"><?php if (isset($_SESSION['login'])) echo $_SESSION['login']; ?></span>
                         <div class="logged-menu">
                             <ul>
                                 <?php
-                                    if (isset($_SESSION['isAdmin'])) 
+                                    if (isset($_SESSION['login'])) 
                                     {
                                         if ($_SESSION['isAdmin'])
-                                            echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
+                                            echo '<li><a href="admin.php">Panel administracyjny</a></li>';
                                     }
                                 ?>
-                                <li><a href="../user.php">Panel użytkownika</a></li>
-                                <li><a href="../logout.php">Wyloguj się</a></li>
+                                <li><a href="user.php">Panel użytkownika</a></li>
+                                <li><a href="logout.php">Wyloguj się</a></li>
                             </ul>
                         </div>
                     </div>
