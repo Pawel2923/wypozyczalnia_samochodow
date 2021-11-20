@@ -37,7 +37,7 @@
             <div class="cars">
                 <?php 
                     require("inc/veh.php");
-                    printCarInfo("Wypożycz", $vehNum, $vehicle, 6);
+                    printCarInfo("Wypożycz", $vehNum, $vehicle, false, 6);
                 ?>
             </div>
         </section>
