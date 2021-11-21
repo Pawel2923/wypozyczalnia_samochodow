@@ -163,7 +163,20 @@
                         </header>
                         <section>
                             <form action="" method="POST">
-                                Rezerowanie pojazdów
+                                <div class="option">
+                                    <label><h3>Rezerwowanie pojazdów przez użytkowników</h3></label>
+                                    <select>
+                                        <option value="on">Włączone</option>
+                                        <option value="off">Wyłączone</option>
+                                    </select>
+                                </div>
+                                <div class="option">
+                                    <label><h3>Rezerwowanie pojazdów przez gości</h3></label>
+                                    <select>
+                                        <option value="on">Włączone</option>
+                                        <option value="off" selected>Wyłączone</option>
+                                    </select>
+                                </div>
                                 <button type="submit">Zatwierdź</button>
                             </form>
                         </section>
