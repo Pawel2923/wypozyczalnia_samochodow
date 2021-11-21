@@ -15,6 +15,36 @@
         header('Location: login.php');
         exit;
     }
+
+    if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_POST['vehicle-price']) && isset($_POST['is-available']))
+    {
+        if (isset($_SESSION['vehicle-img-name']))
+        {
+            $brand = htmlentities($_POST['vehicle-brand']);
+            $model = htmlentities($_POST['vehicle-model']);
+            $price = htmlentities($_POST['vehicle-price']);
+            $avail = htmlentities($_POST['is-available']);
+            $img = "img/".$_SESSION['vehicle-img-name'];
+            unset($_SESSION['vehicle-img-name']);
+
+            $logAsAdmin = true;
+            require('../db/db_connection.php');
+
+            $query = "INSERT INTO vehicles (marka, model, cena, img_url, is_available) VALUES(?, ?, ?, ?, ?)";
+            $stmt = $db_connection->prepare($query);
+            $stmt->bind_param('ssdsi', $brand, $model, $price, $img, $avail);
+            $stmt->execute();
+
+            $_SESSION['msg'] = 'Pomyślnie dodano nowy pojazd.';
+
+            $stmt->close();
+            $db_connection->close();
+        }
+        else
+        {
+            $_SESSION['msg'] = 'Nie udało się dodać pojazdu';
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -158,18 +188,30 @@
                             <h2>Dodawanie nowych pojazdów</h2>
                         </header>
                         <section>
+                            <form action="upload.php" method="POST" enctype="multipart/form-data">
+                                <label>Wybierz zdjęcie samochodu</label>
+                                <input type="file" name="vehicle-img" id="vehicle-img" required>
+                                <button type="submit">Prześlij zdjęcie</button>
+                            </form>
                             <form action="" method="POST">
-                                <label>Nazwa pojazdu</label>
-                                <input type="text" name="vehicle-name" required>
-                                <label>Cena za godzinę</label>
+                                <label>Marka pojazdu</label>
+                                <input type="text" name="vehicle-brand" required>
+                                <label>Model pojazdu</label>
+                                <input type="text" name="vehicle-model" required>
+                                <label>Cena</label>
                                 <input type="text" name="vehicle-price" required>
-                                <label>Link do zdjęcia samochodu</label>
-                                <input type="url" name="vehicle-img">
-                                <label>Prześlij zdjęcie samochodu</label>
-                                <input type="file" name="vehicle-img-upload">
+                                <label>Dostępność</label>
+                                <input type="text" name="is-available">
                                 <button type="submit">Dodaj</button>
                             </form>
                         </section>
+                        <?php 
+                            if (isset($_SESSION['msg']))
+                            {
+                                echo '<script>alert("'.$_SESSION['msg'].'");</script>';
+                                unset($_SESSION['msg']);
+                            }
+                        ?>
                     </div>
                 </main>
             </div>
