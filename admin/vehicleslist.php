@@ -150,6 +150,7 @@
                         <section>         
                             <div class="cars">
                                 <?php 
+                                    $logAsAdmin = true;
                                     require('../inc/veh.php');
                                     if (isset($_GET['view-mode']))
                                     {
@@ -204,6 +205,11 @@
             if (mode == "list")
                 document.querySelector('.cars').classList.add('cars-list');
         }
+        document.querySelector('button.car-button').addEventListener('click', () => {
+            <?php 
+                
+            ?>
+        });
     </script>
     <?php 
         if (isset($_GET['view-mode']))
