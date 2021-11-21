@@ -83,7 +83,7 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = fal
                     <span>1 godz.</span>
                     <span><?php echo $vehicle[$i]->price ?> zł</span>
                 </div>
-                <button><?php echo $buttonCaption ?></button>
+                <button class="car-button"><?php echo $buttonCaption ?></button>
                 </div>
 <?php
             }
@@ -102,7 +102,7 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = fal
                 <span>1 godz.</span>
                 <span><?php echo $vehicle[$i]->price ?> zł</span>
             </div>
-            <button>
+            <button class="car-button">
                 <?php 
                     if ($buttonCaption === "availabilityCheck")
                     {
