@@ -15,6 +15,13 @@
         header('Location: login.php');
         exit;
     }
+
+    if (isset($_POST['theme']))
+    {
+        $theme = htmlentities($_POST['theme']);
+        if ($theme == "default" || $theme == "system" || $theme == "dark" || $theme == "light")
+            setcookie('theme', $theme, time() + (5 * 365 * 24 * 60 * 60));
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -33,9 +40,15 @@
     <link rel="stylesheet" href="styles/panel.css">
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
     <?php 
-        if (isset($_COOKIE['theme']))
+        if (isset($_POST['theme']))
         {
-            // dark.css, bright.css, zmiana dla motywu systemowego
+            if ($_POST['theme'] != "default")
+                echo '<link rel="stylesheet" href="styles/'.$_POST['theme'].'.css">';
+        }
+        elseif (isset($_COOKIE['theme']))
+        {
+            if ($_COOKIE['theme'] != "default")
+                echo '<link rel="stylesheet" href="styles/'.$_COOKIE['theme'].'.css">';
         }
     ?>
 </head>
@@ -248,27 +261,20 @@
                         <section>
                             <div class="option">
                                 <h3>Motyw panelu</h3>
-                                    <form action="" method="POST">
-                                        <select name="theme">
-                                            <option value="system">Według motywu systemowego</option>
-                                            <option value="bright">Jasny</option>
-                                            <option value="dark">Ciemny</option>
-                                        </select>
-                                        <button type="submit">Zmień</button>
-                                    </form>
-                                <?php 
-                                    if (isset($_POST['theme']))
-                                    {
-                                        $theme = htmlentities($_POST['theme']);
-                                        if ($theme == "system" || $theme == "dark" || $theme == "bright")
-                                            setcookie('theme', $theme, time() + (5 * 365 * 24 * 60 * 60));
-                                    }
-                                ?>
+                                <form action="" method="POST">
+                                    <select name="theme">
+                                        <option value="default">Domyślny</option>
+                                        <option value="system">Użyj motywu urządzenia</option>
+                                        <option value="light">Jasny</option>
+                                        <option value="dark">Ciemny</option>
+                                    </select>
+                                    <button type="submit">Zmień</button>
+                                </form>
                             </div>
                             <div class="option">
                                 <h3>Zarządzanie dostępem</h3>
                                 <form action="" method="POST">
-                                    <input type="text" name="aLogin">
+                                    <input type="text" name="aLogin" placeholder="Wpisz ID użytkownika">
                                     <button type="submit">Nadaj dostęp</button>                                        
                                     <!-- <button type="submit">Usuń dostęp</button> -->
                                 </form>
@@ -327,6 +333,17 @@
         </div>
     </div>
     <script src="js/panelHandler.js"></script>
+    <script>
+        const selectTheme = (mode) => {
+            document.querySelector('main select option[value="'+mode+'"]').setAttribute('selected', 'selected');
+        }
+    </script>
+    <?php 
+        if (isset($_POST['theme']))
+            echo '<script>selectTheme("'.$_POST['theme'].'");</script>';
+        elseif (isset($_COOKIE['theme']))
+            echo '<script>selectTheme("'.$_COOKIE['theme'].'");</script>';
+    ?>
     <?php include_once('inc/logged.php'); ?>
 </body>
 </html>

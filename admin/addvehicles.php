@@ -111,6 +111,16 @@
             }
         }
     </style>
+    <?php 
+        if (isset($_POST['theme']))
+        {
+            echo '<link rel="stylesheet" href="../styles/'.$_POST['theme'].'.css">';
+        }
+        elseif (isset($_COOKIE['theme']))
+        {
+            echo '<link rel="stylesheet" href="../styles/'.$_COOKIE['theme'].'.css">';
+        }
+    ?>
 </head>
 <body>
     <div class="page-wrapper">
@@ -195,7 +205,7 @@
                         <section>
                             <form action="upload.php" method="POST" enctype="multipart/form-data">
                                 <label>Wybierz zdjęcie samochodu</label>
-                                <input type="file" name="vehicle-img" id="vehicle-img" required>
+                                <input type="file" name="vehicle-img" id="vehicle-img" accept="image/png, image/jpg, image/jpeg, image/gif" required>
                                 <button type="submit">Prześlij zdjęcie</button>
                             </form>
                             <form action="" method="POST">
@@ -204,9 +214,9 @@
                                 <label>Model pojazdu</label>
                                 <input type="text" name="vehicle-model" required>
                                 <label>Cena</label>
-                                <input type="text" name="vehicle-price" required>
-                                <label>Dostępność (Opcjonalne)</label>
-                                <input type="text" name="is-available">
+                                <input type="text" name="vehicle-price" placeholder="np. 59,59" required>
+                                <label>Ustaw dostępnośc do rezerwacji (Opcjonalne)</label>
+                                <input type="text" name="is-available" placeholder="Wpisz 0 jeśli nie lub 1 jeśli tak">
                                 <button type="submit">Dodaj</button>
                             </form>
                         </section>

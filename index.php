@@ -87,6 +87,13 @@
         };
         const subscriptionInput = document.querySelector('.subscription-form form input[name="newsletter-mail"]');
         checkInput(subscriptionInput);
+
+        const carButton = document.querySelectorAll('.car-button');
+        for (let i=0; i<carButton.length; i++) {
+            carButton[i].addEventListener('click', () => {
+                window.location = 'rezerwacja.php';
+            });
+        }
     </script>
     <script src="js/nav.js"></script>
     <?php include_once('inc/logged.php'); ?>
