@@ -24,7 +24,10 @@
             <div class="cars">
                 <?php 
                     require("inc/veh.php");
-                    printCarInfo("Zobacz szczegóły", $vehNum, $vehicle, true);
+                    if (isset($vehicle))
+                        printCarInfo("Zobacz szczegóły", $vehNum, $vehicle, true);
+                    else 
+                        echo '<p>Obecnie nie ma pojazdów do rezerwacji</p>';
                 ?>
             </div>
         </section>

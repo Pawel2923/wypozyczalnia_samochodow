@@ -14,14 +14,16 @@ if (!!$_FILES['vehicle-img']['tmp_name']) // Sprawdzenie czy plik istnieje
         {
             $_SESSION['msg'] = 'Plik został pomyślnie przesłany.';
             $_SESSION['vehicle-img-name'] = $_FILES['vehicle-img']['name'];
-            header('Location: addvehicles.php');
-            exit;
         }
         else 
         {
             $_SESSION['msg'] = 'Wystąpił błąd podczas przesyłania pliku.';
-            header('Location: addvehicles.php');
-            exit;
         }
     }
+    else
+    {
+        $_SESSION['msg'] = 'Dopuszczalne rozszerzenia zdjęcia to jpg, jpeg, gif i png.';
+    }
 }
+header('Location: addvehicles.php');
+exit;

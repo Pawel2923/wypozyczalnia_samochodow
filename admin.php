@@ -181,6 +181,22 @@
                                     </button>
                                 </a>
                             </div>
+                            <div class="option">
+                                <a href="admin/users.php">
+                                    <button class="option-button user-stats">
+                                        <h3>Usuwanie użytkowników</h3>
+                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="option">
+                                <a href="admin/users.php">
+                                    <button class="option-button user-stats">
+                                        <h3>Dodawanie użytkowników</h3>
+                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                                    </button>
+                                </a>
+                            </div>
                             <h3 style="margin-bottom: 10px;">Lista użytkowników</h3>
                             <table>
                                 <tr>
@@ -248,9 +264,6 @@
                                             setcookie('theme', $theme, time() + (5 * 365 * 24 * 60 * 60));
                                     }
                                 ?>
-                            </div>
-                            <div class="option">
-                                <h3>Zarządzanie panelem użytkownika</h3>
                             </div>
                             <div class="option">
                                 <h3>Zarządzanie dostępem</h3>

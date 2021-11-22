@@ -24,7 +24,10 @@
             <div class="cars cars-list">
                 <?php 
                     require('inc/veh.php');
-                    printCarInfoList("Wypożycz", $vehNum, $vehicle);
+                    if (isset($vehicle)) 
+                        printCarInfoList("Wypożycz", $vehNum, $vehicle);
+                    else 
+                        echo '<p>Obecnie nie ma pojazdów do rezerwacji</p>';
                 ?>
             </div>
         </section>
