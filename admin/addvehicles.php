@@ -200,7 +200,7 @@
                                 <input type="text" name="vehicle-model" required>
                                 <label>Cena</label>
                                 <input type="text" name="vehicle-price" required>
-                                <label>Dostępność</label>
+                                <label>Dostępność (Opcjonalne)</label>
                                 <input type="text" name="is-available">
                                 <button type="submit">Dodaj</button>
                             </form>
