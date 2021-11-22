@@ -1,0 +1,36 @@
+* {
+    border-color: #fff !important;
+}
+
+body, input, select, footer {
+    background-color: #202124;
+    color: #fff;
+}
+
+.logged-menu {
+    background-color: #1b1b1b;
+}
+
+header a, button, .logged-menu a, .content .vehicles header>* a {
+    color: #fff;
+}
+
+main .car .divider {
+    background: #fff;
+}
+
+.mobile-nav {
+    background-color: rgba(20, 20, 20, .95);
+}
+
+.panel {
+    background-color: #1b1b1b !important;
+}
+
+main .home-option:hover, button {
+    background-color: #1797ff;
+}
+
+button:hover {
+    background-color: #202124;
+}

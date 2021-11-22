@@ -58,6 +58,16 @@
             color: #000;
         }
     </style>
+    <?php 
+        if (isset($_POST['theme']))
+        {
+            echo '<link rel="stylesheet" href="../styles/'.$_POST['theme'].'.css">';
+        }
+        elseif (isset($_COOKIE['theme']))
+        {
+            echo '<link rel="stylesheet" href="../styles/'.$_COOKIE['theme'].'.css">';
+        }
+    ?>
 </head>
 <body>
     <div class="page-wrapper">
@@ -212,11 +222,6 @@
             if (mode == "list")
                 document.querySelector('.cars').classList.add('cars-list');
         }
-        // document.querySelector('button.car-button').addEventListener('click', () => {
-        //     <?php 
-                
-        //     ?>
-        // });
     </script>
     <?php 
         if (isset($_GET['view-mode']))
