@@ -2,28 +2,41 @@
 session_start();
 $allowedTypes = array("jpg", "jpeg", "gif", "png");
 
-if (!!$_FILES['vehicle-img']['tmp_name']) // Sprawdzenie czy plik istnieje
+$dir = '../img/';
+$target = $dir.basename($_FILES['vehicle-img']['name']);
+
+if (!file_exists($target)) // Sprawdzenie czy plik istnieje
 {
-    $ext = explode('.', strtolower($_FILES['vehicle-img']['name']));    // Rozszerzenie pliku
-
-    $dir = '../img/';
-
-    if (in_array(end($ext), $allowedTypes)) // Sprawdzenie czy rozszerzenie jest obsługiwane
+    if ($_FILES['vehicle-img']['size'] > (1048576 * 2))
     {
-        if (move_uploaded_file($_FILES['vehicle-img']['tmp_name'], $dir.basename($_FILES['vehicle-img']['name'])))
+        $_SESSION['msg'] = 'Plik nie może być większy niż 2 MB.';
+    }
+    else 
+    {
+        $ext = explode('.', strtolower($_FILES['vehicle-img']['name']));    // Rozszerzenie pliku
+
+        if (in_array(end($ext), $allowedTypes)) // Sprawdzenie czy rozszerzenie jest obsługiwane
         {
-            $_SESSION['msg'] = 'Plik został pomyślnie przesłany.';
-            $_SESSION['vehicle-img-name'] = $_FILES['vehicle-img']['name'];
+            if (move_uploaded_file($_FILES['vehicle-img']['tmp_name'], $target))
+            {
+                $_SESSION['msg'] = 'Plik został pomyślnie przesłany.';
+                $_SESSION['vehicle-img-name'] = $_FILES['vehicle-img']['name'];
+            }
+            else 
+            {
+                $_SESSION['msg'] = 'Wystąpił błąd podczas przesyłania pliku.';
+            }
         }
-        else 
+        else
         {
-            $_SESSION['msg'] = 'Wystąpił błąd podczas przesyłania pliku.';
+            $_SESSION['msg'] = 'Dopuszczalne rozszerzenia zdjęcia to jpg, jpeg, gif i png.';
         }
     }
-    else
-    {
-        $_SESSION['msg'] = 'Dopuszczalne rozszerzenia zdjęcia to jpg, jpeg, gif i png.';
-    }
+}
+else 
+{
+    $_SESSION['msg'] = 'Ten plik już istnieje. Wybrano istniejący plik.';
+    $_SESSION['vehicle-img-name'] = $_FILES['vehicle-img']['name'];
 }
 header('Location: addvehicles.php');
 exit;

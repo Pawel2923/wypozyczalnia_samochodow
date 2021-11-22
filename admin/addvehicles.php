@@ -24,6 +24,11 @@
             $model = htmlentities($_POST['vehicle-model']);
             $price = htmlentities($_POST['vehicle-price']);
             $avail = htmlentities($_POST['is-available']);
+            if ($avail == 0 || $avail == 'false' || $avail == 'off' || empty($avail))
+                $avail = 0;
+            else 
+                $avail = 1;
+
             $img = "img/".$_SESSION['vehicle-img-name'];
             unset($_SESSION['vehicle-img-name']);
 
