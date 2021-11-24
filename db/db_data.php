@@ -1,5 +1,5 @@
 <?php 
-    $db_host = '127.0.0.1';
+    $db_host = 'localhost';
     $db_user = 'wypozyczalnia_user';
     $db_password = 'GtnW8&Gfk%#n%E';
     $db_name = 'wypozyczalnia';

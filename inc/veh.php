@@ -1,7 +1,7 @@
 <?php
 //Połączenie z baza danych
-$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);     // Pobranie ścieżki z URL
-if (strpos($path, '/admin'))            // Sprawdzenie czy ściezka zawiera '/admin'
+$path = $_SERVER['REQUEST_URI'];     // Pobranie ścieżki z URL
+if (strpos($path, '/admin') !== false)            // Sprawdzenie czy ściezka zawiera '/admin'
     require('../db/db_connection.php');
 else 
     require('db/db_connection.php');
