@@ -4,8 +4,10 @@ const settings = document.querySelectorAll('.all-settings main>div');
 for (let i=0; i<settings.length; i++) {
     settings[i].style.display = "none";
 }
-settings[0].classList.add('visible-settings');
-settings[0].style.display = "block";
+if (settings[0] != undefined) {
+    settings[0].classList.add('visible-settings');
+    settings[0].style.display = "block";
+}
 
 const findSettings = (settingName) => {
     let settingsName = [];
