@@ -19,7 +19,7 @@
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <?php require_once("nav.php") ?>
+    <?php require_once("inc/nav.php") ?>
     <main>
         <section class="main-header">
             <h1>Wypożyczalnia — witamy!</h1>
@@ -35,58 +35,13 @@
         <section>
             <h2>Samochody do rezerwacji</h2>
             <div class="cars">
-                <div class="car">
-                    <div class="image-wrapper">
-                        <img src="https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjByc3gyc3BrZzQ4YjMtT1RPTU9UT1BMIiwidyI6W3siZm4iOiJ3ZzRnbnFwNnkxZi1PVE9NT1RPUEwiLCJzIjoiMTYiLCJwIjoiMTAsLTEwIiwiYSI6IjAifV19.hXuoemts_h7soE7DwcsvGnYuHhVCV0y0sCWXJ0ZzIVE/image;s=732x488" alt="Zdjęcie samochodu" width="100%" height="100%">
-                        <div class="img-overlay"></div>
-                    </div>
-                    <span class="car-name">Toyota Yaris</span>
-                    <div class="divider"></div>
-                    <div class="car-price">
-                        <span>1 godz.</span>
-                        <span>65,00 zł</span>
-                    </div>
-                    <button type="button">Wypożycz</button>
-                </div>
-                <div class="car">
-                    <div class="image-wrapper">
-                        <img src="https://i.wpimg.pl/600x0/m.autokult.pl/ford-fusion-4-3ddb5b2d153e08d106.jpg" alt="Zdjęcie samochodu" width="100%" height="100%">
-                        <div class="img-overlay"></div>
-                    </div>
-                    <span class="car-name">Ford Fusion</span>
-                    <div class="divider"></div>
-                    <div class="car-price">
-                        <span>1 godz.</span>
-                        <span>55,00 zł</span>
-                    </div>
-                    <button type="button">Wypożycz</button>
-                </div>
-                <div class="car">
-                    <div class="image-wrapper">
-                        <img src="https://www.auto-gazda.pl/application/files/8816/2861/3097/1.jpg" alt="Zdjęcie samochodu" width="100%" height="100%">
-                        <div class="img-overlay"></div>
-                    </div>
-                    <span class="car-name">Volkswagen Golf</span>
-                    <div class="divider"></div>
-                    <div class="car-price">
-                        <span>1 godz.</span>
-                        <span>65,00 zł</span>
-                    </div>
-                    <button type="button">Wypożycz</button>
-                </div>
-                <div class="car">
-                    <div class="image-wrapper">
-                        <img src="https://image.ceneostatic.pl/data/products/95699167/i-mercedes-sprinter-313-2013-r.jpg" alt="Zdjęcie samochodu" width="100%" height="100%">
-                        <div class="img-overlay"></div>
-                    </div>
-                    <span class="car-name">Mercedes Sprinter</span>
-                    <div class="divider"></div>
-                    <div class="car-price">
-                        <span>1 godz.</span>
-                        <span>80,00 zł</span>
-                    </div>
-                    <button type="button">Wypożycz</button>
-                </div>
+                <?php 
+                    require("inc/veh.php");
+                    if (isset($vehicle))
+                        printCarInfo("Wypożycz", $vehNum, $vehicle, false, 6);
+                    else 
+                        echo '<p>Obecnie nie ma pojazdów do rezerwacji</p>';
+                ?>
             </div>
         </section>
         <section class="contact-with-us">
@@ -105,7 +60,7 @@
     </main>
     <footer>
         <section class="subscription-form">
-            <form action="index.php" method="POST">
+            <form action="newsletter.php" method="POST">
                 <h3>Zapisz się na nasz newsletter</h3>
                 <input type="email" placeholder="Adres e-mail" name="newsletter-mail" required>
                 <br>
@@ -132,8 +87,15 @@
         };
         const subscriptionInput = document.querySelector('.subscription-form form input[name="newsletter-mail"]');
         checkInput(subscriptionInput);
+
+        const carButton = document.querySelectorAll('.car-button');
+        for (let i=0; i<carButton.length; i++) {
+            carButton[i].addEventListener('click', () => {
+                window.location = 'rezerwacja.php';
+            });
+        }
     </script>
     <script src="js/nav.js"></script>
-    <?php include_once('logged.php'); ?>
+    <?php include_once('inc/logged.php'); ?>
 </body>
 </html>

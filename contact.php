@@ -17,7 +17,7 @@
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <?php require_once("nav.php") ?>
+    <?php require_once("inc/nav.php") ?>
     <main>
         <section class="contact-with-us">
             <div class="contact-wrapper">
@@ -35,7 +35,7 @@
     </main>
     <footer>
         <section class="subscription-form">
-            <form action="index.php" method="POST">
+            <form action="newsletter.php" method="POST">
                 <h3>Zapisz się na nasz newsletter</h3>
                 <input type="email" placeholder="Adres e-mail" name="newsletter-mail" required>
                 <br>
@@ -64,6 +64,6 @@
         checkInput(subscriptionInput);
     </script>
     <script src="js/nav.js"></script>
-    <?php include_once('logged.php'); ?>
+    <?php include_once('inc/logged.php'); ?>
 </body>
 </html>

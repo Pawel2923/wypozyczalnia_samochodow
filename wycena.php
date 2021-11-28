@@ -63,7 +63,7 @@
     </style>
 </head>
 <body>
-    <?php require_once("nav.php") ?>
+    <?php require_once("inc/nav.php") ?>
     <main>
         <section>
             <h2>Uzyskaj wycenę</h2>
@@ -75,14 +75,14 @@
                     <input type="email" name="email" placeholder="Adres e-mail" required>
                     <input type="tel" name="tel" placeholder="Nr telefonu">
                 </div>
-                <textarea name="comment" placeholder="Wiadomość"></textarea>
+                <textarea name="comment" placeholder="Wiadomość" required></textarea>
                 <button type="submit">Wyślij</button>
             </form>
         </section>
     </main>
     <footer>
         <section class="subscription-form">
-            <form action="index.php" method="POST">
+            <form action="newsletter.php" method="POST">
                 <h3>Zapisz się na nasz newsletter</h3>
                 <input type="email" placeholder="Adres e-mail" name="newsletter-mail" required>
                 <br>
@@ -109,8 +109,12 @@
         };
         const subscriptionInput = document.querySelector('.subscription-form form input[name="newsletter-mail"]');
         checkInput(subscriptionInput);
+        const formInput = document.querySelectorAll('main form input, main form textarea');
+        for (let i=0; i<formInput.length; i++) {
+            checkInput(formInput[i]);
+        }
     </script>
     <script src="js/nav.js"></script>
-    <?php include_once('logged.php'); ?>
+    <?php include_once('inc/logged.php'); ?>
 </body>
 </html>

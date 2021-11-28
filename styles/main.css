@@ -217,6 +217,178 @@ button:hover {
   color: #000;
 }
 
+main .cars {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: auto;
+  -ms-grid-columns: 1fr 20px 1fr 20px 1fr;
+      grid-template: auto / 1fr 1fr 1fr;
+  -webkit-column-gap: 20px;
+     -moz-column-gap: 20px;
+          column-gap: 20px;
+  row-gap: 20px;
+}
+
+main .cars .car {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border: 1px solid #000;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  overflow: hidden;
+}
+
+main .car .image-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  cursor: pointer;
+}
+
+main .car .img-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, .4);
+  z-index: 1;
+  opacity: 0;
+  -webkit-transition: opacity .2s ease;
+  -o-transition: opacity .2s ease;
+  transition: opacity .2s ease;
+}
+
+main .car .img-overlay:hover {
+  opacity: 1;
+}
+
+main .cars .car>span {
+  margin-top: 5%;
+  margin-bottom: 5%;
+}
+
+main .car-price {
+  margin-top: 5%;
+  margin-bottom: 5%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+main .car-price span {
+  margin-top: 10px;
+}
+
+main .car-price span:first-child {
+  margin-top: 0;
+}
+
+main .car .car-name {
+  font-weight: 400;
+}
+
+main .car .divider {
+  width: 80%;
+  height: 2px;
+  background: #000;
+}
+
+main .car button {
+  width: 80%;
+  margin-bottom: 5%;
+}
+
+main .cars-list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.cars-list .vehicle {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+  margin-bottom: 20px;
+}
+.cars-list .vehicle:last-child {
+  margin-bottom: 0;
+}
+.cars-list .vehicle>* {
+  margin-right: 20px;
+}
+.cars-list .vehicle .vehicle-price {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.cars-list .vehicle .vehicle-price div {
+  margin-right: 20px;
+}
+.cars-list .vehicle .vehicle-image {
+  width: 400px;
+}
+.cars-list button {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin: 0;
+}
+.cars-list .vehicle-name {
+  text-align: center;
+}
+@media screen and (max-width: 800px) {
+  main .cars {
+      -ms-grid-rows: auto;
+      -ms-grid-columns: auto;
+          grid-template: auto / auto;
+  }
+  .cars-list .vehicle,
+  .cars-list .vehicle .vehicle-price {
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+          -ms-flex-direction: column;
+              flex-direction: column;
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center;
+  }
+  .cars-list .vehicle .vehicle-image {
+      width: 100%;
+      margin: 0;
+  }
+  .cars-list .vehicle .vehicle-price,
+  .cars-list .vehicle .vehicle-price div {
+      margin-right: 0;
+      margin-left: 0;
+  }
+  .cars-list .vehicle div {
+      margin-bottom: 10px;
+  }
+}
+
 footer {
   display: -ms-grid;
   display: grid;
@@ -391,7 +563,8 @@ footer .bottom-content .bottom-text {
   }
   nav.mobile-nav .logged-menu {
     position: absolute;
-    left: -50%;
+    left: 0;
+    transform: translateX(-25%);
   }
   .show-logged-menu {
     opacity: 1;
@@ -419,6 +592,12 @@ footer .bottom-content .bottom-text {
     nav.mobile-nav i.fa-user-circle {
       margin: 0;
       font-size: 1.5em;
+    }
+    .user i {
+      margin-right: 0;
+    }
+    nav.mobile-nav .logged-menu {
+      transform: translateX(-45%);
     }
   }
   nav.mobile-nav .user {
