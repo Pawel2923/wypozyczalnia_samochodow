@@ -11,16 +11,21 @@ if (isset($_POST['isLogged']))
     }
 }
 
-require('db/db_connection.php');
-$query = "SELECT * FROM vehicles WHERE id=1";
-$stmt = $db_connection->prepare($query);
-$stmt->execute();
-$result = $stmt->get_result();
+if (isset($_POST['vehicle-id']))
+{
+    $vehicleID = htmlentities($_POST['vehicle-id']);
+    require('db/db_connection.php');
+    $query = "SELECT * FROM vehicles WHERE id=?";
+    $stmt = $db_connection->prepare($query);
+    $stmt->bind_param('i', $vehicleID);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-$attribute = $result->fetch_assoc();
+    $attribute = $result->fetch_assoc();
 
-$stmt->close();
-$db_connection->close();
+    $stmt->close();
+    $db_connection->close();
+}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -154,7 +159,8 @@ $db_connection->close();
                 document.querySelector('.summary .amount').innerHTML = 'Liczba godzin wynajmu: <h3>'+amount+'</h3>';
                 const date = document.querySelector('form input[name="date"]').value;
                 document.querySelector('.summary .date').innerHTML = 'Data wynajmu: <h3>'+date+'</h3>'
-                document.querySelector('.summary .price').innerHTML = 'W sumie do zapłaty: <h3>'+(amount * <?php echo $attribute['cena'] ?>)+'</h3>';
+                let total = amount * <?php echo $attribute['cena'] ?>;
+                document.querySelector('.summary .price').innerHTML = 'W sumie do zapłaty: <h3>'+total.toFixed(2)+'</h3>';
             });
         }
     </script>

@@ -28,7 +28,7 @@
                         if (isset($vehicle)) 
                             printCarInfoList("Wypożycz", $vehNum, $vehicle);
                         else 
-                            echo '<p>Obecnie nie ma pojazdów do rezerwacji</p>';
+                            echo '<p>Obecnie nie ma pojazdów do wypożyczenia</p>';
                     ?>
                 </form>
             </div>
