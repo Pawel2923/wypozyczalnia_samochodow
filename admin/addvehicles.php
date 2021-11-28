@@ -215,7 +215,7 @@
                                 <input type="text" name="vehicle-model" required>
                                 <label>Cena</label>
                                 <input type="text" name="vehicle-price" placeholder="np. 59,59" required>
-                                <label>Ustaw dostępnośc do rezerwacji (Opcjonalne)</label>
+                                <label>Ustaw dostępność do rezerwacji (Opcjonalne)</label>
                                 <input type="text" name="is-available" placeholder="Wpisz 0 jeśli nie lub 1 jeśli tak">
                                 <button type="submit">Dodaj</button>
                             </form>

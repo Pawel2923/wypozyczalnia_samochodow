@@ -22,19 +22,21 @@
         <section>
             <h2>Wybierz pojazd</h2>
             <div class="cars cars-list">
-                <?php 
-                    require('inc/veh.php');
-                    if (isset($vehicle)) 
-                        printCarInfoList("Wypożycz", $vehNum, $vehicle);
-                    else 
-                        echo '<p>Obecnie nie ma pojazdów do rezerwacji</p>';
-                ?>
+                <form action="rent.php" method="POST">
+                    <?php 
+                        require('inc/veh.php');
+                        if (isset($vehicle)) 
+                            printCarInfoList("Wypożycz", $vehNum, $vehicle);
+                        else 
+                            echo '<p>Obecnie nie ma pojazdów do rezerwacji</p>';
+                    ?>
+                </form>
             </div>
         </section>
     </main>
     <footer>
         <section class="subscription-form">
-            <form action="index.php" method="POST">
+            <form action="newsletter.php" method="POST">
                 <h3>Zapisz się na nasz newsletter</h3>
                 <input type="email" placeholder="Adres e-mail" name="newsletter-mail" required>
                 <br>

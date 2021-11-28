@@ -82,7 +82,7 @@
     </main>
     <footer>
         <section class="subscription-form">
-            <form action="index.php" method="POST">
+            <form action="newsletter.php" method="POST">
                 <h3>Zapisz się na nasz newsletter</h3>
                 <input type="email" placeholder="Adres e-mail" name="newsletter-mail" required>
                 <br>

@@ -22,6 +22,29 @@
         if ($theme == "default" || $theme == "system" || $theme == "dark" || $theme == "light")
             setcookie('theme', $theme, time() + (5 * 365 * 24 * 60 * 60));
     }
+
+    if (isset($_POST['action']) && isset($_POST['user-id']))
+    {
+
+        $logAsAdmin = true;
+        $userID = htmlentities($_POST['user-id']);
+        require('db/db_connection.php');
+
+        if ($_POST['action'] === 'grant')
+        {
+            $query = "UPDATE users SET is_admin=1 WHERE id=?";
+        }
+        else 
+        {
+            $query = "UPDATE users SET is_admin=0 WHERE id=?";
+        }
+        
+        $stmt = $db_connection->prepare($query);
+        $stmt->bind_param('i', $userID);
+        $stmt->execute();
+        $stmt->close();
+        $db_connection->close();
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -39,6 +62,16 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/panel.css">
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
+    <style>
+        .access-buttons {
+            display: grid; 
+            grid-template: 1fr / 1fr 1fr;
+            column-gap: 10px;
+        }
+        .access-buttons button {
+            width: 100%;
+        }
+    </style>
     <?php 
         if (isset($_POST['theme']))
         {
@@ -187,25 +220,9 @@
                         </header>
                         <section>
                             <div class="option">
-                                <a href="admin/users.php">
-                                    <button class="option-button user-stats">
-                                        <h3>Statystyki użytkowników</h3>
-                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                    </button>
-                                </a>
-                            </div>
-                            <div class="option">
-                                <a href="admin/users.php">
+                                <a href="admin/deluser.php">
                                     <button class="option-button user-stats">
                                         <h3>Usuwanie użytkowników</h3>
-                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                    </button>
-                                </a>
-                            </div>
-                            <div class="option">
-                                <a href="admin/users.php">
-                                    <button class="option-button user-stats">
-                                        <h3>Dodawanie użytkowników</h3>
                                         <div class="icon"><i class="fas fa-chevron-right"></i></div>
                                     </button>
                                 </a>
@@ -217,7 +234,7 @@
                                     <th>Login</th>
                                     <th>E-mail</th>
                                     <th>Admin</th>
-                                    <!-- <th>Rezerwowane pojazdy</th> -->
+                                    <th>Rezerwowane pojazdy</th>
                                 </tr>
                                 <?php 
                                     // Wylistowanie użytkowników w tabeli
@@ -245,6 +262,12 @@
                                                 echo 'TAK';
                                             else 
                                                 echo 'NIE';
+                                        echo '</td>';
+                                        echo '<td>';
+                                            if ($row['rented_vehicles'] > 0)
+                                                echo $row['rented_vehicles'];
+                                            else 
+                                                echo 'Brak pojazdów';
                                         echo '</td>';
                                         echo '<tr>';
                                     }
@@ -274,11 +297,12 @@
                             <div class="option">
                                 <h3>Zarządzanie dostępem</h3>
                                 <form action="" method="POST">
-                                    <input type="text" name="aLogin" placeholder="Wpisz ID użytkownika">
-                                    <button type="submit">Nadaj dostęp</button>                                        
-                                    <!-- <button type="submit">Usuń dostęp</button> -->
+                                    <input type="number" name="user-id" placeholder="Wpisz ID użytkownika">
+                                    <div class="access-buttons">
+                                        <button type="submit" name="action" value="grant">Nadaj dostęp</button>                                        
+                                        <button type="submit" name="action" value="revoke">Usuń dostęp</button>
+                                    </div>
                                 </form>
-                                <!-- Możliwość wyszukiwania z tabeli -->
                                 <div class="access-list">
                                     <h4>Administratorzy</h4>
                                     <br>

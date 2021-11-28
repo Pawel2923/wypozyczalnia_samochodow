@@ -1,8 +1,26 @@
 <?php 
     session_start();
-    if (!$_SESSION['isLogged']) {
+    $exit = false;
+    if (isset($_SESSION['isLogged']))
+    {
+        if (!$_SESSION['isLogged']) {
+            $exit = true;
+        }
+    }
+    else 
+        $exit = true;
+
+    if ($exit)
+    {
         header('Location: login.php');
         exit;
+    }
+
+    if (isset($_POST['theme']))
+    {
+        $theme = htmlentities($_POST['theme']);
+        if ($theme == "default" || $theme == "system" || $theme == "dark" || $theme == "light")
+            setcookie('theme', $theme, time() + (5 * 365 * 24 * 60 * 60));
     }
 ?>
 <!DOCTYPE html>
@@ -21,15 +39,38 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/panel.css">
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
+    <style>
+        .access-buttons {
+            display: grid; 
+            grid-template: 1fr / 1fr 1fr;
+            column-gap: 10px;
+        }
+        .access-buttons button {
+            width: 100%;
+        }
+    </style>
+    <?php 
+        if (isset($_POST['theme']))
+        {
+            if ($_POST['theme'] != "default")
+                echo '<link rel="stylesheet" href="styles/'.$_POST['theme'].'.css">';
+        }
+        elseif (isset($_COOKIE['theme']))
+        {
+            if ($_COOKIE['theme'] != "default")
+                echo '<link rel="stylesheet" href="styles/'.$_COOKIE['theme'].'.css">';
+        }
+    ?>
 </head>
 <body>
     <div class="page-wrapper">
         <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="user.php"><li>Home</li></a>
-                    <a class="veh-link" href="user.php#vehicles"><li>Pojazdy</li></a>
-                    <a class="settings-link" href="user.php#settings"><li>Ustawienia</li></a>
+                    <a href="admin.php"><li>Home</li></a>
+                    <a class="veh-link" href="admin.php#vehicles"><li>Pojazdy</li></a>
+                    <a class="users-link" href="admin.php#users"><li>Użytkownicy</li></a>
+                    <a class="settings-link" href="admin.php#settings"><li>Ustawienia</li></a>
                 </ul>
             </div>
             <div class="back">
@@ -47,6 +88,7 @@
                         <span class="login-caption">Zaloguj się</span>
                     </a>
                     <div class="logged">
+                        <div class="mobile-logged-menu-overlay"></div>
                         <i class="fas fa-user"></i>
                         <span class="login-caption"><?php if (isset($_SESSION['login'])) echo $_SESSION['login']; ?></span>
                         <div class="logged-menu">
@@ -68,7 +110,7 @@
             </div>
             <div class="all-settings">
                 <header>
-                    <h1><a href="user.php">Panel użytkownika</a></h1>
+                    <h1><a href="admin.php">Panel użytkownika</a></h1>
                     <div class="user">
                         <a href="login.php" class="login">
                             <i class="fas fa-sign-in-alt"></i>
@@ -100,82 +142,17 @@
                                 <i class="fas fa-car"></i>
                                 <span>Zarządzanie pojazdami</span>
                             </div>
+                            <div class="home-option manage-users">
+                                <i class="fas fa-user-edit"></i>
+                                <span>Edytuj swój profil</span>
+                            </div>
                             <div class="home-option manage-settings">
                                 <i class="fas fa-cog"></i>
                                 <span>Zmiana ustawień serwisu</span>
                             </div>
                         </section>
                     </div>
-                    <div class="vehicles">
-                        <header>
-                            <h2>Pojazdy</h2>
-                        </header>
-                        <section>
-                            <div class="option">
-                                <a href="addvehicles.php">
-                                    <button class="option-button add-veh">
-                                        <h3>Dodawanie nowych pojazdów</h3>
-                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                    </button>
-                                </a>
-                            </div>
-                            <div class="option">
-                                <a href="vehicleslist.php">
-                                    <button class="option-button veh-list">
-                                        <h3>Lista pojazdów</h3>
-                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                    </button>
-                                </a>
-                            </div>
-                            <div class="option">
-                                <a href="vehiclerent.php">
-                                    <button class="option-button veh-res">
-                                        <h3>Rezerwacja pojazdów</h3>
-                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                    </button>
-                                </a>
-                            </div>
-                            <div class="option">
-                                <a href="delvehicle.php">
-                                    <button class="option-button del-veh">
-                                        <h3>Usuwanie pojazdów</h3>
-                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                    </button>
-                                </a>
-                            </div>
-                        </section>
-                    </div>
-                    <div class="settings">
-                        <header>
-                            <h2>Ustawienia</h2>
-                        </header>
-                        <section>
-                            <div class="option">
-                                <a>
-                                    <button class="option-button add-veh">
-                                        <h3>Motyw panelu</h3>
-                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                    </button>
-                                </a>
-                            </div>
-                            <div class="option">
-                                <a>
-                                    <button class="option-button veh-list">
-                                        <h3>Zarządzanie panelem użytkownika</h3>
-                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                    </button>
-                                </a>
-                            </div>
-                            <div class="option">
-                                <a>
-                                    <button class="option-button del-veh">
-                                        <h3>Zarządzanie dostępem</h3>
-                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
-                                    </button>
-                                </a>
-                            </div>
-                        </section>
-                    </div>
+                    
                 </main>
             </div>
             <footer>
@@ -191,6 +168,17 @@
         </div>
     </div>
     <script src="js/panelHandler.js"></script>
+    <script>
+        const selectTheme = (mode) => {
+            document.querySelector('main select option[value="'+mode+'"]').setAttribute('selected', 'selected');
+        }
+    </script>
+    <?php 
+        if (isset($_POST['theme']))
+            echo '<script>selectTheme("'.$_POST['theme'].'");</script>';
+        elseif (isset($_COOKIE['theme']))
+            echo '<script>selectTheme("'.$_COOKIE['theme'].'");</script>';
+    ?>
     <?php include_once('inc/logged.php'); ?>
 </body>
 </html>
