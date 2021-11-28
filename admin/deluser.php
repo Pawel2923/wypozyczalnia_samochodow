@@ -1,8 +1,43 @@
 <?php 
-    session_start(); 
-    if (!$_SESSION['isLogged'] && !$_SESSION['isAdmin']) {
+    session_start();
+    $exit = false;
+    if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin']))
+    {
+        if (!$_SESSION['isLogged'] && !$_SESSION['isAdmin']) {
+            $exit = true;
+        }
+    }
+    else 
+        $exit = true;
+
+    if ($exit)
+    {
         header('Location: login.php');
         exit;
+    }
+
+    if (isset($_POST['user-id']))
+    {
+        $userID = htmlentities($_POST['user-id']);
+
+        $logAsAdmin = true;
+        require('../db/db_connection.php');
+        $query = "DELETE FROM users WHERE id=?";
+        $stmt = $db_connection->prepare($query);
+        $stmt->bind_param('i', $userID);
+        $stmt->execute();
+
+        if ($db_connection->affected_rows > 0)
+        {
+            $_SESSION['msg'] = 'Udało się usunąć użytkownika.';
+        }
+        else 
+        {
+            $_SESSION['msg'] = 'Nie udało się usunąć użytkownika.';
+        }
+
+        $stmt->close();
+        $db_connection->close();
     }
 ?>
 <!DOCTYPE html>
@@ -22,83 +57,28 @@
     <link rel="stylesheet" href="../styles/panel.css">
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
     <style>
-        .content .vehicles header {
+        input {
+            border: 2px solid #000;
+        }
+        .content .users header {
             display: -webkit-box;
             display: -ms-flexbox;
             display: flex;
             -webkit-box-align: center;
                 -ms-flex-align: center;
                     align-items: center;
-            -webkit-box-pack: start;
-                -ms-flex-pack: start;
-                    justify-content: flex-start;
         }
-        .content .vehicles header>* {
+        .content .users header>* {
             margin-right: 20px;
         }
-        .content .vehicles header>*:last-child {
+        .content .users header>*:last-child {
             margin-right: 0;
         }
-        .content .vehicles header>* a {
+        .content .users header>* a {
             color: #000;
         }
-        main .cars {
-            display: -ms-grid;
-            display: grid;
-            -ms-grid-rows: auto;
-            -ms-grid-columns: 1fr 20px 1fr 20px 1fr;
-                grid-template: auto / 1fr 1fr 1fr;
-            -webkit-column-gap: 20px;
-            -moz-column-gap: 20px;
-                    column-gap: 20px;
-            row-gap: 20px;
-        }
-        main .cars .car {
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-box-orient: vertical;
-            -webkit-box-direction: normal;
-                -ms-flex-direction: column;
-                    flex-direction: column;
-            -webkit-box-align: center;
-                -ms-flex-align: center;
-                    align-items: center;
-            border: 1px solid #000;
-            width: -webkit-fit-content;
-            width: -moz-fit-content;
-            width: fit-content;
-            overflow: hidden;
-        }
-        main .car .image-wrapper {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            cursor: pointer;
-        }
-        main .car .img-overlay {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            background-color: rgba(0, 0, 0, .4);
-            z-index: 1;
-            opacity: 0;
-            -webkit-transition: opacity .2s ease;
-            -o-transition: opacity .2s ease;
-            transition: opacity .2s ease;
-        }
-        main .car .img-overlay:hover {
-            opacity: 1;
-        }
-        main .cars .car>span {
-            margin-top: 5%;
-            margin-bottom: 5%;
-        }
-        main .car-price {
-            margin-top: 5%;
-            margin-bottom: 5%;
+        main form {
+            width: 60%;
             display: -webkit-box;
             display: -ms-flexbox;
             display: flex;
@@ -107,39 +87,33 @@
                 -ms-flex-direction: column;
                     flex-direction: column;
         }
-        main .car-price span {
-            margin-top: 10px;
+        main form label,
+        main form button {
+            margin-top: 20px;
         }
-        main .car-price span:first-child {
+        main form label:first-child {
             margin-top: 0;
         }
-        main .car .car-name {
-            font-weight: 400;
-        }
-        main .car .divider {
-            width: 80%;
-            height: 2px;
-            background: #000;
-        }
-        main .car button {
-            width: 80%;
-            margin-bottom: 5%;
-        }
         @media screen and (max-width: 800px) {
-            main .cars {
-                -ms-grid-rows: 1fr 1fr 1fr;
-                -ms-grid-columns: auto;
-                    grid-template: 1fr 1fr 1fr / auto;
-            }
-            .content .vehicles header>* {
+            .content .users header>* {
                 margin-right: 10px;
             }
         }
     </style>
+    <?php 
+        if (isset($_POST['theme']))
+        {
+            echo '<link rel="stylesheet" href="../styles/'.$_POST['theme'].'.css">';
+        }
+        elseif (isset($_COOKIE['theme']))
+        {
+            echo '<link rel="stylesheet" href="../styles/'.$_COOKIE['theme'].'.css">';
+        }
+    ?>
 </head>
 <body>
-    <div class="page-wrapper">
-        <nav class="panel">
+<div class="page-wrapper">
+    <nav class="panel">
             <div class="list-wrapper">
                 <ul>
                     <a href="../admin.php"><li>Home</li></a>
@@ -149,33 +123,34 @@
                 </ul>
             </div>
             <div class="back">
-                <a href="index.php">
+                <a href="../index.php">
                     <i class="fas fa-angle-double-left"></i> Wyjdź
                 </a>
             </div>
         </nav>
         <div class="content">
-            <div class="mobile-nav">
+        <div class="mobile-nav">
                 <div class="open"><i class="fas fa-bars"></i></div>
                 <div class="user">
-                    <a href="../login.php" class="login">
+                    <a href="login.php" class="login">
                         <i class="fas fa-sign-in-alt"></i>
                         <span class="login-caption">Zaloguj się</span>
                     </a>
                     <div class="logged">
+                        <div class="mobile-logged-menu-overlay"></div>
                         <i class="fas fa-user"></i>
                         <span class="login-caption"><?php if (isset($_SESSION['login'])) echo $_SESSION['login']; ?></span>
                         <div class="logged-menu">
                             <ul>
                                 <?php
-                                    if (isset($_SESSION['isAdmin'])) 
+                                    if (isset($_SESSION['login'])) 
                                     {
                                         if ($_SESSION['isAdmin'])
-                                            echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
+                                            echo '<li><a href="admin.php">Panel administracyjny</a></li>';
                                     }
                                 ?>
-                                <li><a href="../user.php">Panel użytkownika</a></li>
-                                <li><a href="../logout.php">Wyloguj się</a></li>
+                                <li><a href="user.php">Panel użytkownika</a></li>
+                                <li><a href="logout.php">Wyloguj się</a></li>
                             </ul>
                         </div>
                     </div>
@@ -209,16 +184,56 @@
                         </div>
                     </div>
                 </header>
-                <div class="vehicles">
-                    <header>
-                        <h2><a href="../admin.php#users">Użytkownicy</a></h2> 
-                        <i class="fas fa-chevron-right"></i> 
-                        <h2>Statystyki użytkowników</h2>
-                    </header>
-                    <main>
-                        Ilość wypożyczonych aut etc.
-                    </main>
-                </div>
+                <main>
+                    <div class="users">
+                        <header>
+                            <h2><a href="../admin.php#users">Użytkownicy</a></h2> 
+                            <i class="fas fa-chevron-right"></i> 
+                            <h2>Usuń użytkowników</h2>
+                        </header>
+                        <section>
+                            <form action="" method="POST">
+                                <label>ID użytkownika</label>
+                                <input type="number" name="user-id" required>
+                                <button type="submit">Usuń</button>
+                            </form>
+                            <h3 style="margin-bottom: 10px;">Lista użytkowników</h3>
+                            <table>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Login</th>
+                                </tr>
+                                <?php 
+                                    // Wylistowanie użytkowników w tabeli
+
+                                    require('../db/db_connection.php');
+                                    $query = "SELECT id, login FROM all_users WHERE is_admin=0";
+
+                                    $stmt = $db_connection->prepare($query);
+                                    $stmt->execute();
+
+                                    $result = $stmt->get_result();
+                                    while ($row = $result->fetch_assoc())
+                                    {
+                                        echo '<tr>';
+                                        echo '<td>'.$row['id'].'</td>';
+                                        echo '<td>'.$row['login'].'</td>';
+                                        echo '<tr>';
+                                    }
+                                    $stmt->close();
+                                    $db_connection->close();
+                                ?>
+                            </table>
+                        </section>
+                        <?php 
+                            if (isset($_SESSION['msg']))
+                            {
+                                echo '<script>alert("'.$_SESSION['msg'].'");</script>';
+                                unset($_SESSION['msg']);
+                            }
+                        ?>
+                    </div>
+                </main>
             </div>
             <footer>
                 <section class="bottom-content">
@@ -233,6 +248,20 @@
         </div>
     </div>
     <script src="../js/panelHandler.js"></script>
+    <script>
+        const checkInput = (name) => {
+            name.addEventListener('invalid', () => {
+                name.classList.add('subscription-input-invalid');
+            });
+            name.addEventListener('keyup', () => {
+                name.classList.remove('subscription-input-invalid');
+            });
+        };
+        const input = document.querySelectorAll('main form input');
+        for (let i=0; i<input.length; i++) {
+            checkInput(input[i]);
+        }
+    </script>
     <?php include_once('logged.php'); ?>
 </body>
 </html>

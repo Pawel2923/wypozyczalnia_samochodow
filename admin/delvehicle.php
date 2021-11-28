@@ -1,8 +1,43 @@
 <?php 
-    session_start(); 
-    if (!$_SESSION['isLogged'] && !$_SESSION['isAdmin']) {
+    session_start();
+    $exit = false;
+    if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin']))
+    {
+        if (!$_SESSION['isLogged'] && !$_SESSION['isAdmin']) {
+            $exit = true;
+        }
+    }
+    else 
+        $exit = true;
+
+    if ($exit)
+    {
         header('Location: login.php');
         exit;
+    }
+
+    if (isset($_POST['vehicle-id']))
+    {
+        $vehicleId = htmlentities($_POST['vehicle-id']);
+
+        $logAsAdmin = true;
+        require('../db/db_connection.php');
+        $query = "DELETE FROM vehicles WHERE id=?";
+        $stmt = $db_connection->prepare($query);
+        $stmt->bind_param('i', $vehicleId);
+        $stmt->execute();
+
+        if ($db_connection->affected_rows > 0)
+        {
+            $_SESSION['msg'] = 'Udało się usunąć pojazd.';
+        }
+        else 
+        {
+            $_SESSION['msg'] = 'Nie udało się usunąć pojazdu.';
+        }
+
+        $stmt->close();
+        $db_connection->close();
     }
 ?>
 <!DOCTYPE html>
@@ -36,63 +71,8 @@
         .content .vehicles header>* a {
             color: #000;
         }
-        main .cars {
-            display: -ms-grid;
-            display: grid;
-            -ms-grid-rows: auto;
-            -ms-grid-columns: 1fr 20px 1fr 20px 1fr;
-                grid-template: auto / 1fr 1fr 1fr;
-            -webkit-column-gap: 20px;
-            -moz-column-gap: 20px;
-                    column-gap: 20px;
-            row-gap: 20px;
-        }
-        main .cars .car {
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-box-orient: vertical;
-            -webkit-box-direction: normal;
-                -ms-flex-direction: column;
-                    flex-direction: column;
-            -webkit-box-align: center;
-                -ms-flex-align: center;
-                    align-items: center;
-            border: 1px solid #000;
-            width: -webkit-fit-content;
-            width: -moz-fit-content;
-            width: fit-content;
-            overflow: hidden;
-        }
-        main .car .image-wrapper {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            cursor: pointer;
-        }
-        main .car .img-overlay {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            background-color: rgba(0, 0, 0, .4);
-            z-index: 1;
-            opacity: 0;
-            -webkit-transition: opacity .2s ease;
-            -o-transition: opacity .2s ease;
-            transition: opacity .2s ease;
-        }
-        main .car .img-overlay:hover {
-            opacity: 1;
-        }
-        main .cars .car>span {
-            margin-top: 5%;
-            margin-bottom: 5%;
-        }
-        main .car-price {
-            margin-top: 5%;
-            margin-bottom: 5%;
+        main form {
+            width: 60%;
             display: -webkit-box;
             display: -ms-flexbox;
             display: flex;
@@ -101,35 +81,29 @@
                 -ms-flex-direction: column;
                     flex-direction: column;
         }
-        main .car-price span {
-            margin-top: 10px;
+        main form label,
+        main form button {
+            margin-top: 20px;
         }
-        main .car-price span:first-child {
+        main form label:first-child {
             margin-top: 0;
         }
-        main .car .car-name {
-            font-weight: 400;
-        }
-        main .car .divider {
-            width: 80%;
-            height: 2px;
-            background: #000;
-        }
-        main .car button {
-            width: 80%;
-            margin-bottom: 5%;
-        }
         @media screen and (max-width: 800px) {
-            main .cars {
-                -ms-grid-rows: 1fr 1fr 1fr;
-                -ms-grid-columns: auto;
-                    grid-template: 1fr 1fr 1fr / auto;
-            }
             .content .vehicles header>* {
                 margin-right: 10px;
             }
         }
     </style>
+    <?php 
+        if (isset($_POST['theme']))
+        {
+            echo '<link rel="stylesheet" href="../styles/'.$_POST['theme'].'.css">';
+        }
+        elseif (isset($_COOKIE['theme']))
+        {
+            echo '<link rel="stylesheet" href="../styles/'.$_COOKIE['theme'].'.css">';
+        }
+    ?>
 </head>
 <body>
     <div class="page-wrapper">
@@ -143,7 +117,7 @@
                 </ul>
             </div>
             <div class="back">
-                <a href="index.php">
+                <a href="../index.php">
                     <i class="fas fa-angle-double-left"></i> Wyjdź
                 </a>
             </div>
@@ -152,24 +126,25 @@
             <div class="mobile-nav">
                 <div class="open"><i class="fas fa-bars"></i></div>
                 <div class="user">
-                    <a href="../login.php" class="login">
+                    <a href="login.php" class="login">
                         <i class="fas fa-sign-in-alt"></i>
                         <span class="login-caption">Zaloguj się</span>
                     </a>
                     <div class="logged">
+                        <div class="mobile-logged-menu-overlay"></div>
                         <i class="fas fa-user"></i>
                         <span class="login-caption"><?php if (isset($_SESSION['login'])) echo $_SESSION['login']; ?></span>
                         <div class="logged-menu">
                             <ul>
                                 <?php
-                                    if (isset($_SESSION['isAdmin'])) 
+                                    if (isset($_SESSION['login'])) 
                                     {
                                         if ($_SESSION['isAdmin'])
-                                            echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
+                                            echo '<li><a href="admin.php">Panel administracyjny</a></li>';
                                     }
                                 ?>
-                                <li><a href="../user.php">Panel użytkownika</a></li>
-                                <li><a href="../logout.php">Wyloguj się</a></li>
+                                <li><a href="user.php">Panel użytkownika</a></li>
+                                <li><a href="logout.php">Wyloguj się</a></li>
                             </ul>
                         </div>
                     </div>
@@ -203,69 +178,44 @@
                         </div>
                     </div>
                 </header>
-                <div class="vehicles">
-                    <header>
-                        <h2><a href="../admin.php#vehicles">Pojazdy</a></h2> 
-                        <i class="fas fa-chevron-right"></i> 
-                        <h2>Usuwanie pojazdów</h2>
-                    </header>
-                    <main>
-                    <div class="cars">
-                        <div class="car">
-                            <div class="image-wrapper">
-                                <img src="https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjByc3gyc3BrZzQ4YjMtT1RPTU9UT1BMIiwidyI6W3siZm4iOiJ3ZzRnbnFwNnkxZi1PVE9NT1RPUEwiLCJzIjoiMTYiLCJwIjoiMTAsLTEwIiwiYSI6IjAifV19.hXuoemts_h7soE7DwcsvGnYuHhVCV0y0sCWXJ0ZzIVE/image;s=732x488" alt="Zdjęcie samochodu" width="100%" height="100%">
-                                <div class="img-overlay"></div>
+                <main>
+                    <div class="vehicles">
+                        <header>
+                            <h2><a href="../admin.php#vehicles">Pojazdy</a></h2> 
+                            <i class="fas fa-chevron-right"></i> 
+                            <h2>Usuwanie pojazdów</h2>
+                        </header>
+                        <section>
+                            <form action="" method="POST">
+                                <label><h3>Wpisz id pojazdu</h3></label>
+                                <input type="number" name="vehicle-id" required>
+                                <button type="submit">Usuń pojazd</button>
+                            </form>
+                        </section>
+                        <section>
+                            <div class="cars">
+                                <?php 
+                                    require('../inc/veh.php');
+                                    if (isset($vehicle))
+                                    {
+                                        printCarInfoTable($vehNum, $vehicle, 0, true);
+                                    }
+                                    else 
+                                    {
+                                        echo 'W bazie nie ma żadnych pojazdów.';
+                                    }
+                                ?>
                             </div>
-                            <span class="car-name">Toyota Yaris</span>
-                            <div class="divider"></div>
-                            <div class="car-price">
-                                <span>1 godz.</span>
-                                <span>65,00 zł</span>
-                            </div>
-                            <button type="button">Usuń</button>
-                        </div>
-                        <div class="car">
-                            <div class="image-wrapper">
-                                <img src="https://i.wpimg.pl/600x0/m.autokult.pl/ford-fusion-4-3ddb5b2d153e08d106.jpg" alt="Zdjęcie samochodu" width="100%" height="100%">
-                                <div class="img-overlay"></div>
-                            </div>
-                            <span class="car-name">Ford Fusion</span>
-                            <div class="divider"></div>
-                            <div class="car-price">
-                                <span>1 godz.</span>
-                                <span>55,00 zł</span>
-                            </div>
-                            <button type="button">Usuń</button>
-                        </div>
-                        <div class="car">
-                            <div class="image-wrapper">
-                                <img src="https://www.auto-gazda.pl/application/files/8816/2861/3097/1.jpg" alt="Zdjęcie samochodu" width="100%" height="100%">
-                                <div class="img-overlay"></div>
-                            </div>
-                            <span class="car-name">Volkswagen Golf</span>
-                            <div class="divider"></div>
-                            <div class="car-price">
-                                <span>1 godz.</span>
-                                <span>65,00 zł</span>
-                            </div>
-                            <button type="button">Usuń</button>
-                        </div>
-                        <div class="car">
-                            <div class="image-wrapper">
-                                <img src="https://image.ceneostatic.pl/data/products/95699167/i-mercedes-sprinter-313-2013-r.jpg" alt="Zdjęcie samochodu" width="100%" height="100%">
-                                <div class="img-overlay"></div>
-                            </div>
-                            <span class="car-name">Mercedes Sprinter</span>
-                            <div class="divider"></div>
-                            <div class="car-price">
-                                <span>1 godz.</span>
-                                <span>80,00 zł</span>
-                            </div>
-                            <button type="button">Usuń</button>
-                        </div>
+                        </section>
+                        <?php 
+                            if (isset($_SESSION['msg']))
+                            {
+                                echo '<script>alert("'.$_SESSION['msg'].'");</script>';
+                                unset($_SESSION['msg']);
+                            }
+                        ?>
                     </div>
-                    </main>
-                </div>
+                </main>
             </div>
             <footer>
                 <section class="bottom-content">
@@ -280,6 +230,20 @@
         </div>
     </div>
     <script src="../js/panelHandler.js"></script>
+    <script>
+        const checkInput = (name) => {
+            name.addEventListener('invalid', () => {
+                name.classList.add('subscription-input-invalid');
+            });
+            name.addEventListener('keyup', () => {
+                name.classList.remove('subscription-input-invalid');
+            });
+        };
+        const input = document.querySelectorAll('main form input');
+        for (let i=0; i<input.length; i++) {
+            checkInput(input[i]);
+        }
+    </script>
     <?php include_once('logged.php'); ?>
 </body>
 </html>

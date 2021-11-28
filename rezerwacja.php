@@ -15,158 +15,28 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/index.css">
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
-    <style>
-        main {
-            -webkit-box-align: unset;
-                -ms-flex-align: unset;
-                    align-items: unset;
-        }
-        .vehicles {
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-box-orient: vertical;
-            -webkit-box-direction: normal;
-                -ms-flex-direction: column;
-                    flex-direction: column;
-        }
-        .vehicles .vehicle {
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-box-align: center;
-                -ms-flex-align: center;
-                    align-items: center;
-            -webkit-box-pack: space-evenly;
-                -ms-flex-pack: space-evenly;
-                    justify-content: space-evenly;
-            margin-bottom: 20px;
-        }
-        .vehicles .vehicle:last-child {
-            margin-bottom: 0;
-        }
-        .vehicles .vehicle>* {
-            margin-right: 20px;
-        }
-        .vehicles .vehicle .vehicle-price {
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-        }
-        .vehicles .vehicle .vehicle-price div {
-            margin-right: 20px;
-        }
-        .vehicles .vehicle .vehicle-image {
-            width: 400px;
-        }
-        .vehicles button {
-            width: -webkit-fit-content;
-            width: -moz-fit-content;
-            width: fit-content;
-            margin: 0;
-        }
-        @media screen and (max-width: 800px) {
-            .vehicles .vehicle,
-            .vehicles .vehicle .vehicle-price {
-                -webkit-box-orient: vertical;
-                -webkit-box-direction: normal;
-                    -ms-flex-direction: column;
-                        flex-direction: column;
-                -webkit-box-align: center;
-                    -ms-flex-align: center;
-                        align-items: center;
-            }
-            .vehicles .vehicle .vehicle-image {
-                width: 100%;
-                margin: 0;
-            }
-            .vehicles .vehicle .vehicle-price,
-            .vehicles .vehicle .vehicle-price div {
-                margin-right: 0;
-                margin-left: 0;
-            }
-            .vehicles .vehicle div {
-                margin-bottom: 10px;
-            }
-        }
-    </style>
 </head>
 <body>
-    <?php require_once("nav.php") ?>
+    <?php require_once("inc/nav.php") ?>
     <main>
         <section>
             <h2>Wybierz pojazd</h2>
-            <div class="vehicles">
-                <div class="vehicle">
-                    <div class="vehicle-image">
-                        <img src="https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6IjByc3gyc3BrZzQ4YjMtT1RPTU9UT1BMIiwidyI6W3siZm4iOiJ3ZzRnbnFwNnkxZi1PVE9NT1RPUEwiLCJzIjoiMTYiLCJwIjoiMTAsLTEwIiwiYSI6IjAifV19.hXuoemts_h7soE7DwcsvGnYuHhVCV0y0sCWXJ0ZzIVE/image;s=732x488" alt="Zdjęcie samochodu" width="100%" height="100%">
-                        <div class="vehicle-name">
-                            Toyota Yaris
-                        </div>
-                    </div>
-                    <div class="vehicle-price">
-                        <div>
-                            <span>1 godz.</span>
-                            <br>
-                            <span>65,00zł</span>
-                        </div>
-                        <button>Wypożycz</button>
-                    </div>
-                </div>
-                <div class="vehicle">
-                    <div class="vehicle-image">
-                        <img src="https://i.wpimg.pl/600x0/m.autokult.pl/ford-fusion-4-3ddb5b2d153e08d106.jpg" alt="Zdjęcie samochodu" width="100%" height="100%">
-                        <div class="vehicle-name">
-                            Ford Fusion
-                        </div>
-                    </div>
-                    <div class="vehicle-price">
-                        <div>
-                            <span>1 godz.</span>
-                            <br>
-                            <span>55,00zł</span>
-                        </div>
-                        <button>Wypożycz</button>
-                    </div>
-                </div>
-                <div class="vehicle">
-                    <div class="vehicle-image">
-                        <img src="https://www.auto-gazda.pl/application/files/8816/2861/3097/1.jpg" alt="Zdjęcie samochodu" width="100%" height="100%">
-                        <div class="vehicle-name">
-                            Volkswagen Gof
-                        </div>
-                    </div>
-                    <div class="vehicle-price">
-                        <div>
-                            <span>1 godz.</span>
-                            <br>
-                            <span>65,00zł</span>
-                        </div>
-                        <button>Wypożycz</button>
-                    </div>
-                </div>
-                <div class="vehicle">
-                    <div class="vehicle-image">
-                    <img src="https://image.ceneostatic.pl/data/products/95699167/i-mercedes-sprinter-313-2013-r.jpg" alt="Zdjęcie samochodu" width="100%" height="100%">
-                        <div class="vehicle-name">
-                            Mercedes Sprinter
-                        </div>
-                    </div>
-                    <div class="vehicle-price">
-                        <div>
-                            <span>1 godz.</span>
-                            <br>
-                            <span>80,00zł</span>
-                        </div>
-                        <button>Wypożycz</button>
-                    </div>
-                </div>
+            <div class="cars cars-list">
+                <form action="rent.php" method="POST">
+                    <?php 
+                        require('inc/veh.php');
+                        if (isset($vehicle)) 
+                            printCarInfoList("Wypożycz", $vehNum, $vehicle);
+                        else 
+                            echo '<p>Obecnie nie ma pojazdów do rezerwacji</p>';
+                    ?>
+                </form>
             </div>
         </section>
     </main>
     <footer>
         <section class="subscription-form">
-            <form action="index.php" method="POST">
+            <form action="newsletter.php" method="POST">
                 <h3>Zapisz się na nasz newsletter</h3>
                 <input type="email" placeholder="Adres e-mail" name="newsletter-mail" required>
                 <br>
@@ -195,6 +65,6 @@
         checkInput(subscriptionInput);
     </script>
     <script src="js/nav.js"></script>
-    <?php include_once('logged.php'); ?>
+    <?php include_once('inc/logged.php'); ?>
 </body>
 </html>

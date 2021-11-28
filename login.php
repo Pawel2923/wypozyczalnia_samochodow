@@ -57,7 +57,10 @@
                 <div class="error">
                     <?php 
                         if (isset($_SESSION['connectionError']))
+                        {
                             echo $_SESSION['connectionError'];
+                            unset($_SESSION['connectionError']);
+                        }
                     ?>
                 </div>
             </form>

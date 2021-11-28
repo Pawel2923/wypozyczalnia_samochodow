@@ -1,6 +1,17 @@
 <?php 
-    session_start(); 
-    if (!$_SESSION['isLogged'] && !$_SESSION['isAdmin']) {
+    session_start();
+    $exit = false;
+    if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin']))
+    {
+        if (!$_SESSION['isLogged'] && !$_SESSION['isAdmin']) {
+            $exit = true;
+        }
+    }
+    else 
+        $exit = true;
+
+    if ($exit)
+    {
         header('Location: login.php');
         exit;
     }
@@ -69,6 +80,16 @@
             }
         }
     </style>
+    <?php 
+        if (isset($_POST['theme']))
+        {
+            echo '<link rel="stylesheet" href="../styles/'.$_POST['theme'].'.css">';
+        }
+        elseif (isset($_COOKIE['theme']))
+        {
+            echo '<link rel="stylesheet" href="../styles/'.$_COOKIE['theme'].'.css">';
+        }
+    ?>
 </head>
 <body>
     <div class="page-wrapper">
@@ -82,7 +103,7 @@
                 </ul>
             </div>
             <div class="back">
-                <a href="index.php">
+                <a href="../index.php">
                     <i class="fas fa-angle-double-left"></i> Wyjdź
                 </a>
             </div>
@@ -91,24 +112,25 @@
             <div class="mobile-nav">
                 <div class="open"><i class="fas fa-bars"></i></div>
                 <div class="user">
-                    <a href="../login.php" class="login">
+                    <a href="login.php" class="login">
                         <i class="fas fa-sign-in-alt"></i>
                         <span class="login-caption">Zaloguj się</span>
                     </a>
                     <div class="logged">
+                        <div class="mobile-logged-menu-overlay"></div>
                         <i class="fas fa-user"></i>
                         <span class="login-caption"><?php if (isset($_SESSION['login'])) echo $_SESSION['login']; ?></span>
                         <div class="logged-menu">
                             <ul>
                                 <?php
-                                    if (isset($_SESSION['isAdmin'])) 
+                                    if (isset($_SESSION['login'])) 
                                     {
                                         if ($_SESSION['isAdmin'])
-                                            echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
+                                            echo '<li><a href="admin.php">Panel administracyjny</a></li>';
                                     }
                                 ?>
-                                <li><a href="../user.php">Panel użytkownika</a></li>
-                                <li><a href="../logout.php">Wyloguj się</a></li>
+                                <li><a href="user.php">Panel użytkownika</a></li>
+                                <li><a href="logout.php">Wyloguj się</a></li>
                             </ul>
                         </div>
                     </div>
@@ -142,19 +164,34 @@
                         </div>
                     </div>
                 </header>
-                <div class="vehicles">
-                    <header>
-                        <h2><a href="../admin.php#vehicles">Pojazdy</a></h2> 
-                        <i class="fas fa-chevron-right"></i> 
-                        <h2>Rezerwacja pojazdów</h2>
-                    </header>
-                    <main>
-                        <form action="" method="POST">
-                            Rezerowanie pojazdów
-                            <button type="submit">Zatwierdź</button>
-                        </form>
-                    </main>
-                </div>
+                <main>
+                    <div class="vehicles">
+                        <header>
+                            <h2><a href="../admin.php#vehicles">Pojazdy</a></h2> 
+                            <i class="fas fa-chevron-right"></i> 
+                            <h2>Rezerwacja pojazdów</h2>
+                        </header>
+                        <section>
+                            <form action="" method="POST">
+                                <div class="option">
+                                    <label><h3>Rezerwowanie pojazdów przez użytkowników</h3></label>
+                                    <select>
+                                        <option value="on">Włączone</option>
+                                        <option value="off">Wyłączone</option>
+                                    </select>
+                                </div>
+                                <div class="option">
+                                    <label><h3>Rezerwowanie pojazdów przez gości</h3></label>
+                                    <select>
+                                        <option value="on">Włączone</option>
+                                        <option value="off" selected>Wyłączone</option>
+                                    </select>
+                                </div>
+                                <button type="submit">Zatwierdź</button>
+                            </form>
+                        </section>
+                    </div>
+                </main>
             </div>
             <footer>
                 <section class="bottom-content">
