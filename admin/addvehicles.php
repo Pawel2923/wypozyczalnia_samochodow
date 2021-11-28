@@ -32,7 +32,6 @@
             $img = "img/".$_SESSION['vehicle-img-name'];
             unset($_SESSION['vehicle-img-name']);
 
-            $logAsAdmin = true;
             require('../db/db_connection.php');
 
             $query = "INSERT INTO vehicles (marka, model, cena, img_url, is_available) VALUES(?, ?, ?, ?, ?)";

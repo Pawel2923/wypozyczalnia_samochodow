@@ -3,9 +3,8 @@
     $exit = false;
     if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin']))
     {
-        if (!$_SESSION['isLogged'] && !$_SESSION['isAdmin']) {
+        if (!$_SESSION['isLogged'] && !$_SESSION['isAdmin'])
             $exit = true;
-        }
     }
     else 
         $exit = true;
@@ -25,8 +24,6 @@
 
     if (isset($_POST['action']) && isset($_POST['user-id']))
     {
-
-        $logAsAdmin = true;
         $userID = htmlentities($_POST['user-id']);
         require('db/db_connection.php');
 
@@ -234,7 +231,7 @@
                                     <th>Login</th>
                                     <th>E-mail</th>
                                     <th>Admin</th>
-                                    <th>Rezerwowane pojazdy</th>
+                                    <th>Wypożyczone pojazdy</th>
                                 </tr>
                                 <?php 
                                     // Wylistowanie użytkowników w tabeli

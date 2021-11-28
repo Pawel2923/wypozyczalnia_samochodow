@@ -20,7 +20,6 @@
     {
         $vehicleId = htmlentities($_POST['vehicle-id']);
 
-        $logAsAdmin = true;
         require('../db/db_connection.php');
         $query = "DELETE FROM vehicles WHERE id=?";
         $stmt = $db_connection->prepare($query);
@@ -188,7 +187,7 @@
                         <section>
                             <form action="" method="POST">
                                 <label><h3>Wpisz id pojazdu</h3></label>
-                                <input type="number" name="vehicle-id" required>
+                                <input type="number" name="vehicle-id" min="1" required>
                                 <button type="submit">Usuń pojazd</button>
                             </form>
                         </section>

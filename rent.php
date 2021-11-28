@@ -1,19 +1,27 @@
 <?php 
 session_start();
-
-if (isset($_POST['isLogged']))
+$exit = false;
+if (isset($_SESSION['isLogged']))
 {
-    echo $_POST['isLogged'];
-    if (!$_POST['isLogged'])
-    {
-        header('Location: index.php');
-        exit;
-    }
+    if (!$_SESSION['isLogged']) 
+        $exit = true;
+}
+else 
+    $exit = true;
+    
+if ($exit)
+{
+    header('Location: login.php');
+    exit;
 }
 
-if (isset($_POST['vehicle-id']))
+if (isset($_POST['vehicle-id']) || isset($_SESSION['vehicle-id']))
 {
-    $vehicleID = htmlentities($_POST['vehicle-id']);
+    if (isset($_POST['vehicle-id']))
+        $vehicleID = htmlentities($_POST['vehicle-id']);
+    else
+        $vehicleID = htmlentities($_SESSION['vehicle-id']);
+    $_SESSION['vehicle-id'] = $vehicleID;
     require('db/db_connection.php');
     $query = "SELECT * FROM vehicles WHERE id=?";
     $stmt = $db_connection->prepare($query);
@@ -25,6 +33,13 @@ if (isset($_POST['vehicle-id']))
 
     $stmt->close();
     $db_connection->close();
+    $_SESSION['vehicle-id'] = $vehicleID;
+}
+else 
+{
+    echo "<script>alert('Nie wybrano samochodu');</script>";
+    header('Location: rezerwacja.php');
+    exit;
 }
 ?>
 <!DOCTYPE html>
@@ -49,6 +64,11 @@ if (isset($_POST['vehicle-id']))
         }
         .vehicle-name h2 {
             margin-bottom: 10px;
+        }
+        .vehicle-image {
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
         }
         form input {
             width: 100%;
@@ -84,16 +104,16 @@ if (isset($_POST['vehicle-id']))
                     <h2><?php echo $attribute['marka'].' '.$attribute['model'];?></h2>
                 </div>
                 <div class="vehicle-image">
-                    <img src="<?php echo $attribute['img_url']?>" alt="Zdjęcie samochodu" width="60%" height="60%">
+                    <img src="<?php echo $attribute['img_url']?>" alt="Zdjęcie samochodu" width="100%" height="100%">
                 </div>
                 <div class="description">
                     <div class="vehicle-price"><?php echo $attribute['cena']?>zł za 1 godzinę</div>
                 </div>
             </div>
             <h2>Wypełnij formularz</h2>
-            <form action="" method="POST">
+            <form action="rentsubmit.php" method="POST">
                 <label for="amount">Ilość godzin wynajmu</label>
-                <input type="number" name="amount" value="1" min="0" required>
+                <input type="number" name="amount" value="1" min="1" required>
                 <label for="date">Data wynajmu</label>
                 <input type="date" name="date" required>
                 <div class="summary">
@@ -112,7 +132,7 @@ if (isset($_POST['vehicle-id']))
                     </div>
                     <div class="price">
                         W sumie do zapłaty:
-                        <h3>00,00zł</h3>
+                        <h3><?php echo $attribute['cena']?>zł</h3>
                     </div>
                 </div>
                 <button type="submit">Zarezerwuj</button>
@@ -160,7 +180,7 @@ if (isset($_POST['vehicle-id']))
                 const date = document.querySelector('form input[name="date"]').value;
                 document.querySelector('.summary .date').innerHTML = 'Data wynajmu: <h3>'+date+'</h3>'
                 let total = amount * <?php echo $attribute['cena'] ?>;
-                document.querySelector('.summary .price').innerHTML = 'W sumie do zapłaty: <h3>'+total.toFixed(2)+'</h3>';
+                document.querySelector('.summary .price').innerHTML = 'W sumie do zapłaty: <h3>'+total.toFixed(2)+'zł</h3>';
             });
         }
     </script>

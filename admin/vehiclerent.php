@@ -15,6 +15,31 @@
         header('Location: login.php');
         exit;
     }
+
+    if (isset($_POST['id']))
+    {
+        $rentID = htmlentities($_POST['id']);
+        if ($rentID > 0)
+        {
+            require('../db/db_connection.php');
+            $query = "DELETE FROM rezerwacja WHERE id=?";
+            $stmt = $db_connection->prepare($query);
+            $stmt->bind_param('i', $rentID);
+            $stmt->execute();
+
+            if ($db_connection->affected_rows > 0)
+            {
+                $_SESSION['msg'] = 'Udało się usunąć rezerwację.';
+            }
+            else 
+            {
+                $_SESSION['msg'] = 'Nie udało się usunąć rezerwacji.';
+            }
+
+            $stmt->close();
+            $db_connection->close();
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -172,23 +197,54 @@
                             <h2>Rezerwacja pojazdów</h2>
                         </header>
                         <section>
-                            <form action="" method="POST">
-                                <div class="option">
-                                    <label><h3>Rezerwowanie pojazdów przez użytkowników</h3></label>
-                                    <select>
-                                        <option value="on">Włączone</option>
-                                        <option value="off">Wyłączone</option>
-                                    </select>
+                            <div class="option">
+                                <h3>Usuwanie rezerwacji</h3>
+                                <form action="" method="POST">
+                                    <label for="id">Wpisz ID rezerwacji:</label>
+                                    <input type="number" name="id" min="1" required>
+                                    <button type="submit">Usuń</button>
+                                </form>
+                                <div class="message">
+                                    <?php 
+                                        if (isset($_SESSION['msg']))
+                                        {
+                                            echo $_SESSION['msg'];
+                                            unset($_SESSION['msg']);
+                                        }
+                                    ?>
                                 </div>
-                                <div class="option">
-                                    <label><h3>Rezerwowanie pojazdów przez gości</h3></label>
-                                    <select>
-                                        <option value="on">Włączone</option>
-                                        <option value="off" selected>Wyłączone</option>
-                                    </select>
-                                </div>
-                                <button type="submit">Zatwierdź</button>
-                            </form>
+                            </div>
+                            <h3 style="margin-bottom: 10px;">Lista rezerwacji</h3>
+                            <table>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>ID pojazdu</th>
+                                    <th>ID użytkownika</th>
+                                    <th>Data rezerwacji</th>
+                                    <th>Na ile godzin</th>
+                                </tr>
+                                <?php 
+                                    require('../db/db_connection.php');
+                                    $query = "SELECT * FROM rezerwacja";
+
+                                    $stmt = $db_connection->prepare($query);
+                                    $stmt->execute();
+
+                                    $result = $stmt->get_result();
+                                    while ($row = $result->fetch_assoc())
+                                    {
+                                        echo '<tr>';
+                                        echo '<td>'.$row['id'].'</td>';
+                                        echo '<td>'.$row['id_pojazdu'].'</td>';
+                                        echo '<td>'.$row['id_klienta'].'</td>';
+                                        echo '<td>'.$row['data_rezerwacji'].'</td>';
+                                        echo '<td>'.$row['na_ile'].'</td>';
+                                        echo '<tr>';
+                                    }
+                                    $stmt->close();
+                                    $db_connection->close();
+                                ?>
+                            </table>
                         </section>
                     </div>
                 </main>
