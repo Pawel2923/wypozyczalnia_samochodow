@@ -1,15 +1,6 @@
 <?php 
     require('db_data.php');
 
-    if (isset($logAsAdmin))
-    {
-        if ($logAsAdmin)
-        {
-            $db_user = $db_admin;
-            $db_password = $db_admin_passwd;
-        }
-    }
-
     mysqli_report(MYSQLI_REPORT_STRICT);
     try 
     {

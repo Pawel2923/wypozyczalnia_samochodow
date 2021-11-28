@@ -160,7 +160,6 @@
                         <section>         
                             <div class="cars">
                                 <?php 
-                                    $logAsAdmin = true;
                                     require('../inc/veh.php');
                                     if (isset($vehicle))
                                     {

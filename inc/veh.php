@@ -243,8 +243,7 @@ function printCarInfoList($buttonCaption, $vehNum, $vehicle, $printUnavailable =
                                 <br>
                                 <span><?php echo $vehicle[$i]->price ?> zł</span>
                             </div>
-                            <input type="hidden" name="vehicle-id" value="<?php echo $vehicle[$i]->id ?>">
-                            <button class="car-button"><?php echo $buttonCaption ?></button>
+                            <button class="car-button" name="vehicle-id" value="<?php echo $vehicle[$i]->id ?>"><?php echo $buttonCaption ?></button>
                         </div>
                     </div>
 <?php

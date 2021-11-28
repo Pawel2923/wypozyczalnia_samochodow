@@ -20,7 +20,6 @@
     {
         $userID = htmlentities($_POST['user-id']);
 
-        $logAsAdmin = true;
         require('../db/db_connection.php');
         $query = "DELETE FROM users WHERE id=?";
         $stmt = $db_connection->prepare($query);
