@@ -48,7 +48,7 @@
                     <label for="password-field">Hasło</label>
                     <br>
                     <input type="password" name="password" id="password-field" minlength="4" required>
-                    <a href="passwd.php" class="forgotten-password">Zapomniałeś hasła?</a>
+                    <a href="forgotpasswd.php" class="forgotten-password">Zapomniałeś hasła?</a>
                 </div>
                 <div class="form-bottom">
                     <button type="submit">Zaloguj się</button>
