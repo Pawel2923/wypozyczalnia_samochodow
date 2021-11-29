@@ -26,28 +26,18 @@
     <main>
         <div class="header-wrapper">
             <header>
-                <h1>Zmień swoje hasło</h1>
+                <h1>Zresetuj zapomniane hasło</h1>
             </header>
         </div>
         <div class="form-wrapper">
             <form action="" method="POST">
-                <div class="old-password">
-                    <label for="old-password-field">Stare hasło</label>
+                <div class="login">
+                    <label for="login-field">Wpisz adres e-mail lub login</label>
                     <br>
-                    <input type="password" name="old-password" id="old-password-field" minlength="4" required>
-                </div>
-                <div class="password">
-                    <label for="password-field">Nowe hasło</label>
-                    <br>
-                    <input type="password" name="password" id="password-field" minlength="4" required>
-                </div>
-                <div class="password-confirm">
-                    <label for="password-field-confirm">Potwierdź hasło</label>
-                    <br>
-                    <input type="password" name="password-confirm" id="password-field-confirm" minlength="4" required>
+                    <input type="text" name="login" id="login-field" minlength="4" required>
                 </div>
                 <div class="form-bottom">
-                    <button type="submit">Zmień</button>
+                    <button type="submit">Potwierdź</button>
                 </div>
             </form>
         </div>
@@ -59,7 +49,6 @@
     </script>
     <script src="js/loginHandler.js"></script>
     <script>
-        movePlaceholder('old-password');
         passwdCheck();
     </script>
 </body>

@@ -66,9 +66,14 @@ else
             margin-bottom: 10px;
         }
         .vehicle-image {
-            width: 80%;
+            width: 600px;
             margin-left: auto;
             margin-right: auto;
+        }
+        @media screen and (max-width: 800px) {
+            .vehicle-image {
+                width: 90%;
+            }
         }
         form input {
             width: 100%;
