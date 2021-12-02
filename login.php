@@ -104,7 +104,7 @@
 
                 if ($result->fetch_assoc())
                 {
-                    $getPasswd = "SELECT `password`, `is_admin` FROM `users` WHERE `login`=? OR `email`=?";
+                    $getPasswd = "SELECT `password`, `is_admin`, `change_passwd` FROM `users` WHERE `login`=? OR `email`=?";
 
                     $stmt2 = $db_connection->prepare($getPasswd);
                     $stmt2->bind_param("ss", $login, $email);
@@ -112,26 +112,36 @@
 
                     $result2 = $stmt2->get_result();
 
-                    $queriedData = $result2->fetch_row();
+                    $queriedData = $result2->fetch_assoc();
 
-                    if (password_verify($password, $queriedData[0]))
+                    if ($queriedData['change_passwd'])
                     {
                         $_SESSION['login'] = $login;
                         $_SESSION['isLogged'] = true;
-                        $_SESSION['isAdmin'] = $queriedData[1];
-
-                        $stmt->close();
-                        $db_connection->close();
-
-                        header('Location: index.php');
+                        header('Location: changePasswd.php');
                         exit;
                     }
                     else 
                     {
-                        $loginError = "Podane hasło jest nieprawidłowe";
-                        echo '<script>
-                            document.querySelector("div.error").textContent = "'.$loginError.'"
-                        </script>';
+                        if (password_verify($password, $queriedData['password']))
+                        {
+                            $_SESSION['login'] = $login;
+                            $_SESSION['isLogged'] = true;
+                            $_SESSION['isAdmin'] = $queriedData['is_admin'];
+
+                            $stmt->close();
+                            $db_connection->close();
+
+                            header('Location: index.php');
+                            exit;
+                        }
+                        else 
+                        {
+                            $loginError = "Podane hasło jest nieprawidłowe";
+                            echo '<script>
+                                document.querySelector("div.error").textContent = "'.$loginError.'"
+                            </script>';
+                        }
                     }
                 }
                 else 

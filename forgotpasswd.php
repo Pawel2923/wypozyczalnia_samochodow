@@ -1,6 +1,14 @@
 <?php 
     session_start();
     
+    if (isset($_POST['login']))
+    {
+        if (filter_var($_POST['login'], FILTER_VALIDATE_EMAIL))
+        {
+            $email = $_POST['login'];
+            
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -32,9 +40,9 @@
         <div class="form-wrapper">
             <form action="" method="POST">
                 <div class="login">
-                    <label for="login-field">Wpisz adres e-mail lub login</label>
+                    <label for="login-field">Wpisz adres e-mail</label>
                     <br>
-                    <input type="text" name="login" id="login-field" minlength="4" required>
+                    <input type="email" name="login" id="login-field" minlength="4" required>
                 </div>
                 <div class="form-bottom">
                     <button type="submit">Potwierdź</button>
@@ -48,8 +56,5 @@
         }); 
     </script>
     <script src="js/loginHandler.js"></script>
-    <script>
-        passwdCheck();
-    </script>
 </body>
 </html>

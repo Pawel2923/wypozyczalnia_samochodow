@@ -21,18 +21,18 @@
         $userID = htmlentities($_POST['user-id']);
 
         require('../db/db_connection.php');
-        $query = "DELETE FROM users WHERE id=? AND is_admin=0";
+        $query = "UPDATE users SET change_passwd=1 WHERE id=? AND is_admin=0";
         $stmt = $db_connection->prepare($query);
         $stmt->bind_param('i', $userID);
         $stmt->execute();
 
         if ($db_connection->affected_rows > 0)
         {
-            $_SESSION['msg'] = 'Udało się usunąć użytkownika.';
+            $_SESSION['msg'] = 'Użytkownik musi ustawić nowe hasło przy następnym logowaniu.';
         }
         else 
         {
-            $_SESSION['error'] = 'Nie udało się usunąć użytkownika. Pamiętaj, że nie można usuwać administratorów.';
+            $_SESSION['error'] = 'Nie udało się zresetować hasła. Pamiętaj, że nie można resetować hasła administratorów.';
         }
 
         $stmt->close();
@@ -188,13 +188,13 @@
                         <header>
                             <h2><a href="../admin.php#users">Użytkownicy</a></h2> 
                             <i class="fas fa-chevron-right"></i> 
-                            <h2>Usuń użytkowników</h2>
+                            <h2>Resetowanie haseł</h2>
                         </header>
                         <section>
                             <form action="" method="POST">
                                 <label>ID użytkownika</label>
                                 <input type="number" name="user-id" min="1" required>
-                                <button type="submit">Usuń</button>
+                                <button type="submit">Resetuj</button>
                             </form>
                             <h3 style="margin-bottom: 10px;">Lista użytkowników</h3>
                             <table>
@@ -204,7 +204,6 @@
                                 </tr>
                                 <?php 
                                     // Wylistowanie użytkowników w tabeli
-
                                     require('../db/db_connection.php');
                                     $query = "SELECT id, login FROM all_users WHERE is_admin=0";
 
