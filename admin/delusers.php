@@ -98,6 +98,9 @@
                 margin-right: 10px;
             }
         }
+        main form button {
+            margin-bottom: 0;
+        }
     </style>
     <?php 
         if (isset($_POST['theme']))
@@ -196,6 +199,28 @@
                                 <input type="number" name="user-id" min="1" required>
                                 <button type="submit">Usuń</button>
                             </form>
+                        </section>
+                        <section>
+                            <div class="message">
+                                <?php 
+                                    if (isset($_SESSION['msg']))
+                                    {
+                                        echo $_SESSION['msg'];
+                                        unset($_SESSION['msg']);
+                                    }
+                                ?>
+                            </div>
+                            <div class="error" style="color: #ff6c6c;">
+                                <?php 
+                                    if (isset($_SESSION['error']))
+                                    {
+                                        echo $_SESSION['error'];
+                                        unset($_SESSION['error']);
+                                    }
+                                ?>
+                            </div>
+                        </section>
+                        <section>
                             <h3 style="margin-bottom: 10px;">Lista użytkowników</h3>
                             <table>
                                 <tr>
@@ -224,24 +249,6 @@
                                 ?>
                             </table>
                         </section>
-                        <div class="message">
-                            <?php 
-                                if (isset($_SESSION['msg']))
-                                {
-                                    echo $_SESSION['msg'];
-                                    unset($_SESSION['msg']);
-                                }
-                            ?>
-                        </div>
-                        <div class="error" style="color: #ff6c6c;">
-                            <?php 
-                                if (isset($_SESSION['error']))
-                                {
-                                    echo $_SESSION['error'];
-                                    unset($_SESSION['error']);
-                                }
-                            ?>
-                        </div>
                     </div>
                 </main>
             </div>

@@ -233,7 +233,7 @@
                                 </a>
                             </div>
                             <div class="option">
-                                <a href="admin/deluser.php">
+                                <a href="admin/delusers.php">
                                     <button class="option-button user-stats">
                                         <h3>Usuwanie użytkowników</h3>
                                         <div class="icon"><i class="fas fa-chevron-right"></i></div>

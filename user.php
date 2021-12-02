@@ -67,10 +67,10 @@
         <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="admin.php"><li>Home</li></a>
-                    <a class="veh-link" href="admin.php#vehicles"><li>Pojazdy</li></a>
-                    <a class="users-link" href="admin.php#users"><li>Użytkownicy</li></a>
-                    <a class="settings-link" href="admin.php#settings"><li>Ustawienia</li></a>
+                    <a href="user.php"><li>Home</li></a>
+                    <a class="veh-link" href="user.php#vehicles"><li>Pojazdy</li></a>
+                    <a class="profile-link" href="user.php#profile"><li>Edytuj profil</li></a>
+                    <a class="settings-link" href="user.php#settings"><li>Ustawienia</li></a>
                 </ul>
             </div>
             <div class="back">
@@ -110,7 +110,7 @@
             </div>
             <div class="all-settings">
                 <header>
-                    <h1><a href="admin.php">Panel użytkownika</a></h1>
+                    <h1><a href="user.php">Panel użytkownika</a></h1>
                     <div class="user">
                         <a href="login.php" class="login">
                             <i class="fas fa-sign-in-alt"></i>
@@ -142,7 +142,7 @@
                                 <i class="fas fa-car"></i>
                                 <span>Zarządzanie pojazdami</span>
                             </div>
-                            <div class="home-option manage-users">
+                            <div class="home-option manage-profile">
                                 <i class="fas fa-user-edit"></i>
                                 <span>Edytuj swój profil</span>
                             </div>
@@ -152,7 +152,33 @@
                             </div>
                         </section>
                     </div>
-                    
+                    <div class="profile">
+                        <header>
+                            <h2>Edytuj swój profil</h2>
+                        </header>
+                        <section>
+                            sdasd
+                        </section>
+                    </div>
+                    <div class="settings">
+                        <header>
+                            <h2>Ustawienia</h2>
+                        </header>
+                        <section>
+                            <div class="option">
+                                <h3>Motyw panelu</h3>
+                                <form action="" method="POST">
+                                    <select name="theme">
+                                        <option value="default">Domyślny</option>
+                                        <option value="system">Użyj motywu urządzenia</option>
+                                        <option value="light">Jasny</option>
+                                        <option value="dark">Ciemny</option>
+                                    </select>
+                                    <button type="submit">Zmień</button>
+                                </form>
+                            </div>
+                        </section>
+                    </div>
                 </main>
             </div>
             <footer>

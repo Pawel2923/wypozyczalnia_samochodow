@@ -80,6 +80,13 @@ if (settingsLink != null) {
     });
 }
 
+const profileLink = document.querySelector('nav.panel .profile-link');
+if (profileLink != null) {
+    profileLink.addEventListener('click', () => {
+        changeSettings("profile");
+    });
+}
+
 const openMobileNav = () => {
     document.querySelector('nav.panel').style.transform = "translateX(0)";
     document.querySelector('.mobile-nav .overlay').style.display = "block";
@@ -112,6 +119,21 @@ const homeSettings = () => {
     });
 };
 
+const userHomeSettings = () => {
+    document.querySelector('.home .manage-veh').addEventListener('click', () => {
+        changeSettings("vehicles");
+        window.location.hash = '#vehicles';
+    });
+    document.querySelector('.home .manage-profile').addEventListener('click', () => {
+        changeSettings("profile");
+        window.location.hash = '#profile';
+    });
+    document.querySelector('.home .manage-settings').addEventListener('click', () => {
+        changeSettings("settings");
+        window.location.hash = '#settings';
+    });
+};
+
 if (window.location.hash == '#vehicles') {
     changeSettings("vehicles");
 }
@@ -120,6 +142,9 @@ else if (window.location.hash == '#users') {
 }
 else if (window.location.hash == '#settings') {
     changeSettings("settings");
+}
+else if (window.location.hash == '#profile') {
+    changeSettings("profile");
 }
 
 document.querySelector('.mobile-nav .open').addEventListener('click', () => {
@@ -162,5 +187,8 @@ window.addEventListener('resize', () => {
 
 if (window.location.pathname.indexOf('admin.php') > -1)
     homeSettings();
+else if (window.location.pathname.indexOf('user.php') > -1)
+    userHomeSettings();
+
 
 mobileLoggedMenuHandler();

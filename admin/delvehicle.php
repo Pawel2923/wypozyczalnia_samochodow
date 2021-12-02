@@ -32,7 +32,7 @@
         }
         else 
         {
-            $_SESSION['msg'] = 'Nie udało się usunąć pojazdu.';
+            $_SESSION['error'] = 'Nie udało się usunąć pojazdu.';
         }
 
         $stmt->close();
@@ -192,6 +192,26 @@
                             </form>
                         </section>
                         <section>
+                            <div class="message">
+                                <?php 
+                                    if (isset($_SESSION['msg']))
+                                    {
+                                        echo $_SESSION['msg'];
+                                        unset($_SESSION['msg']);
+                                    }
+                                ?>
+                            </div>
+                            <div class="error" style="color: #ff6c6c;">
+                                <?php 
+                                    if (isset($_SESSION['error']))
+                                    {
+                                        echo $_SESSION['error'];
+                                        unset($_SESSION['error']);
+                                    }
+                                ?>
+                            </div>
+                        </section>
+                        <section>
                             <div class="cars">
                                 <?php 
                                     require('../inc/veh.php');
@@ -206,13 +226,6 @@
                                 ?>
                             </div>
                         </section>
-                        <?php 
-                            if (isset($_SESSION['msg']))
-                            {
-                                echo '<script>alert("'.$_SESSION['msg'].'");</script>';
-                                unset($_SESSION['msg']);
-                            }
-                        ?>
                     </div>
                 </main>
             </div>
