@@ -132,11 +132,3 @@ form input:focus {
 form button {
   margin-top: 20px;
 }
-
-.warning {
-  color: #ff9d9d;
-}
-
-.error {
-  color: #ff6c6c;
-}

@@ -109,6 +109,7 @@
                     $stmt->execute();
 
                     $result = $stmt->get_result();
+                    $stmt->close();
 
                     if ($result->fetch_assoc() > 1)
                     {
@@ -122,7 +123,7 @@
                         }
                         else 
                         {
-                            $loginError = "Podany login jest niedostępny";
+                            $loginError = "Podany login jest już zajęty";
                             echo '<script>
                                 document.querySelector("form div.warning").textContent = "'.$loginError.'";
                                 document.querySelector("#login-field").value = "'.$login.'";
@@ -131,33 +132,38 @@
                     }
                     else
                     {
+                        // Ustawienie id użytkownika
+                        $query = "SELECT COUNT(id) FROM users";
+                        $stmt = $db_connection->prepare($query);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+                        $userID = $result->fetch_row();
+                        $userID = $userID[0] + 1;
+                        $stmt->close();
                         // Wprowadzanie danych do bazy
                         if (isset($email))
                         {
-                            $query2 = "INSERT INTO `users` (login, email, password) VALUES(?, ?, ?)";
+                            $query = "INSERT INTO `users` (id, login, email, password) VALUES(?, ?, ?, ?)";
     
-                            $stmt2 = $db_connection->prepare($query2);
-                            $stmt2->bind_param("sss", $login, $email, $hashedPasswd);
-                            $stmt2->execute();
-                            $stmt2->close();
+                            $stmt = $db_connection->prepare($query);
+                            $stmt->bind_param("isss", $userID, $login, $email, $hashedPasswd);
+                            $stmt->execute();
+                            $stmt->close();
                         }
                         else 
                         {
-                            $query2 = "INSERT INTO `users` (login, password) VALUES(?, ?)";
+                            $query = "INSERT INTO `users` (id, login, password) VALUES(?, ?, ?)";
     
-                            $stmt2 = $db_connection->prepare($query2);
-                            $stmt2->bind_param("ss", $login, $hashedPasswd);
-                            $stmt2->execute();
-                            $stmt2->close();
+                            $stmt = $db_connection->prepare($query);
+                            $stmt->bind_param("iss", $userID, $login, $hashedPasswd);
+                            $stmt->execute();
+                            $stmt->close();
                         }
-                        $stmt->close();
                         $db_connection->close();
 
                         header('Location: login.php');
                         exit;
                     }
-
-                    $stmt->close();
                     $db_connection->close();
                 }
             }

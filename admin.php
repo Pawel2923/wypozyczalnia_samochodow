@@ -202,6 +202,14 @@
                                 </a>
                             </div>
                             <div class="option">
+                                <a href="admin/delimg.php">
+                                    <button class="option-button del-img">
+                                        <h3>Zdjęcia pojazdów</h3>
+                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="option">
                                 <a href="admin/delvehicle.php">
                                     <button class="option-button del-veh">
                                         <h3>Usuwanie pojazdów</h3>
@@ -235,7 +243,6 @@
                                 </tr>
                                 <?php 
                                     // Wylistowanie użytkowników w tabeli
-
                                     require('db/db_connection.php');
                                     $query = "SELECT * FROM all_users";
 

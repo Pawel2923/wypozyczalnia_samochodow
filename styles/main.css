@@ -654,3 +654,11 @@ a {
 input {
   border-style: solid;
 }
+
+.warning {
+  color: #ff9d9d;
+}
+
+.error {
+  color: #ff6c6c;
+}

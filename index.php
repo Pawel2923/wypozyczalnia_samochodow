@@ -91,7 +91,7 @@
         const carButton = document.querySelectorAll('.car-button');
         for (let i=0; i<carButton.length; i++) {
             carButton[i].addEventListener('click', () => {
-                window.location = 'rezerwacja.php';
+                window.location = 'rent.php';
             });
         }
     </script>

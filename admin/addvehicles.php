@@ -34,19 +34,29 @@
 
             require('../db/db_connection.php');
 
-            $query = "INSERT INTO vehicles (marka, model, cena, img_url, is_available) VALUES(?, ?, ?, ?, ?)";
+            $query = "SELECT COUNT(id) FROM vehicles";
             $stmt = $db_connection->prepare($query);
-            $stmt->bind_param('ssdsi', $brand, $model, $price, $img, $avail);
             $stmt->execute();
+            $result = $stmt->get_result();
+            $vehicleID = $result->fetch_row();
+            $vehicleID = $vehicleID[0] + 1;
+            $stmt->close();
 
-            $_SESSION['msg'] = 'Pomyślnie dodano nowy pojazd.';
+            $query = "INSERT INTO vehicles VALUES(?, ?, ?, ?, ?, ?)";
+            $stmt = $db_connection->prepare($query);
+            $stmt->bind_param('issdsi', $vehicleID, $brand, $model, $price, $img, $avail);
+            
+            if ($stmt->execute())
+                $_SESSION['msg'] = 'Pomyślnie dodano nowy pojazd.';
+            else 
+                $_SESSION['msg'] = 'Nie udało się dodać pojazdu.';
 
             $stmt->close();
             $db_connection->close();
         }
         else
         {
-            $_SESSION['msg'] = 'Nie udało się dodać pojazdu';
+            $_SESSION['msg'] = 'Nie udało się prawidłowo pobrać zdjęcia.';
         }
     }
 ?>
@@ -219,13 +229,24 @@
                                 <button type="submit">Dodaj</button>
                             </form>
                         </section>
-                        <?php 
-                            if (isset($_SESSION['msg']))
-                            {
-                                echo '<script>alert("'.$_SESSION['msg'].'");</script>';
-                                unset($_SESSION['msg']);
-                            }
-                        ?>
+                        <div class="message">
+                            <?php 
+                                if (isset($_SESSION['msg']))
+                                {
+                                    echo $_SESSION['msg'];
+                                    unset($_SESSION['msg']);
+                                }
+                            ?>
+                        </div>
+                        <div class="error" style="color: #ff6c6c;">
+                            <?php 
+                                if (isset($_SESSION['error']))
+                                {
+                                    echo $_SESSION['error'];
+                                    unset($_SESSION['error']);
+                                }
+                            ?>
+                        </div>
                     </div>
                 </main>
             </div>
