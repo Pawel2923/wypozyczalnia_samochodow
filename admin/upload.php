@@ -9,7 +9,7 @@ if (!file_exists($target)) // Sprawdzenie czy plik istnieje
 {
     if ($_FILES['vehicle-img']['size'] > (1048576 * 2))
     {
-        $_SESSION['msg'] = 'Plik nie może być większy niż 2 MB.';
+        $_SESSION['error'] = 'Plik nie może być większy niż 2 MB.';
     }
     else 
     {
@@ -24,18 +24,18 @@ if (!file_exists($target)) // Sprawdzenie czy plik istnieje
             }
             else 
             {
-                $_SESSION['msg'] = 'Wystąpił błąd podczas przesyłania pliku.';
+                $_SESSION['error'] = 'Wystąpił błąd podczas przesyłania pliku.';
             }
         }
         else
         {
-            $_SESSION['msg'] = 'Dopuszczalne rozszerzenia zdjęcia to jpg, jpeg, gif i png.';
+            $_SESSION['error'] = 'Dopuszczalne rozszerzenia zdjęcia to jpg, jpeg, gif i png.';
         }
     }
 }
 else 
 {
-    $_SESSION['msg'] = 'Ten plik już istnieje. Wybrano istniejący plik.';
+    $_SESSION['error'] = 'Ten plik już istnieje. Wybrano istniejący plik.';
     $_SESSION['vehicle-img-name'] = $_FILES['vehicle-img']['name'];
 }
 header('Location: addvehicles.php');

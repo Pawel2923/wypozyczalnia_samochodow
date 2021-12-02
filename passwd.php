@@ -1,6 +1,78 @@
 <?php 
     session_start();
-    
+    if (isset($_SESSION['isLogged']))
+    {
+        if (!$_SESSION['isLogged'])
+        {
+            header('Location:login.php');
+            exit;
+        }
+    }
+    else 
+    {
+        header('Location:login.php');
+        exit;
+    }
+
+    if (isset($_POST['old-password']) && isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SESSION['login']))
+    {
+        $oldPasswd = htmlentities($_POST['old-password']);
+        $newPasswd = htmlentities($_POST['password']);
+        $confirmPasswd = htmlentities($_POST['password-confirm']);
+
+        require('db/db_connection.php');
+        $query = "SELECT id FROM all_users WHERE login=?";
+        $stmt = $db_connection->prepare($query);
+        $stmt->bind_param('s', $_SESSION['login']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        ($result->num_rows == 1) ? $id = $result->fetch_row() : $_SESSION['msg'] = 'Takiego loginu nie ma w bazie danych.';
+
+        if (isset($id))
+        {
+            $id = $id[0];
+            $query = "SELECT password FROM users WHERE id=?";
+            $stmt = $db_connection->prepare($query);
+            $stmt->bind_param('i', $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $hashedPasswd = $result->fetch_row();
+            $hashedPasswd = $hashedPasswd[0];
+            $stmt->close();
+
+            if (password_verify($oldPasswd, $hashedPasswd))
+            {
+                if ($newPasswd === $confirmPasswd)
+                {
+                    if ($newPasswd !== $oldPasswd)
+                    {
+                        $newHashedPasswd = password_hash($newPasswd, PASSWORD_DEFAULT);
+                        $query = "UPDATE users SET password=? WHERE id=?";
+                        $stmt = $db_connection->prepare($query);
+                        $stmt->bind_param('si', $newHashedPasswd, $id);
+                        $stmt->execute();
+                        
+                        if ($db_connection->affected_rows == 1) 
+                            $_SESSION['msg'] = 'Pomyślnie zmieniono hasło. <a href="index.php">Wróć na stronę główną</a>';
+                        else
+                            $_SESSION['error'] = 'Nie udało się zmienić hasła.';
+                    }
+                    else 
+                        $_SESSION['error'] = 'Nowe hasło jest takie samo jak stare hasło.';
+                }
+                else 
+                    $_SESSION['error'] = 'Hasła nie są takie same.';
+                
+            }
+            else 
+            {
+                $_SESSION['error'] = 'Stare hasło jest nieprawidłowe.';
+            }
+        }
+
+        $db_connection->close();
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -50,6 +122,24 @@
                     <button type="submit">Zmień</button>
                 </div>
             </form>
+            <div class="message">
+                <?php 
+                    if (isset($_SESSION['msg']))
+                    {
+                        echo $_SESSION['msg'];
+                        unset($_SESSION['msg']);
+                    }
+                ?>
+            </div>
+            <div class="error">
+                <?php 
+                    if (isset($_SESSION['error']))
+                    {
+                        echo $_SESSION['error'];
+                        unset($_SESSION['error']);
+                    }
+                ?>
+            </div>
         </div>
     </main>
     <script>
