@@ -35,7 +35,7 @@ if (!file_exists($target)) // Sprawdzenie czy plik istnieje
 }
 else 
 {
-    $_SESSION['error'] = 'Ten plik już istnieje. Wybrano istniejący plik.';
+    $_SESSION['msg'] = 'Ten plik już istnieje. Wybrano istniejący plik.';
     $_SESSION['vehicle-img-name'] = $_FILES['vehicle-img']['name'];
 }
 header('Location: addvehicles.php');

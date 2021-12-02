@@ -119,6 +119,24 @@
                 margin-right: 10px;
             }
         }
+        .upload-wrapper {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        .img-check {
+            display: none;
+            color: #60b8ff;
+            margin-top: 10px;
+            font-size: 1.5em;
+            position: absolute;
+            right: 0;
+            transform: translateX(calc(100% + 10px));
+        }
+        img {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
     </style>
     <?php 
         if (isset($_POST['theme']))
@@ -214,9 +232,22 @@
                         <section>
                             <form action="upload.php" method="POST" enctype="multipart/form-data">
                                 <label>Wybierz zdjęcie samochodu</label>
-                                <input type="file" name="vehicle-img" id="vehicle-img" accept="image/png, image/jpg, image/jpeg, image/gif" required>
+                                <div class="upload-wrapper">
+                                    <input type="file" name="vehicle-img" id="vehicle-img" accept="image/png, image/jpg, image/jpeg, image/gif" required>
+                                    <i class="fas fa-check-circle img-check"></i>
+                                </div>
                                 <button type="submit">Prześlij zdjęcie</button>
                             </form>
+                            <div class="image-msg">
+                                <?php 
+                                    if (isset($_SESSION['vehicle-img-name']))
+                                    {
+                                        echo '<label>Wybrane zdjęcie</label>';
+                                        echo '<br>';
+                                        echo '<img src="../img/'.$_SESSION['vehicle-img-name'].'" alt="zdjęcie samochodu">';
+                                    }
+                                ?>
+                            </div>
                             <form action="" method="POST">
                                 <label>Marka pojazdu</label>
                                 <input type="text" name="vehicle-brand" required>
@@ -276,6 +307,10 @@
         for (let i=0; i<input.length; i++) {
             checkInput(input[i]);
         }
+        <?php 
+            if (isset($_SESSION['vehicle-img-name']))
+                echo 'document.querySelector(".img-check").style.display = "block";';
+        ?>
     </script>
     <?php include_once('logged.php'); ?>
 </body>
