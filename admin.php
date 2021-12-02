@@ -225,6 +225,14 @@
                         </header>
                         <section>
                             <div class="option">
+                                <a href="admin/resetpasswd.php">
+                                    <button class="option-button user-stats">
+                                        <h3>Resetowanie haseł</h3>
+                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="option">
                                 <a href="admin/deluser.php">
                                     <button class="option-button user-stats">
                                         <h3>Usuwanie użytkowników</h3>
