@@ -32,8 +32,11 @@
     $result = $stmt->get_result();
     $stmt->close();
 
-    if ($result->num_rows == 1) 
+    if ($result->num_rows == 1)
+    {
         $id = $result->fetch_row();
+        $id = $id[0];
+    }
 
     if (isset($_POST['name']) && isset($_POST['sName']) && isset($_POST['tel']) && isset($_POST['email']))
     {
@@ -63,19 +66,29 @@
             }
             if (!empty($tel))
             {
-                $query = "UPDATE users SET telefon=? WHERE id=?";
-                $stmt = $db_connection->prepare($query);
-                $stmt->bind_param('si', $tel, $id);
-                $stmt->execute();
-                $stmt->close();
+                if (filter_var($tel, FILTER_VALIDATE_INT))
+                {
+                    $query = "UPDATE users SET telefon=? WHERE id=?";
+                    $stmt = $db_connection->prepare($query);
+                    $stmt->bind_param('si', $tel, $id);
+                    $stmt->execute();
+                    $stmt->close();
+                }
+                else 
+                    $_SESSION['error'] = 'Wprowadzono niepoprawny numer telefonu';
             }
             if (!empty($email))
             {
-                $query = "UPDATE users SET email=? WHERE id=?";
-                $stmt = $db_connection->prepare($query);
-                $stmt->bind_param('si', $email, $id);
-                $stmt->execute();
-                $stmt->close();
+                if (filter_var($email, FILTER_VALIDATE_EMAIL))
+                {
+                    $query = "UPDATE users SET email=? WHERE id=?";
+                    $stmt = $db_connection->prepare($query);
+                    $stmt->bind_param('si', $email, $id);
+                    $stmt->execute();
+                    $stmt->close();
+                }
+                else 
+                    $_SESSION['error'] = 'Wprowadzono niepoprawny email';
             }
             
             if ($db_connection->affected_rows > 0)
@@ -96,6 +109,14 @@
         $result = $stmt->get_result();
         $userData = $result->fetch_assoc();
         $stmt->close();
+
+        foreach ($userData as $key => $value)
+        {
+            if (empty($value))
+            {
+                $userData[$key] = 'Brak danych';
+            }
+        }
     }
     $db_connection->close();
 ?>
@@ -116,13 +137,10 @@
     <link rel="stylesheet" href="styles/panel.css">
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
     <style>
-        .access-buttons {
-            display: grid; 
-            grid-template: 1fr / 1fr 1fr;
+        form .buttons {
+            display: flex;
             column-gap: 10px;
-        }
-        .access-buttons button {
-            width: 100%;
+            display: none;
         }
     </style>
     <?php 
@@ -216,7 +234,7 @@
                         <section>
                             <div class="home-option manage-veh">
                                 <i class="fas fa-car"></i>
-                                <span>Zarządzanie pojazdami</span>
+                                <span>Wypożyczone pojazdy</span>
                             </div>
                             <div class="home-option manage-profile">
                                 <i class="fas fa-user-edit"></i>
@@ -224,7 +242,7 @@
                             </div>
                             <div class="home-option manage-settings">
                                 <i class="fas fa-cog"></i>
-                                <span>Zmiana ustawień serwisu</span>
+                                <span>Zmień ustawienia panelu</span>
                             </div>
                         </section>
                     </div>
@@ -251,7 +269,10 @@
                                     <input type="tel" name="tel" value="<?php if (isset($userData['telefon'])) echo $userData['telefon']; ?>">
                                     <label for="email">Adres e-mail</label>
                                     <input type="email" name="email" value="<?php if (isset($userData['email'])) echo $userData['email']; ?>">
-                                    <button type="submit" style="display: none;">Potwierdź</button>
+                                    <div class="buttons">
+                                        <button type="submit">Potwierdź</button>
+                                        <button type="reset">Anuluj zmiany</button>
+                                    </div>
                                 </form>
                             </div>
                             <div class="option">
@@ -312,10 +333,13 @@
         }
         const profileInput = document.querySelectorAll('.edit-profile input');
         for (let i = 0; i < profileInput.length; i++) {
-            profileInput[i].addEventListener('focus', () => {
-                document.querySelector('.edit-profile button[type="submit"]').style.display = "block";
+            profileInput[i].addEventListener('keypress', () => {
+                document.querySelector('form .buttons').style.display = 'flex';
             });
         }
+        document.querySelector('main form button[type="reset"]').addEventListener('click', () => {
+            document.querySelector('form .buttons').style.display = 'none';
+        });
     </script>
     <?php 
         if (isset($_POST['theme']))
