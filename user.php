@@ -22,6 +22,82 @@
         if ($theme == "default" || $theme == "system" || $theme == "dark" || $theme == "light")
             setcookie('theme', $theme, time() + (5 * 365 * 24 * 60 * 60));
     }
+
+    require('db/db_connection.php');
+
+    $query = "SELECT id FROM all_users WHERE login=?";
+    $stmt = $db_connection->prepare($query);
+    $stmt->bind_param('s', $_SESSION['login']);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+
+    if ($result->num_rows == 1) 
+        $id = $result->fetch_row();
+
+    if (isset($_POST['name']) && isset($_POST['sName']) && isset($_POST['tel']) && isset($_POST['email']))
+    {
+        $name = htmlentities($_POST['name']);
+        $sName = htmlentities($_POST['sName']);
+        $tel = htmlentities($_POST['tel']);
+        $email = htmlentities($_POST['email']);
+
+        if (isset($id)) 
+        {
+
+            if (!empty($name))
+            {
+                $query = "UPDATE users SET imie=? WHERE id=?";
+                $stmt = $db_connection->prepare($query);
+                $stmt->bind_param('si', $name, $id);
+                $stmt->execute();
+                $stmt->close();
+            }
+            if (!empty($sName))
+            {
+                $query = "UPDATE users SET nazwisko=? WHERE id=?";
+                $stmt = $db_connection->prepare($query);
+                $stmt->bind_param('si', $sName, $id);
+                $stmt->execute();
+                $stmt->close();
+            }
+            if (!empty($tel))
+            {
+                $query = "UPDATE users SET telefon=? WHERE id=?";
+                $stmt = $db_connection->prepare($query);
+                $stmt->bind_param('si', $tel, $id);
+                $stmt->execute();
+                $stmt->close();
+            }
+            if (!empty($email))
+            {
+                $query = "UPDATE users SET email=? WHERE id=?";
+                $stmt = $db_connection->prepare($query);
+                $stmt->bind_param('si', $email, $id);
+                $stmt->execute();
+                $stmt->close();
+            }
+            
+            if ($db_connection->affected_rows > 0)
+                $_SESSION['msg'] = 'Zmiany zostały zapisane.';
+            else 
+                $_SESSION['error'] = 'Nie udało się wprowadzić zmian.';
+        }
+        else 
+            $_SESSION['error'] = 'Takiego loginu nie ma w bazie danych.';
+    }
+    
+    if (isset($id))
+    {
+        $query = "SELECT imie, nazwisko, telefon, email FROM users WHERE id=?";
+        $stmt = $db_connection->prepare($query);
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $userData = $result->fetch_assoc();
+        $stmt->close();
+    }
+    $db_connection->close();
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -152,12 +228,48 @@
                             </div>
                         </section>
                     </div>
+                    <div class="vehicles">
+                        <header>
+                            <h2>Wypożyczone pojazdy</h2>
+                        </header>
+                        <section>
+                            
+                        </section>
+                    </div>
                     <div class="profile">
                         <header>
                             <h2>Edytuj swój profil</h2>
                         </header>
                         <section>
-                            sdasd
+                            <div class="option edit-profile">
+                                <form action="" method="POST">
+                                    <label for="name">Imię</label>
+                                    <input type="text" name="name" value="<?php if (isset($userData['imie'])) echo $userData['imie']; ?>">
+                                    <label for="sName">Nazwisko</label>
+                                    <input type="text" name="sName" value="<?php if (isset($userData['nazwisko'])) echo $userData['nazwisko']; ?>">
+                                    <label for="tel">Telefon</label>
+                                    <input type="tel" name="tel" value="<?php if (isset($userData['telefon'])) echo $userData['telefon']; ?>">
+                                    <label for="email">Adres e-mail</label>
+                                    <input type="email" name="email" value="<?php if (isset($userData['email'])) echo $userData['email']; ?>">
+                                    <button type="submit" style="display: none;">Potwierdź</button>
+                                </form>
+                            </div>
+                            <div class="option">
+                                <a href="user/changeLogin.php">
+                                    <button class="option-button ch-login">
+                                        <h3>Zmień login</h3>
+                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="option">
+                                <a href="user/changePasswd.php">
+                                    <button class="option-button ch-passwd">
+                                        <h3>Zmień hasło</h3>
+                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                                    </button>
+                                </a>
+                            </div>
                         </section>
                     </div>
                     <div class="settings">
@@ -197,6 +309,12 @@
     <script>
         const selectTheme = (mode) => {
             document.querySelector('main select option[value="'+mode+'"]').setAttribute('selected', 'selected');
+        }
+        const profileInput = document.querySelectorAll('.edit-profile input');
+        for (let i = 0; i < profileInput.length; i++) {
+            profileInput[i].addEventListener('focus', () => {
+                document.querySelector('.edit-profile button[type="submit"]').style.display = "block";
+            });
         }
     </script>
     <?php 
