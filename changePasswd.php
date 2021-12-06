@@ -43,13 +43,21 @@
             if ($newPasswd === $confirmPasswd)
             {
                 $newHashedPasswd = password_hash($newPasswd, PASSWORD_DEFAULT);
-                $query = "UPDATE users SET password=? WHERE id=?";
+                $changePasswd = 0;
+                $query = "UPDATE users SET password=?, change_passwd=? WHERE id=?";
                 $stmt = $db_connection->prepare($query);
-                $stmt->bind_param('si', $newHashedPasswd, $id);
+                $stmt->bind_param('sii', $newHashedPasswd, $changePasswd, $id);
                 $stmt->execute();
                 
                 if ($db_connection->affected_rows == 1) 
-                    $_SESSION['msg'] = 'Pomyślnie zmieniono hasło. <a href="index.php">Wróć na stronę główną</a>';
+                {
+                    $_SESSION['msg'] = 'Pomyślnie zmieniono hasło. Zaloguj się ponownie.';
+                    echo '<script>
+                        setTimeout(() => {
+                            window.location = "logout.php";
+                        }, 5000);
+                    </script>';
+                }
                 else
                     $_SESSION['error'] = 'Nie udało się zmienić hasła.';
             }

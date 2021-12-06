@@ -57,6 +57,11 @@
                     if ($db_connection->affected_rows == 1) 
                     {
                         $_SESSION['msg'] = 'Pomyślnie zmieniono hasło. Za chwilę wystąpi wylogowanie...';
+                        echo '<script>
+                            setTimeout(() => {
+                                window.location = "../logout.php";
+                            }, 5000);
+                        </script>';
                     }
                     else
                         $_SESSION['error'] = 'Nie udało się zmienić hasła.';

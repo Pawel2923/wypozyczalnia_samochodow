@@ -1,77 +1,19 @@
 <?php 
     session_start();
-    if (isset($_SESSION['isLogged']))
+    $exit = false;
+    if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin']))
     {
-        if (!$_SESSION['isLogged'])
-        {
-            header('Location: ../login.php');
-            exit;
+        if (!$_SESSION['isLogged'] && !$_SESSION['isAdmin']) {
+            $exit = true;
         }
     }
     else 
+        $exit = true;
+
+    if ($exit)
     {
-        header('Location: ../login.php');
+        header('Location: login.php');
         exit;
-    }
-
-    if (isset($_POST['new-login']) && isset($_SESSION['login']))
-    {
-        $login = htmlentities($_SESSION['login']);
-        $newLogin = htmlentities($_POST['new-login']);
-
-        if ($login !== $newLogin)
-        {
-            require('../db/db_connection.php');
-
-            $query = "SELECT COUNT(id) FROM all_users WHERE login=?";
-            $stmt = $db_connection->prepare($query);
-            $stmt->bind_param('s', $newLogin);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $stmt->close();
-            $checkLogin = $result->fetch_row();
-            $checkLogin = $checkLogin[0];
-
-            if ($checkLogin != 1)
-            {
-                $query = "SELECT id FROM all_users WHERE login=?";
-                $stmt = $db_connection->prepare($query);
-                $stmt->bind_param('s', $_SESSION['login']);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                $stmt->close();
-                
-                if ($result->num_rows == 1)
-                {
-                    $id = $result->fetch_row();
-                    $id = $id[0];
-                    $query = "UPDATE users SET login=? WHERE id=?";
-                    $stmt = $db_connection->prepare($query);
-                    $stmt->bind_param('si', $newLogin, $id);
-                    $stmt->execute();
-                    $stmt->close();
-
-                    $_SESSION['msg'] = 'Pomyślnie zmieniono login. Za chwilę wystąpi wylogowanie...';
-                    echo '<script>
-                        setTimeout(() => {
-                            window.location = "../logout.php";
-                        }, 5000);
-                    </script>';
-                }
-                else 
-                {
-                    $_SESSION['error'] = 'Takiego loginu nie ma w bazie danych.';
-                }
-            }
-            else 
-            {
-                $_SESSION['error'] = 'Taki login jest już zajęty.';
-            }
-
-            $db_connection->close();
-        }
-        else 
-            $_SESSION['error'] = 'Nowy login jest taki sam jak stary.';
     }
 ?>
 <!DOCTYPE html>
@@ -94,7 +36,7 @@
         input {
             border: 2px solid #000;
         }
-        .content .users header {
+        .content .vehicles header {
             display: -webkit-box;
             display: -ms-flexbox;
             display: flex;
@@ -102,13 +44,13 @@
                 -ms-flex-align: center;
                     align-items: center;
         }
-        .content .users header>* {
+        .content .vehicles header>* {
             margin-right: 20px;
         }
-        .content .users header>*:last-child {
+        .content .vehicles header>*:last-child {
             margin-right: 0;
         }
-        .content .users header>* a {
+        .content .vehicles header>* a {
             color: #000;
         }
         main form {
@@ -121,46 +63,57 @@
                 -ms-flex-direction: column;
                     flex-direction: column;
         }
+        main form label,
         main form button {
             margin-top: 20px;
         }
+        main form label:first-child {
+            margin-top: 0;
+        }
         @media screen and (max-width: 800px) {
-            .content .users header>* {
+            .content .vehicles header>* {
                 margin-right: 10px;
             }
         }
-        main form input {
-            margin-top: 5px;
+        .upload-wrapper {
+            display: flex;
+            align-items: center;
+            position: relative;
         }
-        main form>div {
-            margin-top: 20px;
+        .img-check {
+            display: none;
+            color: #60b8ff;
+            margin-top: 10px;
+            font-size: 1.5em;
+            position: absolute;
+            right: 0;
+            transform: translateX(calc(100% + 10px));
         }
-        main form>div:first-child {
-            margin-top: 0;
+        img {
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
     </style>
     <?php 
         if (isset($_POST['theme']))
         {
-            if ($_POST['theme'] != "default")
-                echo '<link rel="stylesheet" href="styles/'.$_POST['theme'].'.css">';
+            echo '<link rel="stylesheet" href="../styles/'.$_POST['theme'].'.css">';
         }
         elseif (isset($_COOKIE['theme']))
         {
-            if ($_COOKIE['theme'] != "default")
-                echo '<link rel="stylesheet" href="styles/'.$_COOKIE['theme'].'.css">';
+            echo '<link rel="stylesheet" href="../styles/'.$_COOKIE['theme'].'.css">';
         }
     ?>
 </head>
 <body>
     <div class="page-wrapper">
-        <nav class="panel">
+    <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="../user.php"><li>Home</li></a>
-                    <a class="veh-link" href="../user.php#vehicles"><li>Pojazdy</li></a>
-                    <a class="profile-link" href="../user.php#profile"><li>Edytuj profil</li></a>
-                    <a class="settings-link" href="../user.php#settings"><li>Ustawienia</li></a>
+                    <a href="../admin.php"><li>Home</li></a>
+                    <a class="veh-link" href="../admin.php#vehicles"><li>Pojazdy</li></a>
+                    <a class="users-link" href="../admin.php#users"><li>Użytkownicy</li></a>
+                    <a class="settings-link" href="../admin.php#settings"><li>Ustawienia</li></a>
                 </ul>
             </div>
             <div class="back">
@@ -200,7 +153,7 @@
             </div>
             <div class="all-settings">
                 <header>
-                    <h1><a href="../user.php">Panel użytkownika</a></h1>
+                    <h1><a href="../admin.php">Panel administracyjny</a></h1>
                     <div class="user">
                         <a href="../login.php" class="login">
                             <i class="fas fa-sign-in-alt"></i>
@@ -226,45 +179,14 @@
                     </div>
                 </header>
                 <main>
-                    <div class="users">
+                    <div class="vehicles">
                         <header>
-                            <h2><a href="../user.php#profile">Edytuj swój profil</a></h2> 
+                            <h2><a href="../admin.php#vehicles">Pojazdy</a></h2> 
                             <i class="fas fa-chevron-right"></i> 
-                            <h2>Zmień login</h2>
+                            <h2>Zdjęcia pojazdów</h2>
                         </header>
                         <section>
-                            <div class="form-wrapper">
-                                <form action="" method="POST">
-                                    <div class="new-login">
-                                        <label for="new-login">Wpisz nowy login</label>
-                                        <br>
-                                        <input type="text" name="new-login" required>
-                                    </div>
-                                    <div class="form-bottom">
-                                        <button type="submit">Zmień</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </section>
-                        <section>
-                            <div class="message">
-                                <?php 
-                                    if (isset($_SESSION['msg']))
-                                    {
-                                        echo $_SESSION['msg'];
-                                        unset($_SESSION['msg']);
-                                    }
-                                ?>
-                            </div>
-                            <div class="error">
-                                <?php 
-                                    if (isset($_SESSION['error']))
-                                    {
-                                        echo $_SESSION['error'];
-                                        unset($_SESSION['error']);
-                                    }
-                                ?>
-                            </div>
+                            
                         </section>
                     </div>
                 </main>
@@ -282,6 +204,24 @@
         </div>
     </div>
     <script src="../js/panelHandler.js"></script>
+    <script>
+        const checkInput = (name) => {
+            name.addEventListener('invalid', () => {
+                name.classList.add('subscription-input-invalid');
+            });
+            name.addEventListener('keyup', () => {
+                name.classList.remove('subscription-input-invalid');
+            });
+        };
+        const input = document.querySelectorAll('main form input');
+        for (let i=0; i<input.length; i++) {
+            checkInput(input[i]);
+        }
+        <?php 
+            if (isset($_SESSION['vehicle-img-name']))
+                echo 'document.querySelector(".img-check").style.display = "block";';
+        ?>
+    </script>
     <?php include_once('logged.php'); ?>
 </body>
 </html>
