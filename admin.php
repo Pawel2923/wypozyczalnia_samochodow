@@ -61,8 +61,7 @@
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
     <style>
         .access-buttons {
-            display: grid; 
-            grid-template: 1fr / 1fr 1fr;
+            display: flex;
             column-gap: 10px;
         }
         .access-buttons button {
