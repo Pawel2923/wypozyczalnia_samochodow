@@ -1,6 +1,6 @@
 <?php
 session_start();
-$allowedTypes = array("jpg", "jpeg", "gif", "png");
+$allowedExt = array("jpg", "jpeg", "gif", "png");
 
 $dir = '../img/';
 $target = $dir.basename($_FILES['vehicle-img']['name']);
@@ -15,7 +15,7 @@ if (!file_exists($target)) // Sprawdzenie czy plik istnieje
     {
         $ext = explode('.', strtolower($_FILES['vehicle-img']['name']));    // Rozszerzenie pliku
 
-        if (in_array(end($ext), $allowedTypes)) // Sprawdzenie czy rozszerzenie jest obsługiwane
+        if (in_array(end($ext), $allowedExt)) // Sprawdzenie czy rozszerzenie jest obsługiwane
         {
             if (move_uploaded_file($_FILES['vehicle-img']['tmp_name'], $target))
             {
@@ -38,5 +38,5 @@ else
     $_SESSION['msg'] = 'Ten plik już istnieje. Wybrano istniejący plik.';
     $_SESSION['vehicle-img-name'] = $_FILES['vehicle-img']['name'];
 }
-header('Location: addvehicles.php');
+header('Location: '. $_SERVER['HTTP_REFERER']);
 exit;

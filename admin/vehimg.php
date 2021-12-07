@@ -70,28 +70,88 @@
         main form label:first-child {
             margin-top: 0;
         }
+        .image-wrapper {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+        .vehicle-image {
+            position: relative;
+            cursor: pointer;
+        }
+        .vehicle-image img {
+            display: block;
+        }
+        .vehicle-image>.img-overlay {
+            background-color: rgba(0,0,0,.5);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity .2s ease;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+        }
+        .vehicle-image:hover .img-overlay {
+            opacity: 1;
+        }
+        .add-img {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 8em;
+            color: #ccc;
+            border: 5px solid #ccc;
+            transition: .2s ease;
+        }
+        .add-img:hover {
+            border-color: #60B8FF;
+            color: #60B8FF;
+            cursor: pointer;
+        }
+        .upload {
+            position: fixed;
+            background-color: #fff;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+        .upload-status {
+            display: none;
+            position: fixed;
+            top: calc(50% - 100px);
+            left: calc(50% - 100px);
+            background-color: #fff;
+            padding: 50px;
+            z-index: 4;
+        }
+        .upload-status>.back {
+            width: fit-content;
+            height: fit-content;
+            right: 20px;
+            top: 20px;
+            left: unset;
+            bottom: unset;
+            transform: unset;
+            cursor: pointer;
+        }
         @media screen and (max-width: 800px) {
             .content .vehicles header>* {
                 margin-right: 10px;
             }
-        }
-        .upload-wrapper {
-            display: flex;
-            align-items: center;
-            position: relative;
-        }
-        .img-check {
-            display: none;
-            color: #60b8ff;
-            margin-top: 10px;
-            font-size: 1.5em;
-            position: absolute;
-            right: 0;
-            transform: translateX(calc(100% + 10px));
-        }
-        img {
-            margin-top: 10px;
-            margin-bottom: 10px;
+            .image-wrapper {
+                grid-template-columns: 1fr 1fr;
+                gap: 5px;
+            }
         }
     </style>
     <?php 
@@ -106,8 +166,33 @@
     ?>
 </head>
 <body>
+    <div class="upload-status">
+        <div class="back">
+            <i class="fas fa-times"></i>
+        </div>
+        <div class="msg">
+        <?php 
+            if (isset($_SESSION['msg']))
+            {
+                echo '<script>document.querySelector(".upload-status").style.display = "block";</script>';
+                echo $_SESSION['msg'];
+                unset($_SESSION['msg']);
+            }
+        ?>
+        </div>
+        <div class="error">
+            <?php 
+                if (isset($_SESSION['error']))
+                {
+                    echo '<script>document.querySelector(".upload-status").style.display = "block";</script>';
+                    echo $_SESSION['error'];
+                    unset($_SESSION['error']);
+                }
+            ?>
+        </div>
+    </div>
     <div class="page-wrapper">
-    <nav class="panel">
+        <nav class="panel">
             <div class="list-wrapper">
                 <ul>
                     <a href="../admin.php"><li>Home</li></a>
@@ -186,7 +271,47 @@
                             <h2>Zdjęcia pojazdów</h2>
                         </header>
                         <section>
-                            
+                            <div class="image-wrapper">
+                                <?php 
+                                    require('../db/db_connection.php');
+
+                                    $query = "SELECT img_url FROM vehicles";
+                                    $stmt = $db_connection->prepare($query);
+                                    $stmt->execute();
+                                    $result = $stmt->get_result();
+                                    $stmt->close();
+                                    
+                                    while ($row = $result->fetch_row())
+                                    {
+                                        if (filter_var($row[0], FILTER_VALIDATE_URL))
+                                        {
+                                            echo '<div class="vehicle-image">';
+                                            echo '<img src="'.$row[0].'" alt="Zdjęcie pojazdu" width="100%" height="100%">';
+                                            echo '<div class="img-overlay"><i class="fas fa-trash-alt"></i> Usuń zdjęcie</div>';
+                                            echo '</div>';
+                                        }
+                                        else 
+                                        {
+                                            echo '<div class="vehicle-image"';
+                                            echo '<img src="../img/'.$row[0].'" alt="Zdjęcie pojazdu" width="100%" height="100%">';
+                                            echo '<div class="img-overlay"><i class="fas fa-trash-alt"></i> Usuń zdjęcie</div>';
+                                            echo '</div>';
+                                        }
+                                    }
+                                ?>
+                                <div class="add-img">
+                                    <i class="fas fa-plus"></i>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="upload">
+                            <form action="upload.php" method="POST" enctype="multipart/form-data">
+                                <label>Wybierz zdjęcie samochodu</label>
+                                <div class="upload-wrapper">
+                                    <input type="file" name="vehicle-img" id="vehicle-img" accept="image/png, image/jpg, image/jpeg, image/gif" required>
+                                </div>
+                                <button type="submit">Prześlij zdjęcie</button>
+                            </form>
                         </section>
                     </div>
                 </main>
@@ -221,6 +346,16 @@
             if (isset($_SESSION['vehicle-img-name']))
                 echo 'document.querySelector(".img-check").style.display = "block";';
         ?>
+        document.querySelector('.add-img').addEventListener('click', () => {
+            document.querySelector('.upload').style.display = "block";
+            window.scrollTo(0, 0);
+            document.body.style.overflow = 'hidden';
+        });
+    </script>
+    <script>
+        document.querySelector('.upload-status').addEventListener('click', () => {
+            document.querySelector('.upload-status').style.display = "none";
+        });
     </script>
     <?php include_once('logged.php'); ?>
 </body>

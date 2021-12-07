@@ -201,7 +201,7 @@
                                 </a>
                             </div>
                             <div class="option">
-                                <a href="admin/delimg.php">
+                                <a href="admin/vehimg.php">
                                     <button class="option-button del-img">
                                         <h3>Zdjęcia pojazdów</h3>
                                         <div class="icon"><i class="fas fa-chevron-right"></i></div>
