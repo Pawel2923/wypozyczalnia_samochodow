@@ -118,6 +118,21 @@
             }
         }
     }
+
+    if (isset($_POST['rentID']))
+    {
+        $rentID = htmlentities($_POST['rentID']);
+
+        $query = "DELETE FROM rezerwacja WHERE id=?";
+        $stmt = $db_connection->prepare($query);
+        $stmt->bind_param('i', $rentID);
+        $stmt->execute();
+        $stmt->close();
+        
+        $_SESSION['msg'] = 'Anulowano rezerwację.';
+        header('Location: user.php#vehicles');
+        exit;
+    }
     $db_connection->close();
 ?>
 <!DOCTYPE html>
@@ -251,7 +266,65 @@
                             <h2>Wypożyczone pojazdy</h2>
                         </header>
                         <section>
-                            
+                            <?php 
+                                if (isset($_SESSION['login']))
+                                {
+                                    require('db/db_connection.php');
+                                    $login = $_SESSION['login'];
+                                    $query = "SELECT id FROM users WHERE login=?";
+                                    $stmt = $db_connection->prepare($query);
+                                    $stmt->bind_param('s', $login);
+                                    $stmt->execute();
+                                    $result = $stmt->get_result();
+                                    $stmt->close();
+
+                                    $userId = $result->fetch_row();
+                                    $userId = $userId[0];
+
+                                    $query = "SELECT rezerwacja.id, marka, model, cena, na_ile, data_rezerwacji FROM vehicles INNER JOIN rezerwacja ON vehicles.id=rezerwacja.id_pojazdu WHERE id_klienta=?";
+                                    $stmt = $db_connection->prepare($query);
+                                    $stmt->bind_param('i', $userId);
+                                    $stmt->execute();
+                                    $result = $stmt->get_result();
+                                    $stmt->close();
+
+                                    while ($row = $result->fetch_assoc())
+                                    {
+                                        echo '<div class="option">';
+                                        echo '<form action="" method="POST">';
+                                        echo 'Nazwa samochodu: '.$row['marka'].' '.$row['model'].'<br>';
+                                        echo 'Cena: '.$row['cena']*$row['na_ile'].'zł<br>';
+                                        echo 'Na ile godzin: '.$row['na_ile'].'<br>';
+                                        echo 'Data rezerwacji: '.$row['data_rezerwacji'].'<br>';
+                                        echo '<input type="hidden" name="rentID" value="'.$row['id'].'">';
+                                        echo '<button type="submit">Anuluj</button>';
+                                        echo '</form>';
+                                        echo '</div>';
+                                    }
+
+                                    $db_connection->close();
+                                }
+                            ?>
+                        </section>
+                        <section>
+                            <div class="msg">
+                                <?php 
+                                    if (isset($_SESSION['msg']))
+                                    {
+                                        echo $_SESSION['msg'];
+                                        unset($_SESSION['msg']);
+                                    }
+                                ?>
+                            </div>
+                            <div class="error">
+                                <?php 
+                                    if (isset($_SESSION['error']))
+                                    {
+                                        echo $_SESSION['error'];
+                                        unset($_SESSION['error']);
+                                    }
+                                ?>
+                            </div>
                         </section>
                     </div>
                     <div class="profile">
