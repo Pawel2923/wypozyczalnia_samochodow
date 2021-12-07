@@ -193,9 +193,9 @@
                                 </a>
                             </div>
                             <div class="option">
-                                <a href="admin/vehiclerent.php">
-                                    <button class="option-button veh-res">
-                                        <h3>Rezerwacja pojazdów</h3>
+                                <a href="admin/vehaccess.php">
+                                    <button class="option-button veh-access">
+                                        <h3>Dostępność pojazdów</h3>
                                         <div class="icon"><i class="fas fa-chevron-right"></i></div>
                                     </button>
                                 </a>
@@ -204,6 +204,14 @@
                                 <a href="admin/delvehicle.php">
                                     <button class="option-button del-veh">
                                         <h3>Usuwanie pojazdów</h3>
+                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="option">
+                                <a href="admin/vehiclerent.php">
+                                    <button class="option-button veh-res">
+                                        <h3>Rezerwacja pojazdów</h3>
                                         <div class="icon"><i class="fas fa-chevron-right"></i></div>
                                     </button>
                                 </a>
