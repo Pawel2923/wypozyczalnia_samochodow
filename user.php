@@ -25,7 +25,7 @@
 
     require('db/db_connection.php');
 
-    $query = "SELECT id FROM all_users WHERE login=?";
+    $query = "SELECT id FROM users WHERE login=?";
     $stmt = $db_connection->prepare($query);
     $stmt->bind_param('s', $_SESSION['login']);
     $stmt->execute();

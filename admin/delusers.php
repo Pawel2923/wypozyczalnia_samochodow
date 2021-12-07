@@ -231,7 +231,7 @@
                                     // Wylistowanie użytkowników w tabeli
 
                                     require('../db/db_connection.php');
-                                    $query = "SELECT id, login FROM all_users WHERE is_admin=0";
+                                    $query = "SELECT id, login FROM users WHERE is_admin=0";
 
                                     $stmt = $db_connection->prepare($query);
                                     $stmt->execute();

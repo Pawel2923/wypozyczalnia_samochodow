@@ -23,7 +23,7 @@
         {
             require('../db/db_connection.php');
 
-            $query = "SELECT COUNT(id) FROM all_users WHERE login=?";
+            $query = "SELECT COUNT(id) FROM users WHERE login=?";
             $stmt = $db_connection->prepare($query);
             $stmt->bind_param('s', $newLogin);
             $stmt->execute();
@@ -34,7 +34,7 @@
 
             if ($checkLogin != 1)
             {
-                $query = "SELECT id FROM all_users WHERE login=?";
+                $query = "SELECT id FROM users WHERE login=?";
                 $stmt = $db_connection->prepare($query);
                 $stmt->bind_param('s', $_SESSION['login']);
                 $stmt->execute();
