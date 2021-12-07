@@ -251,7 +251,7 @@
                                 <?php 
                                     // Wylistowanie użytkowników w tabeli
                                     require('db/db_connection.php');
-                                    $query = "SELECT * FROM all_users";
+                                    $query = "SELECT * FROM users";
 
                                     $stmt = $db_connection->prepare($query);
                                     $stmt->execute();

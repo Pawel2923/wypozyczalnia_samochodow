@@ -26,7 +26,7 @@ if (isset($_POST['amount']) && isset($_POST['date']) && isset($_SESSION['vehicle
 
         require('db/db_connection.php');
 
-        $query = "SELECT id FROM all_users WHERE login=?";
+        $query = "SELECT id FROM users WHERE login=?";
         $stmt = $db_connection->prepare($query);
         $stmt->bind_param('s', $_SESSION['login']);
         $stmt->execute();
@@ -58,7 +58,7 @@ if (isset($_POST['amount']) && isset($_POST['date']) && isset($_SESSION['vehicle
                 $stmt->execute();
                 $stmt->close();
 
-                $query = "SELECT rented_vehicles FROM all_users WHERE id=?";
+                $query = "SELECT rented_vehicles FROM users WHERE id=?";
                 $stmt = $db_connection->prepare($query);
                 $stmt->bind_param('i', $id);
                 $stmt->execute();
@@ -78,7 +78,7 @@ if (isset($_POST['amount']) && isset($_POST['date']) && isset($_SESSION['vehicle
                     $_SESSION['connectionError'] = "Błąd połączenia z bazą danych";
                 }
 
-                $query = "UPDATE all_users SET rented_vehicles=? WHERE id=?";
+                $query = "UPDATE users SET rented_vehicles=? WHERE id=?";
                 $stmt = $db_connection_adm->prepare($query);
                 $stmt->bind_param('ii', $rentedVehs, $id);
                 $stmt->execute();
