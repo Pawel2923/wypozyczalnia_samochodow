@@ -16,27 +16,37 @@
         exit;
     }
 
-    if (isset($_POST['user-id']))
+    require('../inc/veh.php');
+    if (isset($_POST['vehicle-id']) && isset($vehicle))
     {
-        $userID = htmlentities($_POST['user-id']);
-
-        require('../db/db_connection.php');
-        $query = "UPDATE users SET change_passwd=1 WHERE id=? AND is_admin=0";
-        $stmt = $db_connection->prepare($query);
-        $stmt->bind_param('i', $userID);
-        $stmt->execute();
-
-        if ($db_connection->affected_rows > 0)
+        $vehId = htmlentities($_POST['vehicle-id']);
+        if ($vehId <= $vehNum)
         {
-            $_SESSION['msg'] = 'Użytkownik musi ustawić nowe hasło przy następnym logowaniu.';
+            ($vehicle[$vehId-1]->isAvailable) ? $access = 0 : $access = 1;
+
+            if (isset($access))
+            {
+                require('../db/db_connection.php');
+                $query = "UPDATE vehicles SET is_available=? WHERE id=?";
+                $stmt = $db_connection->prepare($query);
+                $stmt->bind_param('ii', $access, $vehId);
+                $stmt->execute();
+                if ($db_connection->affected_rows > 0)
+                {
+                    $_SESSION['msg'] = 'Udało się zmienić dostępność.';
+                    header('Location: vehaccess.php');
+                    exit;
+                }
+                else 
+                {
+                    $_SESSION['error'] = 'Nie udało się dokonać zmiany.';
+                }
+                $stmt->close();
+                $db_connection->close();
+            }
         }
         else 
-        {
-            $_SESSION['error'] = 'Nie udało się zresetować hasła. Pamiętaj, że nie można resetować hasła administratorów.';
-        }
-
-        $stmt->close();
-        $db_connection->close();
+            $_SESSION['error'] = 'Wpisano niepoprawne ID.';
     }
 ?>
 <!DOCTYPE html>
@@ -56,24 +66,18 @@
     <link rel="stylesheet" href="../styles/panel.css">
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
     <style>
-        input {
-            border: 2px solid #000;
-        }
-        .content .users header {
-            display: -webkit-box;
-            display: -ms-flexbox;
+        .content .vehicles header {
             display: flex;
-            -webkit-box-align: center;
-                -ms-flex-align: center;
-                    align-items: center;
+            align-items: center;
+            justify-content: flex-start;
         }
-        .content .users header>* {
+        .content .vehicles header>* {
             margin-right: 20px;
         }
-        .content .users header>*:last-child {
+        .content .vehicles header>*:last-child {
             margin-right: 0;
         }
-        .content .users header>* a {
+        .content .vehicles header>* a {
             color: #000;
         }
         main form {
@@ -94,7 +98,7 @@
             margin-top: 0;
         }
         @media screen and (max-width: 800px) {
-            .content .users header>* {
+            .content .vehicles header>* {
                 margin-right: 10px;
             }
         }
@@ -111,8 +115,8 @@
     ?>
 </head>
 <body>
-<div class="page-wrapper">
-    <nav class="panel">
+    <div class="page-wrapper">
+        <nav class="panel">
             <div class="list-wrapper">
                 <ul>
                     <a href="../admin.php"><li>Home</li></a>
@@ -128,7 +132,7 @@
             </div>
         </nav>
         <div class="content">
-        <div class="mobile-nav">
+            <div class="mobile-nav">
                 <div class="open"><i class="fas fa-bars"></i></div>
                 <div class="user">
                     <a href="login.php" class="login">
@@ -184,63 +188,53 @@
                     </div>
                 </header>
                 <main>
-                    <div class="users">
+                    <div class="vehicles">
                         <header>
-                            <h2><a href="../admin.php#users">Użytkownicy</a></h2> 
+                            <h2><a href="../admin.php#vehicles">Pojazdy</a></h2> 
                             <i class="fas fa-chevron-right"></i> 
-                            <h2>Resetowanie haseł</h2>
+                            <h2>Dostępność pojazdów</h2>
                         </header>
                         <section>
                             <form action="" method="POST">
-                                <label>ID użytkownika</label>
-                                <input type="number" name="user-id" min="1" required>
-                                <button type="submit">Resetuj</button>
+                                <label><h3>Wpisz id pojazdu</h3></label>
+                                <input type="number" name="vehicle-id" min="1" required>
+                                <button type="submit">Zmień</button>
                             </form>
-                            <h3 style="margin-bottom: 10px;">Lista użytkowników</h3>
-                            <table>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Login</th>
-                                </tr>
-                                <?php 
-                                    // Wylistowanie użytkowników w tabeli
-                                    require('../db/db_connection.php');
-                                    $query = "SELECT id, login FROM all_users WHERE is_admin=0";
-
-                                    $stmt = $db_connection->prepare($query);
-                                    $stmt->execute();
-
-                                    $result = $stmt->get_result();
-                                    while ($row = $result->fetch_assoc())
-                                    {
-                                        echo '<tr>';
-                                        echo '<td>'.$row['id'].'</td>';
-                                        echo '<td>'.$row['login'].'</td>';
-                                        echo '<tr>';
-                                    }
-                                    $stmt->close();
-                                    $db_connection->close();
-                                ?>
-                            </table>
                         </section>
-                        <div class="message">
-                            <?php 
-                                if (isset($_SESSION['msg']))
-                                {
-                                    echo $_SESSION['msg'];
-                                    unset($_SESSION['msg']);
-                                }
-                            ?>
-                        </div>
-                        <div class="error" style="color: #ff6c6c;">
-                            <?php 
-                                if (isset($_SESSION['error']))
-                                {
-                                    echo $_SESSION['error'];
-                                    unset($_SESSION['error']);
-                                }
-                            ?>
-                        </div>
+                        <section>
+                            <div class="message">
+                                <?php 
+                                    if (isset($_SESSION['msg']))
+                                    {
+                                        echo $_SESSION['msg'];
+                                        unset($_SESSION['msg']);
+                                    }
+                                ?>
+                            </div>
+                            <div class="error" style="color: #ff6c6c;">
+                                <?php 
+                                    if (isset($_SESSION['error']))
+                                    {
+                                        echo $_SESSION['error'];
+                                        unset($_SESSION['error']);
+                                    }
+                                ?>
+                            </div>
+                        </section>
+                        <section>
+                            <div class="cars">
+                                <?php 
+                                    if (isset($vehicle))
+                                    {
+                                        printCarInfoTable($vehNum, $vehicle, 0, true);
+                                    }
+                                    else 
+                                    {
+                                        echo 'W bazie nie ma żadnych pojazdów.';
+                                    }
+                                ?>
+                            </div>
+                        </section>
                     </div>
                 </main>
             </div>
