@@ -38,5 +38,5 @@ else
     $_SESSION['msg'] = 'Ten plik już istnieje. Wybrano istniejący plik.';
     $_SESSION['vehicle-img-name'] = $_FILES['vehicle-img']['name'];
 }
-header('Location: '. $_SERVER['HTTP_REFERER']);
+header('Location: addvehicles.php');
 exit;
