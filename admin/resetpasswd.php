@@ -1,18 +1,13 @@
 <?php 
     session_start();
-    $exit = false;
-    if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin']))
-    {
+    if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
         if (!$_SESSION['isLogged'] && !$_SESSION['isAdmin']) {
-            $exit = true;
+            header('Location: index.php');
+            exit;
         }
     }
-    else 
-        $exit = true;
-
-    if ($exit)
-    {
-        header('Location: ../login.php');
+    else {
+        header('Location: index.php');
         exit;
     }
 

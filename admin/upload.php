@@ -1,5 +1,4 @@
 <?php
-session_start();
 $allowedExt = array("jpg", "jpeg", "gif", "png");
 
 $dir = '../img/';

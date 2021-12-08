@@ -16,8 +16,7 @@
                     <div class="logged-menu">
                         <ul>
                             <?php
-                                if (isset($_SESSION['isAdmin'])) 
-                                {
+                                if (isset($_SESSION['isAdmin'])) {
                                     if ($_SESSION['isAdmin'])
                                         echo '<li><a href="admin.php">Panel administracyjny</a></li>';
                                 }
@@ -64,8 +63,7 @@
                 <div class="logged-menu">
                     <ul>
                         <?php
-                            if (isset($_SESSION['isAdmin'])) 
-                            {
+                            if (isset($_SESSION['isAdmin'])) {
                                 if ($_SESSION['isAdmin'])
                                     echo '<li><a href="admin.php">Panel administracyjny</a></li>';
                             }
@@ -99,8 +97,7 @@
                 <div class="logged-menu">
                     <ul>
                         <?php
-                            if (isset($_SESSION['isAdmin'])) 
-                            {
+                            if (isset($_SESSION['isAdmin'])) {
                                 if ($_SESSION['isAdmin'])
                                     echo '<li><a href="admin.php">Panel administracyjny</a></li>';
                             }
