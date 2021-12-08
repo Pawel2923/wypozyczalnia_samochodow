@@ -1,46 +1,37 @@
 <?php 
     session_start();
-    $exit = false;
-    if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin']))
-    {
-        if (!$_SESSION['isLogged'] && !$_SESSION['isAdmin'])
-            $exit = true;
+    if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
+        if (!$_SESSION['isLogged'] && !$_SESSION['isAdmin']) {
+            header('Location: index.php');
+            exit;
+        }
     }
-    else 
-        $exit = true;
-
-    if ($exit)
-    {
-        header('Location: login.php');
+    else {
+        header('Location: index.php');
         exit;
     }
 
-    if (isset($_POST['theme']))
-    {
-        $theme = htmlentities($_POST['theme']);
-        if ($theme == "default" || $theme == "system" || $theme == "dark" || $theme == "light")
-            setcookie('theme', $theme, time() + (5 * 365 * 24 * 60 * 60));
-    }
-
-    if (isset($_POST['action']) && isset($_POST['user-id']))
-    {
+    if (isset($_POST['action']) && isset($_POST['user-id'])) {
         $userID = htmlentities($_POST['user-id']);
         require('db/db_connection.php');
 
         if ($_POST['action'] === 'grant')
-        {
             $query = "UPDATE users SET is_admin=1 WHERE id=?";
-        }
         else 
-        {
             $query = "UPDATE users SET is_admin=0 WHERE id=?";
-        }
         
         $stmt = $db_connection->prepare($query);
         $stmt->bind_param('i', $userID);
         $stmt->execute();
         $stmt->close();
         $db_connection->close();
+    }
+
+    // Ustawienie pliku cookie dla motywu panelu
+    if (isset($_POST['theme'])) {
+        $theme = htmlentities($_POST['theme']);
+        if ($theme == "default" || $theme == "system" || $theme == "dark" || $theme == "light")
+            setcookie('theme', $theme, time() + (5 * 365 * 24 * 60 * 60));
     }
 ?>
 <!DOCTYPE html>
@@ -111,8 +102,7 @@
                         <div class="logged-menu">
                             <ul>
                                 <?php
-                                    if (isset($_SESSION['login'])) 
-                                    {
+                                    if (isset($_SESSION['login'])) {
                                         if ($_SESSION['isAdmin'])
                                             echo '<li><a href="admin.php">Panel administracyjny</a></li>';
                                     }
@@ -139,8 +129,7 @@
                             <div class="logged-menu">
                                 <ul>
                                     <?php
-                                        if (isset($_SESSION['login'])) 
-                                        {
+                                        if (isset($_SESSION['login'])) {
                                             if ($_SESSION['isAdmin'])
                                                 echo '<li><a href="admin.php">Panel administracyjny</a></li>';
                                         }
@@ -255,8 +244,7 @@
                                     $stmt->execute();
 
                                     $result = $stmt->get_result();
-                                    while ($row = $result->fetch_assoc())
-                                    {
+                                    while ($row = $result->fetch_assoc()) {
                                         echo '<tr>';
                                         echo '<td>'.$row['id'].'</td>';
                                         echo '<td>'.$row['login'].'</td>';
@@ -330,8 +318,7 @@
                                             $stmt->execute();
         
                                             $result = $stmt->get_result();
-                                            while ($row = $result->fetch_assoc())
-                                            {
+                                            while ($row = $result->fetch_assoc()) {
                                                 echo '<tr>';
                                                 echo '<td>'.$row['id'].'</td>';
                                                 echo '<td>'.$row['login'].'</td>';

@@ -42,10 +42,8 @@
 <body>
 <main>
     <?php
-        if (isset($_POST['newsletter-mail']))
-        {
-            if (filter_var($_POST['newsletter-mail'], FILTER_VALIDATE_EMAIL))
-            {
+        if (isset($_POST['newsletter-mail'])) {
+            if (filter_var($_POST['newsletter-mail'], FILTER_VALIDATE_EMAIL)) {
                 $email = htmlentities($_POST['newsletter-mail']);
                 $email = filter_var($email, FILTER_SANITIZE_EMAIL);
 
@@ -58,11 +56,8 @@
                 $result = $stmt->get_result();
                 $stmt->close();
                 if ($result->num_rows > 0)
-                {
                     $_SESSION['msg'] = 'Podany adres e-mail jest już zapisany na newsletterze.';
-                }
-                else 
-                {
+                else {
                     $query = "INSERT INTO newsletter (email) VALUES (?)";
                     $stmt = $db_connection->prepare($query);
 
@@ -77,14 +72,10 @@
                 $db_connection->close();
             }
             else 
-            {
                 echo '<script>history.go(-1)</script>';
-            }
         }
         else 
-        {
             echo '<script>history.go(-1)</script>';
-        }
     ?>
     <h1>
         <?php echo $_SESSION['msg']; unset($_SESSION['msg']); ?>

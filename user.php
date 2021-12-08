@@ -1,23 +1,17 @@
 <?php 
     session_start();
-    $exit = false;
-    if (isset($_SESSION['isLogged']))
-    {
+    if (isset($_SESSION['isLogged'])) {
         if (!$_SESSION['isLogged']) {
-            $exit = true;
+            header('Location: login.php');
+            exit;
         }
     }
-    else 
-        $exit = true;
-
-    if ($exit)
-    {
+    else  {
         header('Location: login.php');
         exit;
     }
 
-    if (isset($_POST['theme']))
-    {
+    if (isset($_POST['theme'])) {
         $theme = htmlentities($_POST['theme']);
         if ($theme == "default" || $theme == "system" || $theme == "dark" || $theme == "light")
             setcookie('theme', $theme, time() + (5 * 365 * 24 * 60 * 60));
@@ -32,42 +26,34 @@
     $result = $stmt->get_result();
     $stmt->close();
 
-    if ($result->num_rows == 1)
-    {
+    if ($result->num_rows == 1) {
         $id = $result->fetch_row();
         $id = $id[0];
     }
 
-    if (isset($_POST['name']) && isset($_POST['sName']) && isset($_POST['tel']) && isset($_POST['email']))
-    {
+    if (isset($_POST['name']) && isset($_POST['sName']) && isset($_POST['tel']) && isset($_POST['email'])) {
         $name = htmlentities($_POST['name']);
         $sName = htmlentities($_POST['sName']);
         $tel = htmlentities($_POST['tel']);
         $email = htmlentities($_POST['email']);
 
-        if (isset($id)) 
-        {
-
-            if (!empty($name))
-            {
+        if (isset($id))  {
+            if (!empty($name)) {
                 $query = "UPDATE users SET imie=? WHERE id=?";
                 $stmt = $db_connection->prepare($query);
                 $stmt->bind_param('si', $name, $id);
                 $stmt->execute();
                 $stmt->close();
             }
-            if (!empty($sName))
-            {
+            if (!empty($sName)) {
                 $query = "UPDATE users SET nazwisko=? WHERE id=?";
                 $stmt = $db_connection->prepare($query);
                 $stmt->bind_param('si', $sName, $id);
                 $stmt->execute();
                 $stmt->close();
             }
-            if (!empty($tel))
-            {
-                if (filter_var($tel, FILTER_VALIDATE_INT))
-                {
+            if (!empty($tel)) {
+                if (filter_var($tel, FILTER_VALIDATE_INT)) {
                     $query = "UPDATE users SET telefon=? WHERE id=?";
                     $stmt = $db_connection->prepare($query);
                     $stmt->bind_param('si', $tel, $id);
@@ -77,10 +63,8 @@
                 else 
                     $_SESSION['error'] = 'Wprowadzono niepoprawny numer telefonu';
             }
-            if (!empty($email))
-            {
-                if (filter_var($email, FILTER_VALIDATE_EMAIL))
-                {
+            if (!empty($email)) {
+                if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     $query = "UPDATE users SET email=? WHERE id=?";
                     $stmt = $db_connection->prepare($query);
                     $stmt->bind_param('si', $email, $id);
@@ -100,8 +84,7 @@
             $_SESSION['error'] = 'Takiego loginu nie ma w bazie danych.';
     }
     
-    if (isset($id))
-    {
+    if (isset($id)) {
         $query = "SELECT imie, nazwisko, telefon, email FROM users WHERE id=?";
         $stmt = $db_connection->prepare($query);
         $stmt->bind_param('i', $id);
@@ -110,17 +93,13 @@
         $userData = $result->fetch_assoc();
         $stmt->close();
 
-        foreach ($userData as $key => $value)
-        {
+        foreach ($userData as $key => $value) {
             if (empty($value))
-            {
                 $userData[$key] = 'Brak danych';
-            }
         }
     }
 
-    if (isset($_POST['rentID']))
-    {
+    if (isset($_POST['rentID'])) {
         $rentID = htmlentities($_POST['rentID']);
 
         $query = "DELETE FROM rezerwacja WHERE id=?";
@@ -201,8 +180,7 @@
                         <div class="logged-menu">
                             <ul>
                                 <?php
-                                    if (isset($_SESSION['login'])) 
-                                    {
+                                    if (isset($_SESSION['login'])) {
                                         if ($_SESSION['isAdmin'])
                                             echo '<li><a href="admin.php">Panel administracyjny</a></li>';
                                     }
@@ -229,8 +207,7 @@
                             <div class="logged-menu">
                                 <ul>
                                     <?php
-                                        if (isset($_SESSION['login'])) 
-                                        {
+                                        if (isset($_SESSION['login'])) {
                                             if ($_SESSION['isAdmin'])
                                                 echo '<li><a href="admin.php">Panel administracyjny</a></li>';
                                         }
@@ -265,9 +242,9 @@
                         </header>
                         <section>
                             <?php 
-                                if (isset($_SESSION['login']))
-                                {
+                                if (isset($_SESSION['login'])) {
                                     require('db/db_connection.php');
+
                                     $login = $_SESSION['login'];
                                     $query = "SELECT id FROM users WHERE login=?";
                                     $stmt = $db_connection->prepare($query);
@@ -286,8 +263,7 @@
                                     $result = $stmt->get_result();
                                     $stmt->close();
 
-                                    while ($row = $result->fetch_assoc())
-                                    {
+                                    while ($row = $result->fetch_assoc()) {
                                         echo '<div class="option">';
                                         echo '<form action="" method="POST">';
                                         echo 'Nazwa samochodu: '.$row['marka'].' '.$row['model'].'<br>';
@@ -307,8 +283,7 @@
                         <section>
                             <div class="msg">
                                 <?php 
-                                    if (isset($_SESSION['msg']))
-                                    {
+                                    if (isset($_SESSION['msg'])) {
                                         echo $_SESSION['msg'];
                                         unset($_SESSION['msg']);
                                     }
@@ -316,8 +291,7 @@
                             </div>
                             <div class="error">
                                 <?php 
-                                    if (isset($_SESSION['error']))
-                                    {
+                                    if (isset($_SESSION['error'])) {
                                         echo $_SESSION['error'];
                                         unset($_SESSION['error']);
                                     }

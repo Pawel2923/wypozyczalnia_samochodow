@@ -171,8 +171,7 @@
                         <div class="logged-menu">
                             <ul>
                                 <?php
-                                    if (isset($_SESSION['login'])) 
-                                    {
+                                    if (isset($_SESSION['login'])) {
                                         if ($_SESSION['isAdmin'])
                                             echo '<li><a href="admin.php">Panel administracyjny</a></li>';
                                     }
@@ -199,8 +198,7 @@
                             <div class="logged-menu">
                                 <ul>
                                     <?php
-                                        if (isset($_SESSION['isAdmin'])) 
-                                        {
+                                        if (isset($_SESSION['isAdmin'])) {
                                             if ($_SESSION['isAdmin'])
                                                 echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
                                         }
@@ -236,8 +234,7 @@
                         <section>
                             <div class="message">
                                 <?php 
-                                    if (isset($_SESSION['msg']))
-                                    {
+                                    if (isset($_SESSION['msg'])) {
                                         echo $_SESSION['msg'];
                                         unset($_SESSION['msg']);
                                     }
@@ -245,8 +242,7 @@
                             </div>
                             <div class="error">
                                 <?php 
-                                    if (isset($_SESSION['error']))
-                                    {
+                                    if (isset($_SESSION['error'])) {
                                         echo $_SESSION['error'];
                                         unset($_SESSION['error']);
                                     }

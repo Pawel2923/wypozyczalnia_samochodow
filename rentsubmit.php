@@ -1,27 +1,21 @@
 <?php
 session_start();
-$exit = false;
-if (isset($_SESSION['isLogged']))
-{
-    if (!$_SESSION['isLogged']) 
-        $exit = true;
+if (isset($_SESSION['isLogged'])) {
+    if (!$_SESSION['isLogged']) {
+        header('Location: login.php');
+        exit;
+    }
 }
-else 
-    $exit = true;
-    
-if ($exit)
-{
+else  {
     header('Location: login.php');
     exit;
 }
 
-if (isset($_POST['amount']) && isset($_POST['date']) && isset($_SESSION['vehicle-id']))
-{
+if (isset($_POST['amount']) && isset($_POST['date']) && isset($_SESSION['vehicle-id'])) {
     $vehicleID = $_SESSION['vehicle-id'];
     $amount = htmlentities($_POST['amount']);
     $date = htmlentities($_POST['date']);
-    if ($amount > 0)
-    {
+    if ($amount > 0) {
         $today = date('Y-m-d');
 
         require('db/db_connection.php');
@@ -43,15 +37,12 @@ if (isset($_POST['amount']) && isset($_POST['date']) && isset($_SESSION['vehicle
         $stmt->execute();
         $result = $stmt->get_result();
         $stmt->close();
-        if ($result->num_rows > 0)
-        {
+        if ($result->num_rows > 0) {
             $_SESSION['msg'] = 'Podany pojazd w tym dniu jest już zajęty.';
             $rentError = true;
         }
-        else 
-        {
-            if ($date > $today)
-            {
+        else {
+            if ($date > $today) {
                 $query = "INSERT INTO rezerwacja (id_pojazdu, id_klienta, data_rezerwacji, na_ile) VALUES(?, ?, ?, ?)";
                 $stmt = $db_connection->prepare($query);
                 $stmt->bind_param('iisi', $vehicleID, $id, $date, $amount);
@@ -67,27 +58,16 @@ if (isset($_POST['amount']) && isset($_POST['date']) && isset($_SESSION['vehicle
                 $rentedVehs = $rentedVehs['rented_vehicles'];
                 $rentedVehs++;
                 $stmt->close();
-                
-                mysqli_report(MYSQLI_REPORT_STRICT);
-                try 
-                {
-                    $db_connection_adm = new mysqli($db_host, $db_admin, $db_admin_passwd, $db_name);
-                }
-                catch (mysqli_sql_exception $error)
-                {
-                    $_SESSION['connectionError'] = "Błąd połączenia z bazą danych";
-                }
 
                 $query = "UPDATE users SET rented_vehicles=? WHERE id=?";
-                $stmt = $db_connection_adm->prepare($query);
+                $stmt = $db_connection->prepare($query);
                 $stmt->bind_param('ii', $rentedVehs, $id);
                 $stmt->execute();
                 $stmt->close();
 
                 $_SESSION['msg'] = 'Dziękujemy za korzystanie z naszych usług!';
             }
-            else 
-            {
+            else {
                 echo "<script>alert('Wprowadzono datę która minęła.')</script>";
                 echo "<script>history.go(-1);</script>";
             }
@@ -95,8 +75,7 @@ if (isset($_POST['amount']) && isset($_POST['date']) && isset($_SESSION['vehicle
 
         $db_connection->close();
     }
-    else
-    {
+    else {
         $_SESSION['msg'] = 'Liczba godzin powinna być większa niż 0.';
         $rentError = true;
     }
@@ -149,13 +128,9 @@ if (isset($_POST['amount']) && isset($_POST['date']) && isset($_SESSION['vehicle
     </h1>
     <?php 
         if (isset($rentError))
-        {
             echo '<a href="javascript:void(0)" onclick="history.go(-1);"><button>Wróć</button></a>';
-        }
         else
-        {
             echo '<a href="index.php"><button>Wróć na stronę główną</button></a>';
-        }
     ?>
 </main>
 <footer>

@@ -2,12 +2,12 @@
     session_start();
     if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
         if (!$_SESSION['isLogged'] && !$_SESSION['isAdmin']) {
-            header('Location: index.php');
+            header('Location: ../index.php');
             exit;
         }
     }
     else {
-        header('Location: index.php');
+        header('Location: ../login.php');
         exit;
     }
 
