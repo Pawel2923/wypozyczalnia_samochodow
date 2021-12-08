@@ -1,25 +1,18 @@
 <?php 
     session_start();
-    $exit = false;
-    if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin']))
-    {
+    if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
         if (!$_SESSION['isLogged'] && !$_SESSION['isAdmin']) {
-            $exit = true;
+            header('Location: index.php');
+            exit;
         }
     }
-    else 
-        $exit = true;
-
-    if ($exit)
-    {
-        header('Location: ../login.php');
+    else {
+        header('Location: index.php');
         exit;
     }
 
-    if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_POST['vehicle-price']) && isset($_POST['is-available']))
-    {
-        if (isset($_SESSION['vehicle-img-name']))
-        {
+    if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_POST['vehicle-price']) && isset($_POST['is-available'])) {
+        if (isset($_SESSION['vehicle-img-name'])) {
             $brand = htmlentities($_POST['vehicle-brand']);
             $model = htmlentities($_POST['vehicle-model']);
             $price = htmlentities($_POST['vehicle-price']);
@@ -54,8 +47,7 @@
             $stmt->close();
             $db_connection->close();
         }
-        else
-        {
+        else {
             $_SESSION['msg'] = 'Nie udało się prawidłowo pobrać zdjęcia.';
         }
     }
@@ -140,13 +132,9 @@
     </style>
     <?php 
         if (isset($_POST['theme']))
-        {
             echo '<link rel="stylesheet" href="../styles/'.$_POST['theme'].'.css">';
-        }
         elseif (isset($_COOKIE['theme']))
-        {
             echo '<link rel="stylesheet" href="../styles/'.$_COOKIE['theme'].'.css">';
-        }
     ?>
 </head>
 <body>
@@ -181,8 +169,7 @@
                         <div class="logged-menu">
                             <ul>
                                 <?php
-                                    if (isset($_SESSION['login'])) 
-                                    {
+                                    if (isset($_SESSION['login'])) {
                                         if ($_SESSION['isAdmin'])
                                             echo '<li><a href="admin.php">Panel administracyjny</a></li>';
                                     }
@@ -209,8 +196,7 @@
                             <div class="logged-menu">
                                 <ul>
                                     <?php
-                                        if (isset($_SESSION['isAdmin'])) 
-                                        {
+                                        if (isset($_SESSION['isAdmin'])) {
                                             if ($_SESSION['isAdmin'])
                                                 echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
                                         }
@@ -240,8 +226,7 @@
                             </form>
                             <div class="image-msg">
                                 <?php 
-                                    if (isset($_SESSION['vehicle-img-name']))
-                                    {
+                                    if (isset($_SESSION['vehicle-img-name'])) {
                                         echo '<label>Wybrane zdjęcie</label>';
                                         echo '<br>';
                                         echo '<img src="../img/'.$_SESSION['vehicle-img-name'].'" alt="zdjęcie samochodu">';
@@ -262,8 +247,7 @@
                         </section>
                         <div class="message">
                             <?php 
-                                if (isset($_SESSION['msg']))
-                                {
+                                if (isset($_SESSION['msg'])) {
                                     echo $_SESSION['msg'];
                                     unset($_SESSION['msg']);
                                 }
@@ -271,8 +255,7 @@
                         </div>
                         <div class="error" style="color: #ff6c6c;">
                             <?php 
-                                if (isset($_SESSION['error']))
-                                {
+                                if (isset($_SESSION['error'])) {
                                     echo $_SESSION['error'];
                                     unset($_SESSION['error']);
                                 }

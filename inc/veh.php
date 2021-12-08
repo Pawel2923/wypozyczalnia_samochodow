@@ -5,6 +5,7 @@ if (strpos($path, '/admin') !== false)            // Sprawdzenie czy ściezka za
     require('../db/db_connection.php');
 else 
     require('db/db_connection.php');
+
 //Pobranie danych z tabeli vehicles
 $query = "SELECT * FROM vehicles";
 $stmt = $db_connection->prepare($query);
@@ -23,67 +24,52 @@ class Vehicle
     public $img_url;
     public $isAvailable;
 
-    function setProperty($value, $propertyName)
-    {
+    function setProperty($value, $propertyName) {
         $this->$propertyName = $value;
     }
-}
+};
 
 //Ustawienie właściwości dla pojazdów
-$vehNum = sizeof($vehicles); // Zmienna zawiera liczbę pojazdów
+$vehNum = sizeof($vehicles);
 
 //Stworzenie obiektów vehicle i ustawienie ich właściwości
-if ($vehNum > 0)
-{
-    for ($i=0; $i<$vehNum; $i++)
-    {
+if ($vehNum > 0) {
+    for ($i = 0; $i < $vehNum; $i++) {
         $vehicle[$i] = new Vehicle();
-        $properties = get_object_vars($vehicle[$i]);  // Pobranie właściwości
-        $properties = array_keys($properties);  // Pobranie nazw kluczy
-        for ($j=0; $j<6; $j++)
-        {
+        $properties = get_object_vars($vehicle[$i]);  // Pobranie właściwości i zapisanie ich w tablicy
+        $propNum = count($properties); // Ilość właściwośći obiektu $vehicle 
+        $properties = array_keys($properties); // Pobranie nazw kluczy
+        for ($j = 0; $j < $propNum; $j++) {
             $vehicle[$i]->setProperty($vehicles[$i][$j], $properties[$j]);  // Ustawienie właściwości
         }
     }
 }
 
 //Wyświetlanie informacji o pojazdach jako karty
-function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = false, $limit = 0)
-{
-    if (isset($vehicle))
-    {
-        if ($limit > 0 && $limit <= $vehNum)
-        {
+function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = false, $limit = 0) {
+    if (isset($vehicle)) {
+        //Ustawienie liczby pojazdów do wyświetlenia
+        if ($limit > 0 && $limit <= $vehNum) { // Sprawdzenie czy limit został nadany i jest poprawny
             $n = $limit;
-            if (!$printUnavailable)
-            {
-                for ($i=0; $i<$limit; $i++)
-                {
+            if (!$printUnavailable) { // Pominięcie niedostępnych pojazdów
+                for ($i = 0; $i < $limit; $i++) {
                     if (!($vehicle[$i]->isAvailable))
-                    {
                         $n++;
-                    }
                 }
             }
         }
         else 
-        {
             $n = $vehNum;
-        }
 
-        for ($i=0; $i<$n; $i++) 
-        {
-            if (!$printUnavailable)
-            {
-                if ($vehicle[$i]->isAvailable) 
-                {
-?>
+        for ($i = 0; $i < $n; $i++) {
+            if (!$printUnavailable) {
+                if ($vehicle[$i]->isAvailable) { // Wypisanie tylko dostępnych pojazdów
+                    ?>
                     <div class="car">
                     <div class="image-wrapper">
                         <img src="<?php 
                             $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-                            if (strpos($path, 'admin/') || strpos($path, 'user/'))
-                            {
+                            if (strpos($path, 'admin/') || strpos($path, 'user/')) {
                                 if (filter_var($vehicle[$i]->img_url, FILTER_VALIDATE_URL))
                                     echo $vehicle[$i]->img_url;
                                 else 
@@ -91,6 +77,7 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = fal
                             }
                             else 
                                 echo $vehicle[$i]->img_url;
+                            
                         ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
                         <div class="img-overlay"></div>
                     </div>
@@ -102,18 +89,16 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = fal
                     </div>
                     <button class="car-button"><?php echo $buttonCaption ?></button>
                     </div>
-<?php
+                    <?php
                 }
             }
-            else 
-            {
-?>
+            else { // Wypisanie wszystkich pojazdów
+                ?>
                 <div class="car">
                 <div class="image-wrapper">
                     <img src="<?php 
                         $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-                        if (strpos($path, 'admin/') || strpos($path, 'user/'))
-                        {
+                        if (strpos($path, 'admin/') || strpos($path, 'user/')) {
                             if (filter_var($vehicle[$i]->img_url, FILTER_VALIDATE_URL))
                                 echo $vehicle[$i]->img_url;
                             else 
@@ -132,8 +117,7 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = fal
                 </div>
                 <button class="car-button">
                     <?php 
-                        if ($buttonCaption === "availabilityCheck")
-                        {
+                        if ($buttonCaption === "availabilityCheck") {
                             if ($vehicle[$i]->isAvailable)
                                 echo 'Dostępny';
                             else 
@@ -144,32 +128,29 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = fal
                     ?>
                 </button>
                 </div>
-<?php
+                <?php
             }
         }
     }
 }
 
 //Wyświetlenie informacji o pojazdach jako tabela
-function printCarInfoTable($vehNum, $vehicle, $limit = 0, $printIndex = false)
-{
-    if (isset($vehicle))
-    {
+function printCarInfoTable($vehNum, $vehicle, $limit = 0, $printIndex = false) {
+    if (isset($vehicle)) {
         if ($limit > 0 && $limit <= $vehNum)
             $n = $limit;
         else 
             $n = $vehNum;
-    ?>
+        ?>
         <table>
             <tr>
-                <?php if ($printIndex) echo '<th>ID</th>' ?>
+                <?php if ($printIndex) echo '<th>ID</th>'; ?>
                 <th>Nazwa</th>
                 <th>Cena za 1 godz.</th>
                 <th>Dostępność</th>
             </tr>
             <?php
-                for ($i=0; $i<$n; $i++) 
-                {
+                for ($i=0; $i<$n; $i++) {
                     echo '<tr>';
                         if ($printIndex) echo '<td>'.$vehicle[$i]->id.'</td>';
                         echo '<td>'.$vehicle[$i]->brand.' '.$vehicle[$i]->model.'</td>';
@@ -179,52 +160,40 @@ function printCarInfoTable($vehNum, $vehicle, $limit = 0, $printIndex = false)
                             echo "Dostępny";
                         else 
                             echo "Niedostępny";
+                        
                         echo '</td>';
                     echo '</tr>';
                 }
             ?>
         </table>
-<?php
+        <?php
     }
 }
 
 //Wyświetlenie informacji o pojazdach jako lista
-function printCarInfoList($buttonCaption, $vehNum, $vehicle, $printUnavailable = false, $limit = 0)
-{
-    if (isset($vehicle))
-    {
-        if ($limit > 0 && $limit <= $vehNum)
-        {
+function printCarInfoList($buttonCaption, $vehNum, $vehicle, $printUnavailable = false, $limit = 0) {
+    if (isset($vehicle)) {
+        if ($limit > 0 && $limit <= $vehNum) {
             $n = $limit;
-            if (!$printUnavailable)
-            {
-                for ($i=0; $i<$limit; $i++)
-                {
+            if (!$printUnavailable) {
+                for ($i=0; $i<$limit; $i++) {
                     if (!($vehicle[$i]->isAvailable))
-                    {
                         $n++;
-                    }
                 }
             }
         }
         else 
-        {
             $n = $vehNum;
-        }
 
-        for ($i=0; $i<$n; $i++) 
-        {
-            if (!$printUnavailable) 
-            {
-                if ($vehicle[$i]->isAvailable) 
-                {
-?>
+        for ($i=0; $i<$n; $i++) {
+            if (!$printUnavailable) {
+                if ($vehicle[$i]->isAvailable) {
+                    ?>
                     <div class="vehicle">
                         <div class="vehicle-image">
                         <img src="<?php 
                             $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-                            if (strpos($path, 'admin/') || strpos($path, 'user/'))
-                            {
+                            if (strpos($path, 'admin/') || strpos($path, 'user/')) {
                                 if (filter_var($vehicle[$i]->img_url, FILTER_VALIDATE_URL))
                                     echo $vehicle[$i]->img_url;
                                 else 
@@ -232,6 +201,7 @@ function printCarInfoList($buttonCaption, $vehNum, $vehicle, $printUnavailable =
                             }
                             else 
                                 echo $vehicle[$i]->img_url;
+                            
                         ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
                             <div class="vehicle-name">
                                 <?php echo $vehicle[$i]->brand.' '.$vehicle[$i]->model ?>
@@ -246,18 +216,17 @@ function printCarInfoList($buttonCaption, $vehNum, $vehicle, $printUnavailable =
                             <button class="car-button" name="vehicle-id" value="<?php echo $vehicle[$i]->id ?>"><?php echo $buttonCaption ?></button>
                         </div>
                     </div>
-<?php
+                    <?php
                 }
             }
             else 
             {
-?>
+                ?>
                 <div class="vehicle">
                     <div class="vehicle-image">
                     <img src="<?php 
                         $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-                        if (strpos($path, 'admin/') || strpos($path, 'user/'))
-                        {
+                        if (strpos($path, 'admin/') || strpos($path, 'user/')) {
                             if (filter_var($vehicle[$i]->img_url, FILTER_VALIDATE_URL))
                                 echo $vehicle[$i]->img_url;
                             else 
@@ -265,6 +234,7 @@ function printCarInfoList($buttonCaption, $vehNum, $vehicle, $printUnavailable =
                         }
                         else 
                             echo $vehicle[$i]->img_url;
+                        
                      ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
                         <div class="vehicle-name">
                             <?php echo $vehicle[$i]->brand.' '.$vehicle[$i]->model ?>
@@ -278,8 +248,7 @@ function printCarInfoList($buttonCaption, $vehNum, $vehicle, $printUnavailable =
                         </div>
                         <button class="car-button">
                             <?php 
-                                if ($buttonCaption === "availabilityCheck")
-                                {
+                                if ($buttonCaption === "availabilityCheck") {
                                     if ($vehicle[$i]->isAvailable)
                                         echo 'Dostępny';
                                     else 
@@ -291,7 +260,7 @@ function printCarInfoList($buttonCaption, $vehNum, $vehicle, $printUnavailable =
                         </button>
                     </div>
                 </div>
-<?php
+                <?php
             }
         }
     }
