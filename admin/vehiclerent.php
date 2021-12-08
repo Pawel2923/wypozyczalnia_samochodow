@@ -11,11 +11,9 @@
         exit;
     }
 
-    if (isset($_POST['id']))
-    {
+    if (isset($_POST['id'])) {
         $rentID = htmlentities($_POST['id']);
-        if ($rentID > 0)
-        {
+        if ($rentID > 0) {
             require('../db/db_connection.php');
             $query = "DELETE FROM rezerwacja WHERE id=?";
             $stmt = $db_connection->prepare($query);
@@ -23,13 +21,9 @@
             $stmt->execute();
 
             if ($db_connection->affected_rows > 0)
-            {
                 $_SESSION['msg'] = 'Udało się usunąć rezerwację.';
-            }
             else 
-            {
                 $_SESSION['msg'] = 'Nie udało się usunąć rezerwacji.';
-            }
 
             $stmt->close();
             $db_connection->close();
@@ -102,13 +96,9 @@
     </style>
     <?php 
         if (isset($_POST['theme']))
-        {
             echo '<link rel="stylesheet" href="../styles/'.$_POST['theme'].'.css">';
-        }
         elseif (isset($_COOKIE['theme']))
-        {
             echo '<link rel="stylesheet" href="../styles/'.$_COOKIE['theme'].'.css">';
-        }
     ?>
 </head>
 <body>
@@ -143,8 +133,7 @@
                         <div class="logged-menu">
                             <ul>
                                 <?php
-                                    if (isset($_SESSION['login'])) 
-                                    {
+                                    if (isset($_SESSION['login'])) {
                                         if ($_SESSION['isAdmin'])
                                             echo '<li><a href="admin.php">Panel administracyjny</a></li>';
                                     }
@@ -171,8 +160,7 @@
                             <div class="logged-menu">
                                 <ul>
                                     <?php
-                                        if (isset($_SESSION['isAdmin'])) 
-                                        {
+                                        if (isset($_SESSION['isAdmin'])) {
                                             if ($_SESSION['isAdmin'])
                                                 echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
                                         }
@@ -201,8 +189,7 @@
                                 </form>
                                 <div class="message">
                                     <?php 
-                                        if (isset($_SESSION['msg']))
-                                        {
+                                        if (isset($_SESSION['msg'])) {
                                             echo $_SESSION['msg'];
                                             unset($_SESSION['msg']);
                                         }
@@ -226,8 +213,7 @@
                                     $stmt->execute();
 
                                     $result = $stmt->get_result();
-                                    while ($row = $result->fetch_assoc())
-                                    {
+                                    while ($row = $result->fetch_assoc()) {
                                         echo '<tr>';
                                         echo '<td>'.$row['id'].'</td>';
                                         echo '<td>'.$row['id_pojazdu'].'</td>';

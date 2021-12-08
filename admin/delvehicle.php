@@ -11,8 +11,7 @@
         exit;
     }
 
-    if (isset($_POST['vehicle-id']))
-    {
+    if (isset($_POST['vehicle-id'])) {
         $vehicleId = htmlentities($_POST['vehicle-id']);
 
         require('../db/db_connection.php');
@@ -22,13 +21,9 @@
         $stmt->execute();
 
         if ($db_connection->affected_rows > 0)
-        {
             $_SESSION['msg'] = 'Udało się usunąć pojazd.';
-        }
         else 
-        {
             $_SESSION['error'] = 'Nie udało się usunąć pojazdu.';
-        }
 
         $stmt->close();
         $db_connection->close();
@@ -90,13 +85,9 @@
     </style>
     <?php 
         if (isset($_POST['theme']))
-        {
             echo '<link rel="stylesheet" href="../styles/'.$_POST['theme'].'.css">';
-        }
         elseif (isset($_COOKIE['theme']))
-        {
             echo '<link rel="stylesheet" href="../styles/'.$_COOKIE['theme'].'.css">';
-        }
     ?>
 </head>
 <body>
@@ -131,8 +122,7 @@
                         <div class="logged-menu">
                             <ul>
                                 <?php
-                                    if (isset($_SESSION['login'])) 
-                                    {
+                                    if (isset($_SESSION['login'])) {
                                         if ($_SESSION['isAdmin'])
                                             echo '<li><a href="admin.php">Panel administracyjny</a></li>';
                                     }
@@ -159,8 +149,7 @@
                             <div class="logged-menu">
                                 <ul>
                                     <?php
-                                        if (isset($_SESSION['isAdmin'])) 
-                                        {
+                                        if (isset($_SESSION['isAdmin'])) {
                                             if ($_SESSION['isAdmin'])
                                                 echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
                                         }
@@ -189,8 +178,7 @@
                         <section>
                             <div class="message">
                                 <?php 
-                                    if (isset($_SESSION['msg']))
-                                    {
+                                    if (isset($_SESSION['msg'])) {
                                         echo $_SESSION['msg'];
                                         unset($_SESSION['msg']);
                                     }
@@ -198,8 +186,7 @@
                             </div>
                             <div class="error" style="color: #ff6c6c;">
                                 <?php 
-                                    if (isset($_SESSION['error']))
-                                    {
+                                    if (isset($_SESSION['error'])) {
                                         echo $_SESSION['error'];
                                         unset($_SESSION['error']);
                                     }
@@ -211,13 +198,9 @@
                                 <?php 
                                     require('../inc/veh.php');
                                     if (isset($vehicle))
-                                    {
                                         printCarInfoTable($vehNum, $vehicle, 0, true);
-                                    }
                                     else 
-                                    {
                                         echo 'W bazie nie ma żadnych pojazdów.';
-                                    }
                                 ?>
                             </div>
                         </section>

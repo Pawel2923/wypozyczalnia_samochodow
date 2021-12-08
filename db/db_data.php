@@ -1,6 +1,5 @@
 <?php 
-    $db_host = 'localhost';
-    $db_user = 'root';
-    $db_password = '';
-    $db_name = 'wypozyczalnia';
-?>
+$db_host = 'localhost';
+$db_user = 'root';
+$db_password = '';
+$db_name = 'wypozyczalnia';

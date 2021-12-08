@@ -219,8 +219,7 @@ function printCarInfoList($buttonCaption, $vehNum, $vehicle, $printUnavailable =
                     <?php
                 }
             }
-            else 
-            {
+            else {
                 ?>
                 <div class="vehicle">
                     <div class="vehicle-image">

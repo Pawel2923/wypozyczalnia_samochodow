@@ -1,26 +1,21 @@
 <?php 
     session_start();
-    if (isset($_SESSION['isLogged']))
-    {
-        if (!$_SESSION['isLogged'])
-        {
+    if (isset($_SESSION['isLogged'])) {
+        if (!$_SESSION['isLogged']) {
             header('Location: ../login.php');
             exit;
         }
     }
-    else 
-    {
+    else  {
         header('Location: ../login.php');
         exit;
     }
 
-    if (isset($_POST['new-login']) && isset($_SESSION['login']))
-    {
+    if (isset($_POST['new-login']) && isset($_SESSION['login'])) {
         $login = htmlentities($_SESSION['login']);
         $newLogin = htmlentities($_POST['new-login']);
 
-        if ($login !== $newLogin)
-        {
+        if ($login !== $newLogin) {
             require('../db/db_connection.php');
 
             $query = "SELECT COUNT(id) FROM users WHERE login=?";
@@ -32,8 +27,7 @@
             $checkLogin = $result->fetch_row();
             $checkLogin = $checkLogin[0];
 
-            if ($checkLogin != 1)
-            {
+            if ($checkLogin != 1) {
                 $query = "SELECT id FROM users WHERE login=?";
                 $stmt = $db_connection->prepare($query);
                 $stmt->bind_param('s', $_SESSION['login']);
@@ -41,8 +35,7 @@
                 $result = $stmt->get_result();
                 $stmt->close();
                 
-                if ($result->num_rows == 1)
-                {
+                if ($result->num_rows == 1) {
                     $id = $result->fetch_row();
                     $id = $id[0];
                     $query = "UPDATE users SET login=? WHERE id=?";
@@ -59,14 +52,10 @@
                     </script>';
                 }
                 else 
-                {
                     $_SESSION['error'] = 'Takiego loginu nie ma w bazie danych.';
-                }
             }
             else 
-            {
                 $_SESSION['error'] = 'Taki login jest już zajęty.';
-            }
 
             $db_connection->close();
         }
@@ -140,13 +129,11 @@
         }
     </style>
     <?php 
-        if (isset($_POST['theme']))
-        {
+        if (isset($_POST['theme'])) {
             if ($_POST['theme'] != "default")
                 echo '<link rel="stylesheet" href="styles/'.$_POST['theme'].'.css">';
         }
-        elseif (isset($_COOKIE['theme']))
-        {
+        elseif (isset($_COOKIE['theme'])) {
             if ($_COOKIE['theme'] != "default")
                 echo '<link rel="stylesheet" href="styles/'.$_COOKIE['theme'].'.css">';
         }
