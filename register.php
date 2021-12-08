@@ -35,11 +35,11 @@
                 $result = $stmt->get_result();
                 $stmt->close();
 
-                if ($result->fetch_assoc() > 1) {
+                if ($result->fetch_assoc() > 0) {
                     if (isset($email)) 
-                        $_SESSiON['login-error'] = "Podany email jest już zarejestrowany";
+                        $_SESSION['login-error'] = "Podany email jest już zarejestrowany";
                     else 
-                        $_SESSiON['login-error'] = "Podany email jest już zarejestrowany";
+                        $_SESSION['login-error'] = "Podany login jest już zarejestrowany";
                 }
                 else {
                     // Ustawienie id użytkownika
@@ -68,11 +68,14 @@
                         $stmt->close();
                     }
                     $db_connection->close();
-
+    
                     header('Location: login.php');
                     exit;
                 }
                 $db_connection->close();
+
+                header('Location: register.php');
+                exit;
             }
         }
     }
