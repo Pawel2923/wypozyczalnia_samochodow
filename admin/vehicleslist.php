@@ -54,13 +54,13 @@
         }
     </style>
     <?php 
-        if (isset($_POST['theme']))
-        {
-            echo '<link rel="stylesheet" href="../styles/'.$_POST['theme'].'.css">';
+        if (isset($_POST['theme'])) {
+            if ($_POST['theme'] != "default")
+                echo '<link rel="stylesheet" href="styles/'.$_POST['theme'].'.css">';
         }
-        elseif (isset($_COOKIE['theme']))
-        {
-            echo '<link rel="stylesheet" href="../styles/'.$_COOKIE['theme'].'.css">';
+        elseif (isset($_COOKIE['theme'])) {
+            if ($_COOKIE['theme'] != "default")
+                echo '<link rel="stylesheet" href="styles/'.$_COOKIE['theme'].'.css">';
         }
     ?>
 </head>
