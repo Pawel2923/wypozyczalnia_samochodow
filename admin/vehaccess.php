@@ -12,30 +12,25 @@
     }
 
     require('../inc/veh.php');
-    if (isset($_POST['vehicle-id']) && isset($vehicle))
-    {
+    if (isset($_POST['vehicle-id']) && isset($vehicle)) {
         $vehId = htmlentities($_POST['vehicle-id']);
-        if ($vehId <= $vehNum)
-        {
+        if ($vehId <= $vehNum) {
             ($vehicle[$vehId-1]->isAvailable) ? $access = 0 : $access = 1;
 
-            if (isset($access))
-            {
+            if (isset($access)) {
                 require('../db/db_connection.php');
                 $query = "UPDATE vehicles SET is_available=? WHERE id=?";
                 $stmt = $db_connection->prepare($query);
                 $stmt->bind_param('ii', $access, $vehId);
                 $stmt->execute();
-                if ($db_connection->affected_rows > 0)
-                {
+                if ($db_connection->affected_rows > 0) {
                     $_SESSION['msg'] = 'Udało się zmienić dostępność.';
                     header('Location: vehaccess.php');
                     exit;
                 }
                 else 
-                {
                     $_SESSION['error'] = 'Nie udało się dokonać zmiany.';
-                }
+                
                 $stmt->close();
                 $db_connection->close();
             }
@@ -100,13 +95,9 @@
     </style>
     <?php 
         if (isset($_POST['theme']))
-        {
             echo '<link rel="stylesheet" href="../styles/'.$_POST['theme'].'.css">';
-        }
         elseif (isset($_COOKIE['theme']))
-        {
             echo '<link rel="stylesheet" href="../styles/'.$_COOKIE['theme'].'.css">';
-        }
     ?>
 </head>
 <body>
@@ -141,8 +132,7 @@
                         <div class="logged-menu">
                             <ul>
                                 <?php
-                                    if (isset($_SESSION['login'])) 
-                                    {
+                                    if (isset($_SESSION['login'])) {
                                         if ($_SESSION['isAdmin'])
                                             echo '<li><a href="admin.php">Panel administracyjny</a></li>';
                                     }
@@ -169,8 +159,7 @@
                             <div class="logged-menu">
                                 <ul>
                                     <?php
-                                        if (isset($_SESSION['isAdmin'])) 
-                                        {
+                                        if (isset($_SESSION['isAdmin'])) {
                                             if ($_SESSION['isAdmin'])
                                                 echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
                                         }
@@ -199,8 +188,7 @@
                         <section>
                             <div class="message">
                                 <?php 
-                                    if (isset($_SESSION['msg']))
-                                    {
+                                    if (isset($_SESSION['msg'])) {
                                         echo $_SESSION['msg'];
                                         unset($_SESSION['msg']);
                                     }
@@ -208,8 +196,7 @@
                             </div>
                             <div class="error" style="color: #ff6c6c;">
                                 <?php 
-                                    if (isset($_SESSION['error']))
-                                    {
+                                    if (isset($_SESSION['error'])) {
                                         echo $_SESSION['error'];
                                         unset($_SESSION['error']);
                                     }
@@ -220,13 +207,9 @@
                             <div class="cars">
                                 <?php 
                                     if (isset($vehicle))
-                                    {
                                         printCarInfoTable($vehNum, $vehicle, 0, true);
-                                    }
                                     else 
-                                    {
                                         echo 'W bazie nie ma żadnych pojazdów.';
-                                    }
                                 ?>
                             </div>
                         </section>

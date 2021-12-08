@@ -11,8 +11,8 @@
         exit;
     }
 
-    if (isset($_GET['view-mode']))
-    {
+    //Stworzenie cookie dla tryby wyświetlania pojazdów
+    if (isset($_GET['view-mode'])) {
         if ($_GET['view-mode'] == "cards")
             setcookie('vehList-viewMode', "cards", time() + (5 * 365 * 24 * 60 * 60));
         elseif ($_GET['view-mode'] == "list")
