@@ -1,21 +1,17 @@
 <?php 
     session_start();
-    if (isset($_SESSION['isLogged']))
-    {
-        if (!$_SESSION['isLogged'])
-        {
+    if (isset($_SESSION['isLogged'])) {
+        if (!$_SESSION['isLogged']) {
             header('Location: ../login.php');
             exit;
         }
     }
-    else 
-    {
+    else  {
         header('Location: ../login.php');
         exit;
     }
 
-    if (isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SESSION['login']))
-    {
+    if (isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SESSION['login'])) {
         $newPasswd = htmlentities($_POST['password']);
         $confirmPasswd = htmlentities($_POST['password-confirm']);
 
@@ -28,8 +24,7 @@
         $stmt->close();
         ($result->num_rows == 1) ? $id = $result->fetch_row() : $_SESSION['error'] = 'Takiego loginu nie ma w bazie danych.';
 
-        if (isset($id))
-        {
+        if (isset($id)) {
             $id = $id[0];
             $query = "SELECT password FROM users WHERE id=?";
             $stmt = $db_connection->prepare($query);
@@ -41,21 +36,16 @@
             $stmt->close();
 
             if (password_verify($newPasswd, $hashedPasswd))
-            {
                 $_SESSION['error'] = 'Nowe hasło nie powinno być takie samo jak stare hasło.';
-            }
-            else 
-            {
-                if ($newPasswd === $confirmPasswd)
-                {
+            else {
+                if ($newPasswd === $confirmPasswd) {
                     $newHashedPasswd = password_hash($newPasswd, PASSWORD_DEFAULT);
                     $query = "UPDATE users SET password=? WHERE id=?";
                     $stmt = $db_connection->prepare($query);
                     $stmt->bind_param('si', $newHashedPasswd, $id);
                     $stmt->execute();
                     
-                    if ($db_connection->affected_rows == 1) 
-                    {
+                    if ($db_connection->affected_rows == 1) {
                         $_SESSION['msg'] = 'Pomyślnie zmieniono hasło. Za chwilę wystąpi wylogowanie...';
                         echo '<script>
                             setTimeout(() => {
@@ -182,8 +172,7 @@
                     <div class="logged-menu">
                         <ul>
                             <?php
-                                if (isset($_SESSION['login'])) 
-                                {
+                                if (isset($_SESSION['login'])) {
                                     if ($_SESSION['isAdmin'])
                                         echo '<li><a href="admin.php">Panel administracyjny</a></li>';
                                 }
@@ -210,8 +199,7 @@
                             <div class="logged-menu">
                                 <ul>
                                     <?php
-                                        if (isset($_SESSION['isAdmin'])) 
-                                        {
+                                        if (isset($_SESSION['isAdmin'])) {
                                             if ($_SESSION['isAdmin'])
                                                 echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
                                         }
@@ -252,8 +240,7 @@
                         <section>
                             <div class="message">
                                 <?php 
-                                    if (isset($_SESSION['msg']))
-                                    {
+                                    if (isset($_SESSION['msg'])) {
                                         echo $_SESSION['msg'];
                                         unset($_SESSION['msg']);
                                     }
@@ -261,8 +248,7 @@
                             </div>
                             <div class="error">
                                 <?php 
-                                    if (isset($_SESSION['error']))
-                                    {
+                                    if (isset($_SESSION['error'])) {
                                         echo $_SESSION['error'];
                                         unset($_SESSION['error']);
                                     }

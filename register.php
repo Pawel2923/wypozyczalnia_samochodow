@@ -1,11 +1,79 @@
 <?php 
     session_start();
-    if (isset($_SESSION['isLogged']))
-    {
-        if ($_SESSION['isLogged'])
-        {
-            header('Location:index.php');
+    if (isset($_SESSION['isLogged'])) {
+        if ($_SESSION['isLogged']) {
+            header('Location: index.php');
             exit;
+        }
+    }
+
+    if (isset($_POST['password']) && isset($_POST['login']) && isset($_POST['password-confirm'])) {
+        if (!empty($_POST['password']) && isset($_POST['login']) && isset($_POST['password-confirm'])) {
+            if ($_POST['password'] === $_POST['password-confirm']) {
+                // Przygotowanie loginu
+                $login = htmlentities(trim($_POST['login']));
+                // Przygotowanie adresu email
+                if (filter_var($login, FILTER_VALIDATE_EMAIL)) { // Sprawdzenie czy login jest adresem email
+                    $email = filter_var($login, FILTER_SANITIZE_EMAIL);
+                    $login = explode('@', $login);
+                    $login = array_shift($login);
+                }
+                // Przygotowanie hasła
+                $password = htmlentities(trim($_POST['password']));
+                $hashedPasswd = password_hash($password, PASSWORD_DEFAULT);
+
+                // Połączenie z bazą danych
+                require('db/db_connection.php');
+
+                // Sprawdzenie czy podany login lub email są już w bazie
+                $query = "SELECT `login`, `email` FROM `users` WHERE `login`=? OR `email`=?";
+
+                $stmt = $db_connection->prepare($query);
+                $stmt->bind_param("ss", $login, $email);
+                $stmt->execute();
+
+                $result = $stmt->get_result();
+                $stmt->close();
+
+                if ($result->fetch_assoc() > 1) {
+                    if (isset($email)) 
+                        $_SESSiON['login-error'] = "Podany email jest już zarejestrowany";
+                    else 
+                        $_SESSiON['login-error'] = "Podany email jest już zarejestrowany";
+                }
+                else {
+                    // Ustawienie id użytkownika
+                    $query = "SELECT COUNT(id) FROM users";
+                    $stmt = $db_connection->prepare($query);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    $userID = $result->fetch_row();
+                    $userID = $userID[0] + 1;
+                    $stmt->close();
+                    // Wprowadzanie danych do bazy
+                    if (isset($email)) {
+                        $query = "INSERT INTO `users` (id, login, email, password) VALUES(?, ?, ?, ?)";
+
+                        $stmt = $db_connection->prepare($query);
+                        $stmt->bind_param("isss", $userID, $login, $email, $hashedPasswd);
+                        $stmt->execute();
+                        $stmt->close();
+                    }
+                    else {
+                        $query = "INSERT INTO `users` (id, login, password) VALUES(?, ?, ?)";
+
+                        $stmt = $db_connection->prepare($query);
+                        $stmt->bind_param("iss", $userID, $login, $hashedPasswd);
+                        $stmt->execute();
+                        $stmt->close();
+                    }
+                    $db_connection->close();
+
+                    header('Location: login.php');
+                    exit;
+                }
+                $db_connection->close();
+            }
         }
     }
 ?>
@@ -44,7 +112,14 @@
                     <br>
                     <input type="text" name="login" id="login-field" required>
                     <br>
-                    <div class="warning"></div>
+                    <div class="warning">
+                        <?php 
+                            if (isset($_SESSION['login-error'])) {
+                                echo $_SESSION['login-error'];
+                                unset($_SESSION['login-error']);
+                            }
+                        ?>
+                    </div>
                 </div>
                 <div class="password">
                     <label for="password-field">Hasło</label>
@@ -61,8 +136,7 @@
                 </div>
                 <div class="error">
                     <?php 
-                        if (isset($_SESSION['connectionError']))
-                        {
+                        if (isset($_SESSION['connectionError'])) {
                             echo $_SESSION['connectionError'];
                             unset($_SESSION['connectionError']);
                         }
@@ -78,96 +152,5 @@
         });
         passwdCheck();
     </script>
-    <?php 
-        if (isset($_POST['password']) && isset($_POST['login']) && isset($_POST['password-confirm']))
-        {
-            if (!empty($_POST['password']) && isset($_POST['login']) && isset($_POST['password-confirm']))
-            {
-                if ($_POST['password'] === $_POST['password-confirm'])
-                {
-                    // Przygotowanie loginu
-                    $login = htmlentities(trim($_POST['login']));
-                    // Przygotowanie adresu email
-                    if (filter_var($login, FILTER_VALIDATE_EMAIL)) // Sprawdzenie czy login jest adresem email
-                    {
-                        $email = filter_var($login, FILTER_SANITIZE_EMAIL);
-                        $login = explode('@', $login);
-                        $login = array_shift($login);
-                    }
-                    // Przygotowanie hasła
-                    $password = htmlentities(trim($_POST['password']));
-                    $hashedPasswd = password_hash($password, PASSWORD_DEFAULT);
-
-                    // Połączenie z bazą danych
-                    require('db/db_connection.php');
-
-                    // Sprawdzenie czy podany login lub email są już w bazie
-                    $query = "SELECT `login`, `email` FROM `users` WHERE `login`=? OR `email`=?";
-
-                    $stmt = $db_connection->prepare($query);
-                    $stmt->bind_param("ss", $login, $email);
-                    $stmt->execute();
-
-                    $result = $stmt->get_result();
-                    $stmt->close();
-
-                    if ($result->fetch_assoc() > 1)
-                    {
-                        if (isset($email)) 
-                        {
-                            $loginError = "Podany email jest już zarejestrowany";
-                            echo '<script>
-                                document.querySelector("form div.warning").textContent = "'.$loginError.'";
-                                document.querySelector("#login-field").value = "'.$email.'";
-                            </script>';
-                        }
-                        else 
-                        {
-                            $loginError = "Podany login jest już zajęty";
-                            echo '<script>
-                                document.querySelector("form div.warning").textContent = "'.$loginError.'";
-                                document.querySelector("#login-field").value = "'.$login.'";
-                            </script>';
-                        }
-                    }
-                    else
-                    {
-                        // Ustawienie id użytkownika
-                        $query = "SELECT COUNT(id) FROM users";
-                        $stmt = $db_connection->prepare($query);
-                        $stmt->execute();
-                        $result = $stmt->get_result();
-                        $userID = $result->fetch_row();
-                        $userID = $userID[0] + 1;
-                        $stmt->close();
-                        // Wprowadzanie danych do bazy
-                        if (isset($email))
-                        {
-                            $query = "INSERT INTO `users` (id, login, email, password) VALUES(?, ?, ?, ?)";
-    
-                            $stmt = $db_connection->prepare($query);
-                            $stmt->bind_param("isss", $userID, $login, $email, $hashedPasswd);
-                            $stmt->execute();
-                            $stmt->close();
-                        }
-                        else 
-                        {
-                            $query = "INSERT INTO `users` (id, login, password) VALUES(?, ?, ?)";
-    
-                            $stmt = $db_connection->prepare($query);
-                            $stmt->bind_param("iss", $userID, $login, $hashedPasswd);
-                            $stmt->execute();
-                            $stmt->close();
-                        }
-                        $db_connection->close();
-
-                        header('Location: login.php');
-                        exit;
-                    }
-                    $db_connection->close();
-                }
-            }
-        }
-    ?>
 </body>
 </html>

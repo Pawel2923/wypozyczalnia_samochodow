@@ -1,14 +1,5 @@
 <?php 
     session_start();
-    
-    if (isset($_POST['login']))
-    {
-        if (filter_var($_POST['login'], FILTER_VALIDATE_EMAIL))
-        {
-            $email = $_POST['login'];
-            
-        }
-    }
 ?>
 <!DOCTYPE html>
 <html lang="pl">

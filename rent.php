@@ -1,46 +1,41 @@
 <?php 
-session_start();
-$exit = false;
-if (isset($_SESSION['isLogged']))
-{
-    if (!$_SESSION['isLogged']) 
-        $exit = true;
-}
-else 
-    $exit = true;
-    
-if ($exit)
-{
-    header('Location: login.php');
-    exit;
-}
+    session_start();
+    if (isset($_SESSION['isLogged'])) {
+        if (!$_SESSION['isLogged']) {
+            header('Location: login.php');
+            exit;
+        }
+    }
+    else  {
+        header('Location: login.php');
+        exit;
+    }
 
-if (isset($_POST['vehicle-id']) || isset($_SESSION['vehicle-id']))
-{
-    if (isset($_POST['vehicle-id']))
-        $vehicleID = htmlentities($_POST['vehicle-id']);
-    else
-        $vehicleID = htmlentities($_SESSION['vehicle-id']);
-    $_SESSION['vehicle-id'] = $vehicleID;
-    require('db/db_connection.php');
-    $query = "SELECT * FROM vehicles WHERE id=?";
-    $stmt = $db_connection->prepare($query);
-    $stmt->bind_param('i', $vehicleID);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    if (isset($_POST['vehicle-id']) || isset($_SESSION['vehicle-id'])) {
+        if (isset($_POST['vehicle-id']))
+            $vehicleID = htmlentities($_POST['vehicle-id']);
+        else
+            $vehicleID = htmlentities($_SESSION['vehicle-id']);
+        
+        $_SESSION['vehicle-id'] = $vehicleID;
+        require('db/db_connection.php');
+        $query = "SELECT * FROM vehicles WHERE id=?";
+        $stmt = $db_connection->prepare($query);
+        $stmt->bind_param('i', $vehicleID);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    $attribute = $result->fetch_assoc();
+        $attribute = $result->fetch_assoc();
 
-    $stmt->close();
-    $db_connection->close();
-    $_SESSION['vehicle-id'] = $vehicleID;
-}
-else 
-{
-    echo "<script>alert('Nie wybrano samochodu');</script>";
-    header('Location: rezerwacja.php');
-    exit;
-}
+        $stmt->close();
+        $db_connection->close();
+        $_SESSION['vehicle-id'] = $vehicleID;
+    }
+    else {
+        $_SESSION['error'] = 'Nie wybrano samochodu.';
+        header('Location: rezerwacja.php');
+        exit;
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -114,6 +109,22 @@ else
                 <div class="description">
                     <div class="vehicle-price"><?php echo $attribute['cena']?>zł za 1 godzinę</div>
                 </div>
+            </div>
+            <div class="message">
+                <?php 
+                    if (isset($_SESSION['msg'])) {
+                        echo $_SESSION['msg'];
+                        unset($_SESSION['msg']);
+                    }
+                ?>
+            </div>
+            <div class="error">
+                <?php 
+                    if (isset($_SESSION['error'])) {
+                        echo $_SESSION['error'];
+                        unset($_SESSION['error']);
+                    }
+                ?>
             </div>
             <h2>Wypełnij formularz</h2>
             <form action="rentsubmit.php" method="POST">
