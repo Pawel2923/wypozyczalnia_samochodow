@@ -79,55 +79,6 @@
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/panel.css">
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
-    <style>
-        input {
-            border: 2px solid #000;
-        }
-        .content .users header {
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-box-align: center;
-                -ms-flex-align: center;
-                    align-items: center;
-        }
-        .content .users header>* {
-            margin-right: 20px;
-        }
-        .content .users header>*:last-child {
-            margin-right: 0;
-        }
-        .content .users header>* a {
-            color: #000;
-        }
-        main form {
-            width: 60%;
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-box-orient: vertical;
-            -webkit-box-direction: normal;
-                -ms-flex-direction: column;
-                    flex-direction: column;
-        }
-        main form button {
-            margin-top: 20px;
-        }
-        @media screen and (max-width: 800px) {
-            .content .users header>* {
-                margin-right: 10px;
-            }
-        }
-        main form input {
-            margin-top: 5px;
-        }
-        main form>div {
-            margin-top: 20px;
-        }
-        main form>div:first-child {
-            margin-top: 0;
-        }
-    </style>
     <?php 
         if (isset($_POST['theme'])) {
             if ($_POST['theme'] != "default")

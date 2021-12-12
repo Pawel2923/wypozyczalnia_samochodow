@@ -45,50 +45,6 @@
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/panel.css">
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
-    <style>
-        input {
-            border: 2px solid #000;
-        }
-        .content .users header {
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-box-align: center;
-                -ms-flex-align: center;
-                    align-items: center;
-        }
-        .content .users header>* {
-            margin-right: 20px;
-        }
-        .content .users header>*:last-child {
-            margin-right: 0;
-        }
-        .content .users header>* a {
-            color: #000;
-        }
-        main form {
-            width: 60%;
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-box-orient: vertical;
-            -webkit-box-direction: normal;
-                -ms-flex-direction: column;
-                    flex-direction: column;
-        }
-        main form label,
-        main form button {
-            margin-top: 20px;
-        }
-        main form label:first-child {
-            margin-top: 0;
-        }
-        @media screen and (max-width: 800px) {
-            .content .users header>* {
-                margin-right: 10px;
-            }
-        }
-    </style>
     <?php 
         if (isset($_POST['theme'])) {
             if ($_POST['theme'] != "default")
@@ -207,30 +163,32 @@
                                 <button type="submit">Resetuj</button>
                             </form>
                             <h3 style="margin-bottom: 10px;">Lista użytkowników</h3>
-                            <table>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Login</th>
-                                </tr>
-                                <?php 
-                                    // Wylistowanie użytkowników w tabeli
-                                    require('../db/db_connection.php');
-                                    $query = "SELECT id, login FROM users WHERE is_admin=0";
+                            <div class="table">
+                                <table>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Login</th>
+                                    </tr>
+                                    <?php 
+                                        // Wylistowanie użytkowników w tabeli
+                                        require('../db/db_connection.php');
+                                        $query = "SELECT id, login FROM users WHERE is_admin=0";
 
-                                    $stmt = $db_connection->prepare($query);
-                                    $stmt->execute();
+                                        $stmt = $db_connection->prepare($query);
+                                        $stmt->execute();
 
-                                    $result = $stmt->get_result();
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo '<tr>';
-                                        echo '<td>'.$row['id'].'</td>';
-                                        echo '<td>'.$row['login'].'</td>';
-                                        echo '<tr>';
-                                    }
-                                    $stmt->close();
-                                    $db_connection->close();
-                                ?>
-                            </table>
+                                        $result = $stmt->get_result();
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo '<tr>';
+                                            echo '<td>'.$row['id'].'</td>';
+                                            echo '<td>'.$row['login'].'</td>';
+                                            echo '<tr>';
+                                        }
+                                        $stmt->close();
+                                        $db_connection->close();
+                                    ?>
+                                </table>
+                            </div>
                         </section>
                     </div>
                 </main>

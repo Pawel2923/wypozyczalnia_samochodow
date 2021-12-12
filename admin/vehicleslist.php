@@ -38,19 +38,14 @@
     <link rel="stylesheet" href="../styles/panel.css">
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
     <style>
-        .content .vehicles header {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
+        .view {
+            width: unset;
         }
-        .content .vehicles header>* {
-            margin-right: 20px;
+        .vehicles button {
+            cursor: default;
         }
-        .content .vehicles header>*:last-child {
-            margin-right: 0;
-        }
-        .content .vehicles header>* a {
-            color: #000;
+        .vehicles button:hover {
+            background-color: #60B8FF;
         }
     </style>
     <?php 
@@ -96,8 +91,7 @@
                         <div class="logged-menu">
                             <ul>
                                 <?php
-                                    if (isset($_SESSION['login'])) 
-                                    {
+                                    if (isset($_SESSION['login'])) {
                                         if ($_SESSION['isAdmin'])
                                             echo '<li><a href="admin.php">Panel administracyjny</a></li>';
                                     }
@@ -124,8 +118,7 @@
                             <div class="logged-menu">
                                 <ul>
                                     <?php
-                                        if (isset($_SESSION['isAdmin'])) 
-                                        {
+                                        if (isset($_SESSION['isAdmin'])) {
                                             if ($_SESSION['isAdmin'])
                                                 echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
                                         }
@@ -156,10 +149,8 @@
                             <div class="cars">
                                 <?php 
                                     require('../inc/veh.php');
-                                    if (isset($vehicle))
-                                    {
-                                        if (isset($_GET['view-mode']))
-                                        {
+                                    if (isset($vehicle)) {
+                                        if (isset($_GET['view-mode'])) {
                                             if ($_GET['view-mode'] == "cards")
                                                 printCarInfo("availabilityCheck", $vehNum, $vehicle, true);
                                             elseif ($_GET['view-mode'] == "list")
@@ -167,14 +158,14 @@
                                             elseif ($_GET['view-mode'] == "table")
                                                 printCarInfoTable($vehNum, $vehicle);
                                         }
-                                        else 
-                                        {
+                                        else {
                                             if (isset($_COOKIE['vehList-viewMode']))
                                             {
                                                 if ($_COOKIE['vehList-viewMode'] == "cards")
                                                     printCarInfo("availabilityCheck", $vehNum, $vehicle, true);
-                                                elseif ($_COOKIE['vehList-viewMode'] == "list")
+                                                elseif ($_COOKIE['vehList-viewMode'] == "list") {
                                                     printCarInfoList("availabilityCheck", $vehNum, $vehicle, true);
+                                                }
                                                 elseif ($_COOKIE['vehList-viewMode'] == "table")
                                                     printCarInfoTable($vehNum, $vehicle);
                                                 }
@@ -183,9 +174,7 @@
                                         }
                                     }
                                     else 
-                                    {
                                         echo 'W bazie nie ma żadnych pojazdów.';
-                                    }
                                 ?>
                             </div>
                         </section>

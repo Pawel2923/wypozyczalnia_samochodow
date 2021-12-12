@@ -22,7 +22,7 @@
         <section>
             <h2>Wybierz pojazd</h2>
             <div class="cars cars-list">
-                <form action="rent.php" method="POST">
+                <form action="rent.php" method="GET">
                     <?php 
                         require('inc/veh.php');
                         if (isset($vehicle)) 

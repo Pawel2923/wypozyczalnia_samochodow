@@ -33,7 +33,6 @@
                 <a href="index.php"><li>Strona główna</li></a>
                 <a href="rezerwacja.php"><li>Rezerwacja online</li></a>
                 <a href="pricing.php"><li>Uzyskaj wycenę</li></a>
-                <a href="vehicles.php"><li>Nasze pojazdy</li></a>
                 <a href="contact.php"><li>Kontakt</li></a>
             </ul>
         </div>
@@ -49,7 +48,6 @@
             <a href="index.php"><li>Strona główna</li></a>
             <a href="rezerwacja.php"><li>Rezerwacja online</li></a>
             <a href="pricing.php"><li>Uzyskaj wycenę</li></a>
-            <a href="vehicles.php"><li>Nasze pojazdy</li></a>
             <a href="contact.php"><li>Kontakt</li></a>
         </ul>
         <div class="user">
@@ -83,7 +81,6 @@
             <a href="index.php"><li>Strona główna</li></a>
             <a href="rezerwacja.php"><li>Rezerwacja online</li></a>
             <a href="pricing.php"><li>Uzyskaj wycenę</li></a>
-            <a href="vehicles.php"><li>Nasze pojazdy</li></a>
             <a href="contact.php"><li>Kontakt</li></a>
         </ul>
         <div class="user">
