@@ -1,4 +1,5 @@
 <?php
+session_start();
 $allowedExt = array("jpg", "jpeg", "gif", "png");
 
 $dir = '../img/';
@@ -26,5 +27,6 @@ else {
     $_SESSION['msg'] = 'Ten plik już istnieje. Wybrano istniejący plik.';
     $_SESSION['vehicle-img-name'] = $_FILES['vehicle-img']['name'];
 }
+
 header('Location: addvehicles.php');
 exit;

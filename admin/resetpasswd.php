@@ -92,16 +92,38 @@
     <?php 
         if (isset($_POST['theme'])) {
             if ($_POST['theme'] != "default")
-                echo '<link rel="stylesheet" href="styles/'.$_POST['theme'].'.css">';
+                echo '<link rel="stylesheet" href="../styles/'.$_POST['theme'].'.css">';
         }
         elseif (isset($_COOKIE['theme'])) {
             if ($_COOKIE['theme'] != "default")
-                echo '<link rel="stylesheet" href="styles/'.$_COOKIE['theme'].'.css">';
+                echo '<link rel="stylesheet" href="../styles/'.$_COOKIE['theme'].'.css">';
         }
     ?>
 </head>
 <body>
 <div class="page-wrapper">
+    <div class="message-wrapper" <?php if (isset($_SESSION['msg']) || isset($_SESSION['error'])) echo 'style="display: block;"'?>>
+        <div class="overlay"></div>
+        <div class="message">
+            <div class="close"><i class="fas fa-times"></i></div>
+            <div class="msg">
+                <?php 
+                    if (isset($_SESSION['msg'])) {
+                        echo $_SESSION['msg'];
+                        unset($_SESSION['msg']);
+                    }
+                ?>
+            </div>
+            <div class="error">
+                <?php 
+                    if (isset($_SESSION['error'])) {
+                        echo $_SESSION['error'];
+                        unset($_SESSION['error']);
+                    }
+                ?>
+            </div>
+        </div>
+    </div>
     <nav class="panel">
             <div class="list-wrapper">
                 <ul>
@@ -210,22 +232,6 @@
                                 ?>
                             </table>
                         </section>
-                        <div class="message">
-                            <?php 
-                                if (isset($_SESSION['msg'])) {
-                                    echo $_SESSION['msg'];
-                                    unset($_SESSION['msg']);
-                                }
-                            ?>
-                        </div>
-                        <div class="error" style="color: #ff6c6c;">
-                            <?php 
-                                if (isset($_SESSION['error'])) {
-                                    echo $_SESSION['error'];
-                                    unset($_SESSION['error']);
-                                }
-                            ?>
-                        </div>
                     </div>
                 </main>
             </div>
