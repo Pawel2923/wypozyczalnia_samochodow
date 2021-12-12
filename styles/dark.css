@@ -31,6 +31,18 @@ main .home-option:hover, button {
     background-color: #1797ff;
 }
 
+.message {
+    background-color: #1797ff;
+}
+
+.content .vehicles header>* a {
+    color: #fff;
+}
+
+.content .users header>* a {
+    color: #fff;
+}
+
 button:hover {
     background-color: #202124;
 }

@@ -154,6 +154,19 @@ document.querySelector('.mobile-nav .overlay').addEventListener('click', () => {
     closeMobileNav();
 });
 
+const closeButton = document.querySelector('.message .close');
+const msgWrapper = document.querySelector('.message-wrapper');
+const msgOverlay = document.querySelector('.message-wrapper .overlay');
+
+if (closeButton != null && msgWrapper != null && msgOverlay != null) {
+    closeButton.addEventListener('click', () => {
+        msgWrapper.style.display = 'none';
+    });
+    msgOverlay.addEventListener('click', () => {
+        msgWrapper.style.display = 'none';
+    });
+}
+
 const mobileLoggedMenuHandler = () => {
     if (window.innerWidth < 800) {
         const mobileLogged = document.querySelector('.logged');
