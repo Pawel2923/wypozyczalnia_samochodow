@@ -3,13 +3,24 @@ const openButton = document.querySelector('.mobile-nav .open');
 const closeButton = document.querySelector('.mobile-nav .nav-wrapper .close');
 
 if (openButton != null) {
-    openButton.addEventListener('click', () => {
+    const openMenu = () => {
         mobileNav.style.transform = "translateX(0)";
         mobileNav.style.webkitTransform = "translateX(0)";
         mobileNav.style.mozTransform = "translateX(0)";
         mobileNav.style.msTransform = "translateX(0)";
         mobileNav.style.oTransform = "translateX(0)";
         document.querySelector('body').style.overflow = "hidden";
+    };
+    openButton.addEventListener('click', () => {
+        openMenu();
+    });
+    const innerWidth = window.innerWidth;
+    document.addEventListener('touchmove', (e) => {
+        const clientX = e.touches[0].clientX;
+
+        if (innerWidth - clientX < 30) {
+            openMenu();
+        }
     });
 }
 
