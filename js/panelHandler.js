@@ -89,14 +89,29 @@ if (profileLink != null) {
 
 const openMobileNav = () => {
     document.querySelector('nav.panel').style.transform = "translateX(0)";
+    document.body.style.overflow = "hidden";
     document.querySelector('.mobile-nav .overlay').style.display = "block";
     setTimeout(() => {                
         document.querySelector('.mobile-nav .overlay').style.opacity = 1;
     }, 2);
+    if (window.innerWidth < 800) {
+        let startClientX;
+        document.addEventListener('touchstart', (e) => {
+            startClientX = e.touches[0].clientX;
+        });
+        let clientX;
+        document.addEventListener('touchmove', (e) => {
+            clientX = e.touches[0].clientX;
+            if (startClientX > 30 && startClientX - 30 > clientX) {
+                closeMobileNav();
+            }
+        });
+    }
 };
 
 const closeMobileNav = () => {
     document.querySelector('nav.panel').style.transform = "translateX(-100%)";
+    document.body.style.overflow = "auto";
     document.querySelector('.mobile-nav .overlay').style.opacity = 0;
     setTimeout(() => {                
         document.querySelector('.mobile-nav .overlay').style.display = "none";
@@ -153,6 +168,20 @@ document.querySelector('.mobile-nav .open').addEventListener('click', () => {
 document.querySelector('.mobile-nav .overlay').addEventListener('click', () => {
     closeMobileNav();
 });
+
+if (window.innerWidth < 800) {
+    let startClientX;
+    document.addEventListener('touchstart', (e) => {
+        startClientX = e.touches[0].clientX;
+    });
+    let clientX;
+    document.addEventListener('touchmove', (e) => {
+        clientX = e.touches[0].clientX;
+        if (startClientX < 30 && startClientX + 10 < clientX) {
+            openMobileNav(); 
+        }
+    });
+}
 
 const closeButton = document.querySelector('.message .close');
 const msgWrapper = document.querySelector('.message-wrapper');

@@ -10,18 +10,44 @@ if (openButton != null) {
         mobileNav.style.msTransform = "translateX(0)";
         mobileNav.style.oTransform = "translateX(0)";
         document.querySelector('body').style.overflow = "hidden";
+
+        if (window.innerWidth < 800) {
+            let startClientX;
+            document.addEventListener('touchstart', (e) => {
+                startClientX = e.touches[0].clientX;
+            });
+            let clientX;
+            document.addEventListener('touchmove', (e) => {
+                clientX = e.touches[0].clientX;
+                if (startClientX < 30 && startClientX + 30 < clientX) {
+                    mobileNav.style.transform = "translateX(100%)";
+                    mobileNav.style.webkitTransform = "translateX(100%)";
+                    mobileNav.style.mozTransform = "translateX(100%)";
+                    mobileNav.style.msTransform = "translateX(100%)";
+                    mobileNav.style.oTransform = "translateX(100%)";
+                    document.querySelector('body').style.overflow = "auto";
+                }
+            });
+        }
     };
     openButton.addEventListener('click', () => {
         openMenu();
     });
-    const innerWidth = window.innerWidth;
-    document.addEventListener('touchmove', (e) => {
-        const clientX = e.touches[0].clientX;
 
-        if (innerWidth - clientX < 30) {
-            openMenu();
-        }
-    });
+    if (window.innerWidth < 800) {
+        const innerWidth = window.innerWidth;
+        let startClientX;
+        document.addEventListener('touchstart', (e) => {
+            startClientX = e.touches[0].clientX;
+        });
+        let clientX;
+        document.addEventListener('touchmove', (e) => {
+            clientX = e.touches[0].clientX;
+            if (innerWidth - clientX < 30 && startClientX + 10 > clientX) {
+                openMenu(); 
+            }
+        });
+    }
 }
 
 if (closeButton != null) {
