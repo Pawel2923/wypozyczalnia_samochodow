@@ -227,51 +227,53 @@
                                 </a>
                             </div>
                             <h3 style="margin-bottom: 10px;">Lista użytkowników</h3>
-                            <table>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Login</th>
-                                    <th>E-mail</th>
-                                    <th>Admin</th>
-                                    <th>Wypożyczone pojazdy</th>
-                                </tr>
-                                <?php 
-                                    // Wylistowanie użytkowników w tabeli
-                                    require('db/db_connection.php');
-                                    $query = "SELECT * FROM users";
+                            <div class="table">
+                                <table>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Login</th>
+                                        <th>E-mail</th>
+                                        <th>Admin</th>
+                                        <th>Wypożyczone pojazdy</th>
+                                    </tr>
+                                    <?php 
+                                        // Wylistowanie użytkowników w tabeli
+                                        require('db/db_connection.php');
+                                        $query = "SELECT * FROM users";
 
-                                    $stmt = $db_connection->prepare($query);
-                                    $stmt->execute();
+                                        $stmt = $db_connection->prepare($query);
+                                        $stmt->execute();
 
-                                    $result = $stmt->get_result();
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo '<tr>';
-                                        echo '<td>'.$row['id'].'</td>';
-                                        echo '<td>'.$row['login'].'</td>';
-                                        echo '<td>';
-                                            if ($row['email'] != '') 
-                                                echo $row['email'];
-                                            else 
-                                                echo 'Brak email';
-                                        echo '</td>';
-                                        echo '<td>';
-                                            if ($row['is_admin'])
-                                                echo 'TAK';
-                                            else 
-                                                echo 'NIE';
-                                        echo '</td>';
-                                        echo '<td>';
-                                            if ($row['rented_vehicles'] > 0)
-                                                echo $row['rented_vehicles'];
-                                            else 
-                                                echo 'Brak pojazdów';
-                                        echo '</td>';
-                                        echo '<tr>';
-                                    }
-                                    $stmt->close();
-                                    $db_connection->close();
-                                ?>
-                            </table>
+                                        $result = $stmt->get_result();
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo '<tr>';
+                                            echo '<td>'.$row['id'].'</td>';
+                                            echo '<td>'.$row['login'].'</td>';
+                                            echo '<td>';
+                                                if ($row['email'] != '') 
+                                                    echo $row['email'];
+                                                else 
+                                                    echo 'Brak email';
+                                            echo '</td>';
+                                            echo '<td>';
+                                                if ($row['is_admin'])
+                                                    echo 'TAK';
+                                                else 
+                                                    echo 'NIE';
+                                            echo '</td>';
+                                            echo '<td>';
+                                                if ($row['rented_vehicles'] > 0)
+                                                    echo $row['rented_vehicles'];
+                                                else 
+                                                    echo 'Brak pojazdów';
+                                            echo '</td>';
+                                            echo '<tr>';
+                                        }
+                                        $stmt->close();
+                                        $db_connection->close();
+                                    ?>
+                                </table>
+                            </div>
                         </section>
                     </div>
                     <div class="settings">
@@ -303,37 +305,39 @@
                                 <div class="access-list">
                                     <h4>Administratorzy</h4>
                                     <br>
-                                    <table>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Login</th>
-                                            <th>E-mail</th>
-                                        </tr>
-                                        <?php 
-                                            require('db/db_connection.php');
+                                    <div class="table">
+                                        <table>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Login</th>
+                                                <th>E-mail</th>
+                                            </tr>
+                                            <?php 
+                                                require('db/db_connection.php');
 
-                                            $query = "SELECT * FROM admins";
+                                                $query = "SELECT * FROM admins";
 
-                                            $stmt = $db_connection->prepare($query);
-                                            $stmt->execute();
-        
-                                            $result = $stmt->get_result();
-                                            while ($row = $result->fetch_assoc()) {
-                                                echo '<tr>';
-                                                echo '<td>'.$row['id'].'</td>';
-                                                echo '<td>'.$row['login'].'</td>';
-                                                echo '<td>';
-                                                    if ($row['email'] != '') 
-                                                        echo $row['email'];
-                                                    else 
-                                                        echo 'Brak adresu';
-                                                echo '</td>';
-                                                echo '<tr>';
-                                            }
-                                            $stmt->close();
-                                            $db_connection->close();
-                                        ?>
-                                    </table>
+                                                $stmt = $db_connection->prepare($query);
+                                                $stmt->execute();
+            
+                                                $result = $stmt->get_result();
+                                                while ($row = $result->fetch_assoc()) {
+                                                    echo '<tr>';
+                                                    echo '<td>'.$row['id'].'</td>';
+                                                    echo '<td>'.$row['login'].'</td>';
+                                                    echo '<td>';
+                                                        if ($row['email'] != '') 
+                                                            echo $row['email'];
+                                                        else 
+                                                            echo 'Brak adresu';
+                                                    echo '</td>';
+                                                    echo '<tr>';
+                                                }
+                                                $stmt->close();
+                                                $db_connection->close();
+                                            ?>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </section>

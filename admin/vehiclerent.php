@@ -46,54 +46,6 @@
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/panel.css">
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
-    <style>
-        input {
-            border: 2px solid #000;
-        }
-        .content .vehicles header {
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-box-align: center;
-                -ms-flex-align: center;
-                    align-items: center;
-        }
-        .content .vehicles header>* {
-            margin-right: 20px;
-        }
-        .content .vehicles header>*:last-child {
-            margin-right: 0;
-        }
-        .content .vehicles header>* a {
-            color: #000;
-        }
-        main form {
-            width: 60%;
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-box-orient: vertical;
-            -webkit-box-direction: normal;
-                -ms-flex-direction: column;
-                    flex-direction: column;
-        }
-        main form input,
-        main form button {
-            width: 50%;
-        }
-        main form label,
-        main form button {
-            margin-top: 20px;
-        }
-        main form label:first-child {
-            margin-top: 0;
-        }
-        @media screen and (max-width: 800px) {
-            .content .vehicles header>* {
-                margin-right: 10px;
-            }
-        }
-    </style>
     <?php 
         if (isset($_POST['theme'])) {
             if ($_POST['theme'] != "default")
@@ -215,35 +167,37 @@
                                 </form>
                             </div>
                             <h3 style="margin-bottom: 10px;">Lista rezerwacji</h3>
-                            <table>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>ID pojazdu</th>
-                                    <th>ID użytkownika</th>
-                                    <th>Data rezerwacji</th>
-                                    <th>Na ile godzin</th>
-                                </tr>
-                                <?php 
-                                    require('../db/db_connection.php');
-                                    $query = "SELECT * FROM rezerwacja";
+                            <div class="table">
+                                <table>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>ID pojazdu</th>
+                                        <th>ID użytkownika</th>
+                                        <th>Data rezerwacji</th>
+                                        <th>Na ile godzin</th>
+                                    </tr>
+                                    <?php 
+                                        require('../db/db_connection.php');
+                                        $query = "SELECT * FROM rezerwacja";
 
-                                    $stmt = $db_connection->prepare($query);
-                                    $stmt->execute();
+                                        $stmt = $db_connection->prepare($query);
+                                        $stmt->execute();
 
-                                    $result = $stmt->get_result();
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo '<tr>';
-                                        echo '<td>'.$row['id'].'</td>';
-                                        echo '<td>'.$row['id_pojazdu'].'</td>';
-                                        echo '<td>'.$row['id_klienta'].'</td>';
-                                        echo '<td>'.$row['data_rezerwacji'].'</td>';
-                                        echo '<td>'.$row['na_ile'].'</td>';
-                                        echo '<tr>';
-                                    }
-                                    $stmt->close();
-                                    $db_connection->close();
-                                ?>
-                            </table>
+                                        $result = $stmt->get_result();
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo '<tr>';
+                                            echo '<td>'.$row['id'].'</td>';
+                                            echo '<td>'.$row['id_pojazdu'].'</td>';
+                                            echo '<td>'.$row['id_klienta'].'</td>';
+                                            echo '<td>'.$row['data_rezerwacji'].'</td>';
+                                            echo '<td>'.$row['na_ile'].'</td>';
+                                            echo '<tr>';
+                                        }
+                                        $stmt->close();
+                                        $db_connection->close();
+                                    ?>
+                                </table>
+                            </div>
                         </section>
                     </div>
                 </main>

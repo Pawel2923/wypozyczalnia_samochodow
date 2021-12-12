@@ -45,6 +45,13 @@ nav.desktop-nav a {
   margin-bottom: 40px;
 }
 
+@media screen and (max-width: 800px) {
+  .nav-header {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
+
 .list-wrapper {
   width: 100%;
   display: -ms-grid;
@@ -251,25 +258,6 @@ main .car .image-wrapper {
   width: 100%;
   height: 100%;
   position: relative;
-  cursor: pointer;
-}
-
-main .car .img-overlay {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, .4);
-  z-index: 1;
-  opacity: 0;
-  -webkit-transition: opacity .2s ease;
-  -o-transition: opacity .2s ease;
-  transition: opacity .2s ease;
-}
-
-main .car .img-overlay:hover {
-  opacity: 1;
 }
 
 main .cars .car>span {
@@ -322,42 +310,53 @@ main .cars-list {
           flex-direction: column;
 }
 .cars-list .vehicle {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+.cars-list .vehicle-name {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 1.5em;
+  text-transform: capitalize;
+}
+.cars-list .vehicle-content {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-pack: space-evenly;
-      -ms-flex-pack: space-evenly;
-          justify-content: space-evenly;
-  margin-bottom: 20px;
+  -webkit-box-pack: space-between;
+      -ms-flex-pack: space-between;
+          justify-content: space-between;
+  border: 1px solid #000;
 }
-.cars-list .vehicle:last-child {
+.cars-list .vehicle-content:last-child {
   margin-bottom: 0;
 }
-.cars-list .vehicle>* {
+.cars-list .vehicle-content>* {
   margin-right: 20px;
 }
-.cars-list .vehicle .vehicle-price {
+.cars-list .vehicle-content .vehicle-price {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
-.cars-list .vehicle .vehicle-price div {
+.cars-list .vehicle-content .vehicle-price div {
   margin-right: 20px;
 }
-.cars-list .vehicle .vehicle-image {
+.cars-list .vehicle-content .vehicle-image {
   width: 400px;
+}
+.cars .vehicle-image img {
+  display: block;
 }
 .cars-list button {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   margin: 0;
-}
-.cars-list .vehicle-name {
-  text-align: center;
 }
 @media screen and (max-width: 800px) {
   main .cars {
@@ -367,25 +366,24 @@ main .cars-list {
   }
   .cars-list .vehicle,
   .cars-list .vehicle .vehicle-price {
-      -webkit-box-orient: vertical;
-      -webkit-box-direction: normal;
-          -ms-flex-direction: column;
-              flex-direction: column;
-      -webkit-box-align: center;
-          -ms-flex-align: center;
-              align-items: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+  .cars-list .vehicle-content .vehicle-price div {
+    margin: 0;
+    margin-bottom: 5px;
+    font-size: .8em;
   }
   .cars-list .vehicle .vehicle-image {
       width: 100%;
-      margin: 0;
   }
-  .cars-list .vehicle .vehicle-price,
-  .cars-list .vehicle .vehicle-price div {
-      margin-right: 0;
-      margin-left: 0;
-  }
-  .cars-list .vehicle div {
-      margin-bottom: 10px;
+  .cars-list .vehicle-name {
+    font-size: 1.2em;
   }
 }
 
@@ -640,6 +638,17 @@ footer .bottom-content .bottom-text {
   }
   footer .subscription-form {
     width: 60%;
+  }
+  footer {
+    grid-template-rows: auto;
+  }
+  footer .subscription-form {
+    margin-top: 30px;
+    margin-bottom: 20px;
+  }
+  footer .bottom-content {
+    margin-top: 20px;
+    margin-bottom: 30px;
   }
 }
 

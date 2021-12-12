@@ -11,13 +11,12 @@
         exit;
     }
 
-    if (isset($_POST['vehicle-id']) || isset($_SESSION['vehicle-id'])) {
-        if (isset($_POST['vehicle-id']))
-            $vehicleID = htmlentities($_POST['vehicle-id']);
+    if (isset($_GET['vehicle-id']) || isset($_SESSION['vehicle-id'])) {
+        if (isset($_GET['vehicle-id']))
+            $vehicleID = htmlentities($_GET['vehicle-id']);
         else
             $vehicleID = htmlentities($_SESSION['vehicle-id']);
         
-        $_SESSION['vehicle-id'] = $vehicleID;
         require('db/db_connection.php');
         $query = "SELECT * FROM vehicles WHERE id=?";
         $stmt = $db_connection->prepare($query);

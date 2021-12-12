@@ -89,7 +89,7 @@
         const carButton = document.querySelectorAll('.car-button');
         for (let i=0; i<carButton.length; i++) {
             carButton[i].addEventListener('click', () => {
-                window.location = 'rent.php';
+                window.location = `rent.php?vehicle-id=${i}`;
             });
         }
     </script>

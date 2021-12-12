@@ -55,44 +55,6 @@
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/panel.css">
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
-    <style>
-        .content .vehicles header {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-        }
-        .content .vehicles header>* {
-            margin-right: 20px;
-        }
-        .content .vehicles header>*:last-child {
-            margin-right: 0;
-        }
-        .content .vehicles header>* a {
-            color: #000;
-        }
-        main form {
-            width: 60%;
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-box-orient: vertical;
-            -webkit-box-direction: normal;
-                -ms-flex-direction: column;
-                    flex-direction: column;
-        }
-        main form label,
-        main form button {
-            margin-top: 20px;
-        }
-        main form label:first-child {
-            margin-top: 0;
-        }
-        @media screen and (max-width: 800px) {
-            .content .vehicles header>* {
-                margin-right: 10px;
-            }
-        }
-    </style>
     <?php 
         if (isset($_POST['theme'])) {
             if ($_POST['theme'] != "default")

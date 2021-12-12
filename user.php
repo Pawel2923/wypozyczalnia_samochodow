@@ -132,9 +132,11 @@
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
     <style>
         form .buttons {
-            display: flex;
             column-gap: 10px;
             display: none;
+        }
+        main form {
+            width: 100%;
         }
     </style>
     <?php 
@@ -311,13 +313,13 @@
                             <div class="option edit-profile">
                                 <form action="" method="POST">
                                     <label for="name">Imię</label>
-                                    <input type="text" name="name" value="<?php if (isset($userData['imie'])) echo $userData['imie']; ?>">
+                                    <input onclick="this.setSelectionRange(0, this.value.length)" type="text" name="name" value="<?php if (isset($userData['imie'])) echo $userData['imie']; ?>">
                                     <label for="sName">Nazwisko</label>
-                                    <input type="text" name="sName" value="<?php if (isset($userData['nazwisko'])) echo $userData['nazwisko']; ?>">
+                                    <input onclick="this.setSelectionRange(0, this.value.length)" type="text" name="sName" value="<?php if (isset($userData['nazwisko'])) echo $userData['nazwisko']; ?>">
                                     <label for="tel">Telefon</label>
-                                    <input type="tel" name="tel" value="<?php if (isset($userData['telefon'])) echo $userData['telefon']; ?>">
+                                    <input onclick="this.setSelectionRange(0, this.value.length)" type="tel" name="tel" value="<?php if (isset($userData['telefon'])) echo $userData['telefon']; ?>">
                                     <label for="email">Adres e-mail</label>
-                                    <input type="email" name="email" value="<?php if (isset($userData['email'])) echo $userData['email']; ?>">
+                                    <input onclick="this.setSelectionRange(0, this.value.length)" type="email" name="email" value="<?php if (isset($userData['email'])) echo $userData['email']; ?>">
                                     <div class="buttons">
                                         <button type="submit">Potwierdź</button>
                                         <button type="reset">Anuluj zmiany</button>

@@ -69,13 +69,13 @@
             <h2>Uzyskaj wycenę</h2>
             <p>Chcesz wypożyczyć pojazd na swoją następną przygodę? Wpisz poniżej swoje dane, a ktoś z naszego zespołu wkrótce skontaktuje się, aby przekazać Ci wycenę.</p>
             <form action="" method="POST">
-                <input type="text" name="imie" placeholder="Imię" required>
-                <input type="text" name="nazwisko" placeholder="Nazwisko" required>
+                <input type="text" name="imie" placeholder="Imię*" required>
+                <input type="text" name="nazwisko" placeholder="Nazwisko*" required>
                 <div class="contact">
-                    <input type="email" name="email" placeholder="Adres e-mail" required>
+                    <input type="email" name="email" placeholder="Adres e-mail*" required>
                     <input type="tel" name="tel" placeholder="Nr telefonu">
                 </div>
-                <textarea name="comment" placeholder="Wiadomość" required></textarea>
+                <textarea name="comment" placeholder="Wiadomość*" required></textarea>
                 <button type="submit">Wyślij</button>
             </form>
         </section>
