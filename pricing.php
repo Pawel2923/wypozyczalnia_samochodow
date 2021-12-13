@@ -60,22 +60,75 @@
                 width: 100%;
             }
         }
+        .message-wrapper {
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            position: fixed;
+            z-index: 3;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .message {
+            background-color: #fff;
+            border: 1px solid #000;
+            position: absolute;
+            padding: 50px;
+            max-width: 55%;
+            z-index: 1;
+            display: flex;
+        }
+
+        .message-wrapper>.overlay {
+            content: '';
+            background-color: rgba(0,0,0,.5);
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .message-wrapper .close {
+            position: absolute;
+            top: 6px;
+            right: 10px;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <?php require_once("inc/nav.php") ?>
     <main>
+        <div class="message-wrapper" <?php if (isset($_SESSION['msg'])) echo 'style="display: flex;"'?>>
+            <div class="overlay"></div>
+            <div class="message">
+                <div class="close"><i class="fas fa-times"></i></div>
+                <div class="msg">
+                    <?php 
+                        if (isset($_SESSION['msg'])) {
+                            echo $_SESSION['msg'];
+                            unset($_SESSION['msg']);
+                        }
+                    ?>
+                </div>
+            </div>
+        </div>
         <section>
             <h2>Uzyskaj wycenę</h2>
             <p>Chcesz wypożyczyć pojazd na swoją następną przygodę? Wpisz poniżej swoje dane, a ktoś z naszego zespołu wkrótce skontaktuje się, aby przekazać Ci wycenę.</p>
-            <form action="" method="POST">
-                <input type="text" name="imie" placeholder="Imię*" required>
-                <input type="text" name="nazwisko" placeholder="Nazwisko*" required>
+            <form action="send.php" method="POST">
+                <input type="text" name="name" placeholder="Imię*" required>
+                <input type="text" name="sName" placeholder="Nazwisko*" required>
                 <div class="contact">
                     <input type="email" name="email" placeholder="Adres e-mail*" required>
                     <input type="tel" name="tel" placeholder="Nr telefonu">
                 </div>
-                <textarea name="comment" placeholder="Wiadomość*" required></textarea>
+                <textarea name="message" placeholder="Wiadomość*" required></textarea>
                 <button type="submit">Wyślij</button>
             </form>
         </section>
@@ -112,6 +165,18 @@
         const formInput = document.querySelectorAll('main form input, main form textarea');
         for (let i=0; i<formInput.length; i++) {
             checkInput(formInput[i]);
+        }
+        const msgCloseButton = document.querySelector('.message .close');
+        const msgWrapper = document.querySelector('.message-wrapper');
+        const msgOverlay = document.querySelector('.message-wrapper .overlay');
+
+        if (msgCloseButton != null && msgWrapper != null && msgOverlay != null) {
+            msgCloseButton.addEventListener('click', () => {
+                msgWrapper.style.display = 'none';
+            });
+            msgOverlay.addEventListener('click', () => {
+                msgWrapper.style.display = 'none';
+            });
         }
     </script>
     <script src="js/nav.js"></script>

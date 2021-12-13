@@ -129,6 +129,7 @@
                     <a href="../admin.php"><li>Home</li></a>
                     <a class="veh-link" href="../admin.php#vehicles"><li>Pojazdy</li></a>
                     <a class="users-link" href="../admin.php#users"><li>Użytkownicy</li></a>
+                    <a href="../admin/inbox.php"><li>Wiadomości</li></a>
                     <a class="settings-link" href="../admin.php#settings"><li>Ustawienia</li></a>
                 </ul>
             </div>

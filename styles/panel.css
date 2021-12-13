@@ -232,9 +232,9 @@ form.view {
     -ms-grid-rows: 1fr;
     -ms-grid-columns: 1fr 40px 1fr 40px 1fr;
         grid-template: 1fr / 1fr 1fr 1fr;
-    -webkit-column-gap: 40px;
-       -moz-column-gap: 40px;
-            column-gap: 40px;
+    -webkit-gap: 40px;
+       -moz-gap: 40px;
+            gap: 40px;
 }
 
 main .home-option {
@@ -514,7 +514,7 @@ footer {
         -ms-grid-rows: 1fr 20px 1fr 20px 1fr;
         -ms-grid-columns: 1fr;
             grid-template: 1fr 1fr 1fr / 1fr;
-        row-gap: 20px;
+        gap: 20px;
     }
     .all-settings>header {
         padding-top: 50px;
