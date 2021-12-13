@@ -10,24 +10,6 @@
         header('Location: ../login.php');
         exit;
     }
-
-    if (isset($_POST['user-id'])) {
-        $userID = htmlentities($_POST['user-id']);
-
-        require('../db/db_connection.php');
-        $query = "DELETE FROM users WHERE id=? AND is_admin=0";
-        $stmt = $db_connection->prepare($query);
-        $stmt->bind_param('i', $userID);
-        $stmt->execute();
-
-        if ($db_connection->affected_rows > 0)
-            $_SESSION['msg'] = 'Udało się usunąć użytkownika.';
-        else 
-            $_SESSION['error'] = 'Nie udało się usunąć użytkownika. Pamiętaj, że nie można usuwać administratorów.';
-
-        $stmt->close();
-        $db_connection->close();
-    }
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -55,6 +37,26 @@
                 echo '<link rel="stylesheet" href="../styles/'.$_COOKIE['theme'].'.css">';
         }
     ?>
+    <style>
+        .messages h3 {
+            margin-top: 20px;
+        }
+        .messages h3:first-child {
+            margin-top: 0;
+        }
+        .box-msg {
+            border: 1px solid #000;
+            width: 60%;
+            max-width: 100%;
+            margin-top: 10px;
+            padding: 20px;
+        }
+        @media screen and (max-width: 800px) {
+            .box-msg {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
 <div class="page-wrapper">
@@ -86,7 +88,7 @@
                     <a href="../admin.php"><li>Home</li></a>
                     <a class="veh-link" href="../admin.php#vehicles"><li>Pojazdy</li></a>
                     <a class="users-link" href="../admin.php#users"><li>Użytkownicy</li></a>
-                    <a href="../admin/inbox.php"><li>Wiadomości</li></a>
+                    <a href="inbox.php"><li>Wiadomości</li></a>
                     <a class="settings-link" href="../admin.php#settings"><li>Ustawienia</li></a>
                 </ul>
             </div>
@@ -151,47 +153,64 @@
                     </div>
                 </header>
                 <main>
-                    <div class="users">
+                    <div class="messages">
                         <header>
-                            <h2><a href="../admin.php#users">Użytkownicy</a></h2> 
-                            <i class="fas fa-chevron-right"></i> 
-                            <h2>Usuń użytkowników</h2>
+                            <h2><a href="../admin.php">Wiadomości</a></h2>
                         </header>
                         <section>
-                            <form action="" method="POST">
-                                <label>ID użytkownika</label>
-                                <input type="number" name="user-id" min="1" required>
-                                <button type="submit">Usuń</button>
-                            </form>
-                        </section>
-                        <section>
-                            <h3 style="margin-bottom: 10px;">Lista użytkowników</h3>
-                            <div class="table">
-                                <table>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Login</th>
-                                    </tr>
-                                    <?php 
-                                        // Wylistowanie użytkowników w tabeli
-                                        require('../db/db_connection.php');
-                                        $query = "SELECT id, login FROM users WHERE is_admin=0";
+                            <?php 
+                                require('../db/db_connection.php');
 
-                                        $stmt = $db_connection->prepare($query);
-                                        $stmt->execute();
+                                $query = "SELECT messages.* FROM messages INNER JOIN mailboxes ON mailboxes.message_id=messages.id WHERE user=? AND direction='in'";
+                                $stmt = $db_connection->prepare($query);
+                                $stmt->bind_param('s', $_SESSION['login']);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
+                                $stmt->close();
 
-                                        $result = $stmt->get_result();
-                                        while ($row = $result->fetch_assoc()) {
-                                            echo '<tr>';
-                                            echo '<td>'.$row['id'].'</td>';
-                                            echo '<td>'.$row['login'].'</td>';
-                                            echo '<tr>';
+                                echo '<h3>Odebrane</h3>';
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<div class="box-msg">';
+                                        echo '<b>Od:</b> '.$row['email'];
+                                        echo '<br>';
+                                        echo $row['imie'].' '.$row['nazwisko'];
+                                        echo '<br>';
+                                        if ($row['tel'] != 0) {
+                                            echo '<b>Telefon:</b> '.$row['tel'];
+                                            echo '<br>';
                                         }
-                                        $stmt->close();
-                                        $db_connection->close();
-                                    ?>
-                                </table>
-                            </div>
+                                        echo '<b>Dostarczono:</b> '.$row['date'];
+                                        echo '<br>';
+                                        echo '<b>Treść wiadomości:</b> '.$row['message'];
+                                        echo '</div>';
+                                    }
+                                }
+                                else
+                                    echo 'Nie masz żadnych wiadomości.';
+
+                                $query = "SELECT messages.*, mailboxes.user FROM messages INNER JOIN mailboxes ON mailboxes.message_id=messages.id WHERE user=? AND direction='out'";
+                                $stmt = $db_connection->prepare($query);
+                                $stmt->bind_param('s', $_SESSION['login']);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
+                                $stmt->close();
+
+                                echo '<h3>Wysłane</h3>';
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<div class="box-msg">';
+                                        echo '<b>Do:</b> '.$row['user'];
+                                        echo '<br>';
+                                        echo '<b>Dostarczono:</b> '.$row['date'];
+                                        echo '<br>';
+                                        echo '<b>Treść wiadomości:</b> '.$row['message'];
+                                        echo '</div>';
+                                    }
+                                }
+                                else 
+                                    echo 'Nie wysłałeś żadnych wiadomości.';
+                            ?>
                         </section>
                     </div>
                 </main>
