@@ -35,30 +35,27 @@
             $hashedPasswd = $hashedPasswd[0];
             $stmt->close();
 
-            if (password_verify($newPasswd, $hashedPasswd))
-                $_SESSION['error'] = 'Nowe hasło nie powinno być takie samo jak stare hasło.';
-            else {
-                if ($newPasswd === $confirmPasswd) {
-                    $newHashedPasswd = password_hash($newPasswd, PASSWORD_DEFAULT);
-                    $query = "UPDATE users SET password=? WHERE id=?";
-                    $stmt = $db_connection->prepare($query);
-                    $stmt->bind_param('si', $newHashedPasswd, $id);
-                    $stmt->execute();
-                    
-                    if ($db_connection->affected_rows == 1) {
-                        $_SESSION['msg'] = 'Pomyślnie zmieniono hasło. Za chwilę wystąpi wylogowanie...';
-                        echo '<script>
-                            setTimeout(() => {
-                                window.location = "logout.php";
-                            }, 5000);
-                        </script>';
-                    }
-                    else
-                        $_SESSION['error'] = 'Nie udało się zmienić hasła.';
+            if ($newPasswd === $confirmPasswd) {
+                $newHashedPasswd = password_hash($newPasswd, PASSWORD_DEFAULT);
+                $query = "UPDATE users SET password=?, change_passwd=0 WHERE id=?";
+                $stmt = $db_connection->prepare($query);
+                $stmt->bind_param('si', $newHashedPasswd, $id);
+                $stmt->execute();
+                
+                if ($db_connection->affected_rows == 1) {
+                    $_SESSION['msg'] = 'Pomyślnie zmieniono hasło...';
+                    session_destroy();
+                    echo '<script>
+                        setTimeout(() => {
+                            window.location = "login.php";
+                        }, 3000);
+                    </script>';
                 }
-                else 
-                    $_SESSION['error'] = 'Hasła nie są takie same.';
+                else
+                    $_SESSION['error'] = 'Nie udało się zmienić hasła.';
             }
+            else 
+                $_SESSION['error'] = 'Hasła nie są takie same.';
         }
 
         $db_connection->close();

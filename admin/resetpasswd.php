@@ -23,7 +23,7 @@
         if ($db_connection->affected_rows > 0)
             $_SESSION['msg'] = 'Użytkownik musi ustawić nowe hasło przy następnym logowaniu.';
         else 
-            $_SESSION['error'] = 'Nie udało się zresetować hasła. Pamiętaj, że nie można resetować hasła administratorów.';
+            $_SESSION['error'] = 'Nie udało się zresetować hasła. Pamiętaj, że nie można resetować hasła administratorów lub użytkowników, których hasła zostały już zresetowane.';
 
         $stmt->close();
         $db_connection->close();
@@ -58,7 +58,7 @@
 </head>
 <body>
 <div class="page-wrapper">
-    <div class="message-wrapper" <?php if (isset($_SESSION['msg']) || isset($_SESSION['error'])) echo 'style="display: block;"'?>>
+    <div class="message-wrapper" <?php if (isset($_SESSION['msg']) || isset($_SESSION['error'])) echo 'style="display: flex;"'?>>
         <div class="overlay"></div>
         <div class="message">
             <div class="close"><i class="fas fa-times"></i></div>
