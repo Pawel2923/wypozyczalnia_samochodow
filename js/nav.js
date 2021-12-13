@@ -43,7 +43,7 @@ if (openButton != null) {
         let clientX;
         document.addEventListener('touchmove', (e) => {
             clientX = e.touches[0].clientX;
-            if (innerWidth - clientX < 30 && startClientX + 10 > clientX) {
+            if (innerWidth - clientX < 30 && startClientX + 30 > clientX) {
                 openMenu(); 
             }
         });

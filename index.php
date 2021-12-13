@@ -36,7 +36,7 @@
                 <?php 
                     require("inc/veh.php");
                     if (isset($vehicle))
-                        printCarInfo("Wypożycz", $vehNum, $vehicle, false, 6);
+                        printCarInfo("Wypożycz", $vehNum, $vehicle, false, 6, true);
                     else 
                         echo '<p>Obecnie nie ma pojazdów do rezerwacji</p>';
                 ?>
@@ -87,9 +87,10 @@
         checkInput(subscriptionInput);
 
         const carButton = document.querySelectorAll('.car-button');
-        for (let i=0; i<carButton.length; i++) {
+        for (let i = 0; i < carButton.length; i++) {
             carButton[i].addEventListener('click', () => {
-                window.location = `rent.php?vehicle-id=${i}`;
+                const vehicleID = carButton[i].value * 1;
+                window.location = `rent.php?vehicle-id=${vehicleID}`;
             });
         }
     </script>
