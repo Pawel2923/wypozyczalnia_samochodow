@@ -10,6 +10,31 @@
         header('Location: ../login.php');
         exit;
     }
+
+    if (isset($_POST['message-id'])) {
+        if ($_POST['message-id'] > 0) {
+            $messageID = htmlentities($_POST['message-id']);
+
+            require('../db/db_connection.php');
+
+            $query = 'DELETE FROM mailboxes WHERE message_id=?';
+            $stmt = $db_connection->prepare($query);
+            $stmt->bind_param('i', $messageID);
+            $stmt->execute();
+            $stmt->close();
+
+            $query = 'DELETE FROM messages WHERE id=?';
+            $stmt = $db_connection->prepare($query);
+            $stmt->bind_param('i', $messageID);
+            $stmt->execute();
+            $stmt->close();
+
+            $_SESSION['msg'] = 'Pomyślnie usunięto wiadomość.';
+
+            $db_connection->close();
+            unset($_POST['message-id']);
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -60,7 +85,7 @@
 </head>
 <body>
 <div class="page-wrapper">
-    <div class="message-wrapper" <?php if (isset($_SESSION['msg']) || isset($_SESSION['error'])) echo 'style="display: block;"'?>>
+    <div class="message-wrapper" <?php if (isset($_SESSION['msg']) || isset($_SESSION['error'])) echo 'style="display: flex;"'?>>
         <div class="overlay"></div>
         <div class="message">
             <div class="close"><i class="fas fa-times"></i></div>
@@ -172,17 +197,22 @@
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
                                         echo '<div class="box-msg">';
-                                        echo '<b>Od:</b> '.$row['email'];
+                                        echo '<form action="" method="POST" style="display: block; width: 100%;">';
+                                        echo '<input type="hidden" name="message-id" value="'.$row['id'].'">';
+                                        echo '<span style="font-weight: bold;">Od:</span> '.$row['email'];
                                         echo '<br>';
                                         echo $row['imie'].' '.$row['nazwisko'];
                                         echo '<br>';
                                         if ($row['tel'] != 0) {
-                                            echo '<b>Telefon:</b> '.$row['tel'];
+                                            echo '<span style="font-weight: bold;">Telefon:</span> '.$row['tel'];
                                             echo '<br>';
                                         }
-                                        echo '<b>Dostarczono:</b> '.$row['date'];
+                                        echo '<span style="font-weight: bold;">Dostarczono:</span> '.$row['date'];
                                         echo '<br>';
-                                        echo '<b>Treść wiadomości:</b> '.$row['message'];
+                                        echo '<span style="font-weight: bold;">Treść wiadomości:</span> '.$row['message'];
+                                        echo '<br>';
+                                        echo '<button type="submit" style="margin-bottom: 0;">Usuń wiadomość</button>';
+                                        echo '</form>';
                                         echo '</div>';
                                     }
                                 }
@@ -200,11 +230,16 @@
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
                                         echo '<div class="box-msg">';
-                                        echo '<b>Do:</b> '.$row['user'];
+                                        echo '<form action="" method="POST" style="display: block; width: 100%;">';
+                                        echo '<input type="hidden" name="message-id" value="'.$row['id'].'">';
+                                        echo '<span style="font-weight: bold;">Do:</span> '.$row['user'];
                                         echo '<br>';
-                                        echo '<b>Dostarczono:</b> '.$row['date'];
+                                        echo '<span style="font-weight: bold;">Dostarczono:</span> '.$row['date'];
                                         echo '<br>';
-                                        echo '<b>Treść wiadomości:</b> '.$row['message'];
+                                        echo '<span style="font-weight: bold;">Treść wiadomości:</span> '.$row['message'];
+                                        echo '<br>';
+                                        echo '<button type="submit" style="margin-bottom: 0;">Usuń wiadomość</button>';
+                                        echo '</form>';
                                         echo '</div>';
                                     }
                                 }

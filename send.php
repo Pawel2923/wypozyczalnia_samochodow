@@ -1,13 +1,25 @@
 <?php 
 session_start();
 
-if (isset($_POST['name']) && isset($_POST['sName']) && isset($_POST['email']) && isset($_POST['tel']) && isset($_POST['message'])) {
-    
-    $name = htmlentities($_POST['name']);
-    $sName = htmlentities($_POST['sName']);    
-    $email = htmlentities($_POST['email']);
-    $tel = htmlentities($_POST['tel']);
-    $message = htmlentities($_POST['message']);
+if (isset($_POST['name']) && isset($_POST['sName']) && isset($_POST['email']) && isset($_POST['tel']) && isset($_POST['message']) || isset($_SESSION['forgotten-passwd'])) {
+    if (isset($_SESSION['forgotten-passwd'])) {
+        unset($_SESSION['forgotten-passwd']);
+        $login = $_SESSION['passwd-login'];
+        unset($_SESSION['passwd-login']);
+
+        $name = ' ';
+        $sName = ' ';
+        $email = "noreply@wyposamochodow.localhost";
+        $tel = 0;
+        $message = 'Użytkownik o loginie lub adresie e-mail: <span style="font-weight: bold;">'.$login.'</span> prosi o zresetowanie hasła.';
+    }
+    else {
+        $name = htmlentities($_POST['name']);
+        $sName = htmlentities($_POST['sName']);    
+        $email = htmlentities($_POST['email']);
+        $tel = htmlentities($_POST['tel']);
+        $message = htmlentities($_POST['message']);
+    }
 
     if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
         require('db/db_connection.php');
@@ -66,9 +78,8 @@ if (isset($_POST['name']) && isset($_POST['sName']) && isset($_POST['email']) &&
 
         $db_connection->close();
     }
-    else {
+    else 
         $_SESSION['msg'] = 'Podany adres e-mail jest nieprawidłowy.';
-    }
 }
 
 header('Location: '.$_SERVER['HTTP_REFERER']);

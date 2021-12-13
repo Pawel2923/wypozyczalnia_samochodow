@@ -80,6 +80,7 @@
             max-width: 55%;
             z-index: 1;
             display: flex;
+            text-align: center;
         }
 
         .message-wrapper>.overlay {
