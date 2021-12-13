@@ -46,7 +46,7 @@ if ($vehNum > 0) {
 }
 
 //Wyświetlanie informacji o pojazdach jako karty
-function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = false, $limit = 0) {
+function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = false, $limit = 0, $printRecent = 0) {
     if (isset($vehicle)) {
         //Ustawienie liczby pojazdów do wyświetlenia
         if ($limit > 0 && $limit <= $vehNum) { // Sprawdzenie czy limit został nadany i jest poprawny
@@ -61,9 +61,38 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = fal
         else 
             $n = $vehNum;
 
-        for ($i = 0; $i < $n; $i++) {
-            if (!$printUnavailable) {
-                if ($vehicle[$i]->isAvailable) { // Wypisanie tylko dostępnych pojazdów
+        if ($printRecent) {
+            for ($i = $n + 1; $i > 0; $i--) {
+                if (!$printUnavailable) {
+                    if ($vehicle[$i]->isAvailable) { // Wypisanie tylko dostępnych pojazdów
+                        ?>
+                        <div class="car">
+                        <div class="image-wrapper">
+                            <img src="<?php 
+                                $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+                                if (strpos($path, 'admin/') || strpos($path, 'user/')) {
+                                    if (filter_var($vehicle[$i]->img_url, FILTER_VALIDATE_URL))
+                                        echo $vehicle[$i]->img_url;
+                                    else 
+                                        echo '../'.$vehicle[$i]->img_url;
+                                }
+                                else 
+                                    echo $vehicle[$i]->img_url;
+                                
+                            ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
+                        </div>
+                        <span class="car-name"><?php echo $vehicle[$i]->brand.' '.$vehicle[$i]->model ?></span>
+                        <div class="divider"></div>
+                        <div class="car-price">
+                            <span>1 godz.</span>
+                            <span><?php echo $vehicle[$i]->price ?> zł</span>
+                        </div>
+                        <button class="car-button" value="<?php echo $vehicle[$i]->id ?>"><?php echo $buttonCaption ?></button>
+                        </div>
+                        <?php
+                    }
+                }
+                else { // Wypisanie wszystkich pojazdów
                     ?>
                     <div class="car">
                     <div class="image-wrapper">
@@ -77,7 +106,6 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = fal
                             }
                             else 
                                 echo $vehicle[$i]->img_url;
-                            
                         ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
                     </div>
                     <span class="car-name"><?php echo $vehicle[$i]->brand.' '.$vehicle[$i]->model ?></span>
@@ -86,47 +114,91 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = fal
                         <span>1 godz.</span>
                         <span><?php echo $vehicle[$i]->price ?> zł</span>
                     </div>
-                    <button class="car-button"><?php echo $buttonCaption ?></button>
+                    <button class="car-button">
+                        <?php 
+                            if ($buttonCaption === "availabilityCheck") {
+                                if ($vehicle[$i]->isAvailable)
+                                    echo 'Dostępny';
+                                else 
+                                    echo 'Niedostępny';
+                            } 
+                            else 
+                                echo $buttonCaption;
+                        ?>
+                    </button>
                     </div>
                     <?php
                 }
             }
-            else { // Wypisanie wszystkich pojazdów
-                ?>
-                <div class="car">
-                <div class="image-wrapper">
-                    <img src="<?php 
-                        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-                        if (strpos($path, 'admin/') || strpos($path, 'user/')) {
-                            if (filter_var($vehicle[$i]->img_url, FILTER_VALIDATE_URL))
-                                echo $vehicle[$i]->img_url;
-                            else 
-                                echo '../'.$vehicle[$i]->img_url;
-                        }
-                        else 
-                            echo $vehicle[$i]->img_url;
-                     ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
-                </div>
-                <span class="car-name"><?php echo $vehicle[$i]->brand.' '.$vehicle[$i]->model ?></span>
-                <div class="divider"></div>
-                <div class="car-price">
-                    <span>1 godz.</span>
-                    <span><?php echo $vehicle[$i]->price ?> zł</span>
-                </div>
-                <button class="car-button">
-                    <?php 
-                        if ($buttonCaption === "availabilityCheck") {
-                            if ($vehicle[$i]->isAvailable)
-                                echo 'Dostępny';
-                            else 
-                                echo 'Niedostępny';
-                        } 
-                        else 
-                            echo $buttonCaption;
+        }
+        else {
+            for ($i = 0; $i < $n; $i++) {
+                if (!$printUnavailable) {
+                    if ($vehicle[$i]->isAvailable) { // Wypisanie tylko dostępnych pojazdów
+                        ?>
+                        <div class="car">
+                        <div class="image-wrapper">
+                            <img src="<?php 
+                                $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+                                if (strpos($path, 'admin/') || strpos($path, 'user/')) {
+                                    if (filter_var($vehicle[$i]->img_url, FILTER_VALIDATE_URL))
+                                        echo $vehicle[$i]->img_url;
+                                    else 
+                                        echo '../'.$vehicle[$i]->img_url;
+                                }
+                                else 
+                                    echo $vehicle[$i]->img_url;
+                                
+                            ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
+                        </div>
+                        <span class="car-name"><?php echo $vehicle[$i]->brand.' '.$vehicle[$i]->model ?></span>
+                        <div class="divider"></div>
+                        <div class="car-price">
+                            <span>1 godz.</span>
+                            <span><?php echo $vehicle[$i]->price ?> zł</span>
+                        </div>
+                        <button class="car-button" value="<?php echo $vehicle[$i]->id ?>"><?php echo $buttonCaption ?></button>
+                        </div>
+                        <?php
+                    }
+                }
+                else { // Wypisanie wszystkich pojazdów
                     ?>
-                </button>
-                </div>
-                <?php
+                    <div class="car">
+                    <div class="image-wrapper">
+                        <img src="<?php 
+                            $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+                            if (strpos($path, 'admin/') || strpos($path, 'user/')) {
+                                if (filter_var($vehicle[$i]->img_url, FILTER_VALIDATE_URL))
+                                    echo $vehicle[$i]->img_url;
+                                else 
+                                    echo '../'.$vehicle[$i]->img_url;
+                            }
+                            else 
+                                echo $vehicle[$i]->img_url;
+                        ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
+                    </div>
+                    <span class="car-name"><?php echo $vehicle[$i]->brand.' '.$vehicle[$i]->model ?></span>
+                    <div class="divider"></div>
+                    <div class="car-price">
+                        <span>1 godz.</span>
+                        <span><?php echo $vehicle[$i]->price ?> zł</span>
+                    </div>
+                    <button class="car-button">
+                        <?php 
+                            if ($buttonCaption === "availabilityCheck") {
+                                if ($vehicle[$i]->isAvailable)
+                                    echo 'Dostępny';
+                                else 
+                                    echo 'Niedostępny';
+                            } 
+                            else 
+                                echo $buttonCaption;
+                        ?>
+                    </button>
+                    </div>
+                    <?php
+                }
             }
         }
     }

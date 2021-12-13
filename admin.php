@@ -1,7 +1,7 @@
 <?php 
     session_start();
     if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
-        if (!$_SESSION['isLogged'] && !$_SESSION['isAdmin']) {
+        if (!$_SESSION['isAdmin']) {
             header('Location: index.php');
             exit;
         }

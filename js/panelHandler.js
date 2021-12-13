@@ -177,7 +177,7 @@ if (window.innerWidth < 800) {
     let clientX;
     document.addEventListener('touchmove', (e) => {
         clientX = e.touches[0].clientX;
-        if (startClientX < 30 && startClientX + 10 < clientX) {
+        if (startClientX < 30 && startClientX + 30 < clientX) {
             openMobileNav(); 
         }
     });
