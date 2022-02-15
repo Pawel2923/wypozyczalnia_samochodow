@@ -58,11 +58,14 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = fal
                 }
             }
         }
-        else 
+        else {
             $n = $vehNum;
+            if ($printRecent)
+                $n += 1;
+        }
 
         if ($printRecent) {
-            for ($i = $n + 1; $i > 0; $i--) {
+            for ($i = $vehNum - 1; $i > $vehNum - $n; $i--) {
                 if (!$printUnavailable) {
                     if ($vehicle[$i]->isAvailable) { // Wypisanie tylko dostępnych pojazdów
                         ?>
