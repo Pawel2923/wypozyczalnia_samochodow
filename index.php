@@ -27,7 +27,7 @@
         <section class="info">
             <h2>Wypożyczalnia samochodów — informacje</h2>
             <span>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim mollitia, aliquid rem facere quo consequuntur ullam iste voluptatem corporis tempore, consequatur, recusandae beatae! Architecto reprehenderit saepe omnis vero officia ducimus!
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim mollitia, aliquid rem facere quo consequuntur ullam iste voluptatem corporis tempore, consequatur, recusandae beatae! Architecto reprehenderit saepe omnis vero officia ducimus!
             </span>
         </section>
         <section>
