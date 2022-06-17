@@ -8,7 +8,7 @@ body, input, select, footer {
 }
 
 .logged-menu {
-    background-color: #1b1b1b;
+    background-color: #202124;
 }
 
 header a, button, .logged-menu a, .content .vehicles header>* a {
@@ -20,11 +20,11 @@ main .car .divider {
 }
 
 .mobile-nav {
-    background-color: rgba(20, 20, 20, .95);
+    background-color: rgb(24, 27, 28, 0.95);
 }
 
 .panel {
-    background-color: #1b1b1b !important;
+    background-color: #181b1c !important;
 }
 
 main .home-option:hover, button {
