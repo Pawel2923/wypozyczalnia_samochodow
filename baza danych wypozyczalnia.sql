@@ -179,7 +179,7 @@ INSERT INTO `vehicles` (`id`, `marka`, `model`, `cena`, `img_url`, `is_available
 (2, 'Ford', 'Fusion', '55.00', 'https://i.wpimg.pl/600x0/m.autokult.pl/ford-fusion-4-3ddb5b2d153e08d106.jpg', 0),
 (3, 'Volkswagen', 'Golf', '65.00', 'https://www.auto-gazda.pl/application/files/8816/2861/3097/1.jpg', 1),
 (4, 'Mercedes', 'Sprinter', '80.00', 'https://image.ceneostatic.pl/data/products/95699167/i-mercedes-sprinter-313-2013-r.jpg', 1),
-(5, 'Lamborghini', 'Urus', '100.00', 'https://thumbs.img-sprzedajemy.pl/1000x901c/c4/6d/d5/lamborghini-urus-lamborghini-urus-white-2020-8-slaskie-mikolow-sprzedam-541825189.jpg', 1),
+(5, 'Lamborghini', 'Urus', '100.00', 'https://bi.im-g.pl/im/90/ae/15/z22736272AMP,Lamborghini-Urus-2017.jpg', 1),
 (6, 'Volkswagen', 'Passat B8', '83.00', 'https://www.autocentrum.pl/ac-file/car-version/5d13d13d57502a5ea36e8f85/volkswagen-passat-b8.jpg', 1),
 (7, 'Mazda', 'RX-7', '80.00', 'https://upload.wikimedia.org/wikipedia/commons/a/a6/Mazda-rx7-3rd-generation01.jpg', 1),
 (8, 'Ford', 'Focus', '71.99', 'https://ocs-pl.oktawave.com/v1/AUTH_2887234e-384a-4873-8bc5-405211db13a2/autoblog/2021/08/ford-focus-sedan-test-202116.jpg', 1),
