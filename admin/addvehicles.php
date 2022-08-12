@@ -11,12 +11,18 @@
         exit;
     }
 
-    if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_POST['vehicle-price']) && isset($_POST['is-available'])) {
+    if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_POST['vehicle-price']) && isset($_POST['is-available']) && isset($_POST['vehicle-description'])) {
         if (isset($_SESSION['vehicle-img-name'])) {
             $brand = htmlentities($_POST['vehicle-brand']);
             $model = htmlentities($_POST['vehicle-model']);
             $price = htmlentities($_POST['vehicle-price']);
             $avail = htmlentities($_POST['is-available']);
+            $description = NULL;
+
+            if (strlen($_POST['vehicle-description']) > 0) {
+                $description = htmlentities($_POST['vehicle-description']);
+            }
+
             if ($avail == 0 || $avail == 'false' || $avail == 'off' || empty($avail))
                 $avail = 0;
             else 
@@ -35,9 +41,9 @@
             $vehicleID = $vehicleID[0] + 1;
             $stmt->close();
 
-            $query = "INSERT INTO vehicles VALUES(?, ?, ?, ?, ?, ?)";
+            $query = "INSERT INTO vehicles VALUES(?, ?, ?, ?, ?, ?, ?)";
             $stmt = $db_connection->prepare($query);
-            $stmt->bind_param('issdsi', $vehicleID, $brand, $model, $price, $img, $avail);
+            $stmt->bind_param('issdsis', $vehicleID, $brand, $model, $price, $img, $avail, $description);
             
             if ($stmt->execute())
                 $_SESSION['msg'] = 'Pomyślnie dodano nowy pojazd.';
@@ -202,7 +208,7 @@
                         </header>
                         <section>
                             <form action="upload.php" method="POST" enctype="multipart/form-data">
-                                <label>Wybierz zdjęcie samochodu</label>
+                                <label>Wybierz zdjęcie samochodu*</label>
                                 <div class="upload-wrapper">
                                     <input type="file" name="vehicle-img" id="vehicle-img" accept="image/png, image/jpg, image/jpeg, image/gif" required>
                                     <i class="fas fa-check-circle img-check"></i>
@@ -219,14 +225,16 @@
                                 ?>
                             </div>
                             <form action="" method="POST">
-                                <label>Marka pojazdu</label>
+                                <label>Marka pojazdu*</label>
                                 <input type="text" name="vehicle-brand" required>
-                                <label>Model pojazdu</label>
+                                <label>Model pojazdu*</label>
                                 <input type="text" name="vehicle-model" required>
-                                <label>Cena</label>
+                                <label>Cena*</label>
                                 <input type="text" name="vehicle-price" placeholder="np. 59,59" required>
-                                <label>Ustaw dostępność do rezerwacji (Opcjonalne)</label>
+                                <label>Ustaw dostępność do rezerwacji</label>
                                 <input type="text" name="is-available" placeholder="Wpisz 0 jeśli nie lub 1 jeśli tak">
+                                <label>Dodaj opis pojazdu</label>
+                                <textarea name="vehicle-description"></textarea>
                                 <button type="submit">Dodaj</button>
                             </form>
                         </section>

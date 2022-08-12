@@ -186,7 +186,7 @@
                             <?php 
                                 require('../db/db_connection.php');
 
-                                $query = "SELECT messages.* FROM messages INNER JOIN mailboxes ON mailboxes.message_id=messages.id WHERE user=? AND direction='in'";
+                                $query = "SELECT messages.* FROM messages INNER JOIN mailboxes ON mailboxes.message_id=messages.id WHERE user=? AND direction='in' ORDER BY date DESC";
                                 $stmt = $db_connection->prepare($query);
                                 $stmt->bind_param('s', $_SESSION['login']);
                                 $stmt->execute();
@@ -219,7 +219,7 @@
                                 else
                                     echo 'Nie masz żadnych wiadomości.';
 
-                                $query = "SELECT messages.*, mailboxes.user FROM messages INNER JOIN mailboxes ON mailboxes.message_id=messages.id WHERE user=? AND direction='out'";
+                                $query = "SELECT messages.*, mailboxes.user FROM messages INNER JOIN mailboxes ON mailboxes.message_id=messages.id WHERE user=? AND direction='out' ORDER BY date DESC";
                                 $stmt = $db_connection->prepare($query);
                                 $stmt->bind_param('s', $_SESSION['login']);
                                 $stmt->execute();
