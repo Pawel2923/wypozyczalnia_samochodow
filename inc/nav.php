@@ -14,17 +14,25 @@
                 </div>
             </div>
         </div>
-        <div class="logged-menu <?php if (isset($_SESSION['login'])) echo 'show-logged-menu' ?>">
-            <ul>
-                <?php
+        <div class="logged-menu show-logged-menu">
+            <?php 
+                $admin = '';
                 if (isset($_SESSION['isAdmin'])) {
                     if ($_SESSION['isAdmin'])
-                        echo '<li><a href="admin.php">Panel administracyjny</a></li>';
+                        $admin = '<li><a href="admin.php">Panel administracyjny</a></li>';
                 }
-                ?>
-                <li><a href="user.php">Panel użytkownika</a></li>
-                <li><a href="logout.php">Wyloguj się</a></li>
-            </ul>
+
+                if (isset($_SESSION['login'])) {
+                    echo '
+                    <ul>
+                        '.$admin.'
+                        <li><a href="user.php">Panel użytkownika</a></li>
+                        <li><a href="logout.php">Wyloguj się</a></li>
+                    </ul>
+                ';} else {
+                    echo 'Aby przeglądać swój profil zaloguj się';
+                }
+            ?>
         </div>
     </div>
 </nav>
@@ -42,12 +50,12 @@
         <span>Wycena</span>
     </a>
     <a href="contact.php">
-        <i class="fa-solid fa-address-book"></i>
+        <i class="fa-solid fa-comments"></i>
         <span>Kontakt</span>
     </a>
     <a href="#" referrerpolicy="no-referer" class="open">
-        <i class="fa-solid fa-gear"></i>
-        <span>Ustawienia</span>
+        <i class="fa-solid fa-circle-user"></i>
+        <span>Profil</span>
     </a>
 </nav>
 <nav class="desktop-nav">
