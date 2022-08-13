@@ -1,11 +1,5 @@
 <nav class="mobile-nav-top">
-    <div class="nav-header">
-        <a href="index.php">
-            <h2>Wypożyczalnia</h2>
-        </a>
-    </div>
-    <div class="open"><i class="fas fa-bars"></i></div>
-    <div class="nav-wrapper">
+    <div class="nav-wrapper wrapper-transform">
         <div class="top-content">
             <div class="close"><i class="fas fa-times"></i></div>
             <div class="user">
@@ -50,6 +44,10 @@
     <a href="contact.php">
         <i class="fa-solid fa-address-book"></i>
         <span>Kontakt</span>
+    </a>
+    <a href="#" referrerpolicy="no-referer" class="open">
+        <i class="fa-solid fa-gear"></i>
+        <span>Ustawienia</span>
     </a>
 </nav>
 <nav class="desktop-nav">
@@ -141,29 +139,18 @@
 </nav>
 <script>
     window.addEventListener('scroll', () => {
+        const fixedNav = document.querySelector('.fixed-nav');
         if (window.innerWidth > 800) {
             const nav = document.querySelectorAll('.desktop-nav');
             const navHeight = nav[0].offsetHeight;
             if (window.pageYOffset > navHeight) {
-                document.querySelector('.fixed-nav').style.transform = "translateY(0)";
-                document.querySelector('.fixed-nav').style.webkitTransform = "translateY(0)";
-                document.querySelector('.fixed-nav').style.mozTransform = "translateY(0)";
-                document.querySelector('.fixed-nav').style.msTransform = "translateY(0)";
-                document.querySelector('.fixed-nav').style.oTransform = "translateY(0)";
-                document.querySelector('.fixed-nav').style.opacity = 1;
+                fixedNav.classList.add("fixed-nav-transform");
+                fixedNav.style.opacity = 1;
             } else {
-                document.querySelector('.fixed-nav').style.transform = "translateY(-100%)";
-                document.querySelector('.fixed-nav').style.webkitTransform = "translateY(-100%)";
-                document.querySelector('.fixed-nav').style.mozTransform = "translateY(-100%)";
-                document.querySelector('.fixed-nav').style.msTransform = "translateY(-100%)";
-                document.querySelector('.fixed-nav').style.oTransform = "translateY(-100%)";
+                fixedNav.classList.remove("fixed-nav-transform");
             }
         } else {
-            document.querySelector('.fixed-nav').style.transform = "translateY(-100%)";
-            document.querySelector('.fixed-nav').style.webkitTransform = "translateY(-100%)";
-            document.querySelector('.fixed-nav').style.mozTransform = "translateY(-100%)";
-            document.querySelector('.fixed-nav').style.msTransform = "translateY(-100%)";
-            document.querySelector('.fixed-nav').style.oTransform = "translateY(-100%)";
+            fixedNav.classList.remove("fixed-nav-transform");
         }
     });
 </script>
