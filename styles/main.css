@@ -114,7 +114,7 @@ nav.desktop-nav ul a:last-child {
   -ms-transition: transform 0.2s ease, opacity 0.2s ease;
   -o-transition: transform 0.2s ease, opacity 0.2s ease;
   visibility: hidden;
-  padding: 20px;
+  padding: 10px;
   z-index: 3;
 }
 
@@ -137,7 +137,7 @@ nav.desktop-nav ul a:last-child {
 }
 
 .logged-menu li {
-  width: 100%;
+  width: max-content;
   margin-bottom: 10px;
 }
 
