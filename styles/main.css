@@ -563,9 +563,6 @@ footer .bottom-content .bottom-text {
     -webkit-box-direction: normal;
     -ms-flex-direction: column;
     flex-direction: column;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
     font-weight: 300;
     font-size: 1.3em;
     z-index: 3;
@@ -593,9 +590,10 @@ footer .bottom-content .bottom-text {
   }
   nav.mobile-nav-top .logged-menu {
     position: static;
+    margin-left: calc(1rem + 10px);
   }
   nav.mobile-nav-top .logged-menu li {
-    text-align: center;
+    text-align: left;
   }
   nav.mobile-nav-top .user {
     margin-top: 0;
