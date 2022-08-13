@@ -1,3 +1,7 @@
+<?php 
+    require_once("getUserProfile.php");
+?>
+
 <nav class="mobile-nav">
     <a href="index.php">
         <i class="fa-solid fa-house"></i>
@@ -45,6 +49,20 @@
                 if (isset($_SESSION['login'])) {
                     echo '
                     <ul>
+                        <li><script>
+                            const date = new Date();
+                            const hour = date.getHours();
+                            let welcomeMessage = "Dzień dobry ";
+                            
+                            if (hour > 19 || hour < 5) {
+                                welcomeMessage = "Dobry wieczór ";
+                            }
+                            
+                            welcomeMessage = welcomeMessage + "<b>'.$userProfile->name.'</b>";
+                            document.write(welcomeMessage);
+                        </script></li>
+                        <li>Nieprzeczytane wiadomości: <b>'.$userProfile->unread.'</b></li>
+                        <li>Liczba wypożyczonych pojazdów: <b>'.$userProfile->rented_vehicles.'</b></li>
                         '.$admin.'
                         <li><a href="user.php"><i class="fa-solid fa-gear"></i> Ustawienia</a></li>
                         <li><a href="logout.php"><i class="fa-solid fa-right-from-bracket"></i> Wyloguj się</a></li>
