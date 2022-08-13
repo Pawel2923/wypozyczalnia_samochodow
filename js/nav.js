@@ -1,16 +1,10 @@
 const mobileNav = document.querySelector(".mobile-nav-top .nav-wrapper");
-const openButton = document.querySelector(".mobile-nav-top .open");
-const closeButton = document.querySelector(
-  ".mobile-nav-top .nav-wrapper .close"
-);
+const openButton = document.querySelector(".open");
+const closeButton = document.querySelector(".nav-wrapper .close");
 
 if (openButton != null) {
   const openMenu = () => {
-    mobileNav.style.transform = "translateX(0)";
-    mobileNav.style.webkitTransform = "translateX(0)";
-    mobileNav.style.mozTransform = "translateX(0)";
-    mobileNav.style.msTransform = "translateX(0)";
-    mobileNav.style.oTransform = "translateX(0)";
+    mobileNav.classList.remove("wrapper-transform");
     document.querySelector("body").style.overflow = "hidden";
 
     if (window.innerWidth < 800) {
@@ -22,11 +16,8 @@ if (openButton != null) {
       document.addEventListener("touchmove", (e) => {
         clientX = e.touches[0].clientX;
         if (startClientX < 30 && startClientX + 30 < clientX) {
-          mobileNav.style.transform = "translateX(100%)";
-          mobileNav.style.webkitTransform = "translateX(100%)";
-          mobileNav.style.mozTransform = "translateX(100%)";
-          mobileNav.style.msTransform = "translateX(100%)";
-          mobileNav.style.oTransform = "translateX(100%)";
+          mobileNav.classList.add("wrapper-transform");
+
           document.querySelector("body").style.overflow = "auto";
         }
       });
@@ -54,11 +45,8 @@ if (openButton != null) {
 
 if (closeButton != null) {
   closeButton.addEventListener("click", () => {
-    mobileNav.style.transform = "translateX(100%)";
-    mobileNav.style.webkitTransform = "translateX(100%)";
-    mobileNav.style.mozTransform = "translateX(100%)";
-    mobileNav.style.msTransform = "translateX(100%)";
-    mobileNav.style.oTransform = "translateX(100%)";
+    mobileNav.classList.add("wrapper-transform");
+
     document.querySelector("body").style.overflow = "auto";
   });
 }
@@ -88,20 +76,4 @@ function scrollStop(callback, refresh = 66) {
     },
     false
   );
-}
-
-if (window.innerWidth < 800) {
-  let prevScrollPos = window.scrollY;
-
-  window.addEventListener("scroll", () => {
-    let currentScrollPos = window.scrollY;
-
-    prevScrollPos > currentScrollPos
-      ? (document.querySelector("nav.mobile-nav-top").style.top =
-          "0")
-      : (document.querySelector("nav.mobile-nav-top").style.top =
-          "-100%");
-
-    prevScrollPos = currentScrollPos;
-  });
 }
