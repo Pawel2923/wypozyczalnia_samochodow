@@ -43,26 +43,38 @@
                 $admin = '';
                 if (isset($_SESSION['isAdmin'])) {
                     if ($_SESSION['isAdmin'])
-                        $admin = '<li><a href="admin.php">Panel administracyjny</a></li>';
+                        $admin = '<li><a href="admin.php"><i class="fa-solid fa-hammer"></i> Panel administracyjny</a></li>';
                 }
 
                 if (isset($_SESSION['login'])) {
                     echo '
                     <ul>
-                        <li><script>
-                            const date = new Date();
-                            const hour = date.getHours();
-                            let welcomeMessage = "Dzień dobry ";
-                            
-                            if (hour > 19 || hour < 5) {
-                                welcomeMessage = "Dobry wieczór ";
-                            }
-                            
-                            welcomeMessage = welcomeMessage + "<b>'.$userProfile->name.'</b>";
-                            document.write(welcomeMessage);
-                        </script></li>
-                        <li>Nieprzeczytane wiadomości: <b>'.$userProfile->unread.'</b></li>
-                        <li>Liczba wypożyczonych pojazdów: <b>'.$userProfile->rented_vehicles.'</b></li>
+                        <li>
+                            <div class="card">
+                                <script>
+                                    const date = new Date();
+                                    const hour = date.getHours();
+                                    let welcomeMessage = "Dzień dobry ";
+                                    
+                                    if (hour > 19 || hour < 5) {
+                                        welcomeMessage = "Dobry wieczór ";
+                                    }
+                                    
+                                    welcomeMessage = welcomeMessage + "<b>'.$userProfile->name.'</b>";
+                                    document.write(welcomeMessage);
+                                </script>
+                                <div>
+                                    <div class="number-wrapper">
+                                        <div class="card-number">'.$userProfile->unread.'</div>
+                                        <span>Nieprzeczytane wiadomości</span>
+                                    </div>
+                                    <div class="number-wrapper" id="vehicles-button">
+                                        <div class="card-number">'.$userProfile->rented_vehicles.'</div>
+                                        <span>Wypożyczone pojazdy</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
                         '.$admin.'
                         <li><a href="user.php"><i class="fa-solid fa-gear"></i> Ustawienia</a></li>
                         <li><a href="logout.php"><i class="fa-solid fa-right-from-bracket"></i> Wyloguj się</a></li>
@@ -109,7 +121,7 @@
                         <?php
                         if (isset($_SESSION['isAdmin'])) {
                             if ($_SESSION['isAdmin'])
-                                echo '<li><a href="admin.php">Panel administracyjny</a></li>';
+                                echo '<li><a href="admin.php"><i class="fa-solid fa-hammer"></i> Panel administracyjny</a></li>';
                         }
                         ?>
                         <li><a href="user.php"><i class="fa-solid fa-gear"></i> Ustawienia</a></li>
@@ -150,7 +162,7 @@
                         <?php
                         if (isset($_SESSION['isAdmin'])) {
                             if ($_SESSION['isAdmin'])
-                                echo '<li><a href="admin.php">Panel administracyjny</a></li>';
+                                echo '<li><a href="admin.php"><i class="fa-solid fa-hammer"></i> Panel administracyjny</a></li>';
                         }
                         ?>
                         <li><a href="user.php"><i class="fa-solid fa-gear"></i> Ustawienia</a></li>
@@ -176,5 +188,9 @@
         } else {
             fixedNav.classList.remove("fixed-nav-transform");
         }
+    });
+
+    document.getElementById("vehicles-button").addEventListener('click', () => {
+        window.location = "user.php#vehicles";
     });
 </script>

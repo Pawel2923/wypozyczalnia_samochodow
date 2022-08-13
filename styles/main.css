@@ -106,7 +106,8 @@ nav.desktop-nav ul a:last-child {
   -webkit-transition: opacity 0.2s ease, -webkit-transform 0.2s ease;
   transition: opacity 0.2s ease, -webkit-transform 0.2s ease;
   transition: transform 0.2s ease, opacity 0.2s ease;
-  transition: transform 0.2s ease, opacity 0.2s ease, -webkit-transform 0.2s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease,
+    -webkit-transform 0.2s ease;
   transition: transform 0.2s ease, opacity 0.2s ease,
     -webkit-transform 0.2s ease;
   -webkit-transition: transform 0.2s ease, opacity 0.2s ease;
@@ -333,8 +334,8 @@ main .cars-list {
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
   margin-bottom: 20px;
 }
 .cars-list .vehicle-name {
@@ -497,11 +498,11 @@ footer .bottom-content .bottom-text {
     display: -ms-flexbox;
     display: flex;
     -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
     -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
     font-size: 1.3rem;
     background: #fff;
     border-top: 0.5px solid black;
@@ -527,11 +528,11 @@ footer .bottom-content .bottom-text {
     display: flex;
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
     -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
     width: 5rem;
     padding: 0.5rem 0;
   }
@@ -570,11 +571,11 @@ footer .bottom-content .bottom-text {
     display: -ms-flexbox;
     display: flex;
     -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
     -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-            justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
     padding: 0.5rem 1rem;
     font-weight: bold;
     width: 100%;
@@ -590,13 +591,36 @@ footer .bottom-content .bottom-text {
   nav.mobile-nav .logged-menu {
     text-align: left;
     position: static;
-    margin-left: calc(1rem + 10px);
+    margin: 0 calc(1rem + 10px);
   }
   nav.mobile-nav .logged-menu li {
-    width: auto;
+    width: 100%;
+    margin-bottom: 2.5rem;
   }
   nav.mobile-nav .user {
     margin-top: 0;
+  }
+  nav.mobile-nav .card > div {
+    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 1rem;
+  }
+  nav.mobile-nav .number-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  nav.mobile-nav .card-number {
+    background: #000;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2em;
+    height: 2em;
   }
   .user a {
     padding: 0;
