@@ -1,5 +1,25 @@
-<nav class="mobile-nav-top">
-    <div class="nav-wrapper wrapper-transform">
+<nav class="mobile-nav">
+    <a href="index.php">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+    </a>
+    <a href="rezerwacja.php">
+        <i class="fa-solid fa-bookmark"></i>
+        <span>Rezerwacja</span>
+    </a>
+    <a href="pricing.php">
+        <i class="fa-solid fa-tag"></i>
+        <span>Wycena</span>
+    </a>
+    <a href="contact.php">
+        <i class="fa-solid fa-comments"></i>
+        <span>Kontakt</span>
+    </a>
+    <a href="#" referrerpolicy="no-referer" class="open">
+        <i class="fa-solid fa-circle-user"></i>
+        <span>Profil</span>
+    </a>
+    <div class="mobile-nav-wrapper wrapper-transform">
         <div class="top-content">
             <div class="close"><i class="fas fa-times"></i></div>
             <div class="user">
@@ -35,28 +55,6 @@
             ?>
         </div>
     </div>
-</nav>
-<nav class="mobile-nav">
-    <a href="index.php">
-        <i class="fa-solid fa-house"></i>
-        <span>Home</span>
-    </a>
-    <a href="rezerwacja.php">
-        <i class="fa-solid fa-bookmark"></i>
-        <span>Rezerwacja</span>
-    </a>
-    <a href="pricing.php">
-        <i class="fa-solid fa-tag"></i>
-        <span>Wycena</span>
-    </a>
-    <a href="contact.php">
-        <i class="fa-solid fa-comments"></i>
-        <span>Kontakt</span>
-    </a>
-    <a href="#" referrerpolicy="no-referer" class="open">
-        <i class="fa-solid fa-circle-user"></i>
-        <span>Profil</span>
-    </a>
 </nav>
 <nav class="desktop-nav">
     <div class="nav-header">
