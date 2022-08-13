@@ -46,8 +46,8 @@
                     echo '
                     <ul>
                         '.$admin.'
-                        <li><a href="user.php">Panel użytkownika</a></li>
-                        <li><a href="logout.php">Wyloguj się</a></li>
+                        <li><a href="user.php"><i class="fa-solid fa-gear"></i> Ustawienia</a></li>
+                        <li><a href="logout.php"><i class="fa-solid fa-right-from-bracket"></i> Wyloguj się</a></li>
                     </ul>
                 ';} else {
                     echo 'Aby przeglądać swój profil zaloguj się';
@@ -94,8 +94,8 @@
                                 echo '<li><a href="admin.php">Panel administracyjny</a></li>';
                         }
                         ?>
-                        <li><a href="user.php">Panel użytkownika</a></li>
-                        <li><a href="logout.php">Wyloguj się</a></li>
+                        <li><a href="user.php"><i class="fa-solid fa-gear"></i> Ustawienia</a></li>
+                        <li><a href="logout.php"><i class="fa-solid fa-right-from-bracket"></i> Wyloguj się</a></li>
                     </ul>
                 </div>
             </div>
@@ -135,8 +135,8 @@
                                 echo '<li><a href="admin.php">Panel administracyjny</a></li>';
                         }
                         ?>
-                        <li><a href="user.php">Panel użytkownika</a></li>
-                        <li><a href="logout.php">Wyloguj się</a></li>
+                        <li><a href="user.php"><i class="fa-solid fa-gear"></i> Ustawienia</a></li>
+                        <li><a href="logout.php"><i class="fa-solid fa-right-from-bracket"></i> Wyloguj się</a></li>
                     </ul>
                 </div>
             </div>
