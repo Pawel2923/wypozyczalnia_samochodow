@@ -6,43 +6,48 @@ if (strpos($path, '/admin') !== false)            // Sprawdzenie czy ściezka za
 else 
     require('db/db_connection.php');
 
-//Pobranie danych z tabeli vehicles
-$query = "SELECT * FROM vehicles";
-$stmt = $db_connection->prepare($query);
-$stmt->execute();
-$result = $stmt->get_result();
-$vehicles = $result->fetch_all(); //Przypisanie wszystkich rekordów do $vehicles
-$stmt->close();
-$db_connection->close();
+if (!isset($_SESSION['connectionError'])) {
+    echo "<script>console.log('Pomyślnie połączono z bazą')</script>";
+    //Pobranie danych z tabeli vehicles
+    $query = "SELECT * FROM vehicles";
+    $stmt = $db_connection->prepare($query);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $vehicles = $result->fetch_all(); //Przypisanie wszystkich rekordów do $vehicles
+    $stmt->close();
+    $db_connection->close();
 
-class Vehicle
-{
-    public $id;
-    public $brand;
-    public $model;
-    public $price;
-    public $img_url;
-    public $isAvailable;
+    class Vehicle
+    {
+        public $id;
+        public $brand;
+        public $model;
+        public $price;
+        public $img_url;
+        public $isAvailable;
 
-    function setProperty($value, $propertyName) {
-        $this->$propertyName = $value;
-    }
-};
+        function setProperty($value, $propertyName) {
+            $this->$propertyName = $value;
+        }
+    };
 
-//Ustawienie właściwości dla pojazdów
-$vehNum = sizeof($vehicles);
+    //Ustawienie właściwości dla pojazdów
+    $vehNum = sizeof($vehicles);
 
-//Stworzenie obiektów vehicle i ustawienie ich właściwości
-if ($vehNum > 0) {
-    for ($i = 0; $i < $vehNum; $i++) {
-        $vehicle[$i] = new Vehicle();
-        $properties = get_object_vars($vehicle[$i]);  // Pobranie właściwości i zapisanie ich w tablicy
-        $propNum = count($properties); // Ilość właściwośći obiektu $vehicle 
-        $properties = array_keys($properties); // Pobranie nazw kluczy
-        for ($j = 0; $j < $propNum; $j++) {
-            $vehicle[$i]->setProperty($vehicles[$i][$j], $properties[$j]);  // Ustawienie właściwości
+    //Stworzenie obiektów vehicle i ustawienie ich właściwości
+    if ($vehNum > 0) {
+        for ($i = 0; $i < $vehNum; $i++) {
+            $vehicle[$i] = new Vehicle();
+            $properties = get_object_vars($vehicle[$i]);  // Pobranie właściwości i zapisanie ich w tablicy
+            $propNum = count($properties); // Ilość właściwośći obiektu $vehicle 
+            $properties = array_keys($properties); // Pobranie nazw kluczy
+            for ($j = 0; $j < $propNum; $j++) {
+                $vehicle[$i]->setProperty($vehicles[$i][$j], $properties[$j]);  // Ustawienie właściwości
+            }
         }
     }
+} else {
+    echo "<script>console.error('Nie udało się wczytać listy pojazdów')</script>";
 }
 
 //Wyświetlanie informacji o pojazdach jako karty

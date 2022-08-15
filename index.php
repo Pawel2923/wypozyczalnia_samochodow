@@ -38,7 +38,7 @@
                     if (isset($vehicle))
                         printCarInfo("Wypożycz", $vehNum, $vehicle, false, 6, true);
                     else 
-                        echo '<p>Obecnie nie ma pojazdów do rezerwacji</p>';
+                        echo '<p style="grid-column: span 3;">Obecnie nie ma pojazdów do rezerwacji</p>';
                 ?>
             </div>
         </section>
