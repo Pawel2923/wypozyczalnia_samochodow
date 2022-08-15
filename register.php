@@ -25,54 +25,60 @@
                 // Połączenie z bazą danych
                 require('db/db_connection.php');
 
-                // Sprawdzenie czy podany login lub email są już w bazie
-                $query = "SELECT `login`, `email` FROM `users` WHERE `login`=? OR `email`=?";
+                if (!isset($_SESSION['connectionError'])) {
+                    echo "<script>console.log('Pomyślnie połączono z bazą')</script>";
 
-                $stmt = $db_connection->prepare($query);
-                $stmt->bind_param("ss", $login, $email);
-                $stmt->execute();
+                    // Sprawdzenie czy podany login lub email są już w bazie
+                    $query = "SELECT `login`, `email` FROM `users` WHERE `login`=? OR `email`=?";
 
-                $result = $stmt->get_result();
-                $stmt->close();
-
-                if ($result->fetch_assoc() > 0) {
-                    if (isset($email)) 
-                        $_SESSION['login-error'] = "Podany email jest już zarejestrowany";
-                    else 
-                        $_SESSION['login-error'] = "Podany login jest już zarejestrowany";
-                }
-                else {
-                    // Ustawienie id użytkownika
-                    $query = "SELECT COUNT(id) FROM users";
                     $stmt = $db_connection->prepare($query);
+                    $stmt->bind_param("ss", $login, $email);
                     $stmt->execute();
-                    $result = $stmt->get_result();
-                    $userID = $result->fetch_row();
-                    $userID = $userID[0] + 1;
-                    $stmt->close();
-                    // Wprowadzanie danych do bazy
-                    if (isset($email)) {
-                        $query = "INSERT INTO `users` (id, login, email, password) VALUES(?, ?, ?, ?)";
 
-                        $stmt = $db_connection->prepare($query);
-                        $stmt->bind_param("isss", $userID, $login, $email, $hashedPasswd);
-                        $stmt->execute();
-                        $stmt->close();
+                    $result = $stmt->get_result();
+                    $stmt->close();
+
+                    if ($result->fetch_assoc() > 0) {
+                        if (isset($email)) 
+                            $_SESSION['login-error'] = "Podany email jest już zarejestrowany";
+                        else 
+                            $_SESSION['login-error'] = "Podany login jest już zarejestrowany";
                     }
                     else {
-                        $query = "INSERT INTO `users` (id, login, password) VALUES(?, ?, ?)";
-
+                        // Ustawienie id użytkownika
+                        $query = "SELECT COUNT(id) FROM users";
                         $stmt = $db_connection->prepare($query);
-                        $stmt->bind_param("iss", $userID, $login, $hashedPasswd);
                         $stmt->execute();
+                        $result = $stmt->get_result();
+                        $userID = $result->fetch_row();
+                        $userID = $userID[0] + 1;
                         $stmt->close();
+                        // Wprowadzanie danych do bazy
+                        if (isset($email)) {
+                            $query = "INSERT INTO `users` (id, login, email, password) VALUES(?, ?, ?, ?)";
+
+                            $stmt = $db_connection->prepare($query);
+                            $stmt->bind_param("isss", $userID, $login, $email, $hashedPasswd);
+                            $stmt->execute();
+                            $stmt->close();
+                        }
+                        else {
+                            $query = "INSERT INTO `users` (id, login, password) VALUES(?, ?, ?)";
+
+                            $stmt = $db_connection->prepare($query);
+                            $stmt->bind_param("iss", $userID, $login, $hashedPasswd);
+                            $stmt->execute();
+                            $stmt->close();
+                        }
+                        $db_connection->close();
+        
+                        header('Location: login.php');
+                        exit;
                     }
                     $db_connection->close();
-    
-                    header('Location: login.php');
-                    exit;
+                } else {
+                    echo "<script>console.error('Błąd połączenia z bazą danych');</script>";
                 }
-                $db_connection->close();
 
                 header('Location: register.php');
                 exit;

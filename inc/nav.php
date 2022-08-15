@@ -46,7 +46,7 @@
                         $admin = '<li><a href="admin.php"><i class="fa-solid fa-hammer"></i> Panel administracyjny</a></li>';
                 }
 
-                if (isset($_SESSION['login'])) {
+                if (isset($_SESSION['login']) && !isset($_SESSION['connectionError'])) {
                     echo '
                     <ul>
                         <li>
@@ -80,7 +80,11 @@
                         <li><a href="logout.php"><i class="fa-solid fa-right-from-bracket"></i> Wyloguj się</a></li>
                     </ul>
                 ';} else {
-                    echo 'Aby przeglądać swój profil zaloguj się';
+                    if (!isset($_SESSION['connectionError'])) {
+                        echo 'Aby przeglądać swój profil zaloguj się';
+                    } else {
+                        echo 'Nie można wczytać profilu. Prosimy spróbować później';
+                    }
                 }
             ?>
         </div>
@@ -190,7 +194,11 @@
         }
     });
 
-    document.getElementById("vehicles-button").addEventListener('click', () => {
-        window.location = "user.php#vehicles";
-    });
+    const vehiclesBtn = document.getElementById("vehicles-button");
+
+    if (vehiclesBtn) {
+        vehiclesBtn.addEventListener('click', () => {
+            window.location = "user.php#vehicles";
+        });
+    }
 </script>
