@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 13 Gru 2021, 02:04
--- Wersja serwera: 10.4.22-MariaDB
--- Wersja PHP: 8.0.13
+-- Czas generowania: 15 Sie 2022, 09:37
+-- Wersja serwera: 10.4.24-MariaDB
+-- Wersja PHP: 7.4.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -46,18 +46,20 @@ CREATE TABLE `mailboxes` (
   `id` int(11) NOT NULL,
   `message_id` int(11) NOT NULL,
   `user` text NOT NULL,
-  `direction` enum('in','out') NOT NULL
+  `direction` enum('in','out') NOT NULL,
+  `unread` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Zrzut danych tabeli `mailboxes`
 --
 
-INSERT INTO `mailboxes` (`id`, `message_id`, `user`, `direction`) VALUES
-(1, 1, 'admin', 'in'),
-(2, 2, 'admin', 'in'),
-(3, 3, 'admin', 'in'),
-(4, 4, 'admin', 'in');
+INSERT INTO `mailboxes` (`id`, `message_id`, `user`, `direction`, `unread`) VALUES
+(1, 1, 'admin', 'in', 0),
+(2, 2, 'admin', 'in', 0),
+(3, 3, 'admin', 'in', 0),
+(4, 4, 'admin', 'in', 0),
+(9, 5, 'admin', 'in', 0);
 
 -- --------------------------------------------------------
 
@@ -83,7 +85,8 @@ INSERT INTO `messages` (`id`, `message`, `imie`, `nazwisko`, `email`, `tel`, `da
 (1, 'asdasdasdasdasdasdasd', 'test', 'test', 'testttt123@asdasd.pl', 0, '2021-12-13 00:17:12'),
 (2, 'asdasdasdasfvcxvcxv', 'ts=est2', 'aushdbuasd', 'asdasdas@asdasd.dfasdsa', 0, '2021-12-13 00:19:53'),
 (3, 'asldaskdasd', 'test3', 'aytsvdysa', 'yavsdygvasyd@asd.pl', 1241324, '2021-12-13 00:24:14'),
-(4, '3214v324b', 'test4', 'asdasd', 'asdasd@a.gfh', 0, '2021-12-13 00:27:38');
+(4, '3214v324b', 'test4', 'asdasd', 'asdasd@a.gfh', 0, '2021-12-13 00:27:38'),
+(5, 'Użytkownik o loginie lub adresie e-mail: <span style=\"font-weight: bold;\">andrzej</span> prosi o zresetowanie hasła.', ' ', ' ', 'noreply@wyposamochodow.localhost', 0, '2022-08-15 09:22:46');
 
 -- --------------------------------------------------------
 
@@ -102,6 +105,20 @@ CREATE TABLE `newsletter` (
 
 INSERT INTO `newsletter` (`id`, `email`) VALUES
 (1, 'asdasd@asdas.pl');
+
+-- --------------------------------------------------------
+
+--
+-- Zastąpiona struktura widoku `profiles`
+-- (Zobacz poniżej rzeczywisty widok)
+--
+CREATE TABLE `profiles` (
+`id` int(11)
+,`login` text
+,`rented_vehicles` int(11)
+,`name` text
+,`unread` bigint(21)
+);
 
 -- --------------------------------------------------------
 
@@ -151,9 +168,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `login`, `email`, `password`, `is_admin`, `rented_vehicles`, `change_passwd`, `imie`, `nazwisko`, `telefon`) VALUES
-(1, 'admin', 'admin123@mail.pl', '$2y$10$BMXpq02kOPqN0igKe/siAetNZEov36VpSAqdU4ETDx4KHvqFQ2x/6', 1, 7, 0, 'Brak danych', 'Brak danych', 0),
+(1, 'admin', 'admin123@mail.pl', '$2y$10$BMXpq02kOPqN0igKe/siAetNZEov36VpSAqdU4ETDx4KHvqFQ2x/6', 1, 7, 0, NULL, 'Brak danych', 0),
 (2, 'user', 'user123@mail.pl', '$2y$10$SZGlDAHLa0HJvEnsW/K5oetE2zgSO73rp5/m1IlneMH168s.BAB9.', 0, 1, 0, NULL, NULL, NULL),
-(3, 'andrzej', '', '$2y$10$IAgsVMpP61BVVDQR7xmSNOWEDmK3siLjBeQeYuCnWwNcpEeOE8igK', 0, 0, 0, 'test', 'asdasd', NULL);
+(3, 'andrzej', '', '$2y$10$LG0fZURS20/BC9L6ZHUfIOyGbTbfKNOEYimk9btLjXXDF0NhCkVI.', 0, 0, 0, 'Włodzimierz', 'Kowalski', NULL);
 
 -- --------------------------------------------------------
 
@@ -192,7 +209,16 @@ INSERT INTO `vehicles` (`id`, `marka`, `model`, `cena`, `img_url`, `is_available
 --
 DROP TABLE IF EXISTS `admins`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `admins`  AS SELECT `users`.`id` AS `id`, `users`.`login` AS `login`, `users`.`email` AS `email` FROM `users` WHERE `users`.`is_admin` = 1 ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `admins`  AS SELECT `users`.`id` AS `id`, `users`.`login` AS `login`, `users`.`email` AS `email` FROM `users` WHERE `users`.`is_admin` = 11  ;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura widoku `profiles`
+--
+DROP TABLE IF EXISTS `profiles`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `profiles`  AS SELECT `users`.`id` AS `id`, `users`.`login` AS `login`, `users`.`rented_vehicles` AS `rented_vehicles`, `users`.`imie` AS `name`, (select count(0) from `mailboxes` where `mailboxes`.`unread` = 0 and `mailboxes`.`user` = `users`.`login`) AS `unread` FROM `users``users`  ;
 
 --
 -- Indeksy dla zrzutów tabel
@@ -249,7 +275,7 @@ ALTER TABLE `vehicles`
 -- AUTO_INCREMENT dla tabeli `mailboxes`
 --
 ALTER TABLE `mailboxes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT dla tabeli `newsletter`

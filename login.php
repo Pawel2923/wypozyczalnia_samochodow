@@ -23,55 +23,61 @@
             
             // Połączenie z bazą danych
             require('db/db_connection.php');
+            
+            if (!isset($_SESSION['connectionError'])) {
+                echo "<script>console.log('Pomyślnie połączono z bazą')</script>";
 
-            // Sprawdzenie czy istnieje taki login/email
-            $query = "SELECT `login`, `email` FROM `users` WHERE `login`=? OR `email`=?";
+                // Sprawdzenie czy istnieje taki login/email
+                $query = "SELECT `login`, `email` FROM `users` WHERE `login`=? OR `email`=?";
 
-            $stmt = $db_connection->prepare($query);
-            $stmt->bind_param("ss", $login, $email);
-            $stmt->execute();
+                $stmt = $db_connection->prepare($query);
+                $stmt->bind_param("ss", $login, $email);
+                $stmt->execute();
 
-            $result = $stmt->get_result();
+                $result = $stmt->get_result();
 
-            if ($result->fetch_assoc()) {
-                $getPasswd = "SELECT `password`, `is_admin`, `change_passwd` FROM `users` WHERE `login`=? OR `email`=?";
+                if ($result->fetch_assoc()) {
+                    $getPasswd = "SELECT `password`, `is_admin`, `change_passwd` FROM `users` WHERE `login`=? OR `email`=?";
 
-                $stmt2 = $db_connection->prepare($getPasswd);
-                $stmt2->bind_param("ss", $login, $email);
-                $stmt2->execute();
+                    $stmt2 = $db_connection->prepare($getPasswd);
+                    $stmt2->bind_param("ss", $login, $email);
+                    $stmt2->execute();
 
-                $result2 = $stmt2->get_result();
+                    $result2 = $stmt2->get_result();
 
-                $queriedData = $result2->fetch_assoc();
+                    $queriedData = $result2->fetch_assoc();
 
-                if ($queriedData['change_passwd']) {
-                    $_SESSION['login'] = $login;
-                    $_SESSION['isLogged'] = true;
-                    
-                    header('Location: changePasswd.php');
-                    exit;
-                }
-                else {
-                    if (password_verify($password, $queriedData['password'])) {
+                    if ($queriedData['change_passwd']) {
                         $_SESSION['login'] = $login;
                         $_SESSION['isLogged'] = true;
-                        $_SESSION['isAdmin'] = $queriedData['is_admin'];
-
-                        $stmt->close();
-                        $db_connection->close();
-
-                        header('Location: index.php');
+                        
+                        header('Location: changePasswd.php');
                         exit;
                     }
-                    else 
-                        $_SESSION['password-error'] = "Podane hasło jest nieprawidłowe";
-                }
-            }
-            else 
-                $_SESSION['login-error'] = "Podany login lub e-mail jest nieprawidłowy";
+                    else {
+                        if (password_verify($password, $queriedData['password'])) {
+                            $_SESSION['login'] = $login;
+                            $_SESSION['isLogged'] = true;
+                            $_SESSION['isAdmin'] = $queriedData['is_admin'];
 
-            $stmt->close();
-            $db_connection->close();
+                            $stmt->close();
+                            $db_connection->close();
+
+                            header('Location: index.php');
+                            exit;
+                        }
+                        else 
+                            $_SESSION['password-error'] = "Podane hasło jest nieprawidłowe";
+                    }
+                }
+                else 
+                    $_SESSION['login-error'] = "Podany login lub e-mail jest nieprawidłowy";
+
+                $stmt->close();
+                $db_connection->close();
+            } else {
+                echo "<script>console.error('Błąd połączenia z bazą danych');</script>";
+            }
         }
     }
 ?>
