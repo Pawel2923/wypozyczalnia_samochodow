@@ -253,7 +253,7 @@ main .home-option {
     -webkit-box-pack: center;
         -ms-flex-pack: center;
             justify-content: center;
-    border: 2px solid #000;
+    border: 1px solid #000;
     font-size: 1.3rem;
     cursor: pointer;
     transition: background-color 0.2s ease;
@@ -298,12 +298,12 @@ main .option select {
     font-size: 16px;
     outline: none;
     margin-bottom: 10px;
-    border-width: 2px;
+    border-width: 1px;
 }
 
 main .option-button {
     margin: 0;
-    border: 2px solid #000;
+    border: 1px solid #000;
     background-color: unset;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -350,7 +350,7 @@ main form textarea {
     font-size: 16px;
     outline: none;
     margin-top: 10px;
-    border: 2px solid #000;
+    border: 1px solid #000;
 }
 
 main form textarea {

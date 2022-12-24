@@ -24,20 +24,6 @@ SET time_zone = "+00:00";
 CREATE DATABASE wypozyczalnia;
 USE wypozyczalnia;
 
--- --------------------------------------------------------
-
---
--- Zastąpiona struktura widoku `admins`
--- (Zobacz poniżej rzeczywisty widok)
---
-CREATE TABLE `admins` (
-`id` int(11)
-,`login` text
-,`email` text
-);
-
--- --------------------------------------------------------
-
 --
 -- Struktura tabeli dla tabeli `mailboxes`
 --
@@ -201,6 +187,20 @@ INSERT INTO `vehicles` (`id`, `marka`, `model`, `cena`, `img_url`, `is_available
 (7, 'Mazda', 'RX-7', '80.00', 'https://upload.wikimedia.org/wikipedia/commons/a/a6/Mazda-rx7-3rd-generation01.jpg', 1),
 (8, 'Ford', 'Focus', '71.99', 'https://ocs-pl.oktawave.com/v1/AUTH_2887234e-384a-4873-8bc5-405211db13a2/autoblog/2021/08/ford-focus-sedan-test-202116.jpg', 1),
 (9, 'Lamborghini', 'Huracan', '120.00', 'img/lambo.jpg', 1);
+
+-- --------------------------------------------------------
+
+-- --------------------------------------------------------
+
+--
+-- Zastąpiona struktura widoku `admins`
+-- (Zobacz poniżej rzeczywisty widok)
+--
+CREATE TABLE `admins` (
+`id` int(11)
+,`login` text
+,`email` text
+);
 
 -- --------------------------------------------------------
 

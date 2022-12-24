@@ -52,16 +52,7 @@
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/panel.css">
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
-    <?php 
-        if (isset($_POST['theme'])) {
-            if ($_POST['theme'] != "default")
-                echo '<link rel="stylesheet" href="../styles/'.$_POST['theme'].'.css">';
-        }
-        elseif (isset($_COOKIE['theme'])) {
-            if ($_COOKIE['theme'] != "default")
-                echo '<link rel="stylesheet" href="../styles/'.$_COOKIE['theme'].'.css">';
-        }
-    ?>
+    <?php include_once("./inc/theme.php") ?>
     <style>
         .messages h3 {
             margin-top: 20px;
@@ -180,7 +171,7 @@
                 <main>
                     <div class="messages">
                         <header>
-                            <h2><a href="../admin.php">Wiadomości</a></h2>
+                            <h2>Wiadomości</h2>
                         </header>
                         <section>
                             <?php 
@@ -257,7 +248,7 @@
                         <i class="fab fa-youtube"></i>
                         <i class="fab fa-linkedin-in"></i>
                     </div>
-                    <div class="bottom-text">&copy;2021 by Paweł Poremba</div>
+                    <div class="bottom-text">&copy;2022 by Paweł Poremba</div>
                 </section>
             </footer>
         </div>
@@ -277,6 +268,6 @@
             checkInput(input[i]);
         }
     </script>
-    <?php include_once('logged.php'); ?>
+    <?php include_once('./inc/logged.php'); ?>
 </body>
 </html>

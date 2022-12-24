@@ -1,36 +1,44 @@
-<?php 
-    session_start();
-    if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
-        if (!$_SESSION['isAdmin']) {
-            header('Location: ../index.php');
-            exit;
-        }
-    }
-    else {
-        header('Location: ../login.php');
+<?php
+session_start();
+if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
+    if (!$_SESSION['isAdmin']) {
+        header('Location: ../index.php');
         exit;
     }
+} else {
+    header('Location: ../login.php');
+    exit;
+}
 
-    if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_POST['vehicle-price']) && isset($_POST['is-available']) && isset($_POST['vehicle-description'])) {
-        if (isset($_SESSION['vehicle-img-name'])) {
-            $brand = htmlentities($_POST['vehicle-brand']);
-            $model = htmlentities($_POST['vehicle-model']);
-            $price = htmlentities($_POST['vehicle-price']);
-            $avail = htmlentities($_POST['is-available']);
-            $description = NULL;
+class ConsoleMessage {
+    public $show = false;
+    public $content = NULL;
+    public $is_error = false;
+};
 
-            if (strlen($_POST['vehicle-description']) > 0) {
-                $description = htmlentities($_POST['vehicle-description']);
-            }
+$consoleLog = new ConsoleMessage;
 
-            if ($avail == 0 || $avail == 'false' || $avail == 'off' || empty($avail))
-                $avail = 0;
-            else 
-                $avail = 1;
+if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_POST['vehicle-price']) && isset($_POST['is-available']) && isset($_POST['vehicle-description'])) {
+    if (isset($_SESSION['vehicle-img-name'])) {
+        $brand = htmlentities($_POST['vehicle-brand']);
+        $model = htmlentities($_POST['vehicle-model']);
+        $price = htmlentities($_POST['vehicle-price']);
+        $avail = htmlentities($_POST['is-available']);
+        $description = NULL;
 
-            $img = "img/".$_SESSION['vehicle-img-name'];
-            unset($_SESSION['vehicle-img-name']);
+        if (strlen($_POST['vehicle-description']) > 0) {
+            $description = htmlentities($_POST['vehicle-description']);
+        }
 
+        if ($avail == 0 || $avail == 'false' || $avail == 'off' || empty($avail))
+            $avail = 0;
+        else
+            $avail = 1;
+
+        $img = "img/" . $_SESSION['vehicle-img-name'];
+        unset($_SESSION['vehicle-img-name']);
+
+        try {
             require('../db/db_connection.php');
 
             $query = "SELECT COUNT(id) FROM vehicles";
@@ -43,23 +51,39 @@
 
             $query = "INSERT INTO vehicles VALUES(?, ?, ?, ?, ?, ?, ?)";
             $stmt = $db_connection->prepare($query);
-            $stmt->bind_param('issdsis', $vehicleID, $brand, $model, $price, $img, $avail, $description);
-            
-            if ($stmt->execute())
-                $_SESSION['msg'] = 'Pomyślnie dodano nowy pojazd.';
-            else 
-                $_SESSION['msg'] = 'Nie udało się dodać pojazdu.';
+
+            if ($stmt !== false) {
+                $stmt->bind_param('issdsis', $vehicleID, $brand, $model, $price, $img, $avail, $description);
+
+                if ($stmt->execute())
+                    $_SESSION['msg'] = 'Pomyślnie dodano nowy pojazd.';
+                else
+                    $_SESSION['msg'] = 'Nie udało się dodać pojazdu.';
+            } else {
+                throw new Exception("Statement's value is false.Query's value is: $query");
+            }
 
             $stmt->close();
             $db_connection->close();
+        } catch (Exception $error) {
+            $error = addslashes($error);
+            $error = str_replace("\n", "", $error);
+            $consoleLog->show = true;
+            $consoleLog->content = $error;
+            $consoleLog->is_error = true;
+        } catch (mysqli_sql_exception $error) {
+            $consoleLog->show = true;
+            $consoleLog->content = $error;
+            $consoleLog->is_error = true;
         }
-        else {
-            $_SESSION['msg'] = 'Nie udało się pobrać zdjęcia.';
-        }
+    } else {
+        $_SESSION['msg'] = 'Nie udało się pobrać zdjęcia.';
     }
+}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Paweł Poremba">
@@ -80,6 +104,7 @@
             align-items: center;
             position: relative;
         }
+
         .img-check {
             display: none;
             color: #60b8ff;
@@ -89,54 +114,37 @@
             right: 0;
             transform: translateX(calc(100% + 10px));
         }
+
         img {
             margin-top: 10px;
             margin-bottom: 10px;
+            max-width: 50%;
         }
     </style>
-    <?php 
-        if (isset($_POST['theme'])) {
-            if ($_POST['theme'] != "default")
-                echo '<link rel="stylesheet" href="../styles/'.$_POST['theme'].'.css">';
-        }
-        elseif (isset($_COOKIE['theme'])) {
-            if ($_COOKIE['theme'] != "default")
-                echo '<link rel="stylesheet" href="../styles/'.$_COOKIE['theme'].'.css">';
-        }
-    ?>
+    <?php include_once("./inc/theme.php") ?>
 </head>
+
 <body>
-<div class="page-wrapper">
-    <div class="message-wrapper" <?php if (isset($_SESSION['msg']) || isset($_SESSION['error'])) echo 'style="display: flex;"'?>>
-        <div class="overlay"></div>
-        <div class="message">
-            <div class="close"><i class="fas fa-times"></i></div>
-            <div class="msg">
-                <?php 
-                    if (isset($_SESSION['msg'])) {
-                        echo $_SESSION['msg'];
-                        unset($_SESSION['msg']);
-                    }
-                ?>
-            </div>
-            <div class="error">
-                <?php 
-                    if (isset($_SESSION['error'])) {
-                        echo $_SESSION['error'];
-                        unset($_SESSION['error']);
-                    }
-                ?>
-            </div>
-        </div>
-    </div>
-    <nav class="panel">
+    <div class="page-wrapper">
+        <?php include_once("../inc/message.php"); ?>
+        <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="../admin.php"><li>Home</li></a>
-                    <a class="veh-link" href="../admin.php#vehicles"><li>Pojazdy</li></a>
-                    <a class="users-link" href="../admin.php#users"><li>Użytkownicy</li></a>
-                    <a href="../admin/inbox.php"><li>Wiadomości</li></a>
-                    <a class="settings-link" href="../admin.php#settings"><li>Ustawienia</li></a>
+                    <a href="../admin.php">
+                        <li>Home</li>
+                    </a>
+                    <a class="veh-link" href="../admin.php#vehicles">
+                        <li>Pojazdy</li>
+                    </a>
+                    <a class="users-link" href="../admin.php#users">
+                        <li>Użytkownicy</li>
+                    </a>
+                    <a href="../admin/inbox.php">
+                        <li>Wiadomości</li>
+                    </a>
+                    <a class="settings-link" href="../admin.php#settings">
+                        <li>Ustawienia</li>
+                    </a>
                 </ul>
             </div>
             <div class="back">
@@ -146,7 +154,7 @@
             </div>
         </nav>
         <div class="content">
-        <div class="mobile-nav">
+            <div class="mobile-nav">
                 <div class="open"><i class="fas fa-bars"></i></div>
                 <div class="user">
                     <a href="login.php" class="login">
@@ -160,10 +168,10 @@
                         <div class="logged-menu">
                             <ul>
                                 <?php
-                                    if (isset($_SESSION['login'])) {
-                                        if ($_SESSION['isAdmin'])
-                                            echo '<li><a href="admin.php">Panel administracyjny</a></li>';
-                                    }
+                                if (isset($_SESSION['login'])) {
+                                    if ($_SESSION['isAdmin'])
+                                        echo '<li><a href="admin.php">Panel administracyjny</a></li>';
+                                }
                                 ?>
                                 <li><a href="user.php">Panel użytkownika</a></li>
                                 <li><a href="logout.php">Wyloguj się</a></li>
@@ -187,10 +195,10 @@
                             <div class="logged-menu">
                                 <ul>
                                     <?php
-                                        if (isset($_SESSION['isAdmin'])) {
-                                            if ($_SESSION['isAdmin'])
-                                                echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
-                                        }
+                                    if (isset($_SESSION['isAdmin'])) {
+                                        if ($_SESSION['isAdmin'])
+                                            echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
+                                    }
                                     ?>
                                     <li><a href="../user.php">Panel użytkownika</a></li>
                                     <li><a href="../logout.php">Wyloguj się</a></li>
@@ -202,8 +210,8 @@
                 <main>
                     <div class="vehicles">
                         <header>
-                            <h2><a href="../admin.php#vehicles">Pojazdy</a></h2> 
-                            <i class="fas fa-chevron-right"></i> 
+                            <h2><a href="../admin.php#vehicles">Pojazdy</a></h2>
+                            <i class="fas fa-chevron-right"></i>
                             <h2>Dodawanie nowych pojazdów</h2>
                         </header>
                         <section>
@@ -216,12 +224,12 @@
                                 <button type="submit">Prześlij zdjęcie</button>
                             </form>
                             <div class="image-msg">
-                                <?php 
-                                    if (isset($_SESSION['vehicle-img-name'])) {
-                                        echo '<label>Wybrane zdjęcie</label>';
-                                        echo '<br>';
-                                        echo '<img src="../img/'.$_SESSION['vehicle-img-name'].'" alt="zdjęcie samochodu">';
-                                    }
+                                <?php
+                                if (isset($_SESSION['vehicle-img-name'])) {
+                                    echo '<label>Wybrane zdjęcie</label>';
+                                    echo '<br>';
+                                    echo '<img src="../img/' . $_SESSION['vehicle-img-name'] . '" alt="zdjęcie samochodu">';
+                                }
                                 ?>
                             </div>
                             <form action="" method="POST">
@@ -248,7 +256,7 @@
                         <i class="fab fa-youtube"></i>
                         <i class="fab fa-linkedin-in"></i>
                     </div>
-                    <div class="bottom-text">&copy;2021 by Paweł Poremba</div>
+                    <div class="bottom-text">&copy;2022 by Paweł Poremba</div>
                 </section>
             </footer>
         </div>
@@ -264,14 +272,26 @@
             });
         };
         const input = document.querySelectorAll('main form input');
-        for (let i=0; i<input.length; i++) {
+        for (let i = 0; i < input.length; i++) {
             checkInput(input[i]);
         }
-        <?php 
-            if (isset($_SESSION['vehicle-img-name']))
-                echo 'document.querySelector(".img-check").style.display = "block";';
+        <?php
+        if (isset($_SESSION['vehicle-img-name']))
+            echo 'document.querySelector(".img-check").style.display = "block";';
         ?>
     </script>
-    <?php include_once('logged.php'); ?>
+    <?php 
+        include_once('./inc/logged.php'); 
+        if (isset($consoleLog)) {
+            if ($consoleLog->show) {
+                if ($consoleLog->is_error) {
+                    echo '<script>console.error("'.$console_msg.'")</script>';
+                } else {
+                    echo '<script>console.log("'.$console_msg.'")</script>';
+                }
+            }
+        }
+    ?>
 </body>
+
 </html>

@@ -48,16 +48,7 @@
             background-color: #60B8FF;
         }
     </style>
-    <?php 
-        if (isset($_POST['theme'])) {
-            if ($_POST['theme'] != "default")
-                echo '<link rel="stylesheet" href="../styles/'.$_POST['theme'].'.css">';
-        }
-        elseif (isset($_COOKIE['theme'])) {
-            if ($_COOKIE['theme'] != "default")
-                echo '<link rel="stylesheet" href="../styles/'.$_COOKIE['theme'].'.css">';
-        }
-    ?>
+    <?php include_once("./inc/theme.php") ?>
 </head>
 <body>
     <div class="page-wrapper">
@@ -189,7 +180,7 @@
                         <i class="fab fa-youtube"></i>
                         <i class="fab fa-linkedin-in"></i>
                     </div>
-                    <div class="bottom-text">&copy;2021 by Paweł Poremba</div>
+                    <div class="bottom-text">&copy;2022 by Paweł Poremba</div>
                 </section>
             </footer>
         </div>
@@ -213,6 +204,6 @@
         elseif (isset($_COOKIE['vehList-viewMode']))
             echo '<script>changeView("'.$_COOKIE['vehList-viewMode'].'");</script>';
     ?>
-    <?php include_once('logged.php'); ?>
+    <?php include_once('./inc/logged.php'); ?>
 </body>
 </html>
