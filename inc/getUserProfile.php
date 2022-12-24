@@ -18,7 +18,7 @@
                     $this->$propertyName = $value;
                 }
             };
-    /*
+            
             try {
                 $login = $_SESSION['login'];
                 $query = "SELECT * FROM profiles WHERE login=?";
@@ -39,7 +39,7 @@
                 $_SESSION['connectionError'] = "Błąd ".$error;
                 header('Location: login.php');
                 exit;
-            }*/
+            }
         }
     }
 ?>
