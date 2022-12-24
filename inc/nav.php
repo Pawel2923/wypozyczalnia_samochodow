@@ -15,10 +15,6 @@
         <i class="fa-solid fa-tag"></i>
         <span>Wycena</span>
     </a>
-    <a href="contact.php">
-        <i class="fa-solid fa-comments"></i>
-        <span>Kontakt</span>
-    </a>
     <a href="#" referrerpolicy="no-referer" class="open">
         <i class="fa-solid fa-circle-user"></i>
         <span>Profil</span>
@@ -76,7 +72,7 @@
                             </div>
                         </li>
                         '.$admin.'
-                        <li><a href="user.php"><i class="fa-solid fa-gear"></i> Ustawienia</a></li>
+                        <li><a href="user.php"><i class="fa-solid fa-gear"></i> Panel użytkownika</a></li>
                         <li><a href="logout.php"><i class="fa-solid fa-right-from-bracket"></i> Wyloguj się</a></li>
                     </ul>
                 ';} else {
@@ -108,9 +104,6 @@
             <a href="pricing.php">
                 <li>Uzyskaj wycenę</li>
             </a>
-            <a href="contact.php">
-                <li>Kontakt</li>
-            </a>
         </ul>
         <div class="user">
             <a href="login.php" class="login">
@@ -128,7 +121,7 @@
                                 echo '<li><a href="admin.php"><i class="fa-solid fa-hammer"></i> Panel administracyjny</a></li>';
                         }
                         ?>
-                        <li><a href="user.php"><i class="fa-solid fa-gear"></i> Ustawienia</a></li>
+                        <li><a href="user.php"><i class="fa-solid fa-gear"></i> Panel użytkownika</a></li>
                         <li><a href="logout.php"><i class="fa-solid fa-right-from-bracket"></i> Wyloguj się</a></li>
                     </ul>
                 </div>
@@ -149,9 +142,6 @@
             <a href="pricing.php">
                 <li>Uzyskaj wycenę</li>
             </a>
-            <a href="contact.php">
-                <li>Kontakt</li>
-            </a>
         </ul>
         <div class="user">
             <a href="login.php" class="login">
@@ -169,7 +159,7 @@
                                 echo '<li><a href="admin.php"><i class="fa-solid fa-hammer"></i> Panel administracyjny</a></li>';
                         }
                         ?>
-                        <li><a href="user.php"><i class="fa-solid fa-gear"></i> Ustawienia</a></li>
+                        <li><a href="user.php"><i class="fa-solid fa-gear"></i> Panel użytkownika</a></li>
                         <li><a href="logout.php"><i class="fa-solid fa-right-from-bracket"></i> Wyloguj się</a></li>
                     </ul>
                 </div>
