@@ -36,7 +36,7 @@
                 <?php 
                     require("inc/veh.php");
                     if (isset($vehicle))
-                        printCarInfo("Wypożycz", $vehNum, $vehicle, false, 6, true);
+                        printCarInfo("Wypożycz", $vehNum, $vehicle, false, 7, true);
                     else 
                         echo '<p style="grid-column: span 3;">Obecnie nie ma pojazdów do rezerwacji</p>';
                 ?>
@@ -71,7 +71,7 @@
                 <i class="fab fa-youtube"></i>
                 <i class="fab fa-linkedin-in"></i>
             </div>
-            <div class="bottom-text">&copy;2021 by Paweł Poremba</div>
+            <div class="bottom-text">&copy;2022 by Paweł Poremba</div>
         </section>
     </footer>
     <script>

@@ -220,7 +220,7 @@
                         <i class="fab fa-youtube"></i>
                         <i class="fab fa-linkedin-in"></i>
                     </div>
-                    <div class="bottom-text">&copy;2021 by Paweł Poremba</div>
+                    <div class="bottom-text">&copy;2022 by Paweł Poremba</div>
                 </section>
             </footer>
         </div>

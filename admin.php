@@ -289,18 +289,6 @@
                         </header>
                         <section>
                             <div class="option">
-                                <h3>Motyw panelu</h3>
-                                <form action="" method="POST">
-                                    <select name="theme">
-                                        <option value="default">Domyślny</option>
-                                        <option value="system">Użyj motywu urządzenia</option>
-                                        <option value="light">Jasny</option>
-                                        <option value="dark">Ciemny</option>
-                                    </select>
-                                    <button type="submit">Zmień</button>
-                                </form>
-                            </div>
-                            <div class="option">
                                 <h3>Zarządzanie dostępem</h3>
                                 <form action="" method="POST">
                                     <input type="number" name="user-id" placeholder="Wpisz ID użytkownika">
@@ -358,7 +346,7 @@
                         <i class="fab fa-youtube"></i>
                         <i class="fab fa-linkedin-in"></i>
                     </div>
-                    <div class="bottom-text">&copy;2021 by Paweł Poremba</div>
+                    <div class="bottom-text">&copy;2022 by Paweł Poremba</div>
                 </section>
             </footer>
         </div>

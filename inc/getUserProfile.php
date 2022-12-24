@@ -1,7 +1,7 @@
 <?php
     if (isset($_SESSION['login'])) {
         $path = $_SERVER['REQUEST_URI']; 
-        if (strpos($path, '/admin') !== false)
+        if (strpos($path, '/inc') !== false)
             require('../db/db_connection.php');
         else 
             require('db/db_connection.php');
@@ -18,7 +18,7 @@
                     $this->$propertyName = $value;
                 }
             };
-    
+    /*
             try {
                 $login = $_SESSION['login'];
                 $query = "SELECT * FROM profiles WHERE login=?";
@@ -39,7 +39,7 @@
                 $_SESSION['connectionError'] = "Błąd ".$error;
                 header('Location: login.php');
                 exit;
-            }
+            }*/
         }
     }
 ?>

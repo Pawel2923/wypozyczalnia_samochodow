@@ -1,0 +1,2 @@
+login: admin
+hasło: gFw7p5HPd@ACJpA
