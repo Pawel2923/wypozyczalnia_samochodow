@@ -285,9 +285,9 @@ if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_
         if (isset($consoleLog)) {
             if ($consoleLog->show) {
                 if ($consoleLog->is_error) {
-                    echo '<script>console.error("'.$console_msg.'")</script>';
+                    echo '<script>console.error("'.$consoleLog->content.'")</script>';
                 } else {
-                    echo '<script>console.log("'.$console_msg.'")</script>';
+                    echo '<script>console.log("'.$consoleLog->content.'")</script>';
                 }
             }
         }
