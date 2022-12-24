@@ -95,20 +95,6 @@ INSERT INTO `newsletter` (`id`, `email`) VALUES
 -- --------------------------------------------------------
 
 --
--- Zastąpiona struktura widoku `profiles`
--- (Zobacz poniżej rzeczywisty widok)
---
-CREATE TABLE `profiles` (
-`id` int(11)
-,`login` text
-,`rented_vehicles` int(11)
-,`name` text
-,`unread` bigint(21)
-);
-
--- --------------------------------------------------------
-
---
 -- Struktura tabeli dla tabeli `rezerwacja`
 --
 
@@ -170,7 +156,8 @@ CREATE TABLE `vehicles` (
   `model` text NOT NULL,
   `cena` decimal(30,2) NOT NULL,
   `img_url` text DEFAULT NULL,
-  `is_available` tinyint(1) NOT NULL DEFAULT 1
+  `is_available` tinyint(1) NOT NULL DEFAULT 1,
+  `description` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -193,36 +180,19 @@ INSERT INTO `vehicles` (`id`, `marka`, `model`, `cena`, `img_url`, `is_available
 -- --------------------------------------------------------
 
 --
--- Zastąpiona struktura widoku `admins`
--- (Zobacz poniżej rzeczywisty widok)
+-- Widok admins
 --
-CREATE TABLE `admins` (
-`id` int(11)
-,`login` text
-,`email` text
-);
 
--- --------------------------------------------------------
+CREATE VIEW `admins` AS
+SELECT `id`,`login`,`email`,`imie`,`nazwisko` FROM users
+WHERE is_admin=1;
 
 --
--- Struktura widoku `admins`
+-- Widok profiles
 --
-DROP TABLE IF EXISTS `admins`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `admins`  AS SELECT `users`.`id` AS `id`, `users`.`login` AS `login`, `users`.`email` AS `email` FROM `users` WHERE `users`.`is_admin` = 11  ;
-
--- --------------------------------------------------------
-
---
--- Struktura widoku `profiles`
---
-DROP TABLE IF EXISTS `profiles`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `profiles`  AS SELECT `users`.`id` AS `id`, `users`.`login` AS `login`, `users`.`rented_vehicles` AS `rented_vehicles`, `users`.`imie` AS `name`, (select count(0) from `mailboxes` where `mailboxes`.`unread` = 0 and `mailboxes`.`user` = `users`.`login`) AS `unread` FROM `users``users`  ;
-
---
--- Indeksy dla zrzutów tabel
---
+CREATE VIEW `profiles` AS
+SELECT users.id,users.login,users.rented_vehicles,CONCAT(users.imie, " ", users.nazwisko) AS name FROM users;
 
 --
 -- Indeksy dla tabeli `mailboxes`
