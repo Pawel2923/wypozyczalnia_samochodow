@@ -1,29 +1,30 @@
-<?php 
-    session_start();
-    if (isset($_SESSION['isLogged'])) {
-        if ($_SESSION['isLogged']) {
-            header('Location: index.php');
-            exit;
-        }
+<?php
+session_start();
+if (isset($_SESSION['isLogged'])) {
+    if ($_SESSION['isLogged']) {
+        header('Location: index.php');
+        exit;
     }
+}
 
-    if (isset($_POST['login']) && isset($_POST['password'])) {
-        if (!empty($_POST['login']) && !empty($_POST['password'])) { // Sprawdzenie czy zmienne login i password istnieją i nie są puste
-            // Przygotowanie loginu
-            $login = htmlentities(trim($_POST['login']));
-            // Przygotowanie adresu email
-            if (filter_var($login, FILTER_VALIDATE_EMAIL)) { // Sprawdzenie czy login jest adresem email
-                $email = filter_var($login, FILTER_SANITIZE_EMAIL);
-                $login = explode('@', $login);
-                $login = array_shift($login);
-            }
-            
-            // Przygotowanie hasła
-            $password = htmlentities(trim($_POST['password']));
-            
+if (isset($_POST['login']) && isset($_POST['password'])) {
+    if (!empty($_POST['login']) && !empty($_POST['password'])) { // Sprawdzenie czy zmienne login i password istnieją i nie są puste
+        // Przygotowanie loginu
+        $login = htmlentities(trim($_POST['login']));
+        // Przygotowanie adresu email
+        if (filter_var($login, FILTER_VALIDATE_EMAIL)) { // Sprawdzenie czy login jest adresem email
+            $email = filter_var($login, FILTER_SANITIZE_EMAIL);
+            $login = explode('@', $login);
+            $login = array_shift($login);
+        }
+
+        // Przygotowanie hasła
+        $password = htmlentities(trim($_POST['password']));
+
+        try {
             // Połączenie z bazą danych
             require('db/db_connection.php');
-            
+
             if (!isset($_SESSION['connectionError'])) {
                 echo "<script>console.log('Pomyślnie połączono z bazą')</script>";
 
@@ -50,11 +51,10 @@
                     if ($queriedData['change_passwd']) {
                         $_SESSION['login'] = $login;
                         $_SESSION['isLogged'] = true;
-                        
+
                         header('Location: changePasswd.php');
                         exit;
-                    }
-                    else {
+                    } else {
                         if (password_verify($password, $queriedData['password'])) {
                             $_SESSION['login'] = $login;
                             $_SESSION['isLogged'] = true;
@@ -65,12 +65,10 @@
 
                             header('Location: index.php');
                             exit;
-                        }
-                        else 
+                        } else
                             $_SESSION['password-error'] = "Podane hasło jest nieprawidłowe";
                     }
-                }
-                else 
+                } else
                     $_SESSION['login-error'] = "Podany login lub e-mail jest nieprawidłowy";
 
                 $stmt->close();
@@ -78,11 +76,23 @@
             } else {
                 echo "<script>console.error('Błąd połączenia z bazą danych');</script>";
             }
+        } catch (Exception $error) {
+            $error = addslashes($error);
+            $error = str_replace("\n", "", $error);
+            $consoleLog->show = true;
+            $consoleLog->content = $error;
+            $consoleLog->is_error = true;
+        } catch (mysqli_sql_exception $error) {
+            $consoleLog->show = true;
+            $consoleLog->content = $error;
+            $consoleLog->is_error = true;
         }
     }
+}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Paweł Poremba">
@@ -98,6 +108,7 @@
     <link rel="stylesheet" href="styles/login.css">
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
     <div class="back">
         <i class="fas fa-times"></i>
@@ -117,11 +128,11 @@
                     <input type="text" name="login" id="login-field" required>
                     <br>
                     <div class="warning">
-                        <?php 
-                            if (isset($_SESSION['login-error'])) {
-                                echo $_SESSION['login-error'];
-                                unset($_SESSION['login-error']);
-                            }
+                        <?php
+                        if (isset($_SESSION['login-error'])) {
+                            echo $_SESSION['login-error'];
+                            unset($_SESSION['login-error']);
+                        }
                         ?>
                     </div>
                 </div>
@@ -132,11 +143,11 @@
                     <a href="forgotpasswd.php" class="forgotten-password">Zapomniałeś hasła?</a>
                     <br>
                     <div class="warning">
-                        <?php 
-                            if (isset($_SESSION['password-error'])) {
-                                echo $_SESSION['password-error'];
-                                unset($_SESSION['password-error']);
-                            }
+                        <?php
+                        if (isset($_SESSION['password-error'])) {
+                            echo $_SESSION['password-error'];
+                            unset($_SESSION['password-error']);
+                        }
                         ?>
                     </div>
                 </div>
@@ -145,11 +156,11 @@
                 </div>
                 <br>
                 <div class="error">
-                    <?php 
-                        if (isset($_SESSION['connectionError'])) {
-                            echo $_SESSION['connectionError'];
-                            unset($_SESSION['connectionError']);
-                        }
+                    <?php
+                    if (isset($_SESSION['connectionError'])) {
+                        echo $_SESSION['connectionError'];
+                        unset($_SESSION['connectionError']);
+                    }
                     ?>
                 </div>
             </form>
@@ -161,5 +172,17 @@
         });
     </script>
     <script src="js/loginHandler.js"></script>
+    <?php
+    if (isset($consoleLog)) {
+        if ($consoleLog->show) {
+            if ($consoleLog->is_error) {
+                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+            } else {
+                echo '<script>console.log("' . $consoleLog->content . '")</script>';
+            }
+        }
+    }
+    ?>
 </body>
+
 </html>

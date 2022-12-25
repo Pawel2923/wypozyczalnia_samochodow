@@ -1,23 +1,25 @@
-<?php 
-    session_start();
-    if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
-        if (!$_SESSION['isAdmin']) {
-            header('Location: ../index.php');
-            exit;
-        }
-    }
-    else {
-        header('Location: ../login.php');
+<?php
+session_start();
+if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
+    if (!$_SESSION['isAdmin']) {
+        header('Location: ../index.php');
         exit;
     }
+} else {
+    header('Location: ../login.php');
+    exit;
+}
 
-    require('../inc/veh.php');
-    if (isset($_POST['vehicle-id']) && isset($vehicle)) {
-        $vehId = htmlentities($_POST['vehicle-id']);
-        if ($vehId <= $vehNum) {
-            ($vehicle[$vehId-1]->isAvailable) ? $access = 0 : $access = 1;
+include_once("../inc/consoleMessage.php");
 
-            if (isset($access)) {
+require('../inc/veh.php');
+if (isset($_POST['vehicle-id']) && isset($vehicle)) {
+    $vehId = htmlentities($_POST['vehicle-id']);
+    if ($vehId <= $vehNum) {
+        ($vehicle[$vehId - 1]->isAvailable) ? $access = 0 : $access = 1;
+
+        if (isset($access)) {
+            try {
                 require('../db/db_connection.php');
                 $query = "UPDATE vehicles SET is_available=? WHERE id=?";
                 $stmt = $db_connection->prepare($query);
@@ -27,20 +29,30 @@
                     $_SESSION['msg'] = 'Udało się zmienić dostępność.';
                     header('Location: vehaccess.php');
                     exit;
-                }
-                else 
+                } else
                     $_SESSION['error'] = 'Nie udało się dokonać zmiany.';
-                
+
                 $stmt->close();
                 $db_connection->close();
+            } catch (Exception $error) {
+                $error = addslashes($error);
+                $error = str_replace("\n", "", $error);
+                $consoleLog->show = true;
+                $consoleLog->content = $error;
+                $consoleLog->is_error = true;
+            } catch (mysqli_sql_exception $error) {
+                $consoleLog->show = true;
+                $consoleLog->content = $error;
+                $consoleLog->is_error = true;
             }
         }
-        else 
-            $_SESSION['error'] = 'Wpisano niepoprawne ID.';
-    }
+    } else
+        $_SESSION['error'] = 'Wpisano niepoprawne ID.';
+}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Paweł Poremba">
@@ -57,17 +69,28 @@
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
     <?php include_once("./inc/theme.php") ?>
 </head>
+
 <body>
     <div class="page-wrapper">
         <?php include_once("../inc/message.php"); ?>
         <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="../admin.php"><li>Home</li></a>
-                    <a class="veh-link" href="../admin.php#vehicles"><li>Pojazdy</li></a>
-                    <a class="users-link" href="../admin.php#users"><li>Użytkownicy</li></a>
-                    <a href="../admin/inbox.php"><li>Wiadomości</li></a>
-                    <a class="settings-link" href="../admin.php#settings"><li>Ustawienia</li></a>
+                    <a href="../admin.php">
+                        <li>Home</li>
+                    </a>
+                    <a class="veh-link" href="../admin.php#vehicles">
+                        <li>Pojazdy</li>
+                    </a>
+                    <a class="users-link" href="../admin.php#users">
+                        <li>Użytkownicy</li>
+                    </a>
+                    <a href="../admin/inbox.php">
+                        <li>Wiadomości</li>
+                    </a>
+                    <a class="settings-link" href="../admin.php#settings">
+                        <li>Ustawienia</li>
+                    </a>
                 </ul>
             </div>
             <div class="back">
@@ -91,10 +114,10 @@
                         <div class="logged-menu">
                             <ul>
                                 <?php
-                                    if (isset($_SESSION['login'])) {
-                                        if ($_SESSION['isAdmin'])
-                                            echo '<li><a href="admin.php">Panel administracyjny</a></li>';
-                                    }
+                                if (isset($_SESSION['login'])) {
+                                    if ($_SESSION['isAdmin'])
+                                        echo '<li><a href="admin.php">Panel administracyjny</a></li>';
+                                }
                                 ?>
                                 <li><a href="user.php">Panel użytkownika</a></li>
                                 <li><a href="logout.php">Wyloguj się</a></li>
@@ -118,10 +141,10 @@
                             <div class="logged-menu">
                                 <ul>
                                     <?php
-                                        if (isset($_SESSION['isAdmin'])) {
-                                            if ($_SESSION['isAdmin'])
-                                                echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
-                                        }
+                                    if (isset($_SESSION['isAdmin'])) {
+                                        if ($_SESSION['isAdmin'])
+                                            echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
+                                    }
                                     ?>
                                     <li><a href="../user.php">Panel użytkownika</a></li>
                                     <li><a href="../logout.php">Wyloguj się</a></li>
@@ -133,24 +156,26 @@
                 <main>
                     <div class="vehicles">
                         <header>
-                            <h2><a href="../admin.php#vehicles">Pojazdy</a></h2> 
-                            <i class="fas fa-chevron-right"></i> 
+                            <h2><a href="../admin.php#vehicles">Pojazdy</a></h2>
+                            <i class="fas fa-chevron-right"></i>
                             <h2>Dostępność pojazdów</h2>
                         </header>
                         <section>
                             <form action="" method="POST">
-                                <label><h3>Wpisz id pojazdu</h3></label>
+                                <label>
+                                    <h3>Wpisz id pojazdu</h3>
+                                </label>
                                 <input type="number" name="vehicle-id" min="1" required>
                                 <button type="submit">Zmień</button>
                             </form>
                         </section>
                         <section>
                             <div class="cars">
-                                <?php 
-                                    if (isset($vehicle))
-                                        printCarInfoTable($vehNum, $vehicle, 0, true);
-                                    else 
-                                        echo 'W bazie nie ma żadnych pojazdów.';
+                                <?php
+                                if (isset($vehicle))
+                                    printCarInfoTable($vehNum, $vehicle, 0, true);
+                                else
+                                    echo 'W bazie nie ma żadnych pojazdów.';
                                 ?>
                             </div>
                         </section>
@@ -180,10 +205,22 @@
             });
         };
         const input = document.querySelectorAll('main form input');
-        for (let i=0; i<input.length; i++) {
+        for (let i = 0; i < input.length; i++) {
             checkInput(input[i]);
         }
     </script>
-    <?php include_once('./inc/logged.php'); ?>
+    <?php
+    include_once('./inc/logged.php');
+    if (isset($consoleLog)) {
+        if ($consoleLog->show) {
+            if ($consoleLog->is_error) {
+                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+            } else {
+                echo '<script>console.log("' . $consoleLog->content . '")</script>';
+            }
+        }
+    }
+    ?>
 </body>
+
 </html>

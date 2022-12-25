@@ -1,20 +1,22 @@
-<?php 
-    session_start();
-    if (isset($_SESSION['isLogged'])) {
-        if (!$_SESSION['isLogged']) {
-            header('Location: ../login.php');
-            exit;
-        }
-    }
-    else  {
+<?php
+session_start();
+if (isset($_SESSION['isLogged'])) {
+    if (!$_SESSION['isLogged']) {
         header('Location: ../login.php');
         exit;
     }
+} else {
+    header('Location: ../login.php');
+    exit;
+}
 
-    if (isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SESSION['login'])) {
-        $newPasswd = htmlentities($_POST['password']);
-        $confirmPasswd = htmlentities($_POST['password-confirm']);
+include_once("../inc/consoleMessage.php");
 
+if (isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SESSION['login'])) {
+    $newPasswd = htmlentities($_POST['password']);
+    $confirmPasswd = htmlentities($_POST['password-confirm']);
+
+    try {
         require('../db/db_connection.php');
         $query = "SELECT id FROM users WHERE login=?";
         $stmt = $db_connection->prepare($query);
@@ -44,7 +46,7 @@
                     $stmt = $db_connection->prepare($query);
                     $stmt->bind_param('si', $newHashedPasswd, $id);
                     $stmt->execute();
-                    
+
                     if ($db_connection->affected_rows == 1) {
                         $_SESSION['msg'] = 'Pomyślnie zmieniono hasło. Za chwilę wystąpi wylogowanie...';
                         echo '<script>
@@ -52,20 +54,30 @@
                                 window.location = "../logout.php";
                             }, 5000);
                         </script>';
-                    }
-                    else
+                    } else
                         $_SESSION['error'] = 'Nie udało się zmienić hasła.';
-                }
-                else 
+                } else
                     $_SESSION['error'] = 'Hasła nie są takie same.';
             }
         }
 
         $db_connection->close();
+    } catch (Exception $error) {
+        $error = addslashes($error);
+        $error = str_replace("\n", "", $error);
+        $consoleLog->show = true;
+        $consoleLog->content = $error;
+        $consoleLog->is_error = true;
+    } catch (mysqli_sql_exception $error) {
+        $consoleLog->show = true;
+        $consoleLog->content = $error;
+        $consoleLog->is_error = true;
     }
+}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Paweł Poremba">
@@ -80,62 +92,70 @@
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/panel.css">
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
-    <?php 
-        if (isset($_POST['theme'])) {
-            if ($_POST['theme'] != "default")
-                echo '<link rel="stylesheet" href="styles/'.$_POST['theme'].'.css">';
-        }
-        elseif (isset($_COOKIE['theme'])) {
-            if ($_COOKIE['theme'] != "default")
-                echo '<link rel="stylesheet" href="styles/'.$_COOKIE['theme'].'.css">';
-        }
+    <?php
+    if (isset($_POST['theme'])) {
+        if ($_POST['theme'] != "default")
+            echo '<link rel="stylesheet" href="styles/' . $_POST['theme'] . '.css">';
+    } elseif (isset($_COOKIE['theme'])) {
+        if ($_COOKIE['theme'] != "default")
+            echo '<link rel="stylesheet" href="styles/' . $_COOKIE['theme'] . '.css">';
+    }
     ?>
 </head>
+
 <body>
-<div class="page-wrapper">
-    <?php include_once("../inc/message.php"); ?>
-    <nav class="panel">
-        <div class="list-wrapper">
-            <ul>
-                <a href="../user.php"><li>Home</li></a>
-                <a class="veh-link" href="../user.php#vehicles"><li>Pojazdy</li></a>
-                <a class="profile-link" href="../user.php#profile"><li>Edytuj profil</li></a>
-                <a class="settings-link" href="../user.php#settings"><li>Ustawienia</li></a>
-            </ul>
-        </div>
-        <div class="back">
-            <a href="../index.php">
-                <i class="fas fa-angle-double-left"></i> Wyjdź
-            </a>
-        </div>
-    </nav>
-    <div class="content">
-        <div class="mobile-nav">
-            <div class="open"><i class="fas fa-bars"></i></div>
-            <div class="user">
-                <a href="login.php" class="login">
-                    <i class="fas fa-sign-in-alt"></i>
-                    <span class="login-caption">Zaloguj się</span>
+    <div class="page-wrapper">
+        <?php include_once("../inc/message.php"); ?>
+        <nav class="panel">
+            <div class="list-wrapper">
+                <ul>
+                    <a href="../user.php">
+                        <li>Home</li>
+                    </a>
+                    <a class="veh-link" href="../user.php#vehicles">
+                        <li>Pojazdy</li>
+                    </a>
+                    <a class="profile-link" href="../user.php#profile">
+                        <li>Edytuj profil</li>
+                    </a>
+                    <a class="settings-link" href="../user.php#settings">
+                        <li>Ustawienia</li>
+                    </a>
+                </ul>
+            </div>
+            <div class="back">
+                <a href="../index.php">
+                    <i class="fas fa-angle-double-left"></i> Wyjdź
                 </a>
-                <div class="logged">
-                    <div class="mobile-logged-menu-overlay"></div>
-                    <i class="fas fa-user"></i>
-                    <span class="login-caption"><?php if (isset($_SESSION['login'])) echo $_SESSION['login']; ?></span>
-                    <div class="logged-menu">
-                        <ul>
-                            <?php
+            </div>
+        </nav>
+        <div class="content">
+            <div class="mobile-nav">
+                <div class="open"><i class="fas fa-bars"></i></div>
+                <div class="user">
+                    <a href="login.php" class="login">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span class="login-caption">Zaloguj się</span>
+                    </a>
+                    <div class="logged">
+                        <div class="mobile-logged-menu-overlay"></div>
+                        <i class="fas fa-user"></i>
+                        <span class="login-caption"><?php if (isset($_SESSION['login'])) echo $_SESSION['login']; ?></span>
+                        <div class="logged-menu">
+                            <ul>
+                                <?php
                                 if (isset($_SESSION['login'])) {
                                     if ($_SESSION['isAdmin'])
                                         echo '<li><a href="admin.php">Panel administracyjny</a></li>';
                                 }
-                            ?>
-                            <li><a href="user.php">Panel użytkownika</a></li>
-                            <li><a href="logout.php">Wyloguj się</a></li>
-                        </ul>
+                                ?>
+                                <li><a href="user.php">Panel użytkownika</a></li>
+                                <li><a href="logout.php">Wyloguj się</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="overlay"></div>
+                <div class="overlay"></div>
             </div>
             <div class="all-settings">
                 <header>
@@ -151,10 +171,10 @@
                             <div class="logged-menu">
                                 <ul>
                                     <?php
-                                        if (isset($_SESSION['isAdmin'])) {
-                                            if ($_SESSION['isAdmin'])
-                                                echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
-                                        }
+                                    if (isset($_SESSION['isAdmin'])) {
+                                        if ($_SESSION['isAdmin'])
+                                            echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
+                                    }
                                     ?>
                                     <li><a href="../user.php">Panel użytkownika</a></li>
                                     <li><a href="../logout.php">Wyloguj się</a></li>
@@ -166,8 +186,8 @@
                 <main>
                     <div class="users">
                         <header>
-                            <h2><a href="../user.php#profile">Edytuj swój profil</a></h2> 
-                            <i class="fas fa-chevron-right"></i> 
+                            <h2><a href="../user.php#profile">Edytuj swój profil</a></h2>
+                            <i class="fas fa-chevron-right"></i>
                             <h2>Zmień hasło</h2>
                         </header>
                         <section>
@@ -205,10 +225,22 @@
         </div>
     </div>
     <script src="../js/panelHandler.js"></script>
-    <?php include_once('logged.php'); ?>
+    <?php
+    include_once('./logged.php');
+    if (isset($consoleLog)) {
+        if ($consoleLog->show) {
+            if ($consoleLog->is_error) {
+                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+            } else {
+                echo '<script>console.log("' . $consoleLog->content . '")</script>';
+            }
+        }
+    }
+    ?>
     <script src="../js/loginHandler.js"></script>
     <script>
         passwdCheck();
     </script>
 </body>
+
 </html>

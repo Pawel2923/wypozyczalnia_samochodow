@@ -1,22 +1,22 @@
-<?php 
-    session_start();
-    if (isset($_SESSION['isLogged'])) {
-        if (!$_SESSION['isLogged']) {
-            header('Location: login.php');
-            exit;
-        }
-    }
-    else  {
+<?php
+session_start();
+if (isset($_SESSION['isLogged'])) {
+    if (!$_SESSION['isLogged']) {
         header('Location: login.php');
         exit;
     }
+} else {
+    header('Location: login.php');
+    exit;
+}
 
-    if (isset($_POST['theme'])) {
-        $theme = htmlentities($_POST['theme']);
-        if ($theme == "default" || $theme == "system" || $theme == "dark" || $theme == "light")
-            setcookie('theme', $theme, time() + (5 * 365 * 24 * 60 * 60));
-    }
+if (isset($_POST['theme'])) {
+    $theme = htmlentities($_POST['theme']);
+    if ($theme == "default" || $theme == "system" || $theme == "dark" || $theme == "light")
+        setcookie('theme', $theme, time() + (5 * 365 * 24 * 60 * 60));
+}
 
+try {
     require('db/db_connection.php');
 
     $query = "SELECT id FROM users WHERE login=?";
@@ -37,7 +37,7 @@
         $tel = htmlentities($_POST['tel']);
         $email = htmlentities($_POST['email']);
 
-        if (isset($id))  {
+        if (isset($id)) {
             if (!empty($name)) {
                 $query = "UPDATE users SET imie=? WHERE id=?";
                 $stmt = $db_connection->prepare($query);
@@ -59,8 +59,7 @@
                     $stmt->bind_param('si', $tel, $id);
                     $stmt->execute();
                     $stmt->close();
-                }
-                else 
+                } else
                     $_SESSION['error'] = 'Wprowadzono niepoprawny numer telefonu';
             }
             if (!empty($email)) {
@@ -70,20 +69,18 @@
                     $stmt->bind_param('si', $email, $id);
                     $stmt->execute();
                     $stmt->close();
-                }
-                else 
+                } else
                     $_SESSION['error'] = 'Wprowadzono niepoprawny email';
             }
-            
+
             if ($db_connection->affected_rows > 0)
                 $_SESSION['msg'] = 'Zmiany zostały zapisane.';
-            else 
+            else
                 $_SESSION['error'] = 'Nie udało się wprowadzić zmian.';
-        }
-        else 
+        } else
             $_SESSION['error'] = 'Takiego loginu nie ma w bazie danych.';
     }
-    
+
     if (isset($id)) {
         $query = "SELECT imie, nazwisko, telefon, email FROM users WHERE id=?";
         $stmt = $db_connection->prepare($query);
@@ -107,15 +104,27 @@
         $stmt->bind_param('i', $rentID);
         $stmt->execute();
         $stmt->close();
-        
+
         $_SESSION['msg'] = 'Anulowano rezerwację.';
         header('Location: user.php#vehicles');
         exit;
     }
     $db_connection->close();
+} catch (Exception $error) {
+    $error = addslashes($error);
+    $error = str_replace("\n", "", $error);
+    $consoleLog->show = true;
+    $consoleLog->content = $error;
+    $consoleLog->is_error = true;
+} catch (mysqli_sql_exception $error) {
+    $consoleLog->show = true;
+    $consoleLog->content = $error;
+    $consoleLog->is_error = true;
+}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Paweł Poremba">
@@ -135,31 +144,40 @@
             column-gap: 10px;
             display: none;
         }
+
         main form {
             width: 100%;
         }
     </style>
-    <?php 
-        if (isset($_POST['theme'])) {
-            if ($_POST['theme'] != "default")
-                echo '<link rel="stylesheet" href="styles/'.$_POST['theme'].'.css">';
-        }
-        elseif (isset($_COOKIE['theme'])) {
-            if ($_COOKIE['theme'] != "default")
-                echo '<link rel="stylesheet" href="styles/'.$_COOKIE['theme'].'.css">';
-        }
+    <?php
+    if (isset($_POST['theme'])) {
+        if ($_POST['theme'] != "default")
+            echo '<link rel="stylesheet" href="styles/' . $_POST['theme'] . '.css">';
+    } elseif (isset($_COOKIE['theme'])) {
+        if ($_COOKIE['theme'] != "default")
+            echo '<link rel="stylesheet" href="styles/' . $_COOKIE['theme'] . '.css">';
+    }
     ?>
 </head>
+
 <body>
     <div class="page-wrapper">
         <?php include_once("./inc/message.php"); ?>
         <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="user.php"><li>Home</li></a>
-                    <a class="veh-link" href="user.php#vehicles"><li>Pojazdy</li></a>
-                    <a class="profile-link" href="user.php#profile"><li>Edytuj profil</li></a>
-                    <a class="settings-link" href="user.php#settings"><li>Ustawienia</li></a>
+                    <a href="user.php">
+                        <li>Home</li>
+                    </a>
+                    <a class="veh-link" href="user.php#vehicles">
+                        <li>Pojazdy</li>
+                    </a>
+                    <a class="profile-link" href="user.php#profile">
+                        <li>Edytuj profil</li>
+                    </a>
+                    <a class="settings-link" href="user.php#settings">
+                        <li>Ustawienia</li>
+                    </a>
                 </ul>
             </div>
             <div class="back">
@@ -183,10 +201,10 @@
                         <div class="logged-menu">
                             <ul>
                                 <?php
-                                    if (isset($_SESSION['login'])) {
-                                        if ($_SESSION['isAdmin'])
-                                            echo '<li><a href="admin.php">Panel administracyjny</a></li>';
-                                    }
+                                if (isset($_SESSION['login'])) {
+                                    if ($_SESSION['isAdmin'])
+                                        echo '<li><a href="admin.php">Panel administracyjny</a></li>';
+                                }
                                 ?>
                                 <li><a href="user.php">Panel użytkownika</a></li>
                                 <li><a href="logout.php">Wyloguj się</a></li>
@@ -210,10 +228,10 @@
                             <div class="logged-menu">
                                 <ul>
                                     <?php
-                                        if (isset($_SESSION['login'])) {
-                                            if ($_SESSION['isAdmin'])
-                                                echo '<li><a href="admin.php">Panel administracyjny</a></li>';
-                                        }
+                                    if (isset($_SESSION['login'])) {
+                                        if ($_SESSION['isAdmin'])
+                                            echo '<li><a href="admin.php">Panel administracyjny</a></li>';
+                                    }
                                     ?>
                                     <li><a href="user.php">Panel użytkownika</a></li>
                                     <li><a href="logout.php">Wyloguj się</a></li>
@@ -244,45 +262,45 @@
                             <h2>Wypożyczone pojazdy</h2>
                         </header>
                         <section>
-                            <?php 
-                                if (isset($_SESSION['login'])) {
-                                    require('db/db_connection.php');
+                            <?php
+                            if (isset($_SESSION['login'])) {
+                                require('db/db_connection.php');
 
-                                    $login = $_SESSION['login'];
-                                    $query = "SELECT id FROM users WHERE login=?";
-                                    $stmt = $db_connection->prepare($query);
-                                    $stmt->bind_param('s', $login);
-                                    $stmt->execute();
-                                    $result = $stmt->get_result();
-                                    $stmt->close();
+                                $login = $_SESSION['login'];
+                                $query = "SELECT id FROM users WHERE login=?";
+                                $stmt = $db_connection->prepare($query);
+                                $stmt->bind_param('s', $login);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
+                                $stmt->close();
 
-                                    $userId = $result->fetch_row();
-                                    $userId = $userId[0];
+                                $userId = $result->fetch_row();
+                                $userId = $userId[0];
 
-                                    $query = "SELECT rezerwacja.id, marka, model, cena, na_ile, data_rezerwacji FROM vehicles INNER JOIN rezerwacja ON vehicles.id=rezerwacja.id_pojazdu WHERE id_klienta=?";
-                                    $stmt = $db_connection->prepare($query);
-                                    $stmt->bind_param('i', $userId);
-                                    $stmt->execute();
-                                    $result = $stmt->get_result();
-                                    $stmt->close();
+                                $query = "SELECT rezerwacja.id, marka, model, cena, na_ile, data_rezerwacji FROM vehicles INNER JOIN rezerwacja ON vehicles.id=rezerwacja.id_pojazdu WHERE id_klienta=?";
+                                $stmt = $db_connection->prepare($query);
+                                $stmt->bind_param('i', $userId);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
+                                $stmt->close();
 
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo '<div class="option">';
-                                        echo '<form action="" method="POST">';
-                                        echo 'Nazwa samochodu: '.$row['marka'].' '.$row['model'].'<br>';
-                                        echo 'Cena: '.$row['cena']*$row['na_ile'].'zł<br>';
-                                        echo 'Na ile godzin: '.$row['na_ile'].'<br>';
-                                        echo 'Data rezerwacji: '.$row['data_rezerwacji'].'<br>';
-                                        echo '<input type="hidden" name="rentID" value="'.$row['id'].'">';
-                                        echo '<button type="submit">Anuluj</button>';
-                                        echo '</form>';
-                                        echo '</div>';
-                                    }
-
-                                    $db_connection->close();
+                                while ($row = $result->fetch_assoc()) {
+                                    echo '<div class="option">';
+                                    echo '<form action="" method="POST">';
+                                    echo 'Nazwa samochodu: ' . $row['marka'] . ' ' . $row['model'] . '<br>';
+                                    echo 'Cena: ' . $row['cena'] * $row['na_ile'] . 'zł<br>';
+                                    echo 'Na ile godzin: ' . $row['na_ile'] . '<br>';
+                                    echo 'Data rezerwacji: ' . $row['data_rezerwacji'] . '<br>';
+                                    echo '<input type="hidden" name="rentID" value="' . $row['id'] . '">';
+                                    echo '<button type="submit">Anuluj</button>';
+                                    echo '</form>';
+                                    echo '</div>';
                                 }
+
+                                $db_connection->close();
+                            }
                             ?>
-                        </section>                        
+                        </section>
                     </div>
                     <div class="profile">
                         <header>
@@ -359,7 +377,7 @@
     <script src="js/panelHandler.js"></script>
     <script>
         const selectTheme = (mode) => {
-            document.querySelector('main select option[value="'+mode+'"]').setAttribute('selected', 'selected');
+            document.querySelector('main select option[value="' + mode + '"]').setAttribute('selected', 'selected');
         }
         const profileInput = document.querySelectorAll('.edit-profile input');
         for (let i = 0; i < profileInput.length; i++) {
@@ -371,12 +389,24 @@
             document.querySelector('form .buttons').style.display = 'none';
         });
     </script>
-    <?php 
-        if (isset($_POST['theme']))
-            echo '<script>selectTheme("'.$_POST['theme'].'");</script>';
-        elseif (isset($_COOKIE['theme']))
-            echo '<script>selectTheme("'.$_COOKIE['theme'].'");</script>';
+    <?php
+    if (isset($_POST['theme']))
+        echo '<script>selectTheme("' . $_POST['theme'] . '");</script>';
+    elseif (isset($_COOKIE['theme']))
+        echo '<script>selectTheme("' . $_COOKIE['theme'] . '");</script>';
     ?>
-    <?php include_once('inc/logged.php'); ?>
+    <?php
+    include_once('./inc/logged.php');
+    if (isset($consoleLog)) {
+        if ($consoleLog->show) {
+            if ($consoleLog->is_error) {
+                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+            } else {
+                echo '<script>console.log("' . $consoleLog->content . '")</script>';
+            }
+        }
+    }
+    ?>
 </body>
+
 </html>

@@ -1,20 +1,22 @@
-<?php 
-    session_start();
-    if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
-        if (!$_SESSION['isAdmin']) {
-            header('Location: ../index.php');
-            exit;
-        }
-    }
-    else {
-        header('Location: ../login.php');
+<?php
+session_start();
+if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
+    if (!$_SESSION['isAdmin']) {
+        header('Location: ../index.php');
         exit;
     }
+} else {
+    header('Location: ../login.php');
+    exit;
+}
 
-    if (isset($_POST['message-id'])) {
-        if ($_POST['message-id'] > 0) {
-            $messageID = htmlentities($_POST['message-id']);
+include_once("../inc/consoleMessage.php");
 
+if (isset($_POST['message-id'])) {
+    if ($_POST['message-id'] > 0) {
+        $messageID = htmlentities($_POST['message-id']);
+
+        try {
             require('../db/db_connection.php');
 
             $query = 'DELETE FROM mailboxes WHERE message_id=?';
@@ -33,11 +35,23 @@
 
             $db_connection->close();
             unset($_POST['message-id']);
+        } catch (Exception $error) {
+            $error = addslashes($error);
+            $error = str_replace("\n", "", $error);
+            $consoleLog->show = true;
+            $consoleLog->content = $error;
+            $consoleLog->is_error = true;
+        } catch (mysqli_sql_exception $error) {
+            $consoleLog->show = true;
+            $consoleLog->content = $error;
+            $consoleLog->is_error = true;
         }
     }
+}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Paweł Poremba">
@@ -57,9 +71,11 @@
         .messages h3 {
             margin-top: 20px;
         }
+
         .messages h3:first-child {
             margin-top: 0;
         }
+
         .box-msg {
             border: 1px solid #000;
             width: 60%;
@@ -67,6 +83,7 @@
             margin-top: 10px;
             padding: 20px;
         }
+
         @media screen and (max-width: 800px) {
             .box-msg {
                 width: 100%;
@@ -74,17 +91,28 @@
         }
     </style>
 </head>
+
 <body>
-<div class="page-wrapper">
-    <?php include_once("../inc/message.php"); ?>
-    <nav class="panel">
+    <div class="page-wrapper">
+        <?php include_once("../inc/message.php"); ?>
+        <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="../admin.php"><li>Home</li></a>
-                    <a class="veh-link" href="../admin.php#vehicles"><li>Pojazdy</li></a>
-                    <a class="users-link" href="../admin.php#users"><li>Użytkownicy</li></a>
-                    <a href="inbox.php"><li>Wiadomości</li></a>
-                    <a class="settings-link" href="../admin.php#settings"><li>Ustawienia</li></a>
+                    <a href="../admin.php">
+                        <li>Home</li>
+                    </a>
+                    <a class="veh-link" href="../admin.php#vehicles">
+                        <li>Pojazdy</li>
+                    </a>
+                    <a class="users-link" href="../admin.php#users">
+                        <li>Użytkownicy</li>
+                    </a>
+                    <a href="inbox.php">
+                        <li>Wiadomości</li>
+                    </a>
+                    <a class="settings-link" href="../admin.php#settings">
+                        <li>Ustawienia</li>
+                    </a>
                 </ul>
             </div>
             <div class="back">
@@ -94,7 +122,7 @@
             </div>
         </nav>
         <div class="content">
-        <div class="mobile-nav">
+            <div class="mobile-nav">
                 <div class="open"><i class="fas fa-bars"></i></div>
                 <div class="user">
                     <a href="login.php" class="login">
@@ -108,10 +136,10 @@
                         <div class="logged-menu">
                             <ul>
                                 <?php
-                                    if (isset($_SESSION['login'])) {
-                                        if ($_SESSION['isAdmin'])
-                                            echo '<li><a href="admin.php">Panel administracyjny</a></li>';
-                                    }
+                                if (isset($_SESSION['login'])) {
+                                    if ($_SESSION['isAdmin'])
+                                        echo '<li><a href="admin.php">Panel administracyjny</a></li>';
+                                }
                                 ?>
                                 <li><a href="user.php">Panel użytkownika</a></li>
                                 <li><a href="logout.php">Wyloguj się</a></li>
@@ -135,10 +163,10 @@
                             <div class="logged-menu">
                                 <ul>
                                     <?php
-                                        if (isset($_SESSION['isAdmin'])) {
-                                            if ($_SESSION['isAdmin'])
-                                                echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
-                                        }
+                                    if (isset($_SESSION['isAdmin'])) {
+                                        if ($_SESSION['isAdmin'])
+                                            echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
+                                    }
                                     ?>
                                     <li><a href="../user.php">Panel użytkownika</a></li>
                                     <li><a href="../logout.php">Wyloguj się</a></li>
@@ -153,68 +181,66 @@
                             <h2>Wiadomości</h2>
                         </header>
                         <section>
-                            <?php 
-                                require('../db/db_connection.php');
+                            <?php
+                            require('../db/db_connection.php');
 
-                                $query = "SELECT messages.* FROM messages INNER JOIN mailboxes ON mailboxes.message_id=messages.id WHERE user=? AND direction='in' ORDER BY date DESC";
-                                $stmt = $db_connection->prepare($query);
-                                $stmt->bind_param('s', $_SESSION['login']);
-                                $stmt->execute();
-                                $result = $stmt->get_result();
-                                $stmt->close();
+                            $query = "SELECT messages.* FROM messages INNER JOIN mailboxes ON mailboxes.message_id=messages.id WHERE user=? AND direction='in' ORDER BY date DESC";
+                            $stmt = $db_connection->prepare($query);
+                            $stmt->bind_param('s', $_SESSION['login']);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+                            $stmt->close();
 
-                                echo '<h3>Odebrane</h3>';
-                                if ($result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo '<div class="box-msg">';
-                                        echo '<form action="" method="POST" style="display: block; width: 100%;">';
-                                        echo '<input type="hidden" name="message-id" value="'.$row['id'].'">';
-                                        echo '<span style="font-weight: bold;">Od:</span> '.$row['email'];
+                            echo '<h3>Odebrane</h3>';
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    echo '<div class="box-msg">';
+                                    echo '<form action="" method="POST" style="display: block; width: 100%;">';
+                                    echo '<input type="hidden" name="message-id" value="' . $row['id'] . '">';
+                                    echo '<span style="font-weight: bold;">Od:</span> ' . $row['email'];
+                                    echo '<br>';
+                                    echo $row['imie'] . ' ' . $row['nazwisko'];
+                                    echo '<br>';
+                                    if ($row['tel'] != 0) {
+                                        echo '<span style="font-weight: bold;">Telefon:</span> ' . $row['tel'];
                                         echo '<br>';
-                                        echo $row['imie'].' '.$row['nazwisko'];
-                                        echo '<br>';
-                                        if ($row['tel'] != 0) {
-                                            echo '<span style="font-weight: bold;">Telefon:</span> '.$row['tel'];
-                                            echo '<br>';
-                                        }
-                                        echo '<span style="font-weight: bold;">Dostarczono:</span> '.$row['date'];
-                                        echo '<br>';
-                                        echo '<span style="font-weight: bold;">Treść wiadomości:</span> '.$row['message'];
-                                        echo '<br>';
-                                        echo '<button type="submit" style="margin-bottom: 0;">Usuń wiadomość</button>';
-                                        echo '</form>';
-                                        echo '</div>';
                                     }
+                                    echo '<span style="font-weight: bold;">Dostarczono:</span> ' . $row['date'];
+                                    echo '<br>';
+                                    echo '<span style="font-weight: bold;">Treść wiadomości:</span> ' . $row['message'];
+                                    echo '<br>';
+                                    echo '<button type="submit" style="margin-bottom: 0;">Usuń wiadomość</button>';
+                                    echo '</form>';
+                                    echo '</div>';
                                 }
-                                else
-                                    echo 'Nie masz żadnych wiadomości.';
+                            } else
+                                echo 'Nie masz żadnych wiadomości.';
 
-                                $query = "SELECT messages.*, mailboxes.user FROM messages INNER JOIN mailboxes ON mailboxes.message_id=messages.id WHERE user=? AND direction='out' ORDER BY date DESC";
-                                $stmt = $db_connection->prepare($query);
-                                $stmt->bind_param('s', $_SESSION['login']);
-                                $stmt->execute();
-                                $result = $stmt->get_result();
-                                $stmt->close();
+                            $query = "SELECT messages.*, mailboxes.user FROM messages INNER JOIN mailboxes ON mailboxes.message_id=messages.id WHERE user=? AND direction='out' ORDER BY date DESC";
+                            $stmt = $db_connection->prepare($query);
+                            $stmt->bind_param('s', $_SESSION['login']);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+                            $stmt->close();
 
-                                echo '<h3>Wysłane</h3>';
-                                if ($result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo '<div class="box-msg">';
-                                        echo '<form action="" method="POST" style="display: block; width: 100%;">';
-                                        echo '<input type="hidden" name="message-id" value="'.$row['id'].'">';
-                                        echo '<span style="font-weight: bold;">Do:</span> '.$row['user'];
-                                        echo '<br>';
-                                        echo '<span style="font-weight: bold;">Dostarczono:</span> '.$row['date'];
-                                        echo '<br>';
-                                        echo '<span style="font-weight: bold;">Treść wiadomości:</span> '.$row['message'];
-                                        echo '<br>';
-                                        echo '<button type="submit" style="margin-bottom: 0;">Usuń wiadomość</button>';
-                                        echo '</form>';
-                                        echo '</div>';
-                                    }
+                            echo '<h3>Wysłane</h3>';
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    echo '<div class="box-msg">';
+                                    echo '<form action="" method="POST" style="display: block; width: 100%;">';
+                                    echo '<input type="hidden" name="message-id" value="' . $row['id'] . '">';
+                                    echo '<span style="font-weight: bold;">Do:</span> ' . $row['user'];
+                                    echo '<br>';
+                                    echo '<span style="font-weight: bold;">Dostarczono:</span> ' . $row['date'];
+                                    echo '<br>';
+                                    echo '<span style="font-weight: bold;">Treść wiadomości:</span> ' . $row['message'];
+                                    echo '<br>';
+                                    echo '<button type="submit" style="margin-bottom: 0;">Usuń wiadomość</button>';
+                                    echo '</form>';
+                                    echo '</div>';
                                 }
-                                else 
-                                    echo 'Nie wysłałeś żadnych wiadomości.';
+                            } else
+                                echo 'Nie wysłałeś żadnych wiadomości.';
                             ?>
                         </section>
                     </div>
@@ -243,10 +269,22 @@
             });
         };
         const input = document.querySelectorAll('main form input');
-        for (let i=0; i<input.length; i++) {
+        for (let i = 0; i < input.length; i++) {
             checkInput(input[i]);
         }
     </script>
-    <?php include_once('./inc/logged.php'); ?>
+    <?php
+    include_once('./inc/logged.php');
+    if (isset($consoleLog)) {
+        if ($consoleLog->show) {
+            if ($consoleLog->is_error) {
+                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+            } else {
+                echo '<script>console.log("' . $consoleLog->content . '")</script>';
+            }
+        }
+    }
+    ?>
 </body>
+
 </html>

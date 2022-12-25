@@ -1,19 +1,21 @@
-<?php 
-    session_start();
-    if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
-        if (!$_SESSION['isAdmin']) {
-            header('Location: ../index.php');
-            exit;
-        }
-    }
-    else {
-        header('Location: ../login.php');
+<?php
+session_start();
+if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
+    if (!$_SESSION['isAdmin']) {
+        header('Location: ../index.php');
         exit;
     }
+} else {
+    header('Location: ../login.php');
+    exit;
+}
 
-    if (isset($_POST['id'])) {
-        $rentID = htmlentities($_POST['id']);
-        if ($rentID > 0) {
+include_once("../inc/consoleMessage.php");
+
+if (isset($_POST['id'])) {
+    $rentID = htmlentities($_POST['id']);
+    if ($rentID > 0) {
+        try {
             require('../db/db_connection.php');
             $query = "DELETE FROM rezerwacja WHERE id=?";
             $stmt = $db_connection->prepare($query);
@@ -22,16 +24,28 @@
 
             if ($db_connection->affected_rows > 0)
                 $_SESSION['msg'] = 'Udało się usunąć rezerwację.';
-            else 
+            else
                 $_SESSION['msg'] = 'Nie udało się usunąć rezerwacji.';
 
             $stmt->close();
             $db_connection->close();
+        } catch (Exception $error) {
+            $error = addslashes($error);
+            $error = str_replace("\n", "", $error);
+            $consoleLog->show = true;
+            $consoleLog->content = $error;
+            $consoleLog->is_error = true;
+        } catch (mysqli_sql_exception $error) {
+            $consoleLog->show = true;
+            $consoleLog->content = $error;
+            $consoleLog->is_error = true;
         }
     }
+}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Paweł Poremba">
@@ -48,17 +62,28 @@
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
     <?php include_once("./inc/theme.php") ?>
 </head>
+
 <body>
     <div class="page-wrapper">
-    <?php include_once("../inc/message.php"); ?>
-    <nav class="panel">
+        <?php include_once("../inc/message.php"); ?>
+        <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="../admin.php"><li>Home</li></a>
-                    <a class="veh-link" href="../admin.php#vehicles"><li>Pojazdy</li></a>
-                    <a class="users-link" href="../admin.php#users"><li>Użytkownicy</li></a>
-                    <a href="../admin/inbox.php"><li>Wiadomości</li></a>
-                    <a class="settings-link" href="../admin.php#settings"><li>Ustawienia</li></a>
+                    <a href="../admin.php">
+                        <li>Home</li>
+                    </a>
+                    <a class="veh-link" href="../admin.php#vehicles">
+                        <li>Pojazdy</li>
+                    </a>
+                    <a class="users-link" href="../admin.php#users">
+                        <li>Użytkownicy</li>
+                    </a>
+                    <a href="../admin/inbox.php">
+                        <li>Wiadomości</li>
+                    </a>
+                    <a class="settings-link" href="../admin.php#settings">
+                        <li>Ustawienia</li>
+                    </a>
                 </ul>
             </div>
             <div class="back">
@@ -82,10 +107,10 @@
                         <div class="logged-menu">
                             <ul>
                                 <?php
-                                    if (isset($_SESSION['login'])) {
-                                        if ($_SESSION['isAdmin'])
-                                            echo '<li><a href="admin.php">Panel administracyjny</a></li>';
-                                    }
+                                if (isset($_SESSION['login'])) {
+                                    if ($_SESSION['isAdmin'])
+                                        echo '<li><a href="admin.php">Panel administracyjny</a></li>';
+                                }
                                 ?>
                                 <li><a href="user.php">Panel użytkownika</a></li>
                                 <li><a href="logout.php">Wyloguj się</a></li>
@@ -109,10 +134,10 @@
                             <div class="logged-menu">
                                 <ul>
                                     <?php
-                                        if (isset($_SESSION['isAdmin'])) {
-                                            if ($_SESSION['isAdmin'])
-                                                echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
-                                        }
+                                    if (isset($_SESSION['isAdmin'])) {
+                                        if ($_SESSION['isAdmin'])
+                                            echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
+                                    }
                                     ?>
                                     <li><a href="../user.php">Panel użytkownika</a></li>
                                     <li><a href="../logout.php">Wyloguj się</a></li>
@@ -124,8 +149,8 @@
                 <main>
                     <div class="vehicles">
                         <header>
-                            <h2><a href="../admin.php#vehicles">Pojazdy</a></h2> 
-                            <i class="fas fa-chevron-right"></i> 
+                            <h2><a href="../admin.php#vehicles">Pojazdy</a></h2>
+                            <i class="fas fa-chevron-right"></i>
                             <h2>Rezerwacja pojazdów</h2>
                         </header>
                         <section>
@@ -147,25 +172,25 @@
                                         <th>Data rezerwacji</th>
                                         <th>Na ile godzin</th>
                                     </tr>
-                                    <?php 
-                                        require('../db/db_connection.php');
-                                        $query = "SELECT * FROM rezerwacja";
+                                    <?php
+                                    require('../db/db_connection.php');
+                                    $query = "SELECT * FROM rezerwacja";
 
-                                        $stmt = $db_connection->prepare($query);
-                                        $stmt->execute();
+                                    $stmt = $db_connection->prepare($query);
+                                    $stmt->execute();
 
-                                        $result = $stmt->get_result();
-                                        while ($row = $result->fetch_assoc()) {
-                                            echo '<tr>';
-                                            echo '<td>'.$row['id'].'</td>';
-                                            echo '<td>'.$row['id_pojazdu'].'</td>';
-                                            echo '<td>'.$row['id_klienta'].'</td>';
-                                            echo '<td>'.$row['data_rezerwacji'].'</td>';
-                                            echo '<td>'.$row['na_ile'].'</td>';
-                                            echo '<tr>';
-                                        }
-                                        $stmt->close();
-                                        $db_connection->close();
+                                    $result = $stmt->get_result();
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<tr>';
+                                        echo '<td>' . $row['id'] . '</td>';
+                                        echo '<td>' . $row['id_pojazdu'] . '</td>';
+                                        echo '<td>' . $row['id_klienta'] . '</td>';
+                                        echo '<td>' . $row['data_rezerwacji'] . '</td>';
+                                        echo '<td>' . $row['na_ile'] . '</td>';
+                                        echo '<tr>';
+                                    }
+                                    $stmt->close();
+                                    $db_connection->close();
                                     ?>
                                 </table>
                             </div>
@@ -196,10 +221,22 @@
             });
         };
         const input = document.querySelectorAll('main form input');
-        for (let i=0; i<input.length; i++) {
+        for (let i = 0; i < input.length; i++) {
             checkInput(input[i]);
         }
     </script>
-    <?php include_once('./inc/logged.php'); ?>
+    <?php
+    include_once('./inc/logged.php');
+    if (isset($consoleLog)) {
+        if ($consoleLog->show) {
+            if ($consoleLog->is_error) {
+                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+            } else {
+                echo '<script>console.log("' . $consoleLog->content . '")</script>';
+            }
+        }
+    }
+    ?>
 </body>
+
 </html>

@@ -1,22 +1,22 @@
-<?php 
-    session_start();
-    if (isset($_SESSION['isLogged'])) {
-        if (!$_SESSION['isLogged']) {
-            header('Location: login.php');
-            exit;
-        }
-    }
-    else  {
+<?php
+session_start();
+if (isset($_SESSION['isLogged'])) {
+    if (!$_SESSION['isLogged']) {
         header('Location: login.php');
         exit;
     }
+} else {
+    header('Location: login.php');
+    exit;
+}
 
-    if (isset($_GET['vehicle-id']) || isset($_SESSION['vehicle-id'])) {
-        if (isset($_GET['vehicle-id']))
-            $vehicleID = htmlentities($_GET['vehicle-id']);
-        else
-            $vehicleID = htmlentities($_SESSION['vehicle-id']);
-        
+if (isset($_GET['vehicle-id']) || isset($_SESSION['vehicle-id'])) {
+    if (isset($_GET['vehicle-id']))
+        $vehicleID = htmlentities($_GET['vehicle-id']);
+    else
+        $vehicleID = htmlentities($_SESSION['vehicle-id']);
+
+    try {
         require('db/db_connection.php');
         $query = "SELECT * FROM vehicles WHERE id=?";
         $stmt = $db_connection->prepare($query);
@@ -29,15 +29,26 @@
         $stmt->close();
         $db_connection->close();
         $_SESSION['vehicle-id'] = $vehicleID;
+    } catch (Exception $error) {
+        $error = addslashes($error);
+        $error = str_replace("\n", "", $error);
+        $consoleLog->show = true;
+        $consoleLog->content = $error;
+        $consoleLog->is_error = true;
+    } catch (mysqli_sql_exception $error) {
+        $consoleLog->show = true;
+        $consoleLog->content = $error;
+        $consoleLog->is_error = true;
     }
-    else {
-        $_SESSION['error'] = 'Nie wybrano samochodu.';
-        header('Location: rezerwacja.php');
-        exit;
-    }
+} else {
+    $_SESSION['error'] = 'Nie wybrano samochodu.';
+    header('Location: rezerwacja.php');
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Paweł Poremba">
@@ -52,23 +63,27 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/index.css">
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
-    <style> 
+    <style>
         .vehicle {
             margin-bottom: 50px;
         }
+
         .vehicle-name h2 {
             margin-bottom: 10px;
         }
+
         .vehicle-image {
             width: 600px;
             margin-left: auto;
             margin-right: auto;
         }
+
         @media screen and (max-width: 800px) {
             .vehicle-image {
                 width: 90%;
             }
         }
+
         form input {
             width: 100%;
             padding: 10px;
@@ -77,52 +92,57 @@
             margin-bottom: 10px;
             margin-top: 5px;
         }
+
         form button {
             width: 50%;
             margin-top: 50px;
         }
+
         .summary {
             margin-top: 40px;
         }
+
         .summary div {
             margin-top: 20px;
             border: 1px solid #000;
             padding: 10px;
         }
+
         .summary div:first-child {
             margin-top: 0;
         }
     </style>
 </head>
+
 <body>
     <?php require_once("inc/nav.php") ?>
     <main>
         <section>
             <div class="vehicle">
                 <div class="vehicle-name">
-                    <h2><?php echo $attribute['marka'].' '.$attribute['model'];?></h2>
+                    <h2><?php echo $attribute['marka'] . ' ' . $attribute['model']; ?></h2>
                 </div>
                 <div class="vehicle-image">
-                    <img src="<?php echo $attribute['img_url']?>" alt="Zdjęcie samochodu" width="100%" height="100%">
+                    <img src="<?php echo $attribute['img_url'] ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
                 </div>
                 <div class="description">
-                    <div class="vehicle-price"><?php echo $attribute['cena']?>zł za 1 godzinę</div>
+                    <div class="vehicle-price"><?php echo $attribute['cena'] ?>zł za 1 godzinę</div>
                 </div>
             </div>
             <div class="message">
-                <?php 
-                    if (isset($_SESSION['msg'])) {
-                        echo $_SESSION['msg'];
-                        unset($_SESSION['msg']);
-                    }
+                <?php
+                if (isset($_SESSION['msg'])) {
+                    echo $_SESSION['msg'];
+                    unset($_SESSION['msg']);
+                }
                 ?>
             </div>
             <div class="error">
-                <?php 
-                    if (isset($_SESSION['error'])) {
-                        echo $_SESSION['error'];
-                        unset($_SESSION['error']);
-                    }
+                <?php
+                if (isset($_SESSION['error'])) {
+                    echo $_SESSION['error'];
+                    unset($_SESSION['error']);
+                }
                 ?>
             </div>
             <h2>Wypełnij formularz</h2>
@@ -134,8 +154,8 @@
                 <div class="summary">
                     <h2>Podsumowanie zamówienia</h2>
                     <div class="carName">
-                        Nazwa pojazdu: 
-                        <h3><?php echo $attribute['marka'].' '.$attribute['model'];?></h3>
+                        Nazwa pojazdu:
+                        <h3><?php echo $attribute['marka'] . ' ' . $attribute['model']; ?></h3>
                     </div>
                     <div class="amount">
                         Liczba godzin wynajmu:
@@ -147,7 +167,7 @@
                     </div>
                     <div class="price">
                         W sumie do zapłaty:
-                        <h3><?php echo $attribute['cena']?>zł</h3>
+                        <h3><?php echo $attribute['cena'] ?>zł</h3>
                     </div>
                 </div>
                 <button type="submit">Zarezerwuj</button>
@@ -182,24 +202,36 @@
             });
         };
         const input = document.querySelectorAll('input');
-        for (let i=0; i<input.length; i++) {
+        for (let i = 0; i < input.length; i++) {
             checkInput(input[i]);
         }
 
         const rentInput = document.querySelectorAll('section form input');
 
-        for (let i=0; i<rentInput.length; i++) {
+        for (let i = 0; i < rentInput.length; i++) {
             rentInput[i].addEventListener('change', () => {
                 const amount = document.querySelector('form input[name="amount"]').value;
-                document.querySelector('.summary .amount').innerHTML = 'Liczba godzin wynajmu: <h3>'+amount+'</h3>';
+                document.querySelector('.summary .amount').innerHTML = 'Liczba godzin wynajmu: <h3>' + amount + '</h3>';
                 const date = document.querySelector('form input[name="date"]').value;
-                document.querySelector('.summary .date').innerHTML = 'Data wynajmu: <h3>'+date+'</h3>'
+                document.querySelector('.summary .date').innerHTML = 'Data wynajmu: <h3>' + date + '</h3>'
                 let total = amount * <?php echo $attribute['cena'] ?>;
-                document.querySelector('.summary .price').innerHTML = 'W sumie do zapłaty: <h3>'+total.toFixed(2)+'zł</h3>';
+                document.querySelector('.summary .price').innerHTML = 'W sumie do zapłaty: <h3>' + total.toFixed(2) + 'zł</h3>';
             });
         }
     </script>
     <script src="js/nav.js"></script>
-    <?php include_once('inc/logged.php'); ?>
+    <?php
+    include_once('./inc/logged.php');
+    if (isset($consoleLog)) {
+        if ($consoleLog->show) {
+            if ($consoleLog->is_error) {
+                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+            } else {
+                echo '<script>console.log("' . $consoleLog->content . '")</script>';
+            }
+        }
+    }
+    ?>
 </body>
+
 </html>
