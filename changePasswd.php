@@ -1,20 +1,20 @@
-<?php 
-    session_start();
-    if (isset($_SESSION['isLogged'])) {
-        if (!$_SESSION['isLogged']) {
-            header('Location: login.php');
-            exit;
-        }
-    }
-    else  {
+<?php
+session_start();
+if (isset($_SESSION['isLogged'])) {
+    if (!$_SESSION['isLogged']) {
         header('Location: login.php');
         exit;
     }
+} else {
+    header('Location: login.php');
+    exit;
+}
 
-    if (isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SESSION['login'])) {
-        $newPasswd = htmlentities($_POST['password']);
-        $confirmPasswd = htmlentities($_POST['password-confirm']);
+if (isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SESSION['login'])) {
+    $newPasswd = htmlentities($_POST['password']);
+    $confirmPasswd = htmlentities($_POST['password-confirm']);
 
+    try {
         require('db/db_connection.php');
         $query = "SELECT id FROM users WHERE login=?";
         $stmt = $db_connection->prepare($query);
@@ -41,7 +41,7 @@
                 $stmt = $db_connection->prepare($query);
                 $stmt->bind_param('si', $newHashedPasswd, $id);
                 $stmt->execute();
-                
+
                 if ($db_connection->affected_rows == 1) {
                     $_SESSION['msg'] = 'Pomyślnie zmieniono hasło...';
                     session_destroy();
@@ -50,19 +50,29 @@
                             window.location = "login.php";
                         }, 3000);
                     </script>';
-                }
-                else
+                } else
                     $_SESSION['error'] = 'Nie udało się zmienić hasła.';
-            }
-            else 
+            } else
                 $_SESSION['error'] = 'Hasła nie są takie same.';
         }
 
         $db_connection->close();
+    } catch (Exception $error) {
+        $error = addslashes($error);
+        $error = str_replace("\n", "", $error);
+        $consoleLog->show = true;
+        $consoleLog->content = $error;
+        $consoleLog->is_error = true;
+    } catch (mysqli_sql_exception $error) {
+        $consoleLog->show = true;
+        $consoleLog->content = $error;
+        $consoleLog->is_error = true;
     }
+}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Paweł Poremba">
@@ -78,6 +88,7 @@
     <link rel="stylesheet" href="styles/login.css">
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
     <div class="back">
         <i class="fas fa-times"></i>
@@ -105,19 +116,19 @@
                 </div>
             </form>
             <div class="message">
-                <?php 
-                    if (isset($_SESSION['msg'])) {
-                        echo $_SESSION['msg'];
-                        unset($_SESSION['msg']);
-                    }
+                <?php
+                if (isset($_SESSION['msg'])) {
+                    echo $_SESSION['msg'];
+                    unset($_SESSION['msg']);
+                }
                 ?>
             </div>
             <div class="error">
-                <?php 
-                    if (isset($_SESSION['error'])) {
-                        echo $_SESSION['error'];
-                        unset($_SESSION['error']);
-                    }
+                <?php
+                if (isset($_SESSION['error'])) {
+                    echo $_SESSION['error'];
+                    unset($_SESSION['error']);
+                }
                 ?>
             </div>
         </div>
@@ -125,11 +136,23 @@
     <script>
         document.querySelector('.back').addEventListener('click', () => {
             window.location = './index.php';
-        }); 
+        });
     </script>
     <script src="js/loginHandler.js"></script>
     <script>
         passwdCheck();
     </script>
+    <?php
+    if (isset($consoleLog)) {
+        if ($consoleLog->show) {
+            if ($consoleLog->is_error) {
+                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+            } else {
+                echo '<script>console.log("' . $consoleLog->content . '")</script>';
+            }
+        }
+    }
+    ?>
 </body>
+
 </html>

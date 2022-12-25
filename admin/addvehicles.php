@@ -10,13 +10,7 @@ if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
     exit;
 }
 
-class ConsoleMessage {
-    public $show = false;
-    public $content = NULL;
-    public $is_error = false;
-};
-
-$consoleLog = new ConsoleMessage;
+include_once("../inc/consoleMessage.php");
 
 if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_POST['vehicle-price']) && isset($_POST['is-available']) && isset($_POST['vehicle-description'])) {
     if (isset($_SESSION['vehicle-img-name'])) {
@@ -280,17 +274,17 @@ if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_
             echo 'document.querySelector(".img-check").style.display = "block";';
         ?>
     </script>
-    <?php 
-        include_once('./inc/logged.php'); 
-        if (isset($consoleLog)) {
-            if ($consoleLog->show) {
-                if ($consoleLog->is_error) {
-                    echo '<script>console.error("'.$consoleLog->content.'")</script>';
-                } else {
-                    echo '<script>console.log("'.$consoleLog->content.'")</script>';
-                }
+    <?php
+    include_once('./inc/logged.php');
+    if (isset($consoleLog)) {
+        if ($consoleLog->show) {
+            if ($consoleLog->is_error) {
+                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+            } else {
+                echo '<script>console.log("' . $consoleLog->content . '")</script>';
             }
         }
+    }
     ?>
 </body>
 

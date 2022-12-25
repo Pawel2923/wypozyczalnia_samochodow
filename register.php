@@ -1,27 +1,28 @@
-<?php 
-    session_start();
-    if (isset($_SESSION['isLogged'])) {
-        if ($_SESSION['isLogged']) {
-            header('Location: index.php');
-            exit;
-        }
+<?php
+session_start();
+if (isset($_SESSION['isLogged'])) {
+    if ($_SESSION['isLogged']) {
+        header('Location: index.php');
+        exit;
     }
+}
 
-    if (isset($_POST['password']) && isset($_POST['login']) && isset($_POST['password-confirm'])) {
-        if (!empty($_POST['password']) && isset($_POST['login']) && isset($_POST['password-confirm'])) {
-            if ($_POST['password'] === $_POST['password-confirm']) {
-                // Przygotowanie loginu
-                $login = htmlentities(trim($_POST['login']));
-                // Przygotowanie adresu email
-                if (filter_var($login, FILTER_VALIDATE_EMAIL)) { // Sprawdzenie czy login jest adresem email
-                    $email = filter_var($login, FILTER_SANITIZE_EMAIL);
-                    $login = explode('@', $login);
-                    $login = array_shift($login);
-                }
-                // Przygotowanie hasła
-                $password = htmlentities(trim($_POST['password']));
-                $hashedPasswd = password_hash($password, PASSWORD_DEFAULT);
+if (isset($_POST['password']) && isset($_POST['login']) && isset($_POST['password-confirm'])) {
+    if (!empty($_POST['password']) && isset($_POST['login']) && isset($_POST['password-confirm'])) {
+        if ($_POST['password'] === $_POST['password-confirm']) {
+            // Przygotowanie loginu
+            $login = htmlentities(trim($_POST['login']));
+            // Przygotowanie adresu email
+            if (filter_var($login, FILTER_VALIDATE_EMAIL)) { // Sprawdzenie czy login jest adresem email
+                $email = filter_var($login, FILTER_SANITIZE_EMAIL);
+                $login = explode('@', $login);
+                $login = array_shift($login);
+            }
+            // Przygotowanie hasła
+            $password = htmlentities(trim($_POST['password']));
+            $hashedPasswd = password_hash($password, PASSWORD_DEFAULT);
 
+            try {
                 // Połączenie z bazą danych
                 require('db/db_connection.php');
 
@@ -39,12 +40,11 @@
                     $stmt->close();
 
                     if ($result->fetch_assoc() > 0) {
-                        if (isset($email)) 
+                        if (isset($email))
                             $_SESSION['login-error'] = "Podany email jest już zarejestrowany";
-                        else 
+                        else
                             $_SESSION['login-error'] = "Podany login jest już zarejestrowany";
-                    }
-                    else {
+                    } else {
                         // Ustawienie id użytkownika
                         $query = "SELECT COUNT(id) FROM users";
                         $stmt = $db_connection->prepare($query);
@@ -61,8 +61,7 @@
                             $stmt->bind_param("isss", $userID, $login, $email, $hashedPasswd);
                             $stmt->execute();
                             $stmt->close();
-                        }
-                        else {
+                        } else {
                             $query = "INSERT INTO `users` (id, login, password) VALUES(?, ?, ?)";
 
                             $stmt = $db_connection->prepare($query);
@@ -71,7 +70,7 @@
                             $stmt->close();
                         }
                         $db_connection->close();
-        
+
                         header('Location: login.php');
                         exit;
                     }
@@ -79,15 +78,27 @@
                 } else {
                     echo "<script>console.error('Błąd połączenia z bazą danych');</script>";
                 }
-
-                header('Location: register.php');
-                exit;
+            } catch (Exception $error) {
+                $error = addslashes($error);
+                $error = str_replace("\n", "", $error);
+                $consoleLog->show = true;
+                $consoleLog->content = $error;
+                $consoleLog->is_error = true;
+            } catch (mysqli_sql_exception $error) {
+                $consoleLog->show = true;
+                $consoleLog->content = $error;
+                $consoleLog->is_error = true;
             }
+
+            header('Location: register.php');
+            exit;
         }
     }
+}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Paweł Poremba">
@@ -103,6 +114,7 @@
     <link rel="stylesheet" href="styles/login.css">
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
     <div class="back">
         <i class="fas fa-times"></i>
@@ -122,11 +134,11 @@
                     <input type="text" name="login" id="login-field" required>
                     <br>
                     <div class="warning">
-                        <?php 
-                            if (isset($_SESSION['login-error'])) {
-                                echo $_SESSION['login-error'];
-                                unset($_SESSION['login-error']);
-                            }
+                        <?php
+                        if (isset($_SESSION['login-error'])) {
+                            echo $_SESSION['login-error'];
+                            unset($_SESSION['login-error']);
+                        }
                         ?>
                     </div>
                 </div>
@@ -144,11 +156,11 @@
                     <button type="submit">Zarejestruj się</button>
                 </div>
                 <div class="error">
-                    <?php 
-                        if (isset($_SESSION['connectionError'])) {
-                            echo $_SESSION['connectionError'];
-                            unset($_SESSION['connectionError']);
-                        }
+                    <?php
+                    if (isset($_SESSION['connectionError'])) {
+                        echo $_SESSION['connectionError'];
+                        unset($_SESSION['connectionError']);
+                    }
                     ?>
                 </div>
             </form>
@@ -161,5 +173,17 @@
         });
         passwdCheck();
     </script>
+    <?php
+    if (isset($consoleLog)) {
+        if ($consoleLog->show) {
+            if ($consoleLog->is_error) {
+                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+            } else {
+                echo '<script>console.log("' . $consoleLog->content . '")</script>';
+            }
+        }
+    }
+    ?>
 </body>
+
 </html>

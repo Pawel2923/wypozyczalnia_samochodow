@@ -1,21 +1,23 @@
-<?php 
-    session_start();
-    if (isset($_SESSION['isLogged'])) {
-        if (!$_SESSION['isLogged']) {
-            header('Location: ../login.php');
-            exit;
-        }
-    }
-    else  {
+<?php
+session_start();
+if (isset($_SESSION['isLogged'])) {
+    if (!$_SESSION['isLogged']) {
         header('Location: ../login.php');
         exit;
     }
+} else {
+    header('Location: ../login.php');
+    exit;
+}
 
-    if (isset($_POST['new-login']) && isset($_SESSION['login'])) {
-        $login = htmlentities($_SESSION['login']);
-        $newLogin = htmlentities($_POST['new-login']);
+include_once("../inc/consoleMessage.php");
 
-        if ($login !== $newLogin) {
+if (isset($_POST['new-login']) && isset($_SESSION['login'])) {
+    $login = htmlentities($_SESSION['login']);
+    $newLogin = htmlentities($_POST['new-login']);
+
+    if ($login !== $newLogin) {
+        try {
             require('../db/db_connection.php');
 
             $query = "SELECT COUNT(id) FROM users WHERE login=?";
@@ -34,7 +36,7 @@
                 $stmt->execute();
                 $result = $stmt->get_result();
                 $stmt->close();
-                
+
                 if ($result->num_rows == 1) {
                     $id = $result->fetch_row();
                     $id = $id[0];
@@ -50,21 +52,30 @@
                             window.location = "../logout.php";
                         }, 5000);
                     </script>';
-                }
-                else 
+                } else
                     $_SESSION['error'] = 'Takiego loginu nie ma w bazie danych.';
-            }
-            else 
+            } else
                 $_SESSION['error'] = 'Taki login jest już zajęty.';
 
             $db_connection->close();
+        } catch (Exception $error) {
+            $error = addslashes($error);
+            $error = str_replace("\n", "", $error);
+            $consoleLog->show = true;
+            $consoleLog->content = $error;
+            $consoleLog->is_error = true;
+        } catch (mysqli_sql_exception $error) {
+            $consoleLog->show = true;
+            $consoleLog->content = $error;
+            $consoleLog->is_error = true;
         }
-        else 
-            $_SESSION['error'] = 'Nowy login jest taki sam jak stary.';
-    }
+    } else
+        $_SESSION['error'] = 'Nowy login jest taki sam jak stary.';
+}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Paweł Poremba">
@@ -79,27 +90,35 @@
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/panel.css">
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
-    <?php 
-        if (isset($_POST['theme'])) {
-            if ($_POST['theme'] != "default")
-                echo '<link rel="stylesheet" href="styles/'.$_POST['theme'].'.css">';
-        }
-        elseif (isset($_COOKIE['theme'])) {
-            if ($_COOKIE['theme'] != "default")
-                echo '<link rel="stylesheet" href="styles/'.$_COOKIE['theme'].'.css">';
-        }
+    <?php
+    if (isset($_POST['theme'])) {
+        if ($_POST['theme'] != "default")
+            echo '<link rel="stylesheet" href="styles/' . $_POST['theme'] . '.css">';
+    } elseif (isset($_COOKIE['theme'])) {
+        if ($_COOKIE['theme'] != "default")
+            echo '<link rel="stylesheet" href="styles/' . $_COOKIE['theme'] . '.css">';
+    }
     ?>
 </head>
+
 <body>
     <div class="page-wrapper">
         <?php include_once("../inc/message.php"); ?>
         <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="../user.php"><li>Home</li></a>
-                    <a class="veh-link" href="../user.php#vehicles"><li>Pojazdy</li></a>
-                    <a class="profile-link" href="../user.php#profile"><li>Edytuj profil</li></a>
-                    <a class="settings-link" href="../user.php#settings"><li>Ustawienia</li></a>
+                    <a href="../user.php">
+                        <li>Home</li>
+                    </a>
+                    <a class="veh-link" href="../user.php#vehicles">
+                        <li>Pojazdy</li>
+                    </a>
+                    <a class="profile-link" href="../user.php#profile">
+                        <li>Edytuj profil</li>
+                    </a>
+                    <a class="settings-link" href="../user.php#settings">
+                        <li>Ustawienia</li>
+                    </a>
                 </ul>
             </div>
             <div class="back">
@@ -109,7 +128,7 @@
             </div>
         </nav>
         <div class="content">
-        <div class="mobile-nav">
+            <div class="mobile-nav">
                 <div class="open"><i class="fas fa-bars"></i></div>
                 <div class="user">
                     <a href="login.php" class="login">
@@ -123,10 +142,10 @@
                         <div class="logged-menu">
                             <ul>
                                 <?php
-                                    if (isset($_SESSION['login'])) {
-                                        if ($_SESSION['isAdmin'])
-                                            echo '<li><a href="admin.php">Panel administracyjny</a></li>';
-                                    }
+                                if (isset($_SESSION['login'])) {
+                                    if ($_SESSION['isAdmin'])
+                                        echo '<li><a href="admin.php">Panel administracyjny</a></li>';
+                                }
                                 ?>
                                 <li><a href="user.php">Panel użytkownika</a></li>
                                 <li><a href="logout.php">Wyloguj się</a></li>
@@ -150,10 +169,10 @@
                             <div class="logged-menu">
                                 <ul>
                                     <?php
-                                        if (isset($_SESSION['isAdmin'])) {
-                                            if ($_SESSION['isAdmin'])
-                                                echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
-                                        }
+                                    if (isset($_SESSION['isAdmin'])) {
+                                        if ($_SESSION['isAdmin'])
+                                            echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
+                                    }
                                     ?>
                                     <li><a href="../user.php">Panel użytkownika</a></li>
                                     <li><a href="../logout.php">Wyloguj się</a></li>
@@ -165,8 +184,8 @@
                 <main>
                     <div class="users">
                         <header>
-                            <h2><a href="../user.php#profile">Edytuj swój profil</a></h2> 
-                            <i class="fas fa-chevron-right"></i> 
+                            <h2><a href="../user.php#profile">Edytuj swój profil</a></h2>
+                            <i class="fas fa-chevron-right"></i>
                             <h2>Zmień login</h2>
                         </header>
                         <section>
@@ -199,6 +218,18 @@
         </div>
     </div>
     <script src="../js/panelHandler.js"></script>
-    <?php include_once('logged.php'); ?>
+    <?php
+    include_once('./logged.php');
+    if (isset($consoleLog)) {
+        if ($consoleLog->show) {
+            if ($consoleLog->is_error) {
+                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+            } else {
+                echo '<script>console.log("' . $consoleLog->content . '")</script>';
+            }
+        }
+    }
+    ?>
 </body>
+
 </html>

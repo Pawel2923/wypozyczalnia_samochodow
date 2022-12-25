@@ -1,41 +1,54 @@
-<?php 
-    session_start();
-    if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
-        if (!$_SESSION['isAdmin']) {
-            header('Location: index.php');
-            exit;
-        }
-    }
-    else {
+<?php
+session_start();
+if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
+    if (!$_SESSION['isAdmin']) {
         header('Location: index.php');
         exit;
     }
+} else {
+    header('Location: index.php');
+    exit;
+}
 
-    if (isset($_POST['action']) && isset($_POST['user-id'])) {
-        $userID = htmlentities($_POST['user-id']);
+if (isset($_POST['action']) && isset($_POST['user-id'])) {
+    $userID = htmlentities($_POST['user-id']);
+
+    try {
         require('db/db_connection.php');
 
         if ($_POST['action'] === 'grant')
             $query = "UPDATE users SET is_admin=1 WHERE id=?";
-        else 
+        else
             $query = "UPDATE users SET is_admin=0 WHERE id=?";
-        
+
         $stmt = $db_connection->prepare($query);
         $stmt->bind_param('i', $userID);
         $stmt->execute();
         $stmt->close();
         $db_connection->close();
+    } catch (Exception $error) {
+        $error = addslashes($error);
+        $error = str_replace("\n", "", $error);
+        $consoleLog->show = true;
+        $consoleLog->content = $error;
+        $consoleLog->is_error = true;
+    } catch (mysqli_sql_exception $error) {
+        $consoleLog->show = true;
+        $consoleLog->content = $error;
+        $consoleLog->is_error = true;
     }
+}
 
-    // Ustawienie pliku cookie dla motywu panelu
-    if (isset($_POST['theme'])) {
-        $theme = htmlentities($_POST['theme']);
-        if ($theme == "default" || $theme == "system" || $theme == "dark" || $theme == "light")
-            setcookie('theme', $theme, time() + (5 * 365 * 24 * 60 * 60));
-    }
+// Ustawienie pliku cookie dla motywu panelu
+if (isset($_POST['theme'])) {
+    $theme = htmlentities($_POST['theme']);
+    if ($theme == "default" || $theme == "system" || $theme == "dark" || $theme == "light")
+        setcookie('theme', $theme, time() + (5 * 365 * 24 * 60 * 60));
+}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Paweł Poremba">
@@ -55,31 +68,42 @@
             display: flex;
             column-gap: 10px;
         }
+
         .access-buttons button {
             width: 100%;
         }
     </style>
-    <?php 
-        if (isset($_POST['theme'])) {
-            if ($_POST['theme'] != "default")
-                echo '<link rel="stylesheet" href="styles/'.$_POST['theme'].'.css">';
-        }
-        elseif (isset($_COOKIE['theme'])) {
-            if ($_COOKIE['theme'] != "default")
-                echo '<link rel="stylesheet" href="styles/'.$_COOKIE['theme'].'.css">';
-        }
+    <?php
+    if (isset($_POST['theme'])) {
+        if ($_POST['theme'] != "default")
+            echo '<link rel="stylesheet" href="styles/' . $_POST['theme'] . '.css">';
+    } elseif (isset($_COOKIE['theme'])) {
+        if ($_COOKIE['theme'] != "default")
+            echo '<link rel="stylesheet" href="styles/' . $_COOKIE['theme'] . '.css">';
+    }
     ?>
 </head>
+
 <body>
     <div class="page-wrapper">
         <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="admin.php"><li>Home</li></a>
-                    <a class="veh-link" href="admin.php#vehicles"><li>Pojazdy</li></a>
-                    <a class="users-link" href="admin.php#users"><li>Użytkownicy</li></a>
-                    <a href="admin/inbox.php"><li>Wiadomości</li></a>
-                    <a class="settings-link" href="admin.php#settings"><li>Ustawienia</li></a>
+                    <a href="admin.php">
+                        <li>Home</li>
+                    </a>
+                    <a class="veh-link" href="admin.php#vehicles">
+                        <li>Pojazdy</li>
+                    </a>
+                    <a class="users-link" href="admin.php#users">
+                        <li>Użytkownicy</li>
+                    </a>
+                    <a href="admin/inbox.php">
+                        <li>Wiadomości</li>
+                    </a>
+                    <a class="settings-link" href="admin.php#settings">
+                        <li>Ustawienia</li>
+                    </a>
                 </ul>
             </div>
             <div class="back">
@@ -103,10 +127,10 @@
                         <div class="logged-menu">
                             <ul>
                                 <?php
-                                    if (isset($_SESSION['login'])) {
-                                        if ($_SESSION['isAdmin'])
-                                            echo '<li><a href="admin.php">Panel administracyjny</a></li>';
-                                    }
+                                if (isset($_SESSION['login'])) {
+                                    if ($_SESSION['isAdmin'])
+                                        echo '<li><a href="admin.php">Panel administracyjny</a></li>';
+                                }
                                 ?>
                                 <li><a href="user.php">Panel użytkownika</a></li>
                                 <li><a href="logout.php">Wyloguj się</a></li>
@@ -130,10 +154,10 @@
                             <div class="logged-menu">
                                 <ul>
                                     <?php
-                                        if (isset($_SESSION['login'])) {
-                                            if ($_SESSION['isAdmin'])
-                                                echo '<li><a href="admin.php">Panel administracyjny</a></li>';
-                                        }
+                                    if (isset($_SESSION['login'])) {
+                                        if ($_SESSION['isAdmin'])
+                                            echo '<li><a href="admin.php">Panel administracyjny</a></li>';
+                                    }
                                     ?>
                                     <li><a href="user.php">Panel użytkownika</a></li>
                                     <li><a href="logout.php">Wyloguj się</a></li>
@@ -243,41 +267,41 @@
                                         <th>Admin</th>
                                         <th>Wypożyczone pojazdy</th>
                                     </tr>
-                                    <?php 
-                                        // Wylistowanie użytkowników w tabeli
-                                        require('db/db_connection.php');
-                                        $query = "SELECT * FROM users";
+                                    <?php
+                                    // Wylistowanie użytkowników w tabeli
+                                    require('db/db_connection.php');
+                                    $query = "SELECT * FROM users";
 
-                                        $stmt = $db_connection->prepare($query);
-                                        $stmt->execute();
+                                    $stmt = $db_connection->prepare($query);
+                                    $stmt->execute();
 
-                                        $result = $stmt->get_result();
-                                        while ($row = $result->fetch_assoc()) {
-                                            echo '<tr>';
-                                            echo '<td>'.$row['id'].'</td>';
-                                            echo '<td>'.$row['login'].'</td>';
-                                            echo '<td>';
-                                                if ($row['email'] != '') 
-                                                    echo $row['email'];
-                                                else 
-                                                    echo 'Brak email';
-                                            echo '</td>';
-                                            echo '<td>';
-                                                if ($row['is_admin'])
-                                                    echo 'TAK';
-                                                else 
-                                                    echo 'NIE';
-                                            echo '</td>';
-                                            echo '<td>';
-                                                if ($row['rented_vehicles'] > 0)
-                                                    echo $row['rented_vehicles'];
-                                                else 
-                                                    echo 'Brak pojazdów';
-                                            echo '</td>';
-                                            echo '<tr>';
-                                        }
-                                        $stmt->close();
-                                        $db_connection->close();
+                                    $result = $stmt->get_result();
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<tr>';
+                                        echo '<td>' . $row['id'] . '</td>';
+                                        echo '<td>' . $row['login'] . '</td>';
+                                        echo '<td>';
+                                        if ($row['email'] != '')
+                                            echo $row['email'];
+                                        else
+                                            echo 'Brak email';
+                                        echo '</td>';
+                                        echo '<td>';
+                                        if ($row['is_admin'])
+                                            echo 'TAK';
+                                        else
+                                            echo 'NIE';
+                                        echo '</td>';
+                                        echo '<td>';
+                                        if ($row['rented_vehicles'] > 0)
+                                            echo $row['rented_vehicles'];
+                                        else
+                                            echo 'Brak pojazdów';
+                                        echo '</td>';
+                                        echo '<tr>';
+                                    }
+                                    $stmt->close();
+                                    $db_connection->close();
                                     ?>
                                 </table>
                             </div>
@@ -293,7 +317,7 @@
                                 <form action="" method="POST">
                                     <input type="number" name="user-id" placeholder="Wpisz ID użytkownika">
                                     <div class="access-buttons">
-                                        <button type="submit" name="action" value="grant">Nadaj dostęp</button>                                        
+                                        <button type="submit" name="action" value="grant">Nadaj dostęp</button>
                                         <button type="submit" name="action" value="revoke">Usuń dostęp</button>
                                     </div>
                                 </form>
@@ -307,29 +331,29 @@
                                                 <th>Login</th>
                                                 <th>E-mail</th>
                                             </tr>
-                                            <?php 
-                                                require('db/db_connection.php');
+                                            <?php
+                                            require('db/db_connection.php');
 
-                                                $query = "SELECT * FROM admins";
+                                            $query = "SELECT * FROM admins";
 
-                                                $stmt = $db_connection->prepare($query);
-                                                $stmt->execute();
-            
-                                                $result = $stmt->get_result();
-                                                while ($row = $result->fetch_assoc()) {
-                                                    echo '<tr>';
-                                                    echo '<td>'.$row['id'].'</td>';
-                                                    echo '<td>'.$row['login'].'</td>';
-                                                    echo '<td>';
-                                                        if ($row['email'] != '') 
-                                                            echo $row['email'];
-                                                        else 
-                                                            echo 'Brak adresu';
-                                                    echo '</td>';
-                                                    echo '<tr>';
-                                                }
-                                                $stmt->close();
-                                                $db_connection->close();
+                                            $stmt = $db_connection->prepare($query);
+                                            $stmt->execute();
+
+                                            $result = $stmt->get_result();
+                                            while ($row = $result->fetch_assoc()) {
+                                                echo '<tr>';
+                                                echo '<td>' . $row['id'] . '</td>';
+                                                echo '<td>' . $row['login'] . '</td>';
+                                                echo '<td>';
+                                                if ($row['email'] != '')
+                                                    echo $row['email'];
+                                                else
+                                                    echo 'Brak adresu';
+                                                echo '</td>';
+                                                echo '<tr>';
+                                            }
+                                            $stmt->close();
+                                            $db_connection->close();
                                             ?>
                                         </table>
                                     </div>
@@ -354,15 +378,27 @@
     <script src="js/panelHandler.js"></script>
     <script>
         const selectTheme = (mode) => {
-            document.querySelector('main select option[value="'+mode+'"]').setAttribute('selected', 'selected');
+            document.querySelector('main select option[value="' + mode + '"]').setAttribute('selected', 'selected');
         }
     </script>
-    <?php 
-        if (isset($_POST['theme']))
-            echo '<script>selectTheme("'.$_POST['theme'].'");</script>';
-        elseif (isset($_COOKIE['theme']))
-            echo '<script>selectTheme("'.$_COOKIE['theme'].'");</script>';
+    <?php
+    if (isset($_POST['theme']))
+        echo '<script>selectTheme("' . $_POST['theme'] . '");</script>';
+    elseif (isset($_COOKIE['theme']))
+        echo '<script>selectTheme("' . $_COOKIE['theme'] . '");</script>';
     ?>
-    <?php include_once('inc/logged.php'); ?>
+    <?php
+    include_once('./inc/logged.php');
+    if (isset($consoleLog)) {
+        if ($consoleLog->show) {
+            if ($consoleLog->is_error) {
+                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+            } else {
+                echo '<script>console.log("' . $consoleLog->content . '")</script>';
+            }
+        }
+    }
+    ?>
 </body>
+
 </html>
