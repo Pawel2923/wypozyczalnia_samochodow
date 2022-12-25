@@ -74,20 +74,7 @@
         <i class="fas fa-times"></i>
     </div>
     <main>
-        <div class="message-wrapper" <?php if (isset($_SESSION['msg'])) echo 'style="display: flex;"'?>>
-            <div class="overlay"></div>
-            <div class="message">
-                <div class="close"><i class="fas fa-times"></i></div>
-                <div class="msg">
-                    <?php 
-                        if (isset($_SESSION['msg'])) {
-                            echo $_SESSION['msg'];
-                            unset($_SESSION['msg']);
-                        }
-                    ?>
-                </div>
-            </div>
-        </div>
+        <?php include_once("./inc/message.php"); ?>
         <div class="header-wrapper">
             <header>
                 <h1>Zresetuj zapomniane hasło</h1>
