@@ -20,7 +20,7 @@ if (isset($_POST['password']) && isset($_POST['login']) && isset($_POST['passwor
             }
             // Przygotowanie hasła
             $password = htmlentities(trim($_POST['password']));
-            $hashedPasswd = password_hash($password, PASSWORD_DEFAULT);
+            $newHashedPasswd = password_hash($newPasswd, PASSWORD_DEFAULT, array('cost' => 10));
 
             try {
                 // Połączenie z bazą danych
