@@ -33,7 +33,7 @@
             font-size: 16px;
             outline: none;
             margin-top: 10px;
-            border: 2px solid #000;
+            border: 1px solid #000;
         }
         section form textarea {
             resize: none;
