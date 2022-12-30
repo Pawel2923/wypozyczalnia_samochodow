@@ -36,7 +36,7 @@ if (isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SE
             $stmt->close();
 
             if ($newPasswd === $confirmPasswd) {
-                $newHashedPasswd = password_hash($newPasswd, PASSWORD_DEFAULT);
+                $newHashedPasswd = password_hash($newPasswd, PASSWORD_DEFAULT, array('cost' => 10));
                 $query = "UPDATE users SET password=?, change_passwd=0 WHERE id=?";
                 $stmt = $db_connection->prepare($query);
                 $stmt->bind_param('si', $newHashedPasswd, $id);
