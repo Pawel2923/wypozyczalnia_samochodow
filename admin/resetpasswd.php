@@ -103,18 +103,7 @@ if (isset($_POST['user-id'])) {
                         <div class="mobile-logged-menu-overlay"></div>
                         <i class="fas fa-user"></i>
                         <span class="login-caption"><?php if (isset($_SESSION['login'])) echo $_SESSION['login']; ?></span>
-                        <div class="logged-menu">
-                            <ul>
-                                <?php
-                                if (isset($_SESSION['login'])) {
-                                    if ($_SESSION['isAdmin'])
-                                        echo '<li><a href="admin.php">Panel administracyjny</a></li>';
-                                }
-                                ?>
-                                <li><a href="user.php">Panel użytkownika</a></li>
-                                <li><a href="logout.php">Wyloguj się</a></li>
-                            </ul>
-                        </div>
+                        <?php include("../inc/logged-menu.php"); ?>
                     </div>
                 </div>
                 <div class="overlay"></div>
@@ -130,18 +119,7 @@ if (isset($_POST['user-id'])) {
                         <div class="logged">
                             <i class="fas fa-user"></i>
                             <span class="login-caption"><?php if (isset($_SESSION['login'])) echo $_SESSION['login']; ?></span>
-                            <div class="logged-menu">
-                                <ul>
-                                    <?php
-                                    if (isset($_SESSION['isAdmin'])) {
-                                        if ($_SESSION['isAdmin'])
-                                            echo '<li><a href="../admin.php">Panel administracyjny</a></li>';
-                                    }
-                                    ?>
-                                    <li><a href="../user.php">Panel użytkownika</a></li>
-                                    <li><a href="../logout.php">Wyloguj się</a></li>
-                                </ul>
-                            </div>
+                            <?php include("../inc/logged-menu.php"); ?>
                         </div>
                     </div>
                 </header>
