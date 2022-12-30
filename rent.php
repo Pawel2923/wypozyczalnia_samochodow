@@ -62,6 +62,7 @@ if (isset($_GET['vehicle-id']) || isset($_SESSION['vehicle-id'])) {
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/index.css">
+    <link rel="Shortcut Icon" href="./img/logo.svg" />
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
     <style>
         .vehicle {
