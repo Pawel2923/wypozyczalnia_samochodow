@@ -7,7 +7,7 @@
                                                                                                                         }
                                                                                                                                 ?>
         <li><a class="logged-menu-user" href="user.php"><i class="fa-solid fa-user-gear"></i> Panel użytkownika</a></li>
-        <li><a href="logout.php"><i class="fa-solid fa-right-from-bracket"></i> Wyloguj się</a></li>
+        <li><a class="logged-menu-logout" href="logout.php"><i class="fa-solid fa-right-from-bracket"></i> Wyloguj się</a></li>
     </ul>
 </div>
 <script>
@@ -17,6 +17,9 @@
         });
         document.querySelectorAll(".logged-menu-user").forEach(elem => {
             elem.setAttribute("href", "../user.php")
+        });
+        document.querySelectorAll(".logged-menu-logout").forEach(elem => {
+            elem.setAttribute("href", "../logout.php")
         });
     }
 </script>
