@@ -1,1 +1,1 @@
-Header add Content-Security-Policy "default-src 'self' 'unsafe-inline' https://*.googleapis.com https://fonts.gstatic.com https://*.fontawesome.com;"
+Header add Content-Security-Policy "default-src 'self' 'unsafe-inline' data: https://*.googleapis.com https://fonts.gstatic.com https://*.fontawesome.com;"
