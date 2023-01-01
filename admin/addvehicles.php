@@ -29,7 +29,7 @@ if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_
         else
             $avail = 1;
 
-        $img = "img/" . $_SESSION['vehicle-img-name'];
+        $img = $_SESSION['vehicle-img-name'];
         unset($_SESSION['vehicle-img-name']);
 
         try {
