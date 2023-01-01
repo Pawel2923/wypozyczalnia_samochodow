@@ -10,6 +10,11 @@ if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
     exit;
 }
 
+if (isset($_SESSION['vehicle-img-name'])) {
+    if (!file_exists("../img/" . $_SESSION['vehicle-img-name']))
+        unset($_SESSION['vehicle-img-name']);
+}
+
 include_once("../inc/consoleMessage.php");
 
 if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_POST['vehicle-price']) && isset($_POST['is-available']) && isset($_POST['vehicle-description'])) {
@@ -94,20 +99,26 @@ if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_
     <link rel="Shortcut Icon" href="../img/logo.svg" />
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
     <style>
-        .upload-wrapper {
-            display: flex;
-            align-items: center;
-            position: relative;
+        .uploaded-wrapper {
+            display: none;
+            max-width: 60%;
         }
 
-        .img-check {
+        .uploaded-wrapper > div {
+            display: flex;
+            align-items: center;
+        }
+        
+        .uploaded-wrapper > button {
+            margin-top: 1rem;
+            width: 50%;
+        }
+
+        .uploaded-wrapper .img-check {
             display: none;
             color: #60b8ff;
-            margin-top: 10px;
             font-size: 1.5em;
-            position: absolute;
-            right: 0;
-            transform: translateX(calc(100% + 10px));
+            margin-left: 0.5rem;
         }
 
         img {
@@ -188,33 +199,38 @@ if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_
                             <h2>Dodawanie nowych pojazdów</h2>
                         </header>
                         <section>
-                            <form action="upload.php" method="POST" enctype="multipart/form-data">
-                                <label>Wybierz zdjęcie samochodu*</label>
-                                <div class="upload-wrapper">
-                                    <input type="file" name="vehicle-img" id="vehicle-img" accept="image/png, image/jpg, image/jpeg, image/gif" required>
-                                    <i class="fas fa-check-circle img-check"></i>
-                                </div>
+                            <form action="upload.php" method="POST" enctype="multipart/form-data" name="vehicleImg">
+                                <label for="vehicle-img">Wybierz zdjęcie samochodu*</label>
+                                <input type="file" name="vehicle-img" id="vehicle-img" accept="image/jpg image/jpeg image/gif image/png image/webp image/avif image/bmp image/xbm" required>
+                                <label for="vehicle-img-name">Zmień nazwę pliku</label>
+                                <input type="text" name="vehicle-img-name" id="vehicle-img-name" />
                                 <button type="submit">Prześlij zdjęcie</button>
                             </form>
-                            <div class="image-msg">
+                            <div class="uploaded-wrapper">
+                                <div>
+                                    <h3>Zdjęcie zostało wybrane</h3>
+                                    <i class="fas fa-check-circle img-check"></i>
+                                </div>
+                                <button>Usuń obecne zdjęcie</button>
+                            </div>
+                            <figure class="image-msg">
                                 <?php
                                 if (isset($_SESSION['vehicle-img-name'])) {
-                                    echo '<label>Wybrane zdjęcie</label>';
-                                    echo '<br>';
-                                    echo '<img src="../img/' . $_SESSION['vehicle-img-name'] . '" alt="zdjęcie samochodu">';
+                                    echo '<figcaption>Wybrane zdjęcie: <b>' . basename($_SESSION['vehicle-img-name']) . '</b></figcaption>';
+                                    echo '<img src="' . $_SESSION['vehicle-img-name'] . '" alt="Zdjęcie wybranego samochodu">';
                                 }
                                 ?>
-                            </div>
+                            </figure>
                             <form action="" method="POST">
-                                <label>Marka pojazdu*</label>
+                                <label for="vehicle-brand">Marka pojazdu*</label>
                                 <input type="text" name="vehicle-brand" required>
-                                <label>Model pojazdu*</label>
+                                <label for="vehicle-model">Model pojazdu*</label>
                                 <input type="text" name="vehicle-model" required>
-                                <label>Cena*</label>
+                                <label for="vehicle-price">Cena*</label>
                                 <input type="text" name="vehicle-price" placeholder="np. 59,59" required>
-                                <label>Ustaw dostępność do rezerwacji</label>
+                                <label for="is-available">Ustaw dostępność do rezerwacji</label>
                                 <input type="text" name="is-available" placeholder="Wpisz 0 jeśli nie lub 1 jeśli tak">
-                                <label>Dodaj opis pojazdu</label>
+                                <label for="vehicle-description">Dodaj opis pojazdu</label>
                                 <textarea name="vehicle-description"></textarea>
                                 <button type="submit">Dodaj</button>
                             </form>
@@ -236,6 +252,19 @@ if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_
     </div>
     <script src="../js/panelHandler.js"></script>
     <script>
+        const forbiddenChars = [".", "\\", "/", ":", "*", "<", ">", "|"];
+        const vehicleImgNameInput = document.querySelector("input[name='vehicle-img-name']");
+
+        vehicleImgNameInput.addEventListener("blur", (ev) => {
+            for (let char of forbiddenChars) {
+                if (ev.target.value.includes(char)) {
+                    ev.target.setCustomValidity(`Nazwa nie może zawierać znaku: ${char}`);
+                    break;
+                } else
+                    ev.target.setCustomValidity("");
+            }
+        });
+
         const checkInput = (name) => {
             name.addEventListener('invalid', () => {
                 name.classList.add('subscription-input-invalid');
@@ -250,7 +279,14 @@ if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_
         }
         <?php
         if (isset($_SESSION['vehicle-img-name']))
-            echo 'document.querySelector(".img-check").style.display = "block";';
+            echo '
+            document.querySelector(".img-check").style.display = "block";
+            document.querySelector(".uploaded-wrapper").style.display = "block";
+            document.forms.vehicleImg.style.display = "none";
+            document.querySelector(".uploaded-wrapper > button").addEventListener("click", () => {
+                window.location.pathname = window.location.pathname.replace("/addvehicles.php", "/deleteimg.php");
+            });
+            ';
         ?>
     </script>
     <?php
