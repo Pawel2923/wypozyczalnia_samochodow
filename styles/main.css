@@ -328,6 +328,10 @@ main .car button {
   margin-bottom: 5%;
 }
 
+.cars .no-vehicles {
+  grid-column: span 3;
+}
+
 main .cars-list {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -337,6 +341,7 @@ main .cars-list {
   -ms-flex-direction: column;
   flex-direction: column;
 }
+
 .cars-list .vehicle {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -347,12 +352,14 @@ main .cars-list {
   flex-direction: column;
   margin-bottom: 20px;
 }
+
 .cars-list .vehicle-name {
   display: block;
   margin-bottom: 5px;
   font-size: 1.5em;
   text-transform: capitalize;
 }
+
 .cars-list .vehicle-content {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -365,38 +372,47 @@ main .cars-list {
   justify-content: space-between;
   border: 1px solid #000;
 }
+
 .cars-list .vehicle-content:last-child {
   margin-bottom: 0;
 }
+
 .cars-list .vehicle-content > * {
   margin-right: 20px;
 }
+
 .cars-list .vehicle-content .vehicle-price {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
+
 .cars-list .vehicle-content .vehicle-price div {
   margin-right: 20px;
 }
+
 .cars-list .vehicle-content .vehicle-image {
   width: 400px;
 }
+
 .cars .vehicle-image img {
   display: block;
 }
+
 .cars-list button {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   margin: 0;
 }
+
 @media screen and (max-width: 800px) {
   main .cars {
     -ms-grid-rows: auto;
     -ms-grid-columns: auto;
     grid-template: auto / auto;
   }
+
   .cars-list .vehicle,
   .cars-list .vehicle .vehicle-price {
     -webkit-box-orient: vertical;
@@ -407,14 +423,17 @@ main .cars-list {
     -ms-flex-align: center;
     align-items: center;
   }
+
   .cars-list .vehicle-content .vehicle-price div {
     margin: 0;
     margin-bottom: 5px;
     font-size: 0.8em;
   }
+
   .cars-list .vehicle .vehicle-image {
     width: 100%;
   }
+
   .cars-list .vehicle-name {
     font-size: 1.2em;
   }

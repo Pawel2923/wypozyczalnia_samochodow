@@ -66,8 +66,8 @@ if (isset($_POST['amount']) && isset($_POST['date']) && isset($_SESSION['vehicle
 
                     $_SESSION['msg'] = 'Dziękujemy za korzystanie z naszych usług!';
                 } else {
-                    echo "<script>alert('Wprowadzono datę która minęła.')</script>";
-                    echo "<script>history.go(-1);</script>";
+                    echo "<script nonce='alert'>alert('Wprowadzono datę która minęła.')</script>";
+                    echo "<script nonce='historyPrev'>history.go(-1);</script>";
                 }
             }
 
@@ -104,35 +104,9 @@ if (isset($_POST['amount']) && isset($_POST['date']) && isset($_SESSION['vehicle
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/rentsubmit.css">
     <link rel="Shortcut Icon" href="./img/logo.svg" />
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
-    <style>
-        body {
-            display: flex;
-            height: 90vh;
-            align-items: center;
-            justify-content: center;
-        }
-
-        main {
-            width: 80%;
-            text-align: center;
-        }
-
-        button {
-            margin-top: 10px;
-            width: 50%;
-        }
-
-        footer {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            grid-template-rows: auto;
-            padding: 20px;
-        }
-    </style>
 </head>
 
 <body>
@@ -162,9 +136,9 @@ if (isset($_POST['amount']) && isset($_POST['date']) && isset($_SESSION['vehicle
     if (isset($consoleLog)) {
         if ($consoleLog->show) {
             if ($consoleLog->is_error) {
-                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+                echo '<script src="js/log.js" value="' . $consoleLog->content . '" name="error"></script>';
             } else {
-                echo '<script>console.log("' . $consoleLog->content . '")</script>';
+                echo '<script src="js/log.js" value="' . $consoleLog->content . '" name="log"></script>';
             }
         }
     }

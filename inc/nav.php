@@ -7,7 +7,7 @@
         <i class="fa-solid fa-house"></i>
         <span>Home</span>
     </a>
-    <a href="rezerwacja.php">
+    <a href="rental.php">
         <i class="fa-solid fa-bookmark"></i>
         <span>Rezerwacja</span>
     </a>
@@ -47,18 +47,7 @@
                     <ul>
                         <li>
                             <div class="card">
-                                <script>
-                                    const date = new Date();
-                                    const hour = date.getHours();
-                                    let welcomeMessage = "Dzień dobry ";
-                                    
-                                    if (hour > 19 || hour < 5) {
-                                        welcomeMessage = "Dobry wieczór ";
-                                    }
-                                    
-                                    welcomeMessage = welcomeMessage + "<b>'.$userProfile->name.'</b>";
-                                    document.write(welcomeMessage);
-                                </script>
+                                <script src="js/mobileNav.js" value="'.$userProfile->name.'"></script>
                                 <div>
                                     <div class="number-wrapper">
                                         <div class="card-number">'.$userProfile->unread.'</div>
@@ -98,7 +87,7 @@
             <a href="index.php">
                 <li>Strona główna</li>
             </a>
-            <a href="rezerwacja.php">
+            <a href="rental.php">
                 <li>Rezerwacja online</li>
             </a>
             <a href="pricing.php">
@@ -125,7 +114,7 @@
             <a href="index.php">
                 <li>Strona główna</li>
             </a>
-            <a href="rezerwacja.php">
+            <a href="rental.php">
                 <li>Rezerwacja online</li>
             </a>
             <a href="pricing.php">
@@ -145,28 +134,4 @@
         </div>
     </div>
 </nav>
-<script>
-    window.addEventListener('scroll', () => {
-        const fixedNav = document.querySelector('.fixed-nav');
-        if (window.innerWidth > 800) {
-            const nav = document.querySelectorAll('.desktop-nav');
-            const navHeight = nav[0].offsetHeight;
-            if (window.pageYOffset > navHeight) {
-                fixedNav.classList.add("fixed-nav-transform");
-                fixedNav.style.opacity = 1;
-            } else {
-                fixedNav.classList.remove("fixed-nav-transform");
-            }
-        } else {
-            fixedNav.classList.remove("fixed-nav-transform");
-        }
-    });
-
-    const vehiclesBtn = document.getElementById("vehicles-button");
-
-    if (vehiclesBtn) {
-        vehiclesBtn.addEventListener('click', () => {
-            window.location = "user.php#vehicles";
-        });
-    }
-</script>
+<script src="js/nav.js"></script>

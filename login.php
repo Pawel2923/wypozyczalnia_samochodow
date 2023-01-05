@@ -26,8 +26,6 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
             require('db/db_connection.php');
 
             if (!isset($_SESSION['connectionError'])) {
-                echo "<script>console.log('Pomyślnie połączono z bazą')</script>";
-
                 // Sprawdzenie czy istnieje taki login/email
                 $query = "SELECT `login`, `email` FROM `users` WHERE `login`=? OR `email`=?";
 
@@ -74,7 +72,7 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
                 $stmt->close();
                 $db_connection->close();
             } else {
-                echo "<script>console.error('Błąd połączenia z bazą danych');</script>";
+                throw new Exception("Błąd połączenia z bazą danych");
             }
         } catch (Exception $error) {
             $error = addslashes($error);
@@ -141,7 +139,7 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
                     <label for="password-field">Hasło</label>
                     <br>
                     <input type="password" name="password" id="password-field" minlength="4" required>
-                    <a href="forgotpasswd.php" class="forgotten-password">Zapomniałeś hasła?</a>
+                    <a href="forgotPasswd.php" class="forgotten-password">Zapomniałeś hasła?</a>
                     <br>
                     <div class="warning">
                         <?php
@@ -167,19 +165,14 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
             </form>
         </div>
     </main>
-    <script>
-        document.querySelector('.back').addEventListener('click', () => {
-            window.location = './index.php';
-        });
-    </script>
     <script src="js/loginHandler.js"></script>
     <?php
     if (isset($consoleLog)) {
         if ($consoleLog->show) {
             if ($consoleLog->is_error) {
-                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+                echo '<script src="js/log.js" value="' . $consoleLog->content . '" name="error"></script>';
             } else {
-                echo '<script>console.log("' . $consoleLog->content . '")</script>';
+                echo '<script src="js/log.js" value="' . $consoleLog->content . '" name="log"></script>';
             }
         }
     }

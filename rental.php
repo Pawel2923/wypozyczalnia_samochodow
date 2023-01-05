@@ -1,6 +1,7 @@
 <?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Paweł Poremba">
@@ -17,21 +18,20 @@
     <link rel="Shortcut Icon" href="./img/logo.svg" />
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
     <?php require_once("inc/nav.php") ?>
     <main>
         <section>
             <h2>Wybierz pojazd</h2>
             <div class="cars cars-list">
-                <form action="rent.php" method="GET">
-                    <?php 
-                        require('inc/veh.php');
-                        if (isset($vehicle)) 
-                            printCarInfoList("Wypożycz", $vehNum, $vehicle);
-                        else 
-                            echo '<p>Obecnie nie ma pojazdów do wypożyczenia</p>';
-                    ?>
-                </form>
+                <?php
+                require('inc/veh.php');
+                if (isset($vehicle))
+                    printCarInfoList("Wypożycz", $vehNum, $vehicle);
+                else
+                    echo '<p>Obecnie nie ma pojazdów do wypożyczenia</p>';
+                ?>
             </div>
         </section>
     </main>
@@ -53,19 +53,8 @@
             <div class="bottom-text">&copy;2022 by Paweł Poremba</div>
         </section>
     </footer>
-    <script>
-        const checkInput = (name) => {
-            name.addEventListener('invalid', () => {
-                name.classList.add('subscription-input-invalid');
-            });
-            name.addEventListener('keyup', () => {
-                name.classList.remove('subscription-input-invalid');
-            });
-        };
-        const subscriptionInput = document.querySelector('.subscription-form form input[name="newsletter-mail"]');
-        checkInput(subscriptionInput);
-    </script>
-    <script src="js/nav.js"></script>
+    <script src="js/index.js" type="module"></script>
     <?php include_once('inc/logged.php'); ?>
 </body>
+
 </html>

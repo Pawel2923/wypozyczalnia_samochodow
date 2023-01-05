@@ -141,7 +141,7 @@ if (isset($_POST['id'])) {
                                     <button type="submit">Usuń</button>
                                 </form>
                             </div>
-                            <h3 style="margin-bottom: 10px;">Lista rezerwacji</h3>
+                            <h3>Lista rezerwacji</h3>
                             <div class="table">
                                 <table>
                                     <tr>
@@ -190,28 +190,15 @@ if (isset($_POST['id'])) {
         </div>
     </div>
     <script src="../js/panelHandler.js"></script>
-    <script>
-        const checkInput = (name) => {
-            name.addEventListener('invalid', () => {
-                name.classList.add('subscription-input-invalid');
-            });
-            name.addEventListener('keyup', () => {
-                name.classList.remove('subscription-input-invalid');
-            });
-        };
-        const input = document.querySelectorAll('main form input');
-        for (let i = 0; i < input.length; i++) {
-            checkInput(input[i]);
-        }
-    </script>
+    <script src="js/main.js" type="module"></script>
     <?php
     include_once('./inc/logged.php');
     if (isset($consoleLog)) {
         if ($consoleLog->show) {
             if ($consoleLog->is_error) {
-                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+                echo '<script src="../js/log.js" value="' . $consoleLog->content . '" name="error"></script>';
             } else {
-                echo '<script>console.log("' . $consoleLog->content . '")</script>';
+                echo '<script src="../js/log.js" value="' . $consoleLog->content . '" name="log"></script>';
             }
         }
     }

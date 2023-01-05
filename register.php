@@ -27,8 +27,6 @@ if (isset($_POST['password']) && isset($_POST['login']) && isset($_POST['passwor
                 require('db/db_connection.php');
 
                 if (!isset($_SESSION['connectionError'])) {
-                    echo "<script>console.log('Pomyślnie połączono z bazą')</script>";
-
                     // Sprawdzenie czy podany login lub email są już w bazie
                     $query = "SELECT `login`, `email` FROM `users` WHERE `login`=? OR `email`=?";
 
@@ -76,7 +74,7 @@ if (isset($_POST['password']) && isset($_POST['login']) && isset($_POST['passwor
                     }
                     $db_connection->close();
                 } else {
-                    echo "<script>console.error('Błąd połączenia z bazą danych');</script>";
+                    throw new Exception("Błąd połączenia z bazą danych.");
                 }
             } catch (Exception $error) {
                 $error = addslashes($error);
@@ -168,19 +166,13 @@ if (isset($_POST['password']) && isset($_POST['login']) && isset($_POST['passwor
         </div>
     </main>
     <script src="js/loginHandler.js"></script>
-    <script>
-        document.querySelector('.back').addEventListener('click', () => {
-            window.location = './index.php';
-        });
-        passwdCheck();
-    </script>
     <?php
     if (isset($consoleLog)) {
         if ($consoleLog->show) {
             if ($consoleLog->is_error) {
-                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+                echo '<script src="js/log.js" value="' . $consoleLog->content . '" name="error"></script>';
             } else {
-                echo '<script>console.log("' . $consoleLog->content . '")</script>';
+                echo '<script src="js/log.js" value="' . $consoleLog->content . '" name="log"></script>';
             }
         }
     }

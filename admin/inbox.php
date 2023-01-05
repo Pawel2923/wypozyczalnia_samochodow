@@ -65,32 +65,10 @@ if (isset($_POST['message-id'])) {
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/panel.css">
+    <link rel="stylesheet" href="styles/inbox.css">
     <link rel="Shortcut Icon" href="../img/logo.svg" />
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
     <?php include_once("./inc/theme.php") ?>
-    <style>
-        .messages h3 {
-            margin-top: 20px;
-        }
-
-        .messages h3:first-child {
-            margin-top: 0;
-        }
-
-        .box-msg {
-            border: 1px solid #000;
-            width: 60%;
-            max-width: 100%;
-            margin-top: 10px;
-            padding: 20px;
-        }
-
-        @media screen and (max-width: 800px) {
-            .box-msg {
-                width: 100%;
-            }
-        }
-    </style>
 </head>
 
 <body>
@@ -174,21 +152,21 @@ if (isset($_POST['message-id'])) {
                             if ($result->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
                                     echo '<div class="box-msg">';
-                                    echo '<form action="" method="POST" style="display: block; width: 100%;">';
+                                    echo '<form action="" method="POST">';
                                     echo '<input type="hidden" name="message-id" value="' . $row['id'] . '">';
-                                    echo '<span style="font-weight: bold;">Od:</span> ' . $row['email'];
+                                    echo '<span>Od:</span> ' . $row['email'];
                                     echo '<br>';
                                     echo $row['imie'] . ' ' . $row['nazwisko'];
                                     echo '<br>';
                                     if ($row['tel'] != 0) {
-                                        echo '<span style="font-weight: bold;">Telefon:</span> ' . $row['tel'];
+                                        echo '<span>Telefon:</span> ' . $row['tel'];
                                         echo '<br>';
                                     }
-                                    echo '<span style="font-weight: bold;">Dostarczono:</span> ' . $row['date'];
+                                    echo '<span>Dostarczono:</span> ' . $row['date'];
                                     echo '<br>';
-                                    echo '<span style="font-weight: bold;">Treść wiadomości:</span> ' . $row['message'];
+                                    echo '<span>Treść wiadomości:</span> ' . $row['message'];
                                     echo '<br>';
-                                    echo '<button type="submit" style="margin-bottom: 0;">Usuń wiadomość</button>';
+                                    echo '<button type="submit">Usuń wiadomość</button>';
                                     echo '</form>';
                                     echo '</div>';
                                 }
@@ -206,15 +184,15 @@ if (isset($_POST['message-id'])) {
                             if ($result->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
                                     echo '<div class="box-msg">';
-                                    echo '<form action="" method="POST" style="display: block; width: 100%;">';
+                                    echo '<form action="" method="POST">';
                                     echo '<input type="hidden" name="message-id" value="' . $row['id'] . '">';
-                                    echo '<span style="font-weight: bold;">Do:</span> ' . $row['user'];
+                                    echo '<span>Do:</span> ' . $row['user'];
                                     echo '<br>';
-                                    echo '<span style="font-weight: bold;">Dostarczono:</span> ' . $row['date'];
+                                    echo '<span>Dostarczono:</span> ' . $row['date'];
                                     echo '<br>';
-                                    echo '<span style="font-weight: bold;">Treść wiadomości:</span> ' . $row['message'];
+                                    echo '<span>Treść wiadomości:</span> ' . $row['message'];
                                     echo '<br>';
-                                    echo '<button type="submit" style="margin-bottom: 0;">Usuń wiadomość</button>';
+                                    echo '<button type="submit">Usuń wiadomość</button>';
                                     echo '</form>';
                                     echo '</div>';
                                 }
@@ -238,28 +216,15 @@ if (isset($_POST['message-id'])) {
         </div>
     </div>
     <script src="../js/panelHandler.js"></script>
-    <script>
-        const checkInput = (name) => {
-            name.addEventListener('invalid', () => {
-                name.classList.add('subscription-input-invalid');
-            });
-            name.addEventListener('keyup', () => {
-                name.classList.remove('subscription-input-invalid');
-            });
-        };
-        const input = document.querySelectorAll('main form input');
-        for (let i = 0; i < input.length; i++) {
-            checkInput(input[i]);
-        }
-    </script>
+    <script src="js/main.js" type="module"></script>
     <?php
     include_once('./inc/logged.php');
     if (isset($consoleLog)) {
         if ($consoleLog->show) {
             if ($consoleLog->is_error) {
-                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+                echo '<script src="../js/log.js" value="' . $consoleLog->content . '" name="error"></script>';
             } else {
-                echo '<script>console.log("' . $consoleLog->content . '")</script>';
+                echo '<script src="../js/log.js" value="' . $consoleLog->content . '" name="log"></script>';
             }
         }
     }

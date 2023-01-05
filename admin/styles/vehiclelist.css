@@ -1,0 +1,15 @@
+.view {
+  width: unset;
+}
+
+.view button[type="submit"] {
+    display: none;
+}
+
+.vehicles button {
+  cursor: default;
+}
+
+.vehicles button:hover {
+  background-color: #60b8ff;
+}
