@@ -1,6 +1,7 @@
 <?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Paweł Poremba">
@@ -17,6 +18,7 @@
     <link rel="Shortcut Icon" href="./img/logo.svg" />
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
     <?php require_once("inc/nav.php") ?>
     <main>
@@ -28,18 +30,18 @@
         <section class="info">
             <h2>Wypożyczalnia samochodów — informacje</h2>
             <span>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim mollitia, aliquid rem facere quo consequuntur ullam iste voluptatem corporis tempore, consequatur, recusandae beatae! Architecto reprehenderit saepe omnis vero officia ducimus!
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim mollitia, aliquid rem facere quo consequuntur ullam iste voluptatem corporis tempore, consequatur, recusandae beatae! Architecto reprehenderit saepe omnis vero officia ducimus!
             </span>
         </section>
         <section>
             <h2>Samochody do rezerwacji</h2>
             <div class="cars">
-                <?php 
-                    require("inc/veh.php");
-                    if (isset($vehicle))
-                        printCarInfo("Wypożycz", $vehNum, $vehicle, false, 7, true);
-                    else 
-                        echo '<p style="grid-column: span 3;">Obecnie nie ma pojazdów do rezerwacji</p>';
+                <?php
+                require("inc/veh.php");
+                if (isset($vehicle))
+                    printCarInfo("Wypożycz", $vehNum, $vehicle, false, 7, true);
+                else
+                    echo '<p class="no-vehicles">Obecnie nie ma pojazdów do rezerwacji</p>';
                 ?>
             </div>
         </section>
@@ -75,27 +77,8 @@
             <div class="bottom-text">&copy;2022 by Paweł Poremba</div>
         </section>
     </footer>
-    <script>
-        const checkInput = (name) => {
-            name.addEventListener('invalid', () => {
-                name.classList.add('subscription-input-invalid');
-            });
-            name.addEventListener('keyup', () => {
-                name.classList.remove('subscription-input-invalid');
-            });
-        };
-        const subscriptionInput = document.querySelector('.subscription-form form input[name="newsletter-mail"]');
-        checkInput(subscriptionInput);
-
-        const carButton = document.querySelectorAll('.car-button');
-        for (let i = 0; i < carButton.length; i++) {
-            carButton[i].addEventListener('click', () => {
-                const vehicleID = carButton[i].value * 1;
-                window.location = `rent.php?vehicle-id=${vehicleID}`;
-            });
-        }
-    </script>
-    <script src="js/nav.js"></script>
+    <script src="js/index.js" type="module"></script>
     <?php include_once('inc/logged.php'); ?>
 </body>
+
 </html>

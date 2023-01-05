@@ -96,37 +96,9 @@ if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/panel.css">
+    <link rel="stylesheet" href="styles/addvehicles.css">
     <link rel="Shortcut Icon" href="../img/logo.svg" />
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
-    <style>
-        .uploaded-wrapper {
-            display: none;
-            max-width: 60%;
-        }
-
-        .uploaded-wrapper > div {
-            display: flex;
-            align-items: center;
-        }
-        
-        .uploaded-wrapper > button {
-            margin-top: 1rem;
-            width: 50%;
-        }
-
-        .uploaded-wrapper .img-check {
-            display: none;
-            color: #60b8ff;
-            font-size: 1.5em;
-            margin-left: 0.5rem;
-        }
-
-        img {
-            margin-top: 10px;
-            margin-bottom: 10px;
-            max-width: 50%;
-        }
-    </style>
     <?php include_once("./inc/theme.php") ?>
 </head>
 
@@ -251,52 +223,18 @@ if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_
         </div>
     </div>
     <script src="../js/panelHandler.js"></script>
-    <script>
-        const forbiddenChars = [".", "\\", "/", ":", "*", "<", ">", "|"];
-        const vehicleImgNameInput = document.querySelector("input[name='vehicle-img-name']");
-
-        vehicleImgNameInput.addEventListener("blur", (ev) => {
-            for (let char of forbiddenChars) {
-                if (ev.target.value.includes(char)) {
-                    ev.target.setCustomValidity(`Nazwa nie może zawierać znaku: ${char}`);
-                    break;
-                } else
-                    ev.target.setCustomValidity("");
-            }
-        });
-
-        const checkInput = (name) => {
-            name.addEventListener('invalid', () => {
-                name.classList.add('subscription-input-invalid');
-            });
-            name.addEventListener('keyup', () => {
-                name.classList.remove('subscription-input-invalid');
-            });
-        };
-        const input = document.querySelectorAll('main form input');
-        for (let i = 0; i < input.length; i++) {
-            checkInput(input[i]);
-        }
-        <?php
-        if (isset($_SESSION['vehicle-img-name']))
-            echo '
-            document.querySelector(".img-check").style.display = "block";
-            document.querySelector(".uploaded-wrapper").style.display = "block";
-            document.forms.vehicleImg.style.display = "none";
-            document.querySelector(".uploaded-wrapper > button").addEventListener("click", () => {
-                window.location.pathname = window.location.pathname.replace("/addvehicles.php", "/deleteimg.php");
-            });
-            ';
-        ?>
-    </script>
+    <?php
+    if (isset($_SESSION['vehicle-img-name']))
+        echo '<script src="js/addvehicles.js"></script>';
+    ?>
     <?php
     include_once('./inc/logged.php');
     if (isset($consoleLog)) {
         if ($consoleLog->show) {
             if ($consoleLog->is_error) {
-                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+                echo '<script src="../js/log.js" value="' . $consoleLog->content . '" name="error"></script>';
             } else {
-                echo '<script>console.log("' . $consoleLog->content . '")</script>';
+                echo '<script src="../js/log.js" value="' . $consoleLog->content . '" name="log"></script>';
             }
         }
     }

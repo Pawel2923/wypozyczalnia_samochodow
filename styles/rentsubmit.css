@@ -1,0 +1,25 @@
+body {
+  display: flex;
+  height: 90vh;
+  align-items: center;
+  justify-content: center;
+}
+
+main {
+  width: 80%;
+  text-align: center;
+}
+
+button {
+  margin-top: 10px;
+  width: 50%;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  grid-template-rows: auto;
+  padding: 20px;
+}

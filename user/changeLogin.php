@@ -47,11 +47,7 @@ if (isset($_POST['new-login']) && isset($_SESSION['login'])) {
                     $stmt->close();
 
                     $_SESSION['msg'] = 'Pomyślnie zmieniono login. Za chwilę wystąpi wylogowanie...';
-                    echo '<script>
-                        setTimeout(() => {
-                            window.location = "../logout.php";
-                        }, 5000);
-                    </script>';
+                    echo '<script src="js/changeLocation.js" class="script-changeLocation" id="5000" value="../logout.php"></script>';
                 } else
                     $_SESSION['error'] = 'Takiego loginu nie ma w bazie danych.';
             } else
@@ -202,9 +198,9 @@ if (isset($_POST['new-login']) && isset($_SESSION['login'])) {
     if (isset($consoleLog)) {
         if ($consoleLog->show) {
             if ($consoleLog->is_error) {
-                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+                echo '<script src="../js/log.js" value="' . $consoleLog->content . '" name="error"></script>';
             } else {
-                echo '<script>console.log("' . $consoleLog->content . '")</script>';
+                echo '<script src="../js/log.js" value="' . $consoleLog->content . '" name="log"></script>';
             }
         }
     }

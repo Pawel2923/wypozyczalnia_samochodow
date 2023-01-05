@@ -1,0 +1,8 @@
+.access-buttons {
+  display: flex;
+  column-gap: 10px;
+}
+
+.access-buttons button {
+  width: 100%;
+}

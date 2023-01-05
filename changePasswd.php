@@ -45,11 +45,7 @@ if (isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SE
                 if ($db_connection->affected_rows == 1) {
                     $_SESSION['msg'] = 'Pomyślnie zmieniono hasło...';
                     session_destroy();
-                    echo '<script>
-                        setTimeout(() => {
-                            window.location = "login.php";
-                        }, 3000);
-                    </script>';
+                    echo '<script src="js/changeLocation.js" class="script-changeLocation" id="3000" value="login.php"></script>';
                 } else
                     $_SESSION['error'] = 'Nie udało się zmienić hasła.';
             } else
@@ -134,22 +130,14 @@ if (isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SE
             </div>
         </div>
     </main>
-    <script>
-        document.querySelector('.back').addEventListener('click', () => {
-            window.location = './index.php';
-        });
-    </script>
     <script src="js/loginHandler.js"></script>
-    <script>
-        passwdCheck();
-    </script>
     <?php
     if (isset($consoleLog)) {
         if ($consoleLog->show) {
             if ($consoleLog->is_error) {
-                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+                echo '<script src="js/log.js" value="' . $consoleLog->content . '" name="error"></script>';
             } else {
-                echo '<script>console.log("' . $consoleLog->content . '")</script>';
+                echo '<script src="js/log.js" value="' . $consoleLog->content . '" name="log"></script>';
             }
         }
     }

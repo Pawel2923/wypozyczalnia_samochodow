@@ -10,6 +10,9 @@ if (isset($_SESSION['isLogged'])) {
     exit;
 }
 
+if (isset($_GET['vehicle-id']) && isset($_SESSION['vehicle-id']))
+    unset($_SESSION['vehicle-id']);
+
 if (isset($_GET['vehicle-id']) || isset($_SESSION['vehicle-id'])) {
     if (isset($_GET['vehicle-id']))
         $vehicleID = htmlentities($_GET['vehicle-id']);
@@ -42,7 +45,7 @@ if (isset($_GET['vehicle-id']) || isset($_SESSION['vehicle-id'])) {
     }
 } else {
     $_SESSION['error'] = 'Nie wybrano samochodu.';
-    header('Location: rezerwacja.php');
+    header('Location: rental.php');
     exit;
 }
 ?>
@@ -62,57 +65,9 @@ if (isset($_GET['vehicle-id']) || isset($_SESSION['vehicle-id'])) {
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/index.css">
+    <link rel="stylesheet" href="styles/book.css">
     <link rel="Shortcut Icon" href="./img/logo.svg" />
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
-    <style>
-        .vehicle {
-            margin-bottom: 50px;
-        }
-
-        .vehicle-name h2 {
-            margin-bottom: 10px;
-        }
-
-        .vehicle-image {
-            width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        @media screen and (max-width: 800px) {
-            .vehicle-image {
-                width: 90%;
-            }
-        }
-
-        form input {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            outline: none;
-            margin-bottom: 10px;
-            margin-top: 5px;
-        }
-
-        form button {
-            width: 50%;
-            margin-top: 50px;
-        }
-
-        .summary {
-            margin-top: 40px;
-        }
-
-        .summary div {
-            margin-top: 20px;
-            border: 1px solid #000;
-            padding: 10px;
-        }
-
-        .summary div:first-child {
-            margin-top: 0;
-        }
-    </style>
 </head>
 
 <body>
@@ -124,7 +79,7 @@ if (isset($_GET['vehicle-id']) || isset($_SESSION['vehicle-id'])) {
                     <h2><?php echo $attribute['marka'] . ' ' . $attribute['model']; ?></h2>
                 </div>
                 <div class="vehicle-image">
-                    <img src="<?php echo $attribute['img_url'] ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
+                    <img src="img/<?php echo $attribute['img_url'] ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
                 </div>
                 <div class="description">
                     <div class="vehicle-price"><?php echo $attribute['cena'] ?>zł za 1 godzinę</div>
@@ -193,42 +148,15 @@ if (isset($_GET['vehicle-id']) || isset($_SESSION['vehicle-id'])) {
             <div class="bottom-text">&copy;2022 by Paweł Poremba</div>
         </section>
     </footer>
-    <script>
-        const checkInput = (name) => {
-            name.addEventListener('invalid', () => {
-                name.classList.add('subscription-input-invalid');
-            });
-            name.addEventListener('keyup', () => {
-                name.classList.remove('subscription-input-invalid');
-            });
-        };
-        const input = document.querySelectorAll('input');
-        for (let i = 0; i < input.length; i++) {
-            checkInput(input[i]);
-        }
-
-        const rentInput = document.querySelectorAll('section form input');
-
-        for (let i = 0; i < rentInput.length; i++) {
-            rentInput[i].addEventListener('change', () => {
-                const amount = document.querySelector('form input[name="amount"]').value;
-                document.querySelector('.summary .amount').innerHTML = 'Liczba godzin wynajmu: <h3>' + amount + '</h3>';
-                const date = document.querySelector('form input[name="date"]').value;
-                document.querySelector('.summary .date').innerHTML = 'Data wynajmu: <h3>' + date + '</h3>'
-                let total = amount * <?php echo $attribute['cena'] ?>;
-                document.querySelector('.summary .price').innerHTML = 'W sumie do zapłaty: <h3>' + total.toFixed(2) + 'zł</h3>';
-            });
-        }
-    </script>
-    <script src="js/nav.js"></script>
+    <script src="js/book.js" type="module" value="<?php echo $attribute['cena']; ?>"></script>
     <?php
     include_once('./inc/logged.php');
     if (isset($consoleLog)) {
         if ($consoleLog->show) {
             if ($consoleLog->is_error) {
-                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+                echo '<script src="js/log.js" value="' . $consoleLog->content . '" name="error"></script>';
             } else {
-                echo '<script>console.log("' . $consoleLog->content . '")</script>';
+                echo '<script src="js/log.js" value="' . $consoleLog->content . '" name="log"></script>';
             }
         }
     }

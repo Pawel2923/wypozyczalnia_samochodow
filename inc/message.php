@@ -1,4 +1,4 @@
-<div class="message-wrapper" <?php if (isset($_SESSION['msg']) || isset($_SESSION['error'])) echo 'style="display: flex;"' ?>>
+<div class="message-wrapper">
     <div class="overlay"></div>
     <div class="message">
         <div class="close"><i class="fas fa-times"></i></div>
@@ -20,3 +20,4 @@
         </div>
     </div>
 </div>
+<?php if (isset($_SESSION['msg']) || isset($_SESSION['error'])) echo '<script src="../js/message.js"></script>' ?>

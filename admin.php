@@ -62,18 +62,9 @@ if (isset($_POST['theme'])) {
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/panel.css">
+    <link rel="stylesheet" href="styles/admin.css">
     <link rel="Shortcut Icon" href="./img/logo.svg" />
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
-    <style>
-        .access-buttons {
-            display: flex;
-            column-gap: 10px;
-        }
-
-        .access-buttons button {
-            width: 100%;
-        }
-    </style>
     <?php
     if (isset($_POST['theme'])) {
         if ($_POST['theme'] != "default")
@@ -148,24 +139,22 @@ if (isset($_POST['theme'])) {
                 <main>
                     <div class="home">
                         <section>
-                            <div class="home-option manage-veh">
+                            <div class="home-option vehicles">
                                 <i class="fas fa-car"></i>
                                 <span>Zarządzanie pojazdami</span>
                             </div>
-                            <div class="home-option manage-users">
+                            <div class="home-option users">
                                 <i class="fas fa-users"></i>
                                 <span>Zarządzanie użytkownikami</span>
                             </div>
-                            <div class="home-option manage-settings">
+                            <div class="home-option settings">
                                 <i class="fas fa-cog"></i>
                                 <span>Zmiana ustawień serwisu</span>
                             </div>
-                            <a href="admin/inbox.php" style="color: inherit;">
-                                <div class="home-option inbox">
-                                    <i class="fas fa-inbox"></i>
-                                    <span>Wiadomości</span>
-                                </div>
-                            </a>
+                            <div class="home-option inbox">
+                                <i class="fas fa-inbox"></i>
+                                <span>Wiadomości</span>
+                            </div>
                         </section>
                     </div>
                     <div class="vehicles">
@@ -176,7 +165,7 @@ if (isset($_POST['theme'])) {
                             <div class="option">
                                 <a href="admin/addvehicles.php">
                                     <button class="option-button add-veh">
-                                        <h3>Dodawanie nowych pojazdów</h3>
+                                        <span>Dodawanie nowych pojazdów</span>
                                         <div class="icon"><i class="fas fa-chevron-right"></i></div>
                                     </button>
                                 </a>
@@ -184,7 +173,7 @@ if (isset($_POST['theme'])) {
                             <div class="option">
                                 <a href="admin/vehicleslist.php">
                                     <button class="option-button veh-list">
-                                        <h3>Lista pojazdów</h3>
+                                        <span>Lista pojazdów</span>
                                         <div class="icon"><i class="fas fa-chevron-right"></i></div>
                                     </button>
                                 </a>
@@ -192,7 +181,7 @@ if (isset($_POST['theme'])) {
                             <div class="option">
                                 <a href="admin/vehaccess.php">
                                     <button class="option-button veh-access">
-                                        <h3>Dostępność pojazdów</h3>
+                                        <span>Dostępność pojazdów</span>
                                         <div class="icon"><i class="fas fa-chevron-right"></i></div>
                                     </button>
                                 </a>
@@ -200,7 +189,7 @@ if (isset($_POST['theme'])) {
                             <div class="option">
                                 <a href="admin/delvehicle.php">
                                     <button class="option-button del-veh">
-                                        <h3>Usuwanie pojazdów</h3>
+                                        <span>Usuwanie pojazdów</span>
                                         <div class="icon"><i class="fas fa-chevron-right"></i></div>
                                     </button>
                                 </a>
@@ -208,7 +197,7 @@ if (isset($_POST['theme'])) {
                             <div class="option">
                                 <a href="admin/vehiclerent.php">
                                     <button class="option-button veh-res">
-                                        <h3>Rezerwacja pojazdów</h3>
+                                        <span>Rezerwacja pojazdów</span>
                                         <div class="icon"><i class="fas fa-chevron-right"></i></div>
                                     </button>
                                 </a>
@@ -223,7 +212,7 @@ if (isset($_POST['theme'])) {
                             <div class="option">
                                 <a href="admin/resetpasswd.php">
                                     <button class="option-button user-stats">
-                                        <h3>Resetowanie haseł</h3>
+                                        <span>Resetowanie haseł</span>
                                         <div class="icon"><i class="fas fa-chevron-right"></i></div>
                                     </button>
                                 </a>
@@ -231,12 +220,12 @@ if (isset($_POST['theme'])) {
                             <div class="option">
                                 <a href="admin/delusers.php">
                                     <button class="option-button user-stats">
-                                        <h3>Usuwanie użytkowników</h3>
+                                        <span>Usuwanie użytkowników</span>
                                         <div class="icon"><i class="fas fa-chevron-right"></i></div>
                                     </button>
                                 </a>
                             </div>
-                            <h3 style="margin-bottom: 10px;">Lista użytkowników</h3>
+                            <h3>Lista użytkowników</h3>
                             <div class="table">
                                 <table>
                                     <tr>
@@ -355,25 +344,14 @@ if (isset($_POST['theme'])) {
         </div>
     </div>
     <script src="js/panelHandler.js"></script>
-    <script>
-        const selectTheme = (mode) => {
-            document.querySelector('main select option[value="' + mode + '"]').setAttribute('selected', 'selected');
-        }
-    </script>
-    <?php
-    if (isset($_POST['theme']))
-        echo '<script>selectTheme("' . $_POST['theme'] . '");</script>';
-    elseif (isset($_COOKIE['theme']))
-        echo '<script>selectTheme("' . $_COOKIE['theme'] . '");</script>';
-    ?>
     <?php
     include_once('./inc/logged.php');
     if (isset($consoleLog)) {
         if ($consoleLog->show) {
             if ($consoleLog->is_error) {
-                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+                echo '<script src="js/log.js" value="' . $consoleLog->content . '" name="error"></script>';
             } else {
-                echo '<script>console.log("' . $consoleLog->content . '")</script>';
+                echo '<script src="js/log.js" value="' . $consoleLog->content . '" name="log"></script>';
             }
         }
     }

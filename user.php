@@ -138,18 +138,9 @@ try {
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/panel.css">
+    <link rel="stylesheet" href="styles/user.css">
     <link rel="Shortcut Icon" href="./img/logo.svg" />
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
-    <style>
-        form .buttons {
-            column-gap: 10px;
-            display: none;
-        }
-
-        main form {
-            width: 100%;
-        }
-    </style>
     <?php
     if (isset($_POST['theme'])) {
         if ($_POST['theme'] != "default")
@@ -222,15 +213,15 @@ try {
                 <main>
                     <div class="home">
                         <section>
-                            <div class="home-option manage-veh">
+                            <div class="home-option vehicles">
                                 <i class="fas fa-car"></i>
                                 <span>Wypożyczone pojazdy</span>
                             </div>
-                            <div class="home-option manage-profile">
+                            <div class="home-option profile">
                                 <i class="fas fa-user-edit"></i>
                                 <span>Edytuj swój profil</span>
                             </div>
-                            <div class="home-option manage-settings">
+                            <div class="home-option settings">
                                 <i class="fas fa-cog"></i>
                                 <span>Zmień ustawienia panelu</span>
                             </div>
@@ -305,7 +296,7 @@ try {
                             <div class="option">
                                 <a href="user/changeLogin.php">
                                     <button class="option-button ch-login">
-                                        <h3>Zmień login</h3>
+                                        <span>Zmień login</span>
                                         <div class="icon"><i class="fas fa-chevron-right"></i></div>
                                     </button>
                                 </a>
@@ -313,7 +304,7 @@ try {
                             <div class="option">
                                 <a href="user/changePasswd.php">
                                     <button class="option-button ch-passwd">
-                                        <h3>Zmień hasło</h3>
+                                        <span>Zmień hasło</span>
                                         <div class="icon"><i class="fas fa-chevron-right"></i></div>
                                     </button>
                                 </a>
@@ -326,7 +317,7 @@ try {
                         </header>
                         <section>
                             <div class="option">
-                                <h3>Motyw panelu</h3>
+                                <span>Motyw panelu</span>
                                 <form action="" method="POST">
                                     <select name="theme">
                                         <option value="default">Domyślny</option>
@@ -354,34 +345,17 @@ try {
         </div>
     </div>
     <script src="js/panelHandler.js"></script>
-    <script>
-        const selectTheme = (mode) => {
-            document.querySelector('main select option[value="' + mode + '"]').setAttribute('selected', 'selected');
-        }
-        const profileInput = document.querySelectorAll('.edit-profile input');
-        for (let i = 0; i < profileInput.length; i++) {
-            profileInput[i].addEventListener('keypress', () => {
-                document.querySelector('form .buttons').style.display = 'flex';
-            });
-        }
-        document.querySelector('main form button[type="reset"]').addEventListener('click', () => {
-            document.querySelector('form .buttons').style.display = 'none';
-        });
-    </script>
+    <script src="js/user.js"></script>
     <?php
-    if (isset($_POST['theme']))
-        echo '<script>selectTheme("' . $_POST['theme'] . '");</script>';
-    elseif (isset($_COOKIE['theme']))
-        echo '<script>selectTheme("' . $_COOKIE['theme'] . '");</script>';
-    ?>
-    <?php
+    include_once('./inc/theme.php');
     include_once('./inc/logged.php');
+
     if (isset($consoleLog)) {
         if ($consoleLog->show) {
             if ($consoleLog->is_error) {
-                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+                echo '<script src="js/log.js" value="' . $consoleLog->content . '" name="error"></script>';
             } else {
-                echo '<script>console.log("' . $consoleLog->content . '")</script>';
+                echo '<script src="js/log.js" value="' . $consoleLog->content . '" name="log"></script>';
             }
         }
     }

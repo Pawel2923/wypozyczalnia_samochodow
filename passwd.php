@@ -140,23 +140,14 @@ if (isset($_POST['old-password']) && isset($_POST['password']) && isset($_POST['
             </div>
         </div>
     </main>
-    <script>
-        document.querySelector('.back').addEventListener('click', () => {
-            window.location = './index.php';
-        });
-    </script>
     <script src="js/loginHandler.js"></script>
-    <script>
-        movePlaceholder('old-password');
-        passwdCheck();
-    </script>
     <?php
     if (isset($consoleLog)) {
         if ($consoleLog->show) {
             if ($consoleLog->is_error) {
-                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+                echo '<script src="js/log.js" value="' . $consoleLog->content . '" name="error"></script>';
             } else {
-                echo '<script>console.log("' . $consoleLog->content . '")</script>';
+                echo '<script src="js/log.js" value="' . $consoleLog->content . '" name="log"></script>';
             }
         }
     }

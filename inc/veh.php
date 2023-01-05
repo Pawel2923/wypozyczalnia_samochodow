@@ -7,7 +7,6 @@ else
     require('db/db_connection.php');
 
 if (!isset($_SESSION['connectionError'])) {
-    echo "<script>console.log('Pomyślnie połączono z bazą')</script>";
     //Pobranie danych z tabeli vehicles
     $query = "SELECT * FROM vehicles";
     $stmt = $db_connection->prepare($query);
@@ -47,8 +46,6 @@ if (!isset($_SESSION['connectionError'])) {
             }
         }
     }
-} else {
-    echo "<script>console.error('Nie udało się wczytać listy pojazdów')</script>";
 }
 
 //Wyświetlanie informacji o pojazdach jako karty
@@ -114,7 +111,7 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = fal
                             <span>1 godz.</span>
                             <span><?php echo str_replace(".", ",", $vehicle[$i]->price) ?> zł</span>
                         </div>
-                        <button class="car-button">
+                        <button class="car-button" value="<?php echo $vehicle[$i]->id ?>">
                             <?php
                             if ($buttonCaption === "availabilityCheck") {
                                 if ($vehicle[$i]->isAvailable)
@@ -172,7 +169,7 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = fal
                             <span>1 godz.</span>
                             <span><?php echo str_replace(".", ",", $vehicle[$i]->price) ?> zł</span>
                         </div>
-                        <button class="car-button">
+                        <button class="car-button" value="<?php echo $vehicle[$i]->id ?>">
                             <?php
                             if ($buttonCaption === "availabilityCheck") {
                                 if ($vehicle[$i]->isAvailable)
@@ -269,7 +266,7 @@ function printCarInfoList($buttonCaption, $vehNum, $vehicle, $printUnavailable =
                                     <br>
                                     <span><?php echo str_replace(".", ",", $vehicle[$i]->price) ?> zł</span>
                                 </div>
-                                <button class="car-button">
+                                <button class="car-button" value="<?php echo $vehicle[$i]->id ?>">
                                     <?php
                                     if ($buttonCaption === "availabilityCheck") {
                                         if ($vehicle[$i]->isAvailable)
@@ -307,7 +304,7 @@ function printCarInfoList($buttonCaption, $vehNum, $vehicle, $printUnavailable =
                                 <br>
                                 <span><?php echo str_replace(".", ",", $vehicle[$i]->price) ?> zł</span>
                             </div>
-                            <button class="car-button">
+                            <button class="car-button" value="<?php echo $vehicle[$i]->id ?>">
                                 <?php
                                 if ($buttonCaption === "availabilityCheck") {
                                     if ($vehicle[$i]->isAvailable)

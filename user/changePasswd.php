@@ -49,11 +49,7 @@ if (isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SE
 
                     if ($db_connection->affected_rows == 1) {
                         $_SESSION['msg'] = 'Pomyślnie zmieniono hasło. Za chwilę wystąpi wylogowanie...';
-                        echo '<script>
-                            setTimeout(() => {
-                                window.location = "../logout.php";
-                            }, 5000);
-                        </script>';
+                        echo '<script src="../js/changeLocation.js" class="script-changeLocation" id="5000" value="../logout.php"></script>';
                     } else
                         $_SESSION['error'] = 'Nie udało się zmienić hasła.';
                 } else
@@ -209,17 +205,14 @@ if (isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SE
     if (isset($consoleLog)) {
         if ($consoleLog->show) {
             if ($consoleLog->is_error) {
-                echo '<script>console.error("' . $consoleLog->content . '")</script>';
+                echo '<script src="../js/log.js" value="' . $consoleLog->content . '" name="error"></script>';
             } else {
-                echo '<script>console.log("' . $consoleLog->content . '")</script>';
+                echo '<script src="../js/log.js" value="' . $consoleLog->content . '" name="log"></script>';
             }
         }
     }
     ?>
     <script src="../js/loginHandler.js"></script>
-    <script>
-        passwdCheck();
-    </script>
 </body>
 
 </html>

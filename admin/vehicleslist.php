@@ -1,28 +1,28 @@
-<?php 
-    session_start();
-    if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
-        if (!$_SESSION['isAdmin']) {
-            header('Location: ../index.php');
-            exit;
-        }
-    }
-    else {
-        header('Location: ../login.php');
+<?php
+session_start();
+if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
+    if (!$_SESSION['isAdmin']) {
+        header('Location: ../index.php');
         exit;
     }
+} else {
+    header('Location: ../login.php');
+    exit;
+}
 
-    //Stworzenie cookie dla tryby wyświetlania pojazdów
-    if (isset($_GET['view-mode'])) {
-        if ($_GET['view-mode'] == "cards")
-            setcookie('vehList-viewMode', "cards", time() + (5 * 365 * 24 * 60 * 60));
-        elseif ($_GET['view-mode'] == "list")
-            setcookie('vehList-viewMode', "list", time() + (5 * 365 * 24 * 60 * 60));
-        elseif ($_GET['view-mode'] == "table")
-            setcookie('vehList-viewMode', "table", time() + (5 * 365 * 24 * 60 * 60));
-    }
+//Stworzenie cookie dla tryby wyświetlania pojazdów
+if (isset($_GET['view-mode'])) {
+    if ($_GET['view-mode'] == "cards")
+        setcookie('vehList-viewMode', "cards", time() + (5 * 365 * 24 * 60 * 60));
+    elseif ($_GET['view-mode'] == "list")
+        setcookie('vehList-viewMode', "list", time() + (5 * 365 * 24 * 60 * 60));
+    elseif ($_GET['view-mode'] == "table")
+        setcookie('vehList-viewMode', "table", time() + (5 * 365 * 24 * 60 * 60));
+}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Paweł Poremba">
@@ -36,31 +36,32 @@
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/panel.css">
+    <link rel="stylesheet" href="styles/vehiclelist.css">
     <link rel="Shortcut Icon" href="../img/logo.svg" />
     <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
-    <style>
-        .view {
-            width: unset;
-        }
-        .vehicles button {
-            cursor: default;
-        }
-        .vehicles button:hover {
-            background-color: #60B8FF;
-        }
-    </style>
     <?php include_once("./inc/theme.php") ?>
 </head>
+
 <body>
     <div class="page-wrapper">
         <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="../admin.php"><li>Home</li></a>
-                    <a class="veh-link" href="../admin.php#vehicles"><li>Pojazdy</li></a>
-                    <a class="users-link" href="../admin.php#users"><li>Użytkownicy</li></a>
-                    <a href="../admin/inbox.php"><li>Wiadomości</li></a>
-                    <a class="settings-link" href="../admin.php#settings"><li>Ustawienia</li></a>
+                    <a href="../admin.php">
+                        <li>Home</li>
+                    </a>
+                    <a class="veh-link" href="../admin.php#vehicles">
+                        <li>Pojazdy</li>
+                    </a>
+                    <a class="users-link" href="../admin.php#users">
+                        <li>Użytkownicy</li>
+                    </a>
+                    <a href="../admin/inbox.php">
+                        <li>Wiadomości</li>
+                    </a>
+                    <a class="settings-link" href="../admin.php#settings">
+                        <li>Ustawienia</li>
+                    </a>
                 </ul>
             </div>
             <div class="back">
@@ -104,8 +105,8 @@
                 <main>
                     <div class="vehicles">
                         <header>
-                            <h2><a href="../admin.php#vehicles">Pojazdy</a></h2> 
-                            <i class="fas fa-chevron-right"></i> 
+                            <h2><a href="../admin.php#vehicles">Pojazdy</a></h2>
+                            <i class="fas fa-chevron-right"></i>
                             <h2>Lista pojazdów</h2>
                         </header>
                         <form class="view" method="GET">
@@ -114,38 +115,33 @@
                                 <option value="list">Lista</option>
                                 <option value="table">Tabela</option>
                             </select>
-                            <input type="submit" style="display: none;">
-                        </form>   
-                        <section>         
+                            <button type="submit"></button>
+                        </form>
+                        <section>
                             <div class="cars">
-                                <?php 
-                                    require('../inc/veh.php');
-                                    if (isset($vehicle)) {
-                                        if (isset($_GET['view-mode'])) {
-                                            if ($_GET['view-mode'] == "cards")
+                                <?php
+                                require('../inc/veh.php');
+                                if (isset($vehicle)) {
+                                    if (isset($_GET['view-mode'])) {
+                                        if ($_GET['view-mode'] == "cards")
+                                            printCarInfo("availabilityCheck", $vehNum, $vehicle, true);
+                                        elseif ($_GET['view-mode'] == "list")
+                                            printCarInfoList("availabilityCheck", $vehNum, $vehicle, true);
+                                        elseif ($_GET['view-mode'] == "table")
+                                            printCarInfoTable($vehNum, $vehicle);
+                                    } else {
+                                        if (isset($_COOKIE['vehList-viewMode'])) {
+                                            if ($_COOKIE['vehList-viewMode'] == "cards")
                                                 printCarInfo("availabilityCheck", $vehNum, $vehicle, true);
-                                            elseif ($_GET['view-mode'] == "list")
+                                            elseif ($_COOKIE['vehList-viewMode'] == "list") {
                                                 printCarInfoList("availabilityCheck", $vehNum, $vehicle, true);
-                                            elseif ($_GET['view-mode'] == "table")
+                                            } elseif ($_COOKIE['vehList-viewMode'] == "table")
                                                 printCarInfoTable($vehNum, $vehicle);
-                                        }
-                                        else {
-                                            if (isset($_COOKIE['vehList-viewMode']))
-                                            {
-                                                if ($_COOKIE['vehList-viewMode'] == "cards")
-                                                    printCarInfo("availabilityCheck", $vehNum, $vehicle, true);
-                                                elseif ($_COOKIE['vehList-viewMode'] == "list") {
-                                                    printCarInfoList("availabilityCheck", $vehNum, $vehicle, true);
-                                                }
-                                                elseif ($_COOKIE['vehList-viewMode'] == "table")
-                                                    printCarInfoTable($vehNum, $vehicle);
-                                                }
-                                            else 
-                                                printCarInfo("availabilityCheck", $vehNum, $vehicle, true);
-                                        }
+                                        } else
+                                            printCarInfo("availabilityCheck", $vehNum, $vehicle, true);
                                     }
-                                    else 
-                                        echo 'W bazie nie ma żadnych pojazdów.';
+                                } else
+                                    echo 'W bazie nie ma żadnych pojazdów.';
                                 ?>
                             </div>
                         </section>
@@ -165,24 +161,13 @@
         </div>
     </div>
     <script src="../js/panelHandler.js"></script>
-    <script>
-        const viewMode = document.querySelector('select[name="view-mode"]');
-        viewMode.addEventListener('change', () => {
-            viewMode.form.submit();
-        });
-
-        const changeView = (mode) => {
-            document.querySelector('main select option[value="'+mode+'"]').setAttribute('selected', 'selected');
-            if (mode == "list")
-                document.querySelector('.cars').classList.add('cars-list');
-        }
-    </script>
-    <?php 
-        if (isset($_GET['view-mode']))
-            echo '<script>changeView("'.$_GET['view-mode'].'");</script>';
-        elseif (isset($_COOKIE['vehList-viewMode']))
-            echo '<script>changeView("'.$_COOKIE['vehList-viewMode'].'");</script>';
+    <?php
+    if (isset($_GET['view-mode']))
+        echo '<script src="js/viewMode.js" type="module" value="' . $_GET['view-mode'] . '"></script>';
+    elseif (isset($_COOKIE['vehList-viewMode']))
+        echo '<script src="js/viewMode.js" type="module" value="' . $_COOKIE['vehList-viewMode'] . '"></script>';
     ?>
     <?php include_once('./inc/logged.php'); ?>
 </body>
+
 </html>
