@@ -77,9 +77,9 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = fal
                                 <img src="<?php
                                             $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
                                             if (strpos($path, 'admin/') || strpos($path, 'user/'))
-                                                echo '../img/' . $vehicle[$i]->img_url;
+                                                echo '../img/cars/' . $vehicle[$i]->img_url;
                                             else
-                                                echo 'img/' . $vehicle[$i]->img_url;
+                                                echo 'img/cars/' . $vehicle[$i]->img_url;
 
                                             ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
                             </div>
@@ -100,9 +100,9 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = fal
                             <img src="<?php
                                         $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
                                         if (strpos($path, 'admin/') || strpos($path, 'user/'))
-                                            echo '../img/' . $vehicle[$i]->img_url;
+                                            echo '../img/cars/' . $vehicle[$i]->img_url;
                                         else
-                                            echo 'img/' . $vehicle[$i]->img_url;
+                                            echo 'img/cars/' . $vehicle[$i]->img_url;
                                         ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
                         </div>
                         <span class="car-name"><?php echo $vehicle[$i]->brand . ' ' . $vehicle[$i]->model ?></span>
@@ -136,9 +136,9 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = fal
                                 <img src="<?php
                                             $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
                                             if (strpos($path, 'admin/') || strpos($path, 'user/'))
-                                                echo '../img/' . $vehicle[$i]->img_url;
+                                                echo '../img/cars/' . $vehicle[$i]->img_url;
                                             else
-                                                echo 'img/' . $vehicle[$i]->img_url;
+                                                echo 'img/cars/' . $vehicle[$i]->img_url;
                                             ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
                             </div>
                             <span class="car-name"><?php echo $vehicle[$i]->brand . ' ' . $vehicle[$i]->model ?></span>
@@ -158,9 +158,9 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = fal
                             <img src="<?php
                                         $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
                                         if (strpos($path, 'admin/') || strpos($path, 'user/'))
-                                            echo '../img/' . $vehicle[$i]->img_url;
+                                            echo '../img/cars/' . $vehicle[$i]->img_url;
                                         else
-                                            echo 'img/' . $vehicle[$i]->img_url;
+                                            echo 'img/cars/' . $vehicle[$i]->img_url;
                                         ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
                         </div>
                         <span class="car-name"><?php echo $vehicle[$i]->brand . ' ' . $vehicle[$i]->model ?></span>
@@ -255,9 +255,9 @@ function printCarInfoList($buttonCaption, $vehNum, $vehicle, $printUnavailable =
                                 <img src="<?php
                                             $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
                                             if (strpos($path, 'admin/') || strpos($path, 'user/'))
-                                                echo '../img/' . $vehicle[$i]->img_url;
+                                                echo '../img/cars/' . $vehicle[$i]->img_url;
                                             else
-                                                echo 'img/' . $vehicle[$i]->img_url;
+                                                echo 'img/cars/' . $vehicle[$i]->img_url;
                                             ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
                             </div>
                             <div class="vehicle-price">
@@ -293,9 +293,9 @@ function printCarInfoList($buttonCaption, $vehNum, $vehicle, $printUnavailable =
                             <img src="<?php
                                         $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
                                         if (strpos($path, 'admin/') || strpos($path, 'user/'))
-                                            echo '../img/' . $vehicle[$i]->img_url;
+                                            echo '../img/cars/' . $vehicle[$i]->img_url;
                                         else
-                                            echo 'img/' . $vehicle[$i]->img_url;
+                                            echo 'img/cars/' . $vehicle[$i]->img_url;
                                         ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
                         </div>
                         <div class="vehicle-price">

@@ -79,7 +79,7 @@ if (isset($_GET['vehicle-id']) || isset($_SESSION['vehicle-id'])) {
                     <h2><?php echo $attribute['marka'] . ' ' . $attribute['model']; ?></h2>
                 </div>
                 <div class="vehicle-image">
-                    <img src="img/<?php echo $attribute['img_url'] ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
+                    <img src="img/cars/<?php echo $attribute['img_url'] ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
                 </div>
                 <div class="description">
                     <div class="vehicle-price"><?php echo $attribute['cena'] ?>zł za 1 godzinę</div>
