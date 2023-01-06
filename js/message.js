@@ -1,16 +1,15 @@
-const msgCloseButton = document.querySelector(".message .close");
-const msgWrapper = document.querySelector(".message-wrapper");
-const msgOverlay = document.querySelector(".message-wrapper .overlay");
+const messageCloseButton = document.querySelector(".message .close");
+const messageWrapper = document.querySelector(".message-wrapper");
+const messageOverlay = document.querySelector(".message-wrapper .overlay");
 
-if (msgWrapper) {
-  msgWrapper.style.display = "flex";
-}
+if (messageCloseButton != null && messageWrapper != null && messageOverlay != null) {
+  messageWrapper.style.display = "flex";
 
-if (msgCloseButton != null && msgWrapper != null && msgOverlay != null) {
-  msgCloseButton.addEventListener("click", () => {
-    msgWrapper.style.display = "none";
+  messageCloseButton.addEventListener("click", () => {
+    messageWrapper.style.display = "none";
   });
-  msgOverlay.addEventListener("click", () => {
-    msgWrapper.style.display = "none";
+
+  messageOverlay.addEventListener("click", () => {
+    messageWrapper.style.display = "none";
   });
 }
