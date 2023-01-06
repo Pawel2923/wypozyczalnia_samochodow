@@ -17,18 +17,24 @@ if (isset($_POST['vehicle-id'])) {
 
     try {
         require('../db/db_connection.php');
-        $query = "DELETE FROM vehicles WHERE id=?";
-        $stmt = $db_connection->prepare($query);
-        $stmt->bind_param('i', $vehicleId);
-        $stmt->execute();
+        if (isset($db_connection)) {
+            $query = "DELETE FROM vehicles WHERE id=?";
+            $stmt = $db_connection->prepare($query);
+            if ($stmt) {
+                $stmt->bind_param('i', $vehicleId);
+                $stmt->execute();
 
-        if ($db_connection->affected_rows > 0)
-            $_SESSION['msg'] = 'Udało się usunąć pojazd.';
-        else
-            $_SESSION['error'] = 'Nie udało się usunąć pojazdu.';
+                if ($db_connection->affected_rows > 0)
+                    $_SESSION['msg'] = 'Udało się usunąć pojazd.';
+                else
+                    $_SESSION['error'] = 'Nie udało się usunąć pojazdu.';
+            } else 
+                throw new Exception(`Wystąpił błąd podczas wysyłania zapytania`);
 
-        $stmt->close();
-        $db_connection->close();
+            $stmt->close();
+            $db_connection->close();
+        } else
+            throw new Exception("Błąd połączenia z bazą danych");
     } catch (Exception $error) {
         $error = addslashes($error);
         $error = str_replace("\n", "", $error);
