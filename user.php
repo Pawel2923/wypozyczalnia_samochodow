@@ -280,13 +280,13 @@ try {
                             <div class="option edit-profile">
                                 <form action="" method="POST">
                                     <label for="name">Imię</label>
-                                    <input onclick="this.setSelectionRange(0, this.value.length)" type="text" name="name" value="<?php if (isset($userData['imie'])) echo $userData['imie']; ?>">
+                                    <input type="text" name="name" value="<?php if (isset($userData['imie'])) echo $userData['imie']; ?>">
                                     <label for="sName">Nazwisko</label>
-                                    <input onclick="this.setSelectionRange(0, this.value.length)" type="text" name="sName" value="<?php if (isset($userData['nazwisko'])) echo $userData['nazwisko']; ?>">
+                                    <input type="text" name="sName" value="<?php if (isset($userData['nazwisko'])) echo $userData['nazwisko']; ?>">
                                     <label for="tel">Telefon</label>
-                                    <input onclick="this.setSelectionRange(0, this.value.length)" type="tel" name="tel" value="<?php if (isset($userData['telefon'])) echo $userData['telefon']; ?>">
+                                    <input type="tel" name="tel" value="<?php if (isset($userData['telefon'])) echo $userData['telefon']; ?>">
                                     <label for="email">Adres e-mail</label>
-                                    <input onclick="this.setSelectionRange(0, this.value.length)" type="email" name="email" value="<?php if (isset($userData['email'])) echo $userData['email']; ?>">
+                                    <input type="email" name="email" value="<?php if (isset($userData['email'])) echo $userData['email']; ?>">
                                     <div class="buttons">
                                         <button type="submit">Potwierdź</button>
                                         <button type="reset">Anuluj zmiany</button>
