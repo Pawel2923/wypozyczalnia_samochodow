@@ -5,7 +5,6 @@
 
 .uploaded-wrapper > div {
   display: flex;
-  align-items: center;
 }
 
 .uploaded-wrapper > button {
