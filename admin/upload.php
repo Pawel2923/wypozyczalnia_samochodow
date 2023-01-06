@@ -2,7 +2,7 @@
 session_start();
 $allowedExt = array("jpg", "jpeg", "gif", "png", "webp", "avif", "bmp", "xbm");
 
-$dir = '../img/';
+$dir = '../img/cars/';
 $target = $dir . basename($_FILES['vehicle-img']['name']);
 $newFilename = htmlentities($_POST['vehicle-img-name']);
 $newFilename = explode('.', $newFilename);
