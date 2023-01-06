@@ -1,14 +1,17 @@
-let messageContent = document.querySelector("script[src='js/log.js']").getAttribute("value");
-let messageType = document.querySelector("script[src='js/log.js']").getAttribute("name");
+let message = {
+    type: "",
+    content: "",
+};
 
-if (!messageContent) 
-    messageContent = document.querySelector("script[src='../js/log.js']").getAttribute("value");
-if (!messageType) 
-    messageContent = document.querySelector("script[src='../js/log.js']").getAttribute("name");
+if (!document.querySelector("script[src='js/log.js']")) {
+    message.type = document.querySelector("script[src='../js/log.js']").getAttribute("name");
+    message.content = document.querySelector("script[src='../js/log.js']").getAttribute("value");
+} else {
+    message.type = document.querySelector("script[src='js/log.js']").getAttribute("name");
+    message.content = document.querySelector("script[src='js/log.js']").getAttribute("value");
+}
 
-if (messageType === "error") 
-    console.error(messageContent);
-else if (messageType === "warning")
-    console.warn(messageContent);
+if (message.type === "error") 
+    console.warn(message.content);
 else 
-    console.log(messageContent);
+    console.log(message.content);
