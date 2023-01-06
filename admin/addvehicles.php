@@ -11,7 +11,7 @@ if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
 }
 
 if (isset($_SESSION['vehicle-img-name'])) {
-    if (!file_exists("../img/" . $_SESSION['vehicle-img-name']))
+    if (!file_exists($_SESSION['vehicle-img-name']))
         unset($_SESSION['vehicle-img-name']);
 }
 
@@ -35,7 +35,6 @@ if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_
             $avail = 1;
 
         $img = $_SESSION['vehicle-img-name'];
-        unset($_SESSION['vehicle-img-name']);
 
         try {
             require('../db/db_connection.php');
@@ -62,6 +61,7 @@ if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_
                 throw new Exception("Statement's value is false.Query's value is: $query");
             }
 
+            unset($_SESSION['vehicle-img-name']);
             $stmt->close();
             $db_connection->close();
         } catch (Exception $error) {
