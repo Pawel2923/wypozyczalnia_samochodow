@@ -66,7 +66,7 @@ if (isset($_POST['amount']) && isset($_POST['date']) && isset($_SESSION['vehicle
 
                     $_SESSION['msg'] = 'Dziękujemy za korzystanie z naszych usług!';
                 } else {
-                    echo "<script nonce='alert'>alert('Wprowadzono datę która minęła.')</script>";
+                    echo "<script nonce='alertScript'>alert('Wprowadzono datę która minęła.')</script>";
                     echo "<script nonce='historyPrev'>history.go(-1);</script>";
                 }
             }
