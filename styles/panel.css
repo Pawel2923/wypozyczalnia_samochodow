@@ -7,11 +7,15 @@
 }
 
 .table {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
   width: fit-content;
   max-width: calc(100vw - 40px);
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
   height: fit-content;
   overflow-x: auto;
-  margin-bottom: 30px;
+  margin-bottom: 3rem;
 }
 
 table {
@@ -26,11 +30,11 @@ th {
 
 table td,
 table th {
-  padding: 10px;
+  padding: 1rem;
 }
 
 nav.panel {
-  padding: 20px;
+  padding: 2rem;
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
@@ -81,6 +85,7 @@ nav.panel .list-wrapper ul {
   -webkit-box-align: unset;
   -ms-flex-align: unset;
   align-items: unset;
+  list-style-type: none;
 }
 
 nav.panel a:hover {
@@ -88,7 +93,7 @@ nav.panel a:hover {
 }
 
 nav .list-wrapper ul a {
-  margin-top: 10px;
+  margin-top: 1rem;
 }
 
 nav .list-wrapper ul a:first-child {
@@ -107,6 +112,8 @@ nav .list-wrapper ul a:first-child {
   transition: transform 0.2s ease, opacity 0.2s ease;
   transition: transform 0.2s ease, opacity 0.2s ease,
     -webkit-transform 0.2s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease,
+    -webkit-transform 0.2s ease;
   -webkit-transition: transform 0.2s ease, opacity 0.2s ease;
   -moz-transition: transform 0.2s ease, opacity 0.2s ease;
   -ms-transition: transform 0.2s ease, opacity 0.2s ease;
@@ -117,13 +124,13 @@ nav .list-wrapper ul a:first-child {
   position: absolute;
   left: 0;
   bottom: 0;
-  -webkit-transform: translate(20px, -20px);
-  -ms-transform: translate(20px, -20px);
-  transform: translate(20px, -20px);
+  -webkit-transform: translate(2rem, -2rem);
+  -ms-transform: translate(2rem, -2rem);
+  transform: translate(2rem, -2rem);
 }
 
 .content {
-  margin: 20px;
+  margin: 2rem;
   display: -ms-grid;
   display: grid;
   -ms-grid-rows: auto 1fr;
@@ -157,18 +164,24 @@ header a {
 }
 
 .content section {
-  margin-top: 40px;
+  margin-top: 2rem;
 }
 
 .content .vehicles header,
 .content .users header {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
   justify-content: flex-start;
 }
 .content .vehicles header > *,
 .content .users header > * {
-  margin-right: 20px;
+  margin-right: 0.5rem;
 }
 .content .vehicles header > *:last-child,
 .content .users header > *:last-child {
@@ -177,13 +190,6 @@ header a {
 .content .vehicles header > * a,
 .content .users header > * a {
   color: #000;
-}
-
-@media screen and (max-width: 800px) {
-  .content .vehicles header > *,
-  .content .users header > * {
-    margin-right: 10px;
-  }
 }
 
 main form {
@@ -198,7 +204,7 @@ main form {
 }
 main form label,
 main form button {
-  margin-top: 20px;
+  margin-top: 2rem;
 }
 main form label:first-child {
   margin-top: 0;
@@ -246,7 +252,7 @@ main .home-option {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  height: 300px;
+  aspect-ratio: 1;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
@@ -258,7 +264,7 @@ main .home-option {
   -ms-flex-pack: center;
   justify-content: center;
   border: 1px solid #000;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   cursor: pointer;
   transition: background-color 0.2s ease;
   -webkit-transition: background-color 0.2s ease;
@@ -277,7 +283,7 @@ main .home-option i {
 
 main .option {
   width: 60%;
-  margin-bottom: 30px;
+  margin-bottom: 1.5rem;
 }
 
 main .option a {
@@ -290,7 +296,7 @@ main .option:last-child {
 }
 
 main .option input {
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
 }
 
 main .option select {
@@ -299,10 +305,10 @@ main .option select {
   -ms-flex-pack: space-evenly;
   justify-content: space-evenly;
   width: 100%;
-  padding: 10px;
-  font-size: 16px;
+  padding: 1rem;
+  font-size: 1rem;
   outline: none;
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
   border-width: 1px;
 }
 
@@ -320,7 +326,7 @@ main .option-button {
   -webkit-box-pack: justify;
   -ms-flex-pack: justify;
   justify-content: space-between;
-  padding: 20px;
+  padding: 1.5rem;
   width: 100%;
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -357,10 +363,10 @@ main .visible-settings {
 main form input,
 main form textarea {
   width: 100%;
-  padding: 10px;
-  font-size: 16px;
+  padding: 0.8rem;
+  font-size: 1rem;
   outline: none;
-  margin-top: 10px;
+  margin-top: 1rem;
   border: 1px solid #000;
 }
 
@@ -377,7 +383,7 @@ main form button {
 }
 
 main section h3 {
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
 }
 
 .message-wrapper {
@@ -388,7 +394,11 @@ main section h3 {
   position: fixed;
   z-index: 3;
   display: none;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
 }
 
@@ -396,9 +406,11 @@ main section h3 {
   background-color: #fff;
   border: 1px solid #000;
   position: absolute;
-  padding: 50px;
+  padding: 5rem;
   max-width: 55%;
   z-index: 1;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   text-align: center;
 }
@@ -426,7 +438,7 @@ footer {
   -ms-grid-rows: 1fr;
   -ms-grid-columns: 1fr;
   grid-template: 1fr / 1fr;
-  margin-top: 40px;
+  margin-top: 4rem;
   -ms-grid-row-align: end;
   align-self: end;
 }
@@ -493,6 +505,8 @@ footer {
 
 @media screen and (max-width: 800px) {
   .page-wrapper {
+    -ms-grid-rows: 1fr;
+    -ms-grid-columns: 1fr;
     grid-template: 1fr / 1fr;
   }
   nav.panel {
@@ -519,7 +533,7 @@ footer {
   .mobile-nav {
     width: 100%;
     height: 50px;
-    padding: 0 20px;
+    padding: 0 2rem;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -545,13 +559,16 @@ footer {
     gap: 20px;
   }
   .all-settings > header {
-    padding-top: 50px;
+    padding-top: 2rem;
+  }
+  .all-settings > header h1 {
+    font-size: 1.5rem;
   }
   .content header .user {
     display: none;
   }
   form.view {
-    padding-top: 10px;
+    margin-top: 0.2rem;
   }
   .overlay {
     display: block;

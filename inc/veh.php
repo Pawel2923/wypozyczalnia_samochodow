@@ -81,7 +81,7 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = fal
                                             else
                                                 echo 'img/cars/' . $vehicle[$i]->img_url;
 
-                                            ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
+                                            ?>" alt="Zdjęcie samochodu" width="1024" height="687">
                             </div>
                             <span class="car-name"><?php echo $vehicle[$i]->brand . ' ' . $vehicle[$i]->model ?></span>
                             <div class="divider"></div>
@@ -103,7 +103,7 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = fal
                                             echo '../img/cars/' . $vehicle[$i]->img_url;
                                         else
                                             echo 'img/cars/' . $vehicle[$i]->img_url;
-                                        ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
+                                        ?>" alt="Zdjęcie samochodu" width="1024" height="687">
                         </div>
                         <span class="car-name"><?php echo $vehicle[$i]->brand . ' ' . $vehicle[$i]->model ?></span>
                         <div class="divider"></div>
@@ -139,7 +139,7 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = fal
                                                 echo '../img/cars/' . $vehicle[$i]->img_url;
                                             else
                                                 echo 'img/cars/' . $vehicle[$i]->img_url;
-                                            ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
+                                            ?>" alt="Zdjęcie samochodu" width="1024" height="687">
                             </div>
                             <span class="car-name"><?php echo $vehicle[$i]->brand . ' ' . $vehicle[$i]->model ?></span>
                             <div class="divider"></div>
@@ -161,7 +161,7 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = fal
                                             echo '../img/cars/' . $vehicle[$i]->img_url;
                                         else
                                             echo 'img/cars/' . $vehicle[$i]->img_url;
-                                        ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
+                                        ?>" alt="Zdjęcie samochodu" width="1024" height="687">
                         </div>
                         <span class="car-name"><?php echo $vehicle[$i]->brand . ' ' . $vehicle[$i]->model ?></span>
                         <div class="divider"></div>
@@ -258,7 +258,7 @@ function printCarInfoList($buttonCaption, $vehNum, $vehicle, $printUnavailable =
                                                 echo '../img/cars/' . $vehicle[$i]->img_url;
                                             else
                                                 echo 'img/cars/' . $vehicle[$i]->img_url;
-                                            ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
+                                            ?>" alt="Zdjęcie samochodu" width="1024" height="687">
                             </div>
                             <div class="vehicle-price">
                                 <div>
@@ -296,7 +296,7 @@ function printCarInfoList($buttonCaption, $vehNum, $vehicle, $printUnavailable =
                                             echo '../img/cars/' . $vehicle[$i]->img_url;
                                         else
                                             echo 'img/cars/' . $vehicle[$i]->img_url;
-                                        ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
+                                        ?>" alt="Zdjęcie samochodu" width="1024" height="687">
                         </div>
                         <div class="vehicle-price">
                             <div>

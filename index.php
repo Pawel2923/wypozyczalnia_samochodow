@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/index.css">
     <link rel="Shortcut Icon" href="./img/logo.svg" />
-    <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/32373b1277.js" nonce="kitFontawesome" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -34,7 +34,7 @@
             </span>
         </section>
         <section>
-            <h2>Samochody do rezerwacji</h2>
+            <h2>Najnowsze samochody do rezerwacji</h2>
             <div class="cars">
                 <?php
                 require("inc/veh.php");
@@ -44,6 +44,7 @@
                     echo '<p class="no-vehicles">Obecnie nie ma pojazdów do rezerwacji</p>';
                 ?>
             </div>
+            <a href="rental.php" class="link-check-more">Zobacz więcej samochodów</a>
         </section>
         <section class="contact-with-us">
             <div class="contact-wrapper">

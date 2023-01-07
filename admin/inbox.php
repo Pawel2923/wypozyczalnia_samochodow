@@ -67,7 +67,7 @@ if (isset($_POST['message-id'])) {
     <link rel="stylesheet" href="../styles/panel.css">
     <link rel="stylesheet" href="styles/inbox.css">
     <link rel="Shortcut Icon" href="../img/logo.svg" />
-    <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/32373b1277.js" nonce="kitFontawesome" crossorigin="anonymous"></script>
     <?php include_once("./inc/theme.php") ?>
 </head>
 

@@ -1,9 +1,9 @@
 .vehicle {
-  margin-bottom: 50px;
+  margin-bottom: 5rem;
 }
 
 .vehicle-name h2 {
-  margin-bottom: 10px;
+  margin-bottom: 10rem;
 }
 
 .vehicle-image {
@@ -20,26 +20,26 @@
 
 form input {
   width: 100%;
-  padding: 10px;
-  font-size: 16px;
+  padding: 1rem;
+  font-size: 1rem;
   outline: none;
-  margin-bottom: 10px;
-  margin-top: 5px;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
 }
 
 form button {
   width: 50%;
-  margin-top: 50px;
+  margin-top: 5rem;
 }
 
 .summary {
-  margin-top: 40px;
+  margin-top: 4rem;
 }
 
 .summary div {
-  margin-top: 20px;
+  margin-top: 2rem;
   border: 1px solid #000;
-  padding: 10px;
+  padding: 1rem;
 }
 
 .summary div:first-child {

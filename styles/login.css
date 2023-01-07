@@ -3,8 +3,8 @@ body {
   display: -ms-grid;
   display: grid;
   -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
 }
 
 .back {
@@ -12,8 +12,8 @@ body {
   right: 0;
   top: 0;
   -webkit-transform: translate(-100%, 50%);
-      -ms-transform: translate(-100%, 50%);
-          transform: translate(-100%, 50%);
+  -ms-transform: translate(-100%, 50%);
+  transform: translate(-100%, 50%);
   font-size: 2rem;
   cursor: pointer;
 }
@@ -22,8 +22,8 @@ main {
   display: -ms-grid;
   display: grid;
   -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
   text-align: unset;
 }
 
@@ -32,20 +32,20 @@ main {
   display: -ms-grid;
   display: grid;
   -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
 }
 
 .header-wrapper {
   text-align: center;
   width: 100%;
-  margin-bottom: 40px;
+  margin-bottom: 4rem;
 }
 
 .header-wrapper h1 {
   font-weight: 400;
-  margin-bottom: 10px;
-  font-size: 40px;
+  margin-bottom: 1rem;
+  font-size: 3.5em;
 }
 
 .header-wrapper h3 {
@@ -61,13 +61,13 @@ form {
 form input {
   border: none;
   border-bottom: 1px solid #000;
-  padding: 2px;
-  font-size: 18px;
+  padding: 0.2rem;
+  font-size: 1.2rem;
   width: 100%;
 }
 
 form div {
-  margin-top: 10px;
+  margin-top: 1rem;
 }
 
 form div:first-child {
@@ -79,55 +79,55 @@ form div:last-child {
 }
 
 form div.password .forgotten-password {
-  color: #000; 
-  display: block; 
-  margin-top: 5px;
+  color: #000;
+  display: block;
+  margin-top: 1rem;
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
-  -webkit-transition: color .2s ease;
-  -o-transition: color .2s ease;
-  transition: color .2s ease;
+  -webkit-transition: color 0.2s ease;
+  -o-transition: color 0.2s ease;
+  transition: color 0.2s ease;
 }
 
 form div.password .forgotten-password:hover {
-  color: #60B8FF;
+  color: #60b8ff;
 }
 
 form label {
   display: inline-block;
   cursor: text;
-  -webkit-transition: -webkit-transform .2s ease;
-  transition: -webkit-transform .2s ease;
-  -o-transition: transform .2s ease;
-  transition: transform .2s ease;
-  transition: transform .2s ease, -webkit-transform .2s ease;
+  -webkit-transition: -webkit-transform 0.2s ease;
+  transition: -webkit-transform 0.2s ease;
+  -o-transition: transform 0.2s ease;
+  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, -webkit-transform 0.2s ease;
 }
 
 .form-label-transform-start {
   -webkit-transform: translate(2px, 18px);
-      -ms-transform: translate(2px, 18px);
-          transform: translate(2px, 18px);
+  -ms-transform: translate(2px, 18px);
+  transform: translate(2px, 18px);
 }
 
 .form-label-transform-end {
   -webkit-transform: translate(2px, 18px);
-      -ms-transform: translate(2px, 18px);
-          transform: translate(2px, 18px);
+  -ms-transform: translate(2px, 18px);
+  transform: translate(2px, 18px);
 }
 
 .form-label-transform {
   cursor: default;
   -webkit-transform: translate(2px, -5px);
-      -ms-transform: translate(2px, -5px);
-          transform: translate(2px, -5px);
+  -ms-transform: translate(2px, -5px);
+  transform: translate(2px, -5px);
 }
 
 form input:focus {
-  border-color: #60B8FF;
+  border-color: #60b8ff;
   outline: none;
 }
 
 form button {
-  margin-top: 20px;
+  margin-top: 2rem;
 }

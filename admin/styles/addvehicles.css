@@ -4,6 +4,8 @@
 }
 
 .uploaded-wrapper > div {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
 }
 
@@ -16,11 +18,11 @@
   display: none;
   color: #60b8ff;
   font-size: 1.5em;
-  margin-left: 0.5rem;
+  margin-left: 1rem;
 }
 
 img {
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   max-width: 50%;
 }

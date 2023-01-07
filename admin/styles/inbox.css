@@ -1,5 +1,5 @@
 .messages h3 {
-  margin-top: 20px;
+  margin-top: 2rem;
 }
 
 .messages h3:first-child {
@@ -10,8 +10,8 @@
   border: 1px solid #000;
   width: 60%;
   max-width: 100%;
-  margin-top: 10px;
-  padding: 20px;
+  margin-top: 1rem;
+  padding: 2rem;
 }
 
 .messages section form span {
