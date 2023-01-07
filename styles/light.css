@@ -1,28 +1,31 @@
 * {
-    border-color: #000 !important;
+  border-color: #000 !important;
 }
 
-body, input, select, footer {
-    background-color: #fff;
-    color: #000;
+body,
+input,
+select,
+footer {
+  background-color: #fff;
+  color: #000;
 }
 
 .logged-menu {
-    background-color: #fff;
+  background-color: #fff;
 }
 
 .panel {
-    background-color: #f1f1f1 !important;
+  background-color: #f1f1f1 !important;
 }
 
 nav.panel a {
-    color: #000;
+  color: #000;
 }
 
 button {
-    background-color: #60B8FF;
+  background-color: #60b8ff;
 }
 
 button:hover {
-    background-color: #fff;
+  background-color: #fff;
 }

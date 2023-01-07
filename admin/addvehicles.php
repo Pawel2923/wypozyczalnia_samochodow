@@ -98,7 +98,7 @@ if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_
     <link rel="stylesheet" href="../styles/panel.css">
     <link rel="stylesheet" href="styles/addvehicles.css">
     <link rel="Shortcut Icon" href="../img/logo.svg" />
-    <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/32373b1277.js" nonce="kitFontawesome" crossorigin="anonymous"></script>
     <?php include_once("./inc/theme.php") ?>
 </head>
 
@@ -172,7 +172,7 @@ if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_
                         </header>
                         <section>
                             <form action="upload.php" method="POST" enctype="multipart/form-data" name="vehicleImg">
-                                <label for="vehicle-img">Wybierz zdjęcie samochodu*</label>
+                                <label for="vehicle-img">Wybierz zdjęcie samochodu (Zalecany rozmiar: 1024x687)*</label>
                                 <input type="file" name="vehicle-img" id="vehicle-img" accept="image/jpg image/jpeg image/gif image/png image/webp image/avif image/bmp image/xbm" required>
                                 <label for="vehicle-img-name">Zmień nazwę pliku</label>
                                 <input type="text" name="vehicle-img-name" id="vehicle-img-name" />

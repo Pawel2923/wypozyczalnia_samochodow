@@ -1,48 +1,55 @@
 * {
-    border-color: #fff !important;
+  border-color: #fff !important;
 }
 
-body, input, select, footer {
-    background-color: #202124;
-    color: #fff;
+body,
+input,
+select,
+footer {
+  background-color: #202124;
+  color: #fff;
 }
 
 .logged-menu {
-    background-color: #202124;
+  background-color: #202124;
 }
 
-header a, button, .logged-menu a, .content .vehicles header>* a {
-    color: #fff;
+header a,
+button,
+.logged-menu a,
+.content .vehicles header > * a {
+  color: #fff;
 }
 
 main .car .divider {
-    background: #fff;
+  background: #fff;
 }
 
 .mobile-nav {
-    background-color: rgb(24, 27, 28, 0.95);
+  background-color: rgb(24, 27, 28, 0.95);
 }
 
 .panel {
-    background-color: #181b1c !important;
+  background-color: #181b1c !important;
 }
 
-main .home-option:hover, button {
-    background-color: #1797ff;
+main .home-option:hover,
+button {
+  background-color: #1797ff;
 }
 
 .message {
-    background-color: #1797ff;
+  background-color: #1797ff;
 }
 
-.content .vehicles header>* a {
-    color: #fff;
+.content .vehicles header > * a {
+  color: #fff;
 }
 
-.content .users header>* a {
-    color: #fff;
+.content .users header > * a {
+  color: #fff;
 }
 
 button:hover {
-    background-color: #202124;
+  background-color: #202124;
 }

@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/index.css">
     <link rel="Shortcut Icon" href="./img/logo.svg" />
-    <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/32373b1277.js" nonce="kitFontawesome" crossorigin="anonymous"></script>
 </head>
 
 <body>

@@ -1,69 +1,79 @@
 @media (prefers-color-scheme: dark) {
-    * {
-        border-color: #fff !important;
-    }
-    
-    body, input, select, footer {
-        background-color: #202124;
-        color: #fff;
-    }
-    
-    .logged-menu {
-        background-color: #1b1b1b;
-    }
-    
-    header a, button, .logged-menu a, .content .vehicles header>* a {
-        color: #fff;
-    }
-    
-    main .car .divider {
-        background: #fff;
-    }
-    
-    .mobile-nav {
-        background-color: rgba(20, 20, 20, .95);
-    }
-    
-    .panel {
-        background-color: #1b1b1b !important;
-    }
-    
-    main .home-option:hover, button {
-        background-color: #1797ff;
-    }
-    
-    button:hover {
-        background-color: #202124;
-    }
+  * {
+    border-color: #fff !important;
+  }
+
+  body,
+  input,
+  select,
+  footer {
+    background-color: #202124;
+    color: #fff;
+  }
+
+  .logged-menu {
+    background-color: #1b1b1b;
+  }
+
+  header a,
+  button,
+  .logged-menu a,
+  .content .vehicles header > * a {
+    color: #fff;
+  }
+
+  main .car .divider {
+    background: #fff;
+  }
+
+  .mobile-nav {
+    background-color: rgba(20, 20, 20, 0.95);
+  }
+
+  .panel {
+    background-color: #1b1b1b !important;
+  }
+
+  main .home-option:hover,
+  button {
+    background-color: #1797ff;
+  }
+
+  button:hover {
+    background-color: #202124;
+  }
 }
 
 @media (prefers-color-scheme: light) {
-    * {
-        border-color: #000 !important;
-    }
-    
-    body, input, select, footer {
-        background-color: #f1f1f1;
-        color: #000;
-    }
-    
-    .logged-menu {
-        background-color: #fff;
-    }
-    
-    .panel {
-        background-color: #fff !important;
-    }
-    
-    nav.panel a {
-        color: #000;
-    }
-    
-    button {
-        background-color: #60B8FF;
-    }
-    
-    button:hover {
-        background-color: #f1f1f1;
-    }
+  * {
+    border-color: #000 !important;
+  }
+
+  body,
+  input,
+  select,
+  footer {
+    background-color: #f1f1f1;
+    color: #000;
+  }
+
+  .logged-menu {
+    background-color: #fff;
+  }
+
+  .panel {
+    background-color: #fff !important;
+  }
+
+  nav.panel a {
+    color: #000;
+  }
+
+  button {
+    background-color: #60b8ff;
+  }
+
+  button:hover {
+    background-color: #f1f1f1;
+  }
 }

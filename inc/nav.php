@@ -1,5 +1,5 @@
-<?php 
-    require_once("getUserProfile.php");
+<?php
+require_once("getUserProfile.php");
 ?>
 
 <nav class="mobile-nav">
@@ -35,42 +35,43 @@
             </div>
         </div>
         <div class="logged-menu show-logged-menu">
-            <?php 
-                $admin = '';
-                if (isset($_SESSION['isAdmin'])) {
-                    if ($_SESSION['isAdmin'])
-                        $admin = '<li><a href="admin.php"><i class="fa-solid fa-hammer"></i> Panel administracyjny</a></li>';
-                }
+            <?php
+            $admin = '';
+            if (isset($_SESSION['isAdmin'])) {
+                if ($_SESSION['isAdmin'])
+                    $admin = '<li><a href="admin.php"><i class="fa-solid fa-hammer"></i> Panel administracyjny</a></li>';
+            }
 
-                if (isset($_SESSION['login']) && !isset($_SESSION['connectionError'])) {
-                    echo '
+            if (isset($_SESSION['login']) && !isset($_SESSION['connectionError'])) {
+                echo '
                     <ul>
                         <li>
                             <div class="card">
-                                <script src="js/mobileNav.js" value="'.$userProfile->name.'"></script>
+                                <script src="js/mobileNav.js" value="' . $userProfile->name . '"></script>
                                 <div>
                                     <div class="number-wrapper">
-                                        <div class="card-number">'.$userProfile->unread.'</div>
+                                        <div class="card-number">' . $userProfile->unread . '</div>
                                         <span>Nieprzeczytane wiadomości</span>
                                     </div>
                                     <div class="number-wrapper" id="vehicles-button">
-                                        <div class="card-number">'.$userProfile->rented_vehicles.'</div>
+                                        <div class="card-number">' . $userProfile->rented_vehicles . '</div>
                                         <span>Wypożyczone pojazdy</span>
                                     </div>
                                 </div>
                             </div>
                         </li>
-                        '.$admin.'
+                        ' . $admin . '
                         <li><a href="user.php"><i class="fa-solid fa-gear"></i> Panel użytkownika</a></li>
                         <li><a href="logout.php"><i class="fa-solid fa-right-from-bracket"></i> Wyloguj się</a></li>
                     </ul>
-                ';} else {
-                    if (!isset($_SESSION['connectionError'])) {
-                        echo 'Aby przeglądać swój profil zaloguj się';
-                    } else {
-                        echo 'Nie można wczytać profilu. Prosimy spróbować później';
-                    }
+                ';
+            } else {
+                if (!isset($_SESSION['connectionError'])) {
+                    echo 'Aby przeglądać swój profil zaloguj się';
+                } else {
+                    echo 'Nie można wczytać profilu. Prosimy spróbować później';
                 }
+            }
             ?>
         </div>
     </div>
@@ -83,17 +84,11 @@
     </div>
     <div class="list-wrapper">
         <div class="spacer"></div>
-        <ul>
-            <a href="index.php">
-                <li>Strona główna</li>
-            </a>
-            <a href="rental.php">
-                <li>Rezerwacja online</li>
-            </a>
-            <a href="pricing.php">
-                <li>Uzyskaj wycenę</li>
-            </a>
-        </ul>
+        <div class="nav-options">
+            <a href="index.php">Strona główna</a>
+            <a href="rental.php">Rezerwacja online</a>
+            <a href="pricing.php">Uzyskaj wycenę</a>
+        </div>
         <div class="user">
             <a href="login.php" class="login">
                 <i class="fas fa-sign-in-alt"></i>
@@ -110,17 +105,11 @@
 <nav class="desktop-nav fixed-nav">
     <div class="list-wrapper">
         <div class="spacer"></div>
-        <ul>
-            <a href="index.php">
-                <li>Strona główna</li>
-            </a>
-            <a href="rental.php">
-                <li>Rezerwacja online</li>
-            </a>
-            <a href="pricing.php">
-                <li>Uzyskaj wycenę</li>
-            </a>
-        </ul>
+        <div class="nav-options">
+            <a href="index.php">Strona główna</a>
+            <a href="rental.php">Rezerwacja online</a>
+            <a href="pricing.php">Uzyskaj wycenę</a>
+        </div>
         <div class="user">
             <a href="login.php" class="login">
                 <i class="fas fa-sign-in-alt"></i>

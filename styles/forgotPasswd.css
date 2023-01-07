@@ -6,7 +6,11 @@
   position: fixed;
   z-index: 3;
   display: none;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
 }
 
@@ -14,9 +18,11 @@
   background-color: #fff;
   border: 1px solid #000;
   position: absolute;
-  padding: 50px;
+  padding: 5rem;
   max-width: 55%;
   z-index: 1;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   text-align: center;
 }

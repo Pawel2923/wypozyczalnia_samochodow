@@ -64,7 +64,7 @@ if (isset($_POST['theme'])) {
     <link rel="stylesheet" href="styles/panel.css">
     <link rel="stylesheet" href="styles/admin.css">
     <link rel="Shortcut Icon" href="./img/logo.svg" />
-    <script src="https://kit.fontawesome.com/32373b1277.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/32373b1277.js" nonce="kitFontawesome" crossorigin="anonymous"></script>
     <?php
     if (isset($_POST['theme'])) {
         if ($_POST['theme'] != "default")

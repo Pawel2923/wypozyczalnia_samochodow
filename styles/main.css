@@ -1,7 +1,7 @@
 /*
 * Prefixed by https://autoprefixer.github.io
-* PostCSS: v8.3.6,
-* Autoprefixer: v10.3.1
+* PostCSS: v8.4.14,
+* Autoprefixer: v10.4.7
 * Browsers: last 4 version
 */
 
@@ -23,10 +23,16 @@ nav.mobile-nav {
 
 nav.mobile-nav a {
   -webkit-tap-highlight-color: transparent !important;
+  -webkit-transition: -webkit-transform 0.2s ease;
+  transition: -webkit-transform 0.2s ease;
+  -o-transition: transform 0.2s ease;
   transition: transform 0.2s ease;
+  transition: transform 0.2s ease, -webkit-transform 0.2s ease;
 }
 
 nav.mobile-nav a:active {
+  -webkit-transform: scale(0.9, 0.9);
+  -ms-transform: scale(0.9, 0.9);
   transform: scale(0.9, 0.9);
 }
 
@@ -51,14 +57,14 @@ nav.desktop-nav a {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
-  margin-top: 40px;
-  margin-bottom: 40px;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
 }
 
 @media screen and (max-width: 800px) {
   .nav-header {
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
   }
 }
 
@@ -73,8 +79,7 @@ nav.desktop-nav a {
   grid-template-columns: 1fr 4fr 1fr;
 }
 
-nav ul {
-  list-style-type: none;
+nav .nav-options {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -90,12 +95,12 @@ nav a:hover {
   color: #60b8ff;
 }
 
-nav.desktop-nav ul a {
-  margin-right: 2%;
-  padding: 10px 0;
+nav.desktop-nav .nav-options a {
+  margin-right: 2rem;
+  padding: 1rem 0;
 }
 
-nav.desktop-nav ul a:last-child {
+nav.desktop-nav .nav-options a:last-child {
   margin-right: 0;
 }
 
@@ -119,12 +124,14 @@ nav.desktop-nav ul a:last-child {
     -webkit-transform 0.2s ease;
   transition: transform 0.2s ease, opacity 0.2s ease,
     -webkit-transform 0.2s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease,
+    -webkit-transform 0.2s ease;
   -webkit-transition: transform 0.2s ease, opacity 0.2s ease;
   -moz-transition: transform 0.2s ease, opacity 0.2s ease;
   -ms-transition: transform 0.2s ease, opacity 0.2s ease;
   -o-transition: transform 0.2s ease, opacity 0.2s ease;
   visibility: hidden;
-  padding: 10px;
+  padding: 1rem;
   z-index: 3;
 }
 
@@ -147,8 +154,10 @@ nav.desktop-nav ul a:last-child {
 }
 
 .logged-menu li {
+  width: -webkit-max-content;
+  width: -moz-max-content;
   width: max-content;
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
 }
 
 .logged-menu li:last-child {
@@ -171,11 +180,11 @@ nav.desktop-nav ul a:last-child {
   background-color: #fff;
   -ms-grid-rows: 1fr !important;
   grid-template-rows: 1fr !important;
-  padding-top: 10px;
-  padding-bottom: 10px;
   position: fixed;
   top: 0;
   left: 0;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
   transform: translateY(-100%);
   -webkit-transform: translateY(-100%);
   -moz-transform: translateY(-100%);
@@ -201,13 +210,13 @@ nav.desktop-nav ul a:last-child {
 }
 
 .user a {
-  padding: 10px 0;
+  padding: 1rem 0;
   color: #000;
 }
 
 .user i {
-  margin-right: 10px;
-  padding: 10px 0;
+  margin-right: 0.5rem;
+  padding: 0.5rem 0;
 }
 
 .user i:last-child {
@@ -234,9 +243,9 @@ nav.desktop-nav ul a:last-child {
 
 button {
   background-color: #60b8ff;
-  padding: 10px;
+  padding: 0.8rem;
   width: 100%;
-  margin-bottom: 5%;
+  margin-bottom: 1rem;
   cursor: pointer;
   border: 1px solid #000;
   -webkit-transition: 0.2s ease;
@@ -282,20 +291,37 @@ main .cars .car {
   overflow: hidden;
 }
 
-main .car .image-wrapper {
+.cars .image-wrapper {
   width: 100%;
   height: 100%;
+  max-height: 20rem;
   position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.cars img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto !important;
+  height: auto !important;
 }
 
 main .cars .car > span {
-  margin-top: 5%;
-  margin-bottom: 5%;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 main .car-price {
-  margin-top: 5%;
-  margin-bottom: 5%;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -306,7 +332,7 @@ main .car-price {
 }
 
 main .car-price span {
-  margin-top: 10px;
+  margin-top: 1rem;
 }
 
 main .car-price span:first-child {
@@ -325,10 +351,11 @@ main .car .divider {
 
 main .car button {
   width: 80%;
-  margin-bottom: 5%;
+  margin-bottom: 1rem;
 }
 
 .cars .no-vehicles {
+  -ms-grid-column-span: 3;
   grid-column: span 3;
 }
 
@@ -350,12 +377,12 @@ main .cars-list {
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
   flex-direction: column;
-  margin-bottom: 20px;
+  margin-bottom: 2rem;
 }
 
 .cars-list .vehicle-name {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 1rem;
   font-size: 1.5em;
   text-transform: capitalize;
 }
@@ -378,7 +405,7 @@ main .cars-list {
 }
 
 .cars-list .vehicle-content > * {
-  margin-right: 20px;
+  margin-right: 2rem;
 }
 
 .cars-list .vehicle-content .vehicle-price {
@@ -388,7 +415,7 @@ main .cars-list {
 }
 
 .cars-list .vehicle-content .vehicle-price div {
-  margin-right: 20px;
+  margin-right: 2rem;
 }
 
 .cars-list .vehicle-content .vehicle-image {
@@ -422,11 +449,16 @@ main .cars-list {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
+
+  }
+
+  .cars-list .vehicle-content > * {
+    margin-right: 0.5rem;
   }
 
   .cars-list .vehicle-content .vehicle-price div {
     margin: 0;
-    margin-bottom: 5px;
+    margin-bottom: 1rem;
     font-size: 0.8em;
   }
 
@@ -436,6 +468,10 @@ main .cars-list {
 
   .cars-list .vehicle-name {
     font-size: 1.2em;
+  }
+
+  .cars-list button {
+    padding: 0.5rem;
   }
 }
 
@@ -454,8 +490,8 @@ footer {
 
 footer .subscription-form {
   width: 30%;
-  margin-top: 40px;
-  margin-bottom: 30px;
+  margin-top: 4rem;
+  margin-bottom: 3rem;
 }
 
 footer .subscription-form h3 {
@@ -465,11 +501,11 @@ footer .subscription-form h3 {
 
 footer .subscription-form input {
   width: 100%;
-  padding: 10px;
-  font-size: 16px;
+  padding: 0.8rem;
+  font-size: 1rem;
   outline: none;
   border-width: 1px;
-  margin-top: 10px;
+  margin-top: 1rem;
 }
 
 .subscription-input-invalid {
@@ -482,15 +518,15 @@ footer .subscription-form input {
 }
 
 footer .subscription-form button {
-  margin-top: 5px;
+  margin-top: 1rem;
 }
 
 footer .bottom-content .footer-socials {
-  margin-bottom: 20px;
+  margin-bottom: 2rem;
 }
 
 footer .bottom-content .footer-socials i {
-  margin-right: 10px;
+  margin-right: 1rem;
   font-size: 1.8rem;
   -webkit-transition: color 0.2s ease;
   -o-transition: color 0.2s ease;
@@ -534,7 +570,6 @@ footer .bottom-content .bottom-text {
     justify-content: center;
     font-size: 1.3rem;
     background: #fff;
-    border-top: 0.5px solid black;
     width: 100%;
     position: fixed;
     bottom: 0;
@@ -588,6 +623,7 @@ footer .bottom-content .bottom-text {
     -ms-flex-direction: column;
     flex-direction: column;
     font-weight: 300;
+    font-size: 1.1rem;
     z-index: 3;
   }
   .wrapper-transform {
@@ -605,7 +641,7 @@ footer .bottom-content .bottom-text {
     -webkit-box-pack: justify;
     -ms-flex-pack: justify;
     justify-content: space-between;
-    padding: 0.5rem 1rem;
+    padding: 1rem 1rem;
     font-weight: bold;
     width: 100%;
   }
@@ -620,33 +656,51 @@ footer .bottom-content .bottom-text {
   nav.mobile-nav .logged-menu {
     text-align: left;
     position: static;
-    margin: 0 calc(1rem + 10px);
   }
   nav.mobile-nav .logged-menu li {
     width: 100%;
-    margin-bottom: 2.5rem;
+    margin-bottom: 1.5rem;
   }
   nav.mobile-nav .user {
     margin-top: 0;
   }
   nav.mobile-nav .card > div {
     margin-top: 2rem;
+    display: -ms-grid;
     display: grid;
+    -ms-grid-columns: 1fr 1rem 1fr;
     grid-template-columns: 1fr 1fr;
+    -webkit-column-gap: 1rem;
+    -moz-column-gap: 1rem;
     column-gap: 1rem;
   }
   nav.mobile-nav .number-wrapper {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
     text-align: center;
   }
   nav.mobile-nav .card-number {
     background: #000;
     color: #fff;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
     width: 2em;
     height: 2em;
@@ -691,12 +745,12 @@ footer .bottom-content .bottom-text {
     grid-template-rows: auto;
   }
   footer .subscription-form {
-    margin-top: 30px;
-    margin-bottom: 20px;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
   }
   footer .bottom-content {
-    margin-top: 20px;
-    margin-bottom: 30px;
+    margin-top: 2rem;
+    margin-bottom: 3rem;
   }
 }
 
