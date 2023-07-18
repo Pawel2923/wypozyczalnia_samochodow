@@ -10,8 +10,8 @@
             class Profile {
                 public $id;
                 public $login;
-                public $rented_vehicles;
                 public $name;
+                public $rented_vehicles;
                 public $unread;
     
                 function setProperty($propertyName, $value) {
@@ -21,18 +21,16 @@
             
             try {
                 $login = $_SESSION['login'];
-                $query = "SELECT * FROM profiles WHERE login=?";
+                $query = "SELECT * FROM profiles WHERE login=:login";
     
                 $stmt = $db_connection->prepare($query);
-                $stmt->bind_param("s", $login);
+                $stmt->bindParam("login", $login);
                 $stmt->execute();
                 $result = $stmt->fetch(PDO::FETCH_OBJ);
-                $array = $result->fetch_array();
-                ;
                 $db_connection = null;
     
                 $userProfile = new Profile;
-                foreach ($array as $key => $value) {
+                foreach ($result as $key => $value) {
                     $userProfile->setProperty($key, $value);
                 }
             } catch (Exception $error) {
