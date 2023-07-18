@@ -23,11 +23,11 @@ try {
     $stmt = $db_connection->prepare($query);
     $stmt->bind_param('s', $_SESSION['login']);
     $stmt->execute();
-    $result = $stmt->get_result();
-    $stmt->close();
+    $result = $stmt->fetch(PDO::FETCH_OBJ);
+    ;
 
-    if ($result->num_rows == 1) {
-        $id = $result->fetch_row();
+    if ($stmt->rowCount() == 1) {
+        $id = $result->fetch();
         $id = $id[0];
     }
 
@@ -43,14 +43,14 @@ try {
                 $stmt = $db_connection->prepare($query);
                 $stmt->bind_param('si', $name, $id);
                 $stmt->execute();
-                $stmt->close();
+                ;
             }
             if (!empty($sName)) {
                 $query = "UPDATE users SET nazwisko=? WHERE id=?";
                 $stmt = $db_connection->prepare($query);
                 $stmt->bind_param('si', $sName, $id);
                 $stmt->execute();
-                $stmt->close();
+                ;
             }
             if (!empty($tel)) {
                 if (filter_var($tel, FILTER_VALIDATE_INT)) {
@@ -58,7 +58,7 @@ try {
                     $stmt = $db_connection->prepare($query);
                     $stmt->bind_param('si', $tel, $id);
                     $stmt->execute();
-                    $stmt->close();
+                    ;
                 } else
                     $_SESSION['error'] = 'Wprowadzono niepoprawny numer telefonu';
             }
@@ -68,7 +68,7 @@ try {
                     $stmt = $db_connection->prepare($query);
                     $stmt->bind_param('si', $email, $id);
                     $stmt->execute();
-                    $stmt->close();
+                    ;
                 } else
                     $_SESSION['error'] = 'Wprowadzono niepoprawny email';
             }
@@ -86,9 +86,9 @@ try {
         $stmt = $db_connection->prepare($query);
         $stmt->bind_param('i', $id);
         $stmt->execute();
-        $result = $stmt->get_result();
-        $userData = $result->fetch_assoc();
-        $stmt->close();
+        $result = $stmt->fetch(PDO::FETCH_OBJ);
+        $userData = $result->fetch(PDO::FETCH_ASSOC);
+        ;
 
         foreach ($userData as $key => $value) {
             if (empty($value))
@@ -103,13 +103,13 @@ try {
         $stmt = $db_connection->prepare($query);
         $stmt->bind_param('i', $rentID);
         $stmt->execute();
-        $stmt->close();
+        ;
 
         $_SESSION['msg'] = 'Anulowano rezerwację.';
         header('Location: user.php#vehicles');
         exit;
     }
-    $db_connection->close();
+    $db_connection = null;
 } catch (Exception $error) {
     $error = addslashes($error);
     $error = str_replace("\n", "", $error);
@@ -241,20 +241,20 @@ try {
                                 $stmt = $db_connection->prepare($query);
                                 $stmt->bind_param('s', $login);
                                 $stmt->execute();
-                                $result = $stmt->get_result();
-                                $stmt->close();
+                                $result = $stmt->fetch(PDO::FETCH_OBJ);
+                                ;
 
-                                $userId = $result->fetch_row();
+                                $userId = $result->fetch();
                                 $userId = $userId[0];
 
                                 $query = "SELECT rezerwacja.id, marka, model, cena, na_ile, data_rezerwacji FROM vehicles INNER JOIN rezerwacja ON vehicles.id=rezerwacja.id_pojazdu WHERE id_klienta=?";
                                 $stmt = $db_connection->prepare($query);
                                 $stmt->bind_param('i', $userId);
                                 $stmt->execute();
-                                $result = $stmt->get_result();
-                                $stmt->close();
+                                $result = $stmt->fetch(PDO::FETCH_OBJ);
+                                ;
 
-                                while ($row = $result->fetch_assoc()) {
+                                while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                                     echo '<div class="option">';
                                     echo '<form action="" method="POST">';
                                     echo 'Nazwa samochodu: ' . $row['marka'] . ' ' . $row['model'] . '<br>';
@@ -267,7 +267,7 @@ try {
                                     echo '</div>';
                                 }
 
-                                $db_connection->close();
+                                $db_connection = null;
                             }
                             ?>
                         </section>

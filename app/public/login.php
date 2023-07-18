@@ -27,24 +27,26 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
 
             if (!isset($_SESSION['connectionError'])) {
                 // Sprawdzenie czy istnieje taki login/email
-                $query = "SELECT `login`, `email` FROM `users` WHERE `login`=? OR `email`=?";
+                $query = "SELECT `login`, `email` FROM `users` WHERE `login`=:login OR `email`=:email";
 
                 $stmt = $db_connection->prepare($query);
-                $stmt->bind_param("ss", $login, $email);
+                $stmt->bindParam('login', $login, PDO::PARAM_STR);
+                $stmt->bindParam('email', $email, PDO::PARAM_STR);
                 $stmt->execute();
 
-                $result = $stmt->get_result();
+                $result = $stmt->fetch(PDO::FETCH_OBJ);
 
-                if ($result->fetch_assoc()) {
-                    $getPasswd = "SELECT `password`, `is_admin`, `change_passwd` FROM `users` WHERE `login`=? OR `email`=?";
+                if ($result->fetch(PDO::FETCH_ASSOC)) {
+                    $getPasswd = "SELECT `password`, `is_admin`, `change_passwd` FROM `users` WHERE `login`=:login OR `email`=:email";
 
-                    $stmt2 = $db_connection->prepare($getPasswd);
-                    $stmt2->bind_param("ss", $login, $email);
-                    $stmt2->execute();
+                    $stmt = $db_connection->prepare($getPasswd);
+                    $stmt->bindParam('login', $login, PDO::PARAM_STR);
+                    $stmt->bindParam('email', $email, PDO::PARAM_STR);
+                    $stmt->execute();
 
-                    $result2 = $stmt2->get_result();
+                    $result2 = $stmt->fetch(PDO::FETCH_OBJ);
 
-                    $queriedData = $result2->fetch_assoc();
+                    $queriedData = $result2->fetch(PDO::FETCH_ASSOC);
 
                     if ($queriedData['change_passwd']) {
                         $_SESSION['login'] = $login;
@@ -58,8 +60,7 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
                             $_SESSION['isLogged'] = true;
                             $_SESSION['isAdmin'] = $queriedData['is_admin'];
 
-                            $stmt->close();
-                            $db_connection->close();
+                            $db_connection = null;
 
                             header('Location: index.php');
                             exit;
@@ -69,20 +70,19 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
                 } else
                     $_SESSION['login-error'] = "Podany login lub e-mail jest nieprawidłowy";
 
-                $stmt->close();
-                $db_connection->close();
+                $db_connection = null;
             } else {
                 throw new Exception("Błąd połączenia z bazą danych");
             }
-        } catch (Exception $error) {
-            $error = addslashes($error);
-            $error = str_replace("\n", "", $error);
+        } catch (Exception $Exception) {
+            $Exception = addslashes($Exception);
+            $Exception = str_replace("\n", "", $Exception);
             $consoleLog->show = true;
-            $consoleLog->content = $error;
+            $consoleLog->content = $Exception;
             $consoleLog->is_error = true;
-        } catch (mysqli_sql_exception $error) {
+        } catch (PDOException $Exception) {
             $consoleLog->show = true;
-            $consoleLog->content = $error;
+            $consoleLog->content = $Exception;
             $consoleLog->is_error = true;
         }
     }

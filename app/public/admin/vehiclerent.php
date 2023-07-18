@@ -12,42 +12,35 @@ if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
 
 include_once("../inc/consoleMessage.php");
 
-require('../inc/veh.php');
-if (isset($_POST['vehicle-id']) && isset($vehicle)) {
-    $vehId = htmlentities($_POST['vehicle-id']);
-    if ($vehId <= $vehNum) {
-        ($vehicle[$vehId - 1]->isAvailable) ? $access = 0 : $access = 1;
+if (isset($_POST['id'])) {
+    $rentID = htmlentities($_POST['id']);
+    if ($rentID > 0) {
+        try {
+            require('../db/db_connection.php');
+            $query = "DELETE FROM rezerwacja WHERE id=?";
+            $stmt = $db_connection->prepare($query);
+            $stmt->bind_param('i', $rentID);
+            $stmt->execute();
 
-        if (isset($access)) {
-            try {
-                require('../db/db_connection.php');
-                $query = "UPDATE vehicles SET is_available=? WHERE id=?";
-                $stmt = $db_connection->prepare($query);
-                $stmt->bind_param('ii', $access, $vehId);
-                $stmt->execute();
-                if ($db_connection->affected_rows > 0) {
-                    $_SESSION['msg'] = 'Udało się zmienić dostępność.';
-                    header('Location: vehaccess.php');
-                    exit;
-                } else
-                    $_SESSION['error'] = 'Nie udało się dokonać zmiany.';
+            if ($db_connection->affected_rows > 0)
+                $_SESSION['msg'] = 'Udało się usunąć rezerwację.';
+            else
+                $_SESSION['msg'] = 'Nie udało się usunąć rezerwacji.';
 
-                $stmt->close();
-                $db_connection->close();
-            } catch (Exception $error) {
-                $error = addslashes($error);
-                $error = str_replace("\n", "", $error);
-                $consoleLog->show = true;
-                $consoleLog->content = $error;
-                $consoleLog->is_error = true;
-            } catch (mysqli_sql_exception $error) {
-                $consoleLog->show = true;
-                $consoleLog->content = $error;
-                $consoleLog->is_error = true;
-            }
+            ;
+            $db_connection = null;
+        } catch (Exception $error) {
+            $error = addslashes($error);
+            $error = str_replace("\n", "", $error);
+            $consoleLog->show = true;
+            $consoleLog->content = $error;
+            $consoleLog->is_error = true;
+        } catch (mysqli_sql_exception $error) {
+            $consoleLog->show = true;
+            $consoleLog->content = $error;
+            $consoleLog->is_error = true;
         }
-    } else
-        $_SESSION['error'] = 'Wpisano niepoprawne ID.';
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -137,25 +130,48 @@ if (isset($_POST['vehicle-id']) && isset($vehicle)) {
                         <header>
                             <h2><a href="../admin.php#vehicles">Pojazdy</a></h2>
                             <i class="fas fa-chevron-right"></i>
-                            <h2>Dostępność pojazdów</h2>
+                            <h2>Rezerwacja pojazdów</h2>
                         </header>
                         <section>
-                            <form action="" method="POST">
-                                <label>
-                                    <h3>Wpisz id pojazdu</h3>
-                                </label>
-                                <input type="number" name="vehicle-id" min="1" required>
-                                <button type="submit">Zmień</button>
-                            </form>
-                        </section>
-                        <section>
-                            <div class="cars">
-                                <?php
-                                if (isset($vehicle))
-                                    printCarInfoTable($vehNum, $vehicle, 0, true);
-                                else
-                                    echo 'W bazie nie ma żadnych pojazdów.';
-                                ?>
+                            <div class="option">
+                                <h3>Usuwanie rezerwacji</h3>
+                                <form action="" method="POST">
+                                    <label for="id">Wpisz ID rezerwacji:</label>
+                                    <input type="number" name="id" min="1" required>
+                                    <button type="submit">Usuń</button>
+                                </form>
+                            </div>
+                            <h3>Lista rezerwacji</h3>
+                            <div class="table">
+                                <table>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>ID pojazdu</th>
+                                        <th>ID użytkownika</th>
+                                        <th>Data rezerwacji</th>
+                                        <th>Na ile godzin</th>
+                                    </tr>
+                                    <?php
+                                    require('../db/db_connection.php');
+                                    $query = "SELECT * FROM rezerwacja";
+
+                                    $stmt = $db_connection->prepare($query);
+                                    $stmt->execute();
+
+                                    $result = $stmt->fetch(PDO::FETCH_OBJ);
+                                    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                                        echo '<tr>';
+                                        echo '<td>' . $row['id'] . '</td>';
+                                        echo '<td>' . $row['id_pojazdu'] . '</td>';
+                                        echo '<td>' . $row['id_klienta'] . '</td>';
+                                        echo '<td>' . $row['data_rezerwacji'] . '</td>';
+                                        echo '<td>' . $row['na_ile'] . '</td>';
+                                        echo '<tr>';
+                                    }
+                                    ;
+                                    $db_connection = null;
+                                    ?>
+                                </table>
                             </div>
                         </section>
                     </div>

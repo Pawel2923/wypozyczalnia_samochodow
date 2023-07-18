@@ -1,8 +1,8 @@
 <?php
 session_start();
-if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
-    if (!$_SESSION['isAdmin']) {
-        header('Location: ../index.php');
+if (isset($_SESSION['isLogged'])) {
+    if (!$_SESSION['isLogged']) {
+        header('Location: ../login.php');
         exit;
     }
 } else {
@@ -12,29 +12,52 @@ if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
 
 include_once("../inc/consoleMessage.php");
 
-if (isset($_POST['vehicle-id'])) {
-    $vehicleId = htmlentities($_POST['vehicle-id']);
+if (isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SESSION['login'])) {
+    $newPasswd = htmlentities($_POST['password']);
+    $confirmPasswd = htmlentities($_POST['password-confirm']);
 
     try {
         require('../db/db_connection.php');
-        if (isset($db_connection)) {
-            $query = "DELETE FROM vehicles WHERE id=?";
+        $query = "SELECT id FROM users WHERE login=?";
+        $stmt = $db_connection->prepare($query);
+        $stmt->bind_param('s', $_SESSION['login']);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_OBJ);
+        ;
+        ($stmt->rowCount() == 1) ? $id = $result->fetch() : $_SESSION['error'] = 'Takiego loginu nie ma w bazie danych.';
+
+        if (isset($id)) {
+            $id = $id[0];
+            $query = "SELECT password FROM users WHERE id=?";
             $stmt = $db_connection->prepare($query);
-            if ($stmt) {
-                $stmt->bind_param('i', $vehicleId);
-                $stmt->execute();
+            $stmt->bind_param('i', $id);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_OBJ);
+            $hashedPasswd = $result->fetch();
+            $hashedPasswd = $hashedPasswd[0];
+            ;
 
-                if ($db_connection->affected_rows > 0)
-                    $_SESSION['msg'] = 'Udało się usunąć pojazd.';
-                else
-                    $_SESSION['error'] = 'Nie udało się usunąć pojazdu.';
-            } else 
-                throw new Exception(`Wystąpił błąd podczas wysyłania zapytania`);
+            if (password_verify($newPasswd, $hashedPasswd))
+                $_SESSION['error'] = 'Nowe hasło nie powinno być takie samo jak stare hasło.';
+            else {
+                if ($newPasswd === $confirmPasswd) {
+                    $newHashedPasswd = password_hash($newPasswd, PASSWORD_DEFAULT, array('cost' => 10));
+                    $query = "UPDATE users SET password=? WHERE id=?";
+                    $stmt = $db_connection->prepare($query);
+                    $stmt->bind_param('si', $newHashedPasswd, $id);
+                    $stmt->execute();
 
-            $stmt->close();
-            $db_connection->close();
-        } else
-            throw new Exception("Błąd połączenia z bazą danych");
+                    if ($db_connection->affected_rows == 1) {
+                        $_SESSION['msg'] = 'Pomyślnie zmieniono hasło. Za chwilę wystąpi wylogowanie...';
+                        echo '<script src="../js/changeLocation.js" class="script-changeLocation" id="5000" value="../logout.php"></script>';
+                    } else
+                        $_SESSION['error'] = 'Nie udało się zmienić hasła.';
+                } else
+                    $_SESSION['error'] = 'Hasła nie są takie same.';
+            }
+        }
+
+        $db_connection = null;
     } catch (Exception $error) {
         $error = addslashes($error);
         $error = str_replace("\n", "", $error);
@@ -66,7 +89,15 @@ if (isset($_POST['vehicle-id'])) {
     <link rel="stylesheet" href="../styles/panel.css">
     <link rel="Shortcut Icon" href="../img/logo.svg" />
     <script src="https://kit.fontawesome.com/32373b1277.js" nonce="kitFontawesome" crossorigin="anonymous"></script>
-    <?php include_once("./inc/theme.php") ?>
+    <?php
+    if (isset($_POST['theme'])) {
+        if ($_POST['theme'] != "default")
+            echo '<link rel="stylesheet" href="styles/' . $_POST['theme'] . '.css">';
+    } elseif (isset($_COOKIE['theme'])) {
+        if ($_COOKIE['theme'] != "default")
+            echo '<link rel="stylesheet" href="styles/' . $_COOKIE['theme'] . '.css">';
+    }
+    ?>
 </head>
 
 <body>
@@ -75,19 +106,16 @@ if (isset($_POST['vehicle-id'])) {
         <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="../admin.php">
+                    <a href="../user.php">
                         <li>Home</li>
                     </a>
-                    <a class="veh-link" href="../admin.php#vehicles">
+                    <a class="veh-link" href="../user.php#vehicles">
                         <li>Pojazdy</li>
                     </a>
-                    <a class="users-link" href="../admin.php#users">
-                        <li>Użytkownicy</li>
+                    <a class="profile-link" href="../user.php#profile">
+                        <li>Edytuj profil</li>
                     </a>
-                    <a href="../admin/inbox.php">
-                        <li>Wiadomości</li>
-                    </a>
-                    <a class="settings-link" href="../admin.php#settings">
+                    <a class="settings-link" href="../user.php#settings">
                         <li>Ustawienia</li>
                     </a>
                 </ul>
@@ -110,14 +138,14 @@ if (isset($_POST['vehicle-id'])) {
                         <div class="mobile-logged-menu-overlay"></div>
                         <i class="fas fa-user"></i>
                         <span class="login-caption"><?php if (isset($_SESSION['login'])) echo $_SESSION['login']; ?></span>
-                        <?php include("../inc/logged-menu.php"); ?>
+                        <?php include("../inc/logged-menu.php") ?>
                     </div>
                 </div>
                 <div class="overlay"></div>
             </div>
             <div class="all-settings">
                 <header>
-                    <h1><a href="../admin.php">Panel administracyjny</a></h1>
+                    <h1><a href="../user.php">Panel użytkownika</a></h1>
                     <div class="user">
                         <a href="../login.php" class="login">
                             <i class="fas fa-sign-in-alt"></i>
@@ -131,30 +159,29 @@ if (isset($_POST['vehicle-id'])) {
                     </div>
                 </header>
                 <main>
-                    <div class="vehicles">
+                    <div class="users">
                         <header>
-                            <h2><a href="../admin.php#vehicles">Pojazdy</a></h2>
+                            <h2><a href="../user.php#profile">Edytuj swój profil</a></h2>
                             <i class="fas fa-chevron-right"></i>
-                            <h2>Usuwanie pojazdów</h2>
+                            <h2>Zmień hasło</h2>
                         </header>
                         <section>
-                            <form action="" method="POST">
-                                <label>
-                                    <h3>Wpisz id pojazdu</h3>
-                                </label>
-                                <input type="number" name="vehicle-id" min="1" required>
-                                <button type="submit">Usuń pojazd</button>
-                            </form>
-                        </section>
-                        <section>
-                            <div class="cars">
-                                <?php
-                                require('../inc/veh.php');
-                                if (isset($vehicle))
-                                    printCarInfoTable($vehNum, $vehicle, 0, true);
-                                else
-                                    echo 'W bazie nie ma żadnych pojazdów.';
-                                ?>
+                            <div class="form-wrapper">
+                                <form action="" method="POST">
+                                    <div class="password">
+                                        <label for="password-field">Nowe hasło</label>
+                                        <br>
+                                        <input type="password" name="password" id="password-field" minlength="4" required>
+                                    </div>
+                                    <div class="password-confirm">
+                                        <label for="password-field-confirm">Potwierdź hasło</label>
+                                        <br>
+                                        <input type="password" name="password-confirm" id="password-field-confirm" minlength="4" required>
+                                    </div>
+                                    <div class="form-bottom">
+                                        <button type="submit">Zmień</button>
+                                    </div>
+                                </form>
                             </div>
                         </section>
                     </div>
@@ -173,9 +200,8 @@ if (isset($_POST['vehicle-id'])) {
         </div>
     </div>
     <script src="../js/panelHandler.js"></script>
-    <script src="js/main.js" type="module"></script>
     <?php
-    include_once('./inc/logged.php');
+    include_once('./logged.php');
     if (isset($consoleLog)) {
         if ($consoleLog->show) {
             if ($consoleLog->is_error) {
@@ -186,6 +212,7 @@ if (isset($_POST['vehicle-id'])) {
         }
     }
     ?>
+    <script src="../js/loginHandler.js"></script>
 </body>
 
 </html>
