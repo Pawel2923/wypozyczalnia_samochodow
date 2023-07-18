@@ -34,13 +34,14 @@
             </span>
         </section>
         <section>
-            <h2>Najnowsze samochody do rezerwacji</h2>
+            <h2>Najnowsze samochody</h2>
             <div class="cars">
                 <?php
                 require("inc/veh.php");
-                if ($fetch_is_success) {
-                    $options = new PrintOptions("Wypożycz", 'card', true, true, 7);
-                    printCarInfo($options);
+                $options = new PrintOptions("card", 'Wypożycz', 6, true, true);
+                $result = printCarInfo($options);
+                if ($result === null) {
+                    echo '<p class="no-vehicles">Obecnie nie ma pojazdów do rezerwacji</p>';
                 }
                 ?>
             </div>

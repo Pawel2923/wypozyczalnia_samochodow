@@ -26,11 +26,12 @@
             <h2>Wybierz pojazd</h2>
             <div class="cars cars-list">
                 <?php
-                require('inc/veh.php');
-                if (isset($vehicle))
-                    printCarInfoList("Wypożycz", $vehNum, $vehicle);
-                else
-                    echo '<p>Obecnie nie ma pojazdów do wypożyczenia</p>';
+                require("inc/veh.php");
+                $options = new PrintOptions('list');
+                $result = printCarInfo($options);
+                if ($result === null) {
+                    echo '<p class="no-vehicles">Obecnie nie ma pojazdów do rezerwacji</p>';
+                }
                 ?>
             </div>
         </section>
