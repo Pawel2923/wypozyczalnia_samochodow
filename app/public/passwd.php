@@ -10,58 +10,62 @@ if (isset($_SESSION['isLogged'])) {
     exit;
 }
 
-if (isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SESSION['login'])) {
+if (isset($_POST['old-password']) && isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SESSION['login'])) {
+    $oldPasswd = htmlentities($_POST['old-password']);
     $newPasswd = htmlentities($_POST['password']);
     $confirmPasswd = htmlentities($_POST['password-confirm']);
 
     try {
         require('db/db_connection.php');
-        $query = "SELECT id FROM users WHERE login=?";
+        $query = "SELECT id FROM users WHERE login=:login";
         $stmt = $db_connection->prepare($query);
-        $stmt->bind_param('s', $_SESSION['login']);
+        $stmt->bindParam('login', $_SESSION['login'], PDO::PARAM_STR);
         $stmt->execute();
-        $result = $stmt->get_result();
-        $stmt->close();
-        ($result->num_rows == 1) ? $id = $result->fetch_row() : $_SESSION['error'] = 'Takiego loginu nie ma w bazie danych.';
+        $result = $stmt->fetch(PDO::FETCH_OBJ);
+        ($stmt->rowCount() == 1) ? $id = $result->fetch() : $_SESSION['msg'] = 'Takiego loginu nie ma w bazie danych.';
 
         if (isset($id)) {
             $id = $id[0];
-            $query = "SELECT password FROM users WHERE id=?";
+            $query = "SELECT password FROM users WHERE id=:userID";
             $stmt = $db_connection->prepare($query);
-            $stmt->bind_param('i', $id);
+            $stmt->bindParam('userID', $id, PDO::PARAM_INT);
             $stmt->execute();
-            $result = $stmt->get_result();
-            $hashedPasswd = $result->fetch_row();
+            $result = $stmt->fetch(PDO::FETCH_OBJ);
+            $hashedPasswd = $result->fetch();
             $hashedPasswd = $hashedPasswd[0];
-            $stmt->close();
 
-            if ($newPasswd === $confirmPasswd) {
-                $newHashedPasswd = password_hash($newPasswd, PASSWORD_DEFAULT, array('cost' => 10));
-                $query = "UPDATE users SET password=?, change_passwd=0 WHERE id=?";
-                $stmt = $db_connection->prepare($query);
-                $stmt->bind_param('si', $newHashedPasswd, $id);
-                $stmt->execute();
+            if (password_verify($oldPasswd, $hashedPasswd)) {
+                if ($newPasswd === $confirmPasswd) {
+                    if ($newPasswd !== $oldPasswd) {
+                        $newHashedPasswd = password_hash($newPasswd, PASSWORD_DEFAULT, array('cost' => 10));
+                        $query = "UPDATE users SET password=:newPasswd WHERE id=:userID";
+                        $stmt = $db_connection->prepare($query);
+                        $stmt->bindParam('newPasswd', $newHashedPasswd, PDO::PARAM_STR);
+                        $stmt->bindParam('userID', $id, PDO::PARAM_INT);
+                        $stmt->execute();
 
-                if ($db_connection->affected_rows == 1) {
-                    $_SESSION['msg'] = 'Pomyślnie zmieniono hasło...';
-                    session_destroy();
-                    echo '<script src="js/changeLocation.js" class="script-changeLocation" id="3000" value="login.php"></script>';
+                        if ($stmt->rowCount() === 1)
+                            $_SESSION['msg'] = 'Pomyślnie zmieniono hasło. <a href="index.php">Wróć na stronę główną</a>';
+                        else
+                            $_SESSION['error'] = 'Nie udało się zmienić hasła.';
+                    } else
+                        $_SESSION['error'] = 'Nowe hasło jest takie samo jak stare hasło.';
                 } else
-                    $_SESSION['error'] = 'Nie udało się zmienić hasła.';
+                    $_SESSION['error'] = 'Hasła nie są takie same.';
             } else
-                $_SESSION['error'] = 'Hasła nie są takie same.';
+                $_SESSION['error'] = 'Stare hasło jest nieprawidłowe.';
         }
 
-        $db_connection->close();
-    } catch (Exception $error) {
-        $error = addslashes($error);
-        $error = str_replace("\n", "", $error);
+        $db_connection = null;
+    } catch (Exception $Exception) {
+        $Exception = addslashes($Exception);
+        $Exception = str_replace("\n", "", $Exception);
         $consoleLog->show = true;
-        $consoleLog->content = $error;
+        $consoleLog->content = $Exception;
         $consoleLog->is_error = true;
-    } catch (mysqli_sql_exception $error) {
+    } catch (PDOException $Exception) {
         $consoleLog->show = true;
-        $consoleLog->content = $error;
+        $consoleLog->content = $Exception;
         $consoleLog->is_error = true;
     }
 }
@@ -98,6 +102,11 @@ if (isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SE
         </div>
         <div class="form-wrapper">
             <form action="" method="POST">
+                <div class="old-password">
+                    <label for="old-password-field">Stare hasło</label>
+                    <br>
+                    <input type="password" name="old-password" id="old-password-field" minlength="4" required>
+                </div>
                 <div class="password">
                     <label for="password-field">Nowe hasło</label>
                     <br>

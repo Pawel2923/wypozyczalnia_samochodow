@@ -24,9 +24,9 @@ if (isset($_POST['new-login']) && isset($_SESSION['login'])) {
             $stmt = $db_connection->prepare($query);
             $stmt->bind_param('s', $newLogin);
             $stmt->execute();
-            $result = $stmt->get_result();
-            $stmt->close();
-            $checkLogin = $result->fetch_row();
+            $result = $stmt->fetch(PDO::FETCH_OBJ);
+            ;
+            $checkLogin = $result->fetch();
             $checkLogin = $checkLogin[0];
 
             if ($checkLogin != 1) {
@@ -34,17 +34,17 @@ if (isset($_POST['new-login']) && isset($_SESSION['login'])) {
                 $stmt = $db_connection->prepare($query);
                 $stmt->bind_param('s', $_SESSION['login']);
                 $stmt->execute();
-                $result = $stmt->get_result();
-                $stmt->close();
+                $result = $stmt->fetch(PDO::FETCH_OBJ);
+                ;
 
-                if ($result->num_rows == 1) {
-                    $id = $result->fetch_row();
+                if ($stmt->rowCount() == 1) {
+                    $id = $result->fetch();
                     $id = $id[0];
                     $query = "UPDATE users SET login=? WHERE id=?";
                     $stmt = $db_connection->prepare($query);
                     $stmt->bind_param('si', $newLogin, $id);
                     $stmt->execute();
-                    $stmt->close();
+                    ;
 
                     $_SESSION['msg'] = 'Pomyślnie zmieniono login. Za chwilę wystąpi wylogowanie...';
                     echo '<script src="js/changeLocation.js" class="script-changeLocation" id="5000" value="../logout.php"></script>';
@@ -53,7 +53,7 @@ if (isset($_POST['new-login']) && isset($_SESSION['login'])) {
             } else
                 $_SESSION['error'] = 'Taki login jest już zajęty.';
 
-            $db_connection->close();
+            $db_connection = null;
         } catch (Exception $error) {
             $error = addslashes($error);
             $error = str_replace("\n", "", $error);

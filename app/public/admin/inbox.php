@@ -12,33 +12,40 @@ if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
 
 include_once("../inc/consoleMessage.php");
 
-if (isset($_POST['user-id'])) {
-    $userID = htmlentities($_POST['user-id']);
+if (isset($_POST['message-id'])) {
+    if ($_POST['message-id'] > 0) {
+        $messageID = htmlentities($_POST['message-id']);
 
-    try {
-        require('../db/db_connection.php');
-        $query = "UPDATE users SET change_passwd=1 WHERE id=? AND is_admin=0";
-        $stmt = $db_connection->prepare($query);
-        $stmt->bind_param('i', $userID);
-        $stmt->execute();
+        try {
+            require('../db/db_connection.php');
 
-        if ($db_connection->affected_rows > 0)
-            $_SESSION['msg'] = 'Użytkownik musi ustawić nowe hasło przy następnym logowaniu.';
-        else
-            $_SESSION['error'] = 'Nie udało się zresetować hasła. Pamiętaj, że nie można resetować hasła administratorów lub użytkowników, których hasła zostały już zresetowane.';
+            $query = 'DELETE FROM mailboxes WHERE message_id=?';
+            $stmt = $db_connection->prepare($query);
+            $stmt->bind_param('i', $messageID);
+            $stmt->execute();
+            ;
 
-        $stmt->close();
-        $db_connection->close();
-    } catch (Exception $error) {
-        $error = addslashes($error);
-        $error = str_replace("\n", "", $error);
-        $consoleLog->show = true;
-        $consoleLog->content = $error;
-        $consoleLog->is_error = true;
-    } catch (mysqli_sql_exception $error) {
-        $consoleLog->show = true;
-        $consoleLog->content = $error;
-        $consoleLog->is_error = true;
+            $query = 'DELETE FROM messages WHERE id=?';
+            $stmt = $db_connection->prepare($query);
+            $stmt->bind_param('i', $messageID);
+            $stmt->execute();
+            ;
+
+            $_SESSION['msg'] = 'Pomyślnie usunięto wiadomość.';
+
+            $db_connection = null;
+            unset($_POST['message-id']);
+        } catch (Exception $error) {
+            $error = addslashes($error);
+            $error = str_replace("\n", "", $error);
+            $consoleLog->show = true;
+            $consoleLog->content = $error;
+            $consoleLog->is_error = true;
+        } catch (mysqli_sql_exception $error) {
+            $consoleLog->show = true;
+            $consoleLog->content = $error;
+            $consoleLog->is_error = true;
+        }
     }
 }
 ?>
@@ -58,6 +65,7 @@ if (isset($_POST['user-id'])) {
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/panel.css">
+    <link rel="stylesheet" href="styles/inbox.css">
     <link rel="Shortcut Icon" href="../img/logo.svg" />
     <script src="https://kit.fontawesome.com/32373b1277.js" nonce="kitFontawesome" crossorigin="anonymous"></script>
     <?php include_once("./inc/theme.php") ?>
@@ -78,7 +86,7 @@ if (isset($_POST['user-id'])) {
                     <a class="users-link" href="../admin.php#users">
                         <li>Użytkownicy</li>
                     </a>
-                    <a href="../admin/inbox.php">
+                    <a href="inbox.php">
                         <li>Wiadomości</li>
                     </a>
                     <a class="settings-link" href="../admin.php#settings">
@@ -125,45 +133,72 @@ if (isset($_POST['user-id'])) {
                     </div>
                 </header>
                 <main>
-                    <div class="users">
+                    <div class="messages">
                         <header>
-                            <h2><a href="../admin.php#users">Użytkownicy</a></h2>
-                            <i class="fas fa-chevron-right"></i>
-                            <h2>Resetowanie haseł</h2>
+                            <h2>Wiadomości</h2>
                         </header>
                         <section>
-                            <form action="" method="POST">
-                                <label>ID użytkownika</label>
-                                <input type="number" name="user-id" min="1" required>
-                                <button type="submit">Resetuj</button>
-                            </form>
-                            <h3>Lista użytkowników</h3>
-                            <div class="table">
-                                <table>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Login</th>
-                                    </tr>
-                                    <?php
-                                    // Wylistowanie użytkowników w tabeli
-                                    require('../db/db_connection.php');
-                                    $query = "SELECT id, login FROM users WHERE is_admin=0";
+                            <?php
+                            require('../db/db_connection.php');
 
-                                    $stmt = $db_connection->prepare($query);
-                                    $stmt->execute();
+                            $query = "SELECT messages.* FROM messages INNER JOIN mailboxes ON mailboxes.message_id=messages.id WHERE user=? AND direction='in' ORDER BY date DESC";
+                            $stmt = $db_connection->prepare($query);
+                            $stmt->bind_param('s', $_SESSION['login']);
+                            $stmt->execute();
+                            $result = $stmt->fetch(PDO::FETCH_OBJ);
+                            ;
 
-                                    $result = $stmt->get_result();
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo '<tr>';
-                                        echo '<td>' . $row['id'] . '</td>';
-                                        echo '<td>' . $row['login'] . '</td>';
-                                        echo '<tr>';
+                            echo '<h3>Odebrane</h3>';
+                            if ($stmt->rowCount() > 0) {
+                                while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                                    echo '<div class="box-msg">';
+                                    echo '<form action="" method="POST">';
+                                    echo '<input type="hidden" name="message-id" value="' . $row['id'] . '">';
+                                    echo '<span>Od:</span> ' . $row['email'];
+                                    echo '<br>';
+                                    echo $row['imie'] . ' ' . $row['nazwisko'];
+                                    echo '<br>';
+                                    if ($row['tel'] != 0) {
+                                        echo '<span>Telefon:</span> ' . $row['tel'];
+                                        echo '<br>';
                                     }
-                                    $stmt->close();
-                                    $db_connection->close();
-                                    ?>
-                                </table>
-                            </div>
+                                    echo '<span>Dostarczono:</span> ' . $row['date'];
+                                    echo '<br>';
+                                    echo '<span>Treść wiadomości:</span> ' . $row['message'];
+                                    echo '<br>';
+                                    echo '<button type="submit">Usuń wiadomość</button>';
+                                    echo '</form>';
+                                    echo '</div>';
+                                }
+                            } else
+                                echo 'Nie masz żadnych wiadomości.';
+
+                            $query = "SELECT messages.*, mailboxes.user FROM messages INNER JOIN mailboxes ON mailboxes.message_id=messages.id WHERE user=? AND direction='out' ORDER BY date DESC";
+                            $stmt = $db_connection->prepare($query);
+                            $stmt->bind_param('s', $_SESSION['login']);
+                            $stmt->execute();
+                            $result = $stmt->fetch(PDO::FETCH_OBJ);
+                            ;
+
+                            echo '<h3>Wysłane</h3>';
+                            if ($stmt->rowCount() > 0) {
+                                while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                                    echo '<div class="box-msg">';
+                                    echo '<form action="" method="POST">';
+                                    echo '<input type="hidden" name="message-id" value="' . $row['id'] . '">';
+                                    echo '<span>Do:</span> ' . $row['user'];
+                                    echo '<br>';
+                                    echo '<span>Dostarczono:</span> ' . $row['date'];
+                                    echo '<br>';
+                                    echo '<span>Treść wiadomości:</span> ' . $row['message'];
+                                    echo '<br>';
+                                    echo '<button type="submit">Usuń wiadomość</button>';
+                                    echo '</form>';
+                                    echo '</div>';
+                                }
+                            } else
+                                echo 'Nie wysłałeś żadnych wiadomości.';
+                            ?>
                         </section>
                     </div>
                 </main>

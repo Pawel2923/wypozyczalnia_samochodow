@@ -21,26 +21,25 @@ if (isset($_GET['vehicle-id']) || isset($_SESSION['vehicle-id'])) {
 
     try {
         require('db/db_connection.php');
-        $query = "SELECT * FROM vehicles WHERE id=?";
+        $query = "SELECT * FROM vehicles WHERE id=:vehicleID";
         $stmt = $db_connection->prepare($query);
-        $stmt->bind_param('i', $vehicleID);
+        $stmt->bindParam('vehicleID', $vehicleID, PDO::PARAM_INT);
         $stmt->execute();
-        $result = $stmt->get_result();
+        $result = $stmt->fetch(PDO::FETCH_OBJ);
 
-        $attribute = $result->fetch_assoc();
+        $attribute = $result->fetch(PDO::FETCH_ASSOC);
 
-        $stmt->close();
-        $db_connection->close();
         $_SESSION['vehicle-id'] = $vehicleID;
-    } catch (Exception $error) {
-        $error = addslashes($error);
-        $error = str_replace("\n", "", $error);
+        $db_connection = null;
+    } catch (Exception $Exception) {
+        $Exception = addslashes($Exception);
+        $Exception = str_replace("\n", "", $Exception);
         $consoleLog->show = true;
-        $consoleLog->content = $error;
+        $consoleLog->content = $Exception;
         $consoleLog->is_error = true;
-    } catch (mysqli_sql_exception $error) {
+    } catch (PDOException $Exception) {
         $consoleLog->show = true;
-        $consoleLog->content = $error;
+        $consoleLog->content = $Exception;
         $consoleLog->is_error = true;
     }
 } else {

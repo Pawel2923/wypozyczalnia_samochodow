@@ -12,33 +12,42 @@ if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
 
 include_once("../inc/consoleMessage.php");
 
-if (isset($_POST['user-id'])) {
-    $userID = htmlentities($_POST['user-id']);
+require('../inc/veh.php');
+if (isset($_POST['vehicle-id']) && isset($vehicle)) {
+    $vehId = htmlentities($_POST['vehicle-id']);
+    if ($vehId <= $vehNum) {
+        ($vehicle[$vehId - 1]->isAvailable) ? $access = 0 : $access = 1;
 
-    try {
-        require('../db/db_connection.php');
-        $query = "DELETE FROM users WHERE id=? AND is_admin=0";
-        $stmt = $db_connection->prepare($query);
-        $stmt->bind_param('i', $userID);
-        $stmt->execute();
+        if (isset($access)) {
+            try {
+                require('../db/db_connection.php');
+                $query = "UPDATE vehicles SET is_available=? WHERE id=?";
+                $stmt = $db_connection->prepare($query);
+                $stmt->bind_param('ii', $access, $vehId);
+                $stmt->execute();
+                if ($db_connection->affected_rows > 0) {
+                    $_SESSION['msg'] = 'Udało się zmienić dostępność.';
+                    header('Location: vehaccess.php');
+                    exit;
+                } else
+                    $_SESSION['error'] = 'Nie udało się dokonać zmiany.';
 
-        if ($db_connection->affected_rows > 0)
-            $_SESSION['msg'] = 'Udało się usunąć użytkownika.';
-        else
-            $_SESSION['error'] = 'Nie udało się usunąć użytkownika. Pamiętaj, że nie można usuwać administratorów.';
-
-        $stmt->close();
-        $db_connection->close();
-    } catch (Exception $error) {
-        $error = addslashes($error);
-        $error = str_replace("\n", "", $error);
-        $consoleLog->show = true;
-        $consoleLog->content = $error;
-        $consoleLog->is_error = true;
-    } catch (mysqli_sql_exception $error) {
-        $consoleLog->show = true;
-        $consoleLog->content = $error;
-    }
+                ;
+                $db_connection = null;
+            } catch (Exception $error) {
+                $error = addslashes($error);
+                $error = str_replace("\n", "", $error);
+                $consoleLog->show = true;
+                $consoleLog->content = $error;
+                $consoleLog->is_error = true;
+            } catch (mysqli_sql_exception $error) {
+                $consoleLog->show = true;
+                $consoleLog->content = $error;
+                $consoleLog->is_error = true;
+            }
+        }
+    } else
+        $_SESSION['error'] = 'Wpisano niepoprawne ID.';
 }
 ?>
 <!DOCTYPE html>
@@ -124,46 +133,29 @@ if (isset($_POST['user-id'])) {
                     </div>
                 </header>
                 <main>
-                    <div class="users">
+                    <div class="vehicles">
                         <header>
-                            <h2><a href="../admin.php#users">Użytkownicy</a></h2>
+                            <h2><a href="../admin.php#vehicles">Pojazdy</a></h2>
                             <i class="fas fa-chevron-right"></i>
-                            <h2>Usuń użytkowników</h2>
+                            <h2>Dostępność pojazdów</h2>
                         </header>
                         <section>
                             <form action="" method="POST">
-                                <label>ID użytkownika</label>
-                                <input type="number" name="user-id" min="1" required>
-                                <button type="submit">Usuń</button>
+                                <label>
+                                    <h3>Wpisz id pojazdu</h3>
+                                </label>
+                                <input type="number" name="vehicle-id" min="1" required>
+                                <button type="submit">Zmień</button>
                             </form>
                         </section>
                         <section>
-                            <h3>Lista użytkowników</h3>
-                            <div class="table">
-                                <table>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Login</th>
-                                    </tr>
-                                    <?php
-                                    // Wylistowanie użytkowników w tabeli
-                                    require('../db/db_connection.php');
-                                    $query = "SELECT id, login FROM users WHERE is_admin=0";
-
-                                    $stmt = $db_connection->prepare($query);
-                                    $stmt->execute();
-
-                                    $result = $stmt->get_result();
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo '<tr>';
-                                        echo '<td>' . $row['id'] . '</td>';
-                                        echo '<td>' . $row['login'] . '</td>';
-                                        echo '<tr>';
-                                    }
-                                    $stmt->close();
-                                    $db_connection->close();
-                                    ?>
-                                </table>
+                            <div class="cars">
+                                <?php
+                                if (isset($vehicle))
+                                    printCarInfoTable($vehNum, $vehicle, 0, true);
+                                else
+                                    echo 'W bazie nie ma żadnych pojazdów.';
+                                ?>
                             </div>
                         </section>
                     </div>

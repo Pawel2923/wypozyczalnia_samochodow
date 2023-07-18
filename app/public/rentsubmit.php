@@ -25,19 +25,19 @@ if (isset($_POST['amount']) && isset($_POST['date']) && isset($_SESSION['vehicle
             $stmt->bind_param('s', $_SESSION['login']);
             $stmt->execute();
 
-            $result = $stmt->get_result();
-            $id = $result->fetch_assoc();
+            $result = $stmt->fetch(PDO::FETCH_OBJ);
+            $id = $result->fetch(PDO::FETCH_ASSOC);
             $id = $id['id'];
 
-            $stmt->close();
+            ;
 
             $query = "SELECT id_pojazdu FROM rezerwacja WHERE id_pojazdu=? AND data_rezerwacji=?";
             $stmt = $db_connection->prepare($query);
             $stmt->bind_param('is', $vehicleID, $date);
             $stmt->execute();
-            $result = $stmt->get_result();
-            $stmt->close();
-            if ($result->num_rows > 0) {
+            $result = $stmt->fetch(PDO::FETCH_OBJ);
+            ;
+            if ($stmt->rowCount() > 0) {
                 $_SESSION['msg'] = 'Podany pojazd w tym dniu jest już zajęty.';
                 $rentError = true;
             } else {
@@ -46,23 +46,23 @@ if (isset($_POST['amount']) && isset($_POST['date']) && isset($_SESSION['vehicle
                     $stmt = $db_connection->prepare($query);
                     $stmt->bind_param('iisi', $vehicleID, $id, $date, $amount);
                     $stmt->execute();
-                    $stmt->close();
+                    ;
 
                     $query = "SELECT rented_vehicles FROM users WHERE id=?";
                     $stmt = $db_connection->prepare($query);
                     $stmt->bind_param('i', $id);
                     $stmt->execute();
-                    $rentedVehs = $stmt->get_result();
-                    $rentedVehs = $rentedVehs->fetch_assoc();
+                    $rentedVehs = $stmt->fetch(PDO::FETCH_OBJ);
+                    $rentedVehs = $rentedVehs->fetch(PDO::FETCH_ASSOC);
                     $rentedVehs = $rentedVehs['rented_vehicles'];
                     $rentedVehs++;
-                    $stmt->close();
+                    ;
 
                     $query = "UPDATE users SET rented_vehicles=? WHERE id=?";
                     $stmt = $db_connection->prepare($query);
                     $stmt->bind_param('ii', $rentedVehs, $id);
                     $stmt->execute();
-                    $stmt->close();
+                    ;
 
                     $_SESSION['msg'] = 'Dziękujemy za korzystanie z naszych usług!';
                 } else {
@@ -71,7 +71,7 @@ if (isset($_POST['amount']) && isset($_POST['date']) && isset($_SESSION['vehicle
                 }
             }
 
-            $db_connection->close();
+            $db_connection = null;
         } catch (Exception $error) {
             $error = addslashes($error);
             $error = str_replace("\n", "", $error);

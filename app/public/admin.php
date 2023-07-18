@@ -17,24 +17,23 @@ if (isset($_POST['action']) && isset($_POST['user-id'])) {
         require('db/db_connection.php');
 
         if ($_POST['action'] === 'grant')
-            $query = "UPDATE users SET is_admin=1 WHERE id=?";
+            $query = "UPDATE users SET is_admin=1 WHERE id=:userID";
         else
-            $query = "UPDATE users SET is_admin=0 WHERE id=?";
+            $query = "UPDATE users SET is_admin=0 WHERE id=:userID";
 
         $stmt = $db_connection->prepare($query);
-        $stmt->bind_param('i', $userID);
+        $stmt->bindParam('userID', $userID, PDO::PARAM_INT);
         $stmt->execute();
-        $stmt->close();
-        $db_connection->close();
-    } catch (Exception $error) {
-        $error = addslashes($error);
-        $error = str_replace("\n", "", $error);
+        $db_connection = null;
+    } catch (Exception $Exception) {
+        $Exception = addslashes($Exception);
+        $Exception = str_replace("\n", "", $Exception);
         $consoleLog->show = true;
-        $consoleLog->content = $error;
+        $consoleLog->content = $Exception;
         $consoleLog->is_error = true;
-    } catch (mysqli_sql_exception $error) {
+    } catch (PDOException $Exception) {
         $consoleLog->show = true;
-        $consoleLog->content = $error;
+        $consoleLog->content = $Exception;
         $consoleLog->is_error = true;
     }
 }
@@ -45,6 +44,8 @@ if (isset($_POST['theme'])) {
     if ($theme == "default" || $theme == "system" || $theme == "dark" || $theme == "light")
         setcookie('theme', $theme, time() + (5 * 365 * 24 * 60 * 60));
 }
+
+require('db/db_connection.php');
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -237,14 +238,13 @@ if (isset($_POST['theme'])) {
                                     </tr>
                                     <?php
                                     // Wylistowanie użytkowników w tabeli
-                                    require('db/db_connection.php');
                                     $query = "SELECT * FROM users";
 
                                     $stmt = $db_connection->prepare($query);
                                     $stmt->execute();
 
-                                    $result = $stmt->get_result();
-                                    while ($row = $result->fetch_assoc()) {
+                                    $result = $stmt->fetch(PDO::FETCH_OBJ);
+                                    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                                         echo '<tr>';
                                         echo '<td>' . $row['id'] . '</td>';
                                         echo '<td>' . $row['login'] . '</td>';
@@ -268,8 +268,6 @@ if (isset($_POST['theme'])) {
                                         echo '</td>';
                                         echo '<tr>';
                                     }
-                                    $stmt->close();
-                                    $db_connection->close();
                                     ?>
                                 </table>
                             </div>
@@ -300,15 +298,13 @@ if (isset($_POST['theme'])) {
                                                 <th>E-mail</th>
                                             </tr>
                                             <?php
-                                            require('db/db_connection.php');
-
                                             $query = "SELECT * FROM admins";
 
                                             $stmt = $db_connection->prepare($query);
                                             $stmt->execute();
 
-                                            $result = $stmt->get_result();
-                                            while ($row = $result->fetch_assoc()) {
+                                            $result = $stmt->fetch(PDO::FETCH_OBJ);
+                                            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                                                 echo '<tr>';
                                                 echo '<td>' . $row['id'] . '</td>';
                                                 echo '<td>' . $row['login'] . '</td>';
@@ -320,8 +316,6 @@ if (isset($_POST['theme'])) {
                                                 echo '</td>';
                                                 echo '<tr>';
                                             }
-                                            $stmt->close();
-                                            $db_connection->close();
                                             ?>
                                         </table>
                                     </div>
@@ -355,6 +349,8 @@ if (isset($_POST['theme'])) {
             }
         }
     }
+
+    $db_connection = null;
     ?>
 </body>
 

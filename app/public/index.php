@@ -38,10 +38,10 @@
             <div class="cars">
                 <?php
                 require("inc/veh.php");
-                if (isset($vehicle))
-                    printCarInfo("Wypożycz", $vehNum, $vehicle, false, 7, true);
-                else
-                    echo '<p class="no-vehicles">Obecnie nie ma pojazdów do rezerwacji</p>';
+                if ($fetch_is_success) {
+                    $options = new PrintOptions("Wypożycz", 'card', true, true, 7);
+                    printCarInfo($options);
+                }
                 ?>
             </div>
             <a href="rental.php" class="link-check-more">Zobacz więcej samochodów</a>

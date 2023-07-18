@@ -10,73 +10,35 @@ if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
     exit;
 }
 
-if (isset($_SESSION['vehicle-img-name'])) {
-    if (!file_exists($_SESSION['vehicle-img-name']))
-        unset($_SESSION['vehicle-img-name']);
-}
-
 include_once("../inc/consoleMessage.php");
 
-if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_POST['vehicle-price']) && isset($_POST['is-available']) && isset($_POST['vehicle-description'])) {
-    if (isset($_SESSION['vehicle-img-name'])) {
-        $brand = htmlentities($_POST['vehicle-brand']);
-        $model = htmlentities($_POST['vehicle-model']);
-        $price = htmlentities($_POST['vehicle-price']);
-        $avail = htmlentities($_POST['is-available']);
-        $description = NULL;
+if (isset($_POST['user-id'])) {
+    $userID = htmlentities($_POST['user-id']);
 
-        if (strlen($_POST['vehicle-description']) > 0) {
-            $description = htmlentities($_POST['vehicle-description']);
-        }
+    try {
+        require('../db/db_connection.php');
+        $query = "UPDATE users SET change_passwd=1 WHERE id=? AND is_admin=0";
+        $stmt = $db_connection->prepare($query);
+        $stmt->bind_param('i', $userID);
+        $stmt->execute();
 
-        if ($avail == 0 || $avail == 'false' || $avail == 'off' || empty($avail))
-            $avail = 0;
+        if ($db_connection->affected_rows > 0)
+            $_SESSION['msg'] = 'Użytkownik musi ustawić nowe hasło przy następnym logowaniu.';
         else
-            $avail = 1;
+            $_SESSION['error'] = 'Nie udało się zresetować hasła. Pamiętaj, że nie można resetować hasła administratorów lub użytkowników, których hasła zostały już zresetowane.';
 
-        $img = $_SESSION['vehicle-img-name'];
-
-        try {
-            require('../db/db_connection.php');
-
-            $query = "SELECT COUNT(id) FROM vehicles";
-            $stmt = $db_connection->prepare($query);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $vehicleID = $result->fetch_row();
-            $vehicleID = $vehicleID[0] + 1;
-            $stmt->close();
-
-            $query = "INSERT INTO vehicles VALUES(?, ?, ?, ?, ?, ?, ?)";
-            $stmt = $db_connection->prepare($query);
-
-            if ($stmt !== false) {
-                $stmt->bind_param('issdsis', $vehicleID, $brand, $model, $price, $img, $avail, $description);
-
-                if ($stmt->execute())
-                    $_SESSION['msg'] = 'Pomyślnie dodano nowy pojazd.';
-                else
-                    $_SESSION['msg'] = 'Nie udało się dodać pojazdu.';
-            } else {
-                throw new Exception("Statement's value is false.Query's value is: $query");
-            }
-
-            unset($_SESSION['vehicle-img-name']);
-            $stmt->close();
-            $db_connection->close();
-        } catch (Exception $error) {
-            $error = addslashes($error);
-            $error = str_replace("\n", "", $error);
-            $consoleLog->show = true;
-            $consoleLog->content = $error;
-            $consoleLog->is_error = true;
-        } catch (mysqli_sql_exception $error) {
-            $consoleLog->show = true;
-            $consoleLog->content = $error;
-            $consoleLog->is_error = true;
-        }
-    } else {
-        $_SESSION['msg'] = 'Nie udało się pobrać zdjęcia.';
+        ;
+        $db_connection = null;
+    } catch (Exception $error) {
+        $error = addslashes($error);
+        $error = str_replace("\n", "", $error);
+        $consoleLog->show = true;
+        $consoleLog->content = $error;
+        $consoleLog->is_error = true;
+    } catch (mysqli_sql_exception $error) {
+        $consoleLog->show = true;
+        $consoleLog->content = $error;
+        $consoleLog->is_error = true;
     }
 }
 ?>
@@ -96,7 +58,6 @@ if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/panel.css">
-    <link rel="stylesheet" href="styles/addvehicles.css">
     <link rel="Shortcut Icon" href="../img/logo.svg" />
     <script src="https://kit.fontawesome.com/32373b1277.js" nonce="kitFontawesome" crossorigin="anonymous"></script>
     <?php include_once("./inc/theme.php") ?>
@@ -164,48 +125,45 @@ if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_
                     </div>
                 </header>
                 <main>
-                    <div class="vehicles">
+                    <div class="users">
                         <header>
-                            <h2><a href="../admin.php#vehicles">Pojazdy</a></h2>
+                            <h2><a href="../admin.php#users">Użytkownicy</a></h2>
                             <i class="fas fa-chevron-right"></i>
-                            <h2>Dodawanie nowych pojazdów</h2>
+                            <h2>Resetowanie haseł</h2>
                         </header>
                         <section>
-                            <form action="upload.php" method="POST" enctype="multipart/form-data" name="vehicleImg">
-                                <label for="vehicle-img">Wybierz zdjęcie samochodu (Zalecany rozmiar: 1024x687)*</label>
-                                <input type="file" name="vehicle-img" id="vehicle-img" accept="image/jpg image/jpeg image/gif image/png image/webp image/avif image/bmp image/xbm" required>
-                                <label for="vehicle-img-name">Zmień nazwę pliku</label>
-                                <input type="text" name="vehicle-img-name" id="vehicle-img-name" />
-                                <button type="submit">Prześlij zdjęcie</button>
-                            </form>
-                            <div class="uploaded-wrapper">
-                                <div>
-                                    <h3>Zdjęcie zostało wybrane</h3>
-                                    <i class="fas fa-check-circle img-check"></i>
-                                </div>
-                                <button>Usuń obecne zdjęcie</button>
-                            </div>
-                            <figure class="image-msg">
-                                <?php
-                                if (isset($_SESSION['vehicle-img-name'])) {
-                                    echo '<figcaption>Wybrane zdjęcie: <b>' . basename($_SESSION['vehicle-img-name']) . '</b></figcaption>';
-                                    echo '<img src="' . $_SESSION['vehicle-img-name'] . '" alt="Zdjęcie wybranego samochodu">';
-                                }
-                                ?>
-                            </figure>
                             <form action="" method="POST">
-                                <label for="vehicle-brand">Marka pojazdu*</label>
-                                <input type="text" name="vehicle-brand" required>
-                                <label for="vehicle-model">Model pojazdu*</label>
-                                <input type="text" name="vehicle-model" required>
-                                <label for="vehicle-price">Cena*</label>
-                                <input type="text" name="vehicle-price" placeholder="np. 59,59" required>
-                                <label for="is-available">Ustaw dostępność do rezerwacji</label>
-                                <input type="text" name="is-available" placeholder="Wpisz 0 jeśli nie lub 1 jeśli tak">
-                                <label for="vehicle-description">Dodaj opis pojazdu</label>
-                                <textarea name="vehicle-description"></textarea>
-                                <button type="submit">Dodaj</button>
+                                <label>ID użytkownika</label>
+                                <input type="number" name="user-id" min="1" required>
+                                <button type="submit">Resetuj</button>
                             </form>
+                            <h3>Lista użytkowników</h3>
+                            <div class="table">
+                                <table>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Login</th>
+                                    </tr>
+                                    <?php
+                                    // Wylistowanie użytkowników w tabeli
+                                    require('../db/db_connection.php');
+                                    $query = "SELECT id, login FROM users WHERE is_admin=0";
+
+                                    $stmt = $db_connection->prepare($query);
+                                    $stmt->execute();
+
+                                    $result = $stmt->fetch(PDO::FETCH_OBJ);
+                                    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                                        echo '<tr>';
+                                        echo '<td>' . $row['id'] . '</td>';
+                                        echo '<td>' . $row['login'] . '</td>';
+                                        echo '<tr>';
+                                    }
+                                    ;
+                                    $db_connection = null;
+                                    ?>
+                                </table>
+                            </div>
                         </section>
                     </div>
                 </main>
@@ -223,10 +181,7 @@ if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_
         </div>
     </div>
     <script src="../js/panelHandler.js"></script>
-    <?php
-    if (isset($_SESSION['vehicle-img-name']))
-        echo '<script src="js/addvehicles.js"></script>';
-    ?>
+    <script src="js/main.js" type="module"></script>
     <?php
     include_once('./inc/logged.php');
     if (isset($consoleLog)) {

@@ -33,42 +33,40 @@ include_once("./inc/consoleMessage.php");
                     require('db/db_connection.php');
 
                     if (isset($db_connection)) {
-                        $query = "SELECT email FROM newsletter WHERE email=?";
+                        $query = "SELECT email FROM newsletter WHERE email=:email";
                         $stmt = $db_connection->prepare($query);
-                        $stmt->bind_param('s', $email);
+                        $stmt->bindParam('email', $email, PDO::PARAM_STR);
                         $stmt->execute();
-                        $result = $stmt->get_result();
-                        $stmt->close();
-                        if ($result->num_rows > 0)
+                        $result = $stmt->fetch(PDO::FETCH_OBJ);
+
+                        if ($stmt->rowCount() > 0)
                             $_SESSION['msg'] = 'Podany adres e-mail jest już zapisany na newsletterze.';
                         else {
-                            $query = "INSERT INTO newsletter (email) VALUES (?)";
+                            $query = "INSERT INTO newsletter (email) VALUES (:email)";
                             $stmt = $db_connection->prepare($query);
 
-                            $stmt->bind_param('s', $email);
+                            $stmt->bindParam('email', $email, PDO::PARAM_STR);
                             $stmt->execute();
 
                             $_SESSION['msg'] = 'Dziękujemy za zapisanie się na nasz newsletter!';
-
-                            $stmt->close();
                         }
 
-                        $db_connection->close();
+                        $db_connection = null;
                     } else {
                         throw new Exception("Nie udało połączyć się z bazą danych");
                     }
-                } catch (Exception $error) {
-                    $error = addslashes($error);
-                    $error = str_replace("\n", "", $error);
+                } catch (Exception $Exception) {
+                    $Exception = addslashes($Exception);
+                    $Exception = str_replace("\n", "", $Exception);
                     $consoleLog->show = true;
-                    $consoleLog->content = $error;
+                    $consoleLog->content = $Exception;
                     $consoleLog->is_error = true;
-                    $_SESSION["error"] = $error;
-                } catch (mysqli_sql_exception $error) {
+                    $_SESSION["error"] = $Exception;
+                } catch (PDOException $Exception) {
                     $consoleLog->show = true;
-                    $consoleLog->content = $error;
+                    $consoleLog->content = $Exception;
                     $consoleLog->is_error = true;
-                    $_SESSION["error"] = $error;
+                    $_SESSION["error"] = $Exception;
                 }
             } else
                 echo '<script nonce="historyPrev">history.go(-1)</script>';

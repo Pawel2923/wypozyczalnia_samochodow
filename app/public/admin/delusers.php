@@ -12,40 +12,32 @@ if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
 
 include_once("../inc/consoleMessage.php");
 
-if (isset($_POST['message-id'])) {
-    if ($_POST['message-id'] > 0) {
-        $messageID = htmlentities($_POST['message-id']);
+if (isset($_POST['user-id'])) {
+    $userID = htmlentities($_POST['user-id']);
 
-        try {
-            require('../db/db_connection.php');
+    try {
+        require('../db/db_connection.php');
+        $query = "DELETE FROM users WHERE id=? AND is_admin=0";
+        $stmt = $db_connection->prepare($query);
+        $stmt->bind_param('i', $userID);
+        $stmt->execute();
 
-            $query = 'DELETE FROM mailboxes WHERE message_id=?';
-            $stmt = $db_connection->prepare($query);
-            $stmt->bind_param('i', $messageID);
-            $stmt->execute();
-            $stmt->close();
+        if ($db_connection->affected_rows > 0)
+            $_SESSION['msg'] = 'Udało się usunąć użytkownika.';
+        else
+            $_SESSION['error'] = 'Nie udało się usunąć użytkownika. Pamiętaj, że nie można usuwać administratorów.';
 
-            $query = 'DELETE FROM messages WHERE id=?';
-            $stmt = $db_connection->prepare($query);
-            $stmt->bind_param('i', $messageID);
-            $stmt->execute();
-            $stmt->close();
-
-            $_SESSION['msg'] = 'Pomyślnie usunięto wiadomość.';
-
-            $db_connection->close();
-            unset($_POST['message-id']);
-        } catch (Exception $error) {
-            $error = addslashes($error);
-            $error = str_replace("\n", "", $error);
-            $consoleLog->show = true;
-            $consoleLog->content = $error;
-            $consoleLog->is_error = true;
-        } catch (mysqli_sql_exception $error) {
-            $consoleLog->show = true;
-            $consoleLog->content = $error;
-            $consoleLog->is_error = true;
-        }
+        ;
+        $db_connection = null;
+    } catch (Exception $error) {
+        $error = addslashes($error);
+        $error = str_replace("\n", "", $error);
+        $consoleLog->show = true;
+        $consoleLog->content = $error;
+        $consoleLog->is_error = true;
+    } catch (mysqli_sql_exception $error) {
+        $consoleLog->show = true;
+        $consoleLog->content = $error;
     }
 }
 ?>
@@ -65,7 +57,6 @@ if (isset($_POST['message-id'])) {
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/panel.css">
-    <link rel="stylesheet" href="styles/inbox.css">
     <link rel="Shortcut Icon" href="../img/logo.svg" />
     <script src="https://kit.fontawesome.com/32373b1277.js" nonce="kitFontawesome" crossorigin="anonymous"></script>
     <?php include_once("./inc/theme.php") ?>
@@ -86,7 +77,7 @@ if (isset($_POST['message-id'])) {
                     <a class="users-link" href="../admin.php#users">
                         <li>Użytkownicy</li>
                     </a>
-                    <a href="inbox.php">
+                    <a href="../admin/inbox.php">
                         <li>Wiadomości</li>
                     </a>
                     <a class="settings-link" href="../admin.php#settings">
@@ -133,72 +124,47 @@ if (isset($_POST['message-id'])) {
                     </div>
                 </header>
                 <main>
-                    <div class="messages">
+                    <div class="users">
                         <header>
-                            <h2>Wiadomości</h2>
+                            <h2><a href="../admin.php#users">Użytkownicy</a></h2>
+                            <i class="fas fa-chevron-right"></i>
+                            <h2>Usuń użytkowników</h2>
                         </header>
                         <section>
-                            <?php
-                            require('../db/db_connection.php');
+                            <form action="" method="POST">
+                                <label>ID użytkownika</label>
+                                <input type="number" name="user-id" min="1" required>
+                                <button type="submit">Usuń</button>
+                            </form>
+                        </section>
+                        <section>
+                            <h3>Lista użytkowników</h3>
+                            <div class="table">
+                                <table>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Login</th>
+                                    </tr>
+                                    <?php
+                                    // Wylistowanie użytkowników w tabeli
+                                    require('../db/db_connection.php');
+                                    $query = "SELECT id, login FROM users WHERE is_admin=0";
 
-                            $query = "SELECT messages.* FROM messages INNER JOIN mailboxes ON mailboxes.message_id=messages.id WHERE user=? AND direction='in' ORDER BY date DESC";
-                            $stmt = $db_connection->prepare($query);
-                            $stmt->bind_param('s', $_SESSION['login']);
-                            $stmt->execute();
-                            $result = $stmt->get_result();
-                            $stmt->close();
+                                    $stmt = $db_connection->prepare($query);
+                                    $stmt->execute();
 
-                            echo '<h3>Odebrane</h3>';
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    echo '<div class="box-msg">';
-                                    echo '<form action="" method="POST">';
-                                    echo '<input type="hidden" name="message-id" value="' . $row['id'] . '">';
-                                    echo '<span>Od:</span> ' . $row['email'];
-                                    echo '<br>';
-                                    echo $row['imie'] . ' ' . $row['nazwisko'];
-                                    echo '<br>';
-                                    if ($row['tel'] != 0) {
-                                        echo '<span>Telefon:</span> ' . $row['tel'];
-                                        echo '<br>';
+                                    $result = $stmt->fetch(PDO::FETCH_OBJ);
+                                    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                                        echo '<tr>';
+                                        echo '<td>' . $row['id'] . '</td>';
+                                        echo '<td>' . $row['login'] . '</td>';
+                                        echo '<tr>';
                                     }
-                                    echo '<span>Dostarczono:</span> ' . $row['date'];
-                                    echo '<br>';
-                                    echo '<span>Treść wiadomości:</span> ' . $row['message'];
-                                    echo '<br>';
-                                    echo '<button type="submit">Usuń wiadomość</button>';
-                                    echo '</form>';
-                                    echo '</div>';
-                                }
-                            } else
-                                echo 'Nie masz żadnych wiadomości.';
-
-                            $query = "SELECT messages.*, mailboxes.user FROM messages INNER JOIN mailboxes ON mailboxes.message_id=messages.id WHERE user=? AND direction='out' ORDER BY date DESC";
-                            $stmt = $db_connection->prepare($query);
-                            $stmt->bind_param('s', $_SESSION['login']);
-                            $stmt->execute();
-                            $result = $stmt->get_result();
-                            $stmt->close();
-
-                            echo '<h3>Wysłane</h3>';
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    echo '<div class="box-msg">';
-                                    echo '<form action="" method="POST">';
-                                    echo '<input type="hidden" name="message-id" value="' . $row['id'] . '">';
-                                    echo '<span>Do:</span> ' . $row['user'];
-                                    echo '<br>';
-                                    echo '<span>Dostarczono:</span> ' . $row['date'];
-                                    echo '<br>';
-                                    echo '<span>Treść wiadomości:</span> ' . $row['message'];
-                                    echo '<br>';
-                                    echo '<button type="submit">Usuń wiadomość</button>';
-                                    echo '</form>';
-                                    echo '</div>';
-                                }
-                            } else
-                                echo 'Nie wysłałeś żadnych wiadomości.';
-                            ?>
+                                    ;
+                                    $db_connection = null;
+                                    ?>
+                                </table>
+                            </div>
                         </section>
                     </div>
                 </main>

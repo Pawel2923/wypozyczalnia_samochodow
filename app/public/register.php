@@ -31,13 +31,13 @@ if (isset($_POST['password']) && isset($_POST['login']) && isset($_POST['passwor
                     $query = "SELECT `login`, `email` FROM `users` WHERE `login`=? OR `email`=?";
 
                     $stmt = $db_connection->prepare($query);
-                    $stmt->bind_param("ss", $login, $email);
+                    $stmt->bindParam("login", $login);
+                    $stmt->bindParam('email', $email);
                     $stmt->execute();
 
-                    $result = $stmt->get_result();
-                    $stmt->close();
+                    $result = $stmt->fetch(PDO::FETCH_OBJ);
 
-                    if ($result->fetch_assoc() > 0) {
+                    if ($result->fetch(PDO::FETCH_ASSOC) > 0) {
                         if (isset($email))
                             $_SESSION['login-error'] = "Podany email jest już zarejestrowany";
                         else
@@ -47,44 +47,46 @@ if (isset($_POST['password']) && isset($_POST['login']) && isset($_POST['passwor
                         $query = "SELECT COUNT(id) FROM users";
                         $stmt = $db_connection->prepare($query);
                         $stmt->execute();
-                        $result = $stmt->get_result();
-                        $userID = $result->fetch_row();
+                        $result = $stmt->fetch(PDO::FETCH_OBJ);
+                        $userID = $result->fetch();
                         $userID = $userID[0] + 1;
-                        $stmt->close();
                         // Wprowadzanie danych do bazy
                         if (isset($email)) {
-                            $query = "INSERT INTO `users` (id, login, email, password) VALUES(?, ?, ?, ?)";
+                            $query = "INSERT INTO `users` (id, login, email, password) VALUES(:userID, :login, :email, :passwd)";
 
                             $stmt = $db_connection->prepare($query);
-                            $stmt->bind_param("isss", $userID, $login, $email, $hashedPasswd);
+                            $stmt->bindParam('userID', $userID, PDO::PARAM_INT);
+                            $stmt->bindParam('login', $login);
+                            $stmt->bindParam('email', $email);
+                            $stmt->bindParam('passwd', $hashedPasswd);
                             $stmt->execute();
-                            $stmt->close();
                         } else {
-                            $query = "INSERT INTO `users` (id, login, password) VALUES(?, ?, ?)";
+                            $query = "INSERT INTO `users` (id, login, password) VALUES(:userID, :login, :passwd)";
 
                             $stmt = $db_connection->prepare($query);
-                            $stmt->bind_param("iss", $userID, $login, $hashedPasswd);
+                            $stmt->bindParam('userID', $userID, PDO::PARAM_INT);
+                            $smtt->bindParam('login', $login);
+                            $smtt->bindParam('passwd', $hashedPasswd);
                             $stmt->execute();
-                            $stmt->close();
                         }
-                        $db_connection->close();
+                        $db_connection = null;
 
                         header('Location: login.php');
                         exit;
                     }
-                    $db_connection->close();
+                    $db_connection = null;
                 } else {
                     throw new Exception("Błąd połączenia z bazą danych.");
                 }
-            } catch (Exception $error) {
-                $error = addslashes($error);
-                $error = str_replace("\n", "", $error);
+            } catch (Exception $Exception) {
+                $Exception = addslashes($Exception);
+                $Exception = str_replace("\n", "", $Exception);
                 $consoleLog->show = true;
-                $consoleLog->content = $error;
+                $consoleLog->content = $Exception;
                 $consoleLog->is_error = true;
-            } catch (mysqli_sql_exception $error) {
+            } catch (PDOException $Exception) {
                 $consoleLog->show = true;
-                $consoleLog->content = $error;
+                $consoleLog->content = $Exception;
                 $consoleLog->is_error = true;
             }
 

@@ -26,10 +26,10 @@
                 $stmt = $db_connection->prepare($query);
                 $stmt->bind_param("s", $login);
                 $stmt->execute();
-                $result = $stmt->get_result();
+                $result = $stmt->fetch(PDO::FETCH_OBJ);
                 $array = $result->fetch_array();
-                $stmt->close();
-                $db_connection->close();
+                ;
+                $db_connection = null;
     
                 $userProfile = new Profile;
                 foreach ($array as $key => $value) {
