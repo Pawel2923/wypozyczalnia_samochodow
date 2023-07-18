@@ -36,7 +36,7 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
 
                 $result = $stmt->fetch(PDO::FETCH_OBJ);
 
-                if ($result->fetch(PDO::FETCH_ASSOC)) {
+                if ($result) {
                     $getPasswd = "SELECT `password`, `is_admin`, `change_passwd` FROM `users` WHERE `login`=:login OR `email`=:email";
 
                     $stmt = $db_connection->prepare($getPasswd);
@@ -46,19 +46,17 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
 
                     $result2 = $stmt->fetch(PDO::FETCH_OBJ);
 
-                    $queriedData = $result2->fetch(PDO::FETCH_ASSOC);
-
-                    if ($queriedData['change_passwd']) {
+                    if ($result2->change_passwd) {
                         $_SESSION['login'] = $login;
                         $_SESSION['isLogged'] = true;
 
                         header('Location: changePasswd.php');
                         exit;
                     } else {
-                        if (password_verify($password, $queriedData['password'])) {
+                        if (password_verify($password, $result2->password)) {
                             $_SESSION['login'] = $login;
                             $_SESSION['isLogged'] = true;
-                            $_SESSION['isAdmin'] = $queriedData['is_admin'];
+                            $_SESSION['isAdmin'] = $result2->is_admin;
 
                             $db_connection = null;
 

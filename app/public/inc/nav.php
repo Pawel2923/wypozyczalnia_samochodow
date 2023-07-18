@@ -51,11 +51,11 @@ require_once("getUserProfile.php");
                                 <div>
                                     <div class="number-wrapper">
                                         <div class="card-number">' . $userProfile->unread . '</div>
-                                        <span>Nieprzeczytane wiadomości</span>
+                                        <span>Nieprzeczytane</span>
                                     </div>
                                     <div class="number-wrapper" id="vehicles-button">
                                         <div class="card-number">' . $userProfile->rented_vehicles . '</div>
-                                        <span>Wypożyczone pojazdy</span>
+                                        <span>Twoje pojazdy</span>
                                     </div>
                                 </div>
                             </div>
