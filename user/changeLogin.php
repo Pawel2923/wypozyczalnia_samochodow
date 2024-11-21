@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once("../initial.php");
 if (isset($_SESSION['isLogged'])) {
     if (!$_SESSION['isLogged']) {
         header('Location: ../login.php');
@@ -9,8 +9,6 @@ if (isset($_SESSION['isLogged'])) {
     header('Location: ../login.php');
     exit;
 }
-
-include_once("../inc/consoleMessage.php");
 
 if (isset($_POST['new-login']) && isset($_SESSION['login'])) {
     $login = htmlentities($_SESSION['login']);
@@ -47,7 +45,7 @@ if (isset($_POST['new-login']) && isset($_SESSION['login'])) {
                     $stmt->close();
 
                     $_SESSION['msg'] = 'Pomyślnie zmieniono login. Za chwilę wystąpi wylogowanie...';
-                    echo '<script src="js/changeLocation.js" class="script-changeLocation" id="5000" value="../logout.php"></script>';
+                    echo '<script src="'.$_SERVER["DOCUMENT_ROOT"].'/js/changeLocation.js" class="script-changeLocation" id="5000" value="../logout.php"></script>';
                 } else
                     $_SESSION['error'] = 'Takiego loginu nie ma w bazie danych.';
             } else

@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once("../initial.php");
 if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
     if (!$_SESSION['isAdmin']) {
         header('Location: ../index.php');

@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once("./initial.php");
 if (isset($_SESSION['isLogged'])) {
     if ($_SESSION['isLogged']) {
         header('Location: index.php');
@@ -14,8 +14,6 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
         // Przygotowanie adresu email
         if (filter_var($login, FILTER_VALIDATE_EMAIL)) { // Sprawdzenie czy login jest adresem email
             $email = filter_var($login, FILTER_SANITIZE_EMAIL);
-            $login = explode('@', $login);
-            $login = array_shift($login);
         }
 
         // Przygotowanie hasła
@@ -36,8 +34,7 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
                 $result = $stmt->get_result();
 
                 if ($result->fetch_assoc()) {
-                    $getPasswd = "SELECT `password`, `is_admin`, `change_passwd` FROM `users` WHERE `login`=? OR `email`=?";
-
+                    $getPasswd = "SELECT `password`, `login`, `is_admin`, `change_passwd` FROM `users` WHERE (`login`=? OR `email`=?)";
                     $stmt2 = $db_connection->prepare($getPasswd);
                     $stmt2->bind_param("ss", $login, $email);
                     $stmt2->execute();
@@ -47,14 +44,14 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
                     $queriedData = $result2->fetch_assoc();
 
                     if ($queriedData['change_passwd']) {
-                        $_SESSION['login'] = $login;
+                        $_SESSION['login'] = $queriedData['login'];
                         $_SESSION['isLogged'] = true;
 
                         header('Location: changePasswd.php');
                         exit;
                     } else {
                         if (password_verify($password, $queriedData['password'])) {
-                            $_SESSION['login'] = $login;
+                            $_SESSION['login'] = $queriedData['login'];
                             $_SESSION['isLogged'] = true;
                             $_SESSION['isAdmin'] = $queriedData['is_admin'];
 
@@ -63,8 +60,9 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
 
                             header('Location: index.php');
                             exit;
-                        } else
+                        } else {
                             $_SESSION['password-error'] = "Podane hasło jest nieprawidłowe";
+                        }
                     }
                 } else
                     $_SESSION['login-error'] = "Podany login lub e-mail jest nieprawidłowy";

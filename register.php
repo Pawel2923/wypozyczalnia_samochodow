@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once("./initial.php");
 if (isset($_SESSION['isLogged'])) {
     if ($_SESSION['isLogged']) {
         header('Location: index.php');
@@ -20,7 +20,7 @@ if (isset($_POST['password']) && isset($_POST['login']) && isset($_POST['passwor
             }
             // Przygotowanie hasła
             $password = htmlentities(trim($_POST['password']));
-            $newHashedPasswd = password_hash($newPasswd, PASSWORD_DEFAULT, array('cost' => 10));
+            $hashedPasswd = password_hash($password, PASSWORD_DEFAULT, array('cost' => 10));
 
             try {
                 // Połączenie z bazą danych
@@ -37,33 +37,25 @@ if (isset($_POST['password']) && isset($_POST['login']) && isset($_POST['passwor
                     $result = $stmt->get_result();
                     $stmt->close();
 
-                    if ($result->fetch_assoc() > 0) {
+                    if ($result->num_rows > 0) {
                         if (isset($email))
                             $_SESSION['login-error'] = "Podany email jest już zarejestrowany";
                         else
                             $_SESSION['login-error'] = "Podany login jest już zarejestrowany";
                     } else {
-                        // Ustawienie id użytkownika
-                        $query = "SELECT COUNT(id) FROM users";
-                        $stmt = $db_connection->prepare($query);
-                        $stmt->execute();
-                        $result = $stmt->get_result();
-                        $userID = $result->fetch_row();
-                        $userID = $userID[0] + 1;
-                        $stmt->close();
                         // Wprowadzanie danych do bazy
                         if (isset($email)) {
-                            $query = "INSERT INTO `users` (id, login, email, password) VALUES(?, ?, ?, ?)";
+                            $query = "INSERT INTO `users` (login, email, password) VALUES(?, ?, ?)";
 
                             $stmt = $db_connection->prepare($query);
-                            $stmt->bind_param("isss", $userID, $login, $email, $hashedPasswd);
+                            $stmt->bind_param("sss", $login, $email, $hashedPasswd);
                             $stmt->execute();
                             $stmt->close();
                         } else {
-                            $query = "INSERT INTO `users` (id, login, password) VALUES(?, ?, ?)";
+                            $query = "INSERT INTO `users` (login, password) VALUES(?, ?)";
 
                             $stmt = $db_connection->prepare($query);
-                            $stmt->bind_param("iss", $userID, $login, $hashedPasswd);
+                            $stmt->bind_param("ss", $login, $hashedPasswd);
                             $stmt->execute();
                             $stmt->close();
                         }
@@ -169,6 +161,7 @@ if (isset($_POST['password']) && isset($_POST['login']) && isset($_POST['passwor
     <?php
     if (isset($consoleLog)) {
         if ($consoleLog->show) {
+            echo '<srcript>console.log("ConsoleLog ustawiony")</script>';
             if ($consoleLog->is_error) {
                 echo '<script src="js/log.js" value="' . $consoleLog->content . '" name="error"></script>';
             } else {

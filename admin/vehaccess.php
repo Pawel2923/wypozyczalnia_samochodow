@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once("../initial.php");
 if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
     if (!$_SESSION['isAdmin']) {
         header('Location: ../index.php');
@@ -9,8 +9,6 @@ if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
     header('Location: ../login.php');
     exit;
 }
-
-include_once("../inc/consoleMessage.php");
 
 require('../inc/veh.php');
 if (isset($_POST['vehicle-id']) && isset($vehicle)) {

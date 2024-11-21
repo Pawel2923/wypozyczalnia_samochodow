@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once("../initial.php");
 if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
     if (!$_SESSION['isAdmin']) {
         header('Location: ../index.php');
@@ -14,8 +14,6 @@ if (isset($_SESSION['vehicle-img-name'])) {
     if (!file_exists($_SESSION['vehicle-img-name']))
         unset($_SESSION['vehicle-img-name']);
 }
-
-include_once("../inc/consoleMessage.php");
 
 if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_POST['vehicle-price']) && isset($_POST['is-available']) && isset($_POST['vehicle-description'])) {
     if (isset($_SESSION['vehicle-img-name'])) {
@@ -39,19 +37,11 @@ if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_
         try {
             require('../db/db_connection.php');
 
-            $query = "SELECT COUNT(id) FROM vehicles";
-            $stmt = $db_connection->prepare($query);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $vehicleID = $result->fetch_row();
-            $vehicleID = $vehicleID[0] + 1;
-            $stmt->close();
-
-            $query = "INSERT INTO vehicles VALUES(?, ?, ?, ?, ?, ?, ?)";
+            $query = "INSERT INTO vehicles VALUES(DEFAULT, ?, ?, ?, ?, ?, ?)";
             $stmt = $db_connection->prepare($query);
 
             if ($stmt !== false) {
-                $stmt->bind_param('issdsis', $vehicleID, $brand, $model, $price, $img, $avail, $description);
+                $stmt->bind_param('ssdsis', $brand, $model, $price, $img, $avail, $description);
 
                 if ($stmt->execute())
                     $_SESSION['msg'] = 'Pomyślnie dodano nowy pojazd.';

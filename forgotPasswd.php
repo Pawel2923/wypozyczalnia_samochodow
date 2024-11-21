@@ -1,6 +1,5 @@
 <?php
-session_start();
-
+require_once("./initial.php");
 if (isset($_POST['login'])) {
     if (!empty($login = htmlentities($_POST['login']))) {
         $_SESSION['forgotten-passwd'] = true;

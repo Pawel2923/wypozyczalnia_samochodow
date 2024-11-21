@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once("./initial.php");
 if (isset($_SESSION['isLogged'])) {
     if (!$_SESSION['isLogged']) {
         header('Location: login.php');
@@ -31,7 +31,7 @@ if (isset($_POST['amount']) && isset($_POST['date']) && isset($_SESSION['vehicle
 
             $stmt->close();
 
-            $query = "SELECT id_pojazdu FROM rezerwacja WHERE id_pojazdu=? AND data_rezerwacji=?";
+            $query = "SELECT vehicle_id FROM reservations WHERE vehicle_id=? AND date=?";
             $stmt = $db_connection->prepare($query);
             $stmt->bind_param('is', $vehicleID, $date);
             $stmt->execute();
@@ -42,7 +42,7 @@ if (isset($_POST['amount']) && isset($_POST['date']) && isset($_SESSION['vehicle
                 $rentError = true;
             } else {
                 if ($date > $today) {
-                    $query = "INSERT INTO rezerwacja (id_pojazdu, id_klienta, data_rezerwacji, na_ile) VALUES(?, ?, ?, ?)";
+                    $query = "INSERT INTO reservations (vehicle_id, client_id, date, days_count) VALUES(?, ?, ?, ?)";
                     $stmt = $db_connection->prepare($query);
                     $stmt->bind_param('iisi', $vehicleID, $id, $date, $amount);
                     $stmt->execute();

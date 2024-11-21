@@ -1,6 +1,5 @@
 <?php
-session_start();
-include_once("./inc/consoleMessage.php");
+require_once("./initial.php");
 
 if (isset($_POST['name']) && isset($_POST['sName']) && isset($_POST['email']) && isset($_POST['tel']) && isset($_POST['message']) || isset($_SESSION['forgotten-passwd'])) {
     if (isset($_SESSION['forgotten-passwd'])) {
@@ -26,14 +25,6 @@ if (isset($_POST['name']) && isset($_POST['sName']) && isset($_POST['email']) &&
             require('db/db_connection.php');
 
             if (isset($db_connection)) {
-                $query = "SELECT COUNT(id) FROM messages";
-                $stmt = $db_connection->prepare($query);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                $stmt->close();
-                $messageID = $result->fetch_row();
-                $messageID = $messageID[0] + 1;
-
                 $query = "SELECT login FROM admins";
                 $stmt = $db_connection->prepare($query);
                 $stmt->execute();
@@ -43,9 +34,9 @@ if (isset($_POST['name']) && isset($_POST['sName']) && isset($_POST['email']) &&
 
                 $date = date('Y-m-d H:i:s');
 
-                $query = "INSERT INTO messages VALUES(?, ?, ?, ?, ?, ?, ?)";
+                $query = "INSERT INTO messages VALUES(DEFAULT, ?, ?, ?, ?, ?, ?)";
                 $stmt = $db_connection->prepare($query);
-                $stmt->bind_param('issssis', $messageID, $message, $name, $sName, $email, $tel, $date);
+                $stmt->bind_param('ssssis', $message, $name, $sName, $email, $tel, $date);
                 $stmt->execute();
                 $stmt->close();
 
@@ -60,7 +51,7 @@ if (isset($_POST['name']) && isset($_POST['sName']) && isset($_POST['email']) &&
 
                 if ($username != '') {
                     $direction = "out";
-                    $query = "INSERT INTO mailboxes VALUES(NULL, ?, ?, ?)";
+                    $query = "INSERT INTO mailboxes VALUES(DEFAULT, ?, ?, ?)";
                     $stmt = $db_connection->prepare($query);
                     $stmt->bind_param('iss', $messageID, $username, $direction);
                     $stmt->execute();
@@ -69,7 +60,7 @@ if (isset($_POST['name']) && isset($_POST['sName']) && isset($_POST['email']) &&
 
                 for ($i = 0; $i < sizeof($sentTo); $i++) {
                     $direction = "in";
-                    $query = "INSERT INTO mailboxes VALUES(NULL, ?, ?, ?)";
+                    $query = "INSERT INTO mailboxes VALUES(DEFAULT, ?, ?, ?)";
                     $stmt = $db_connection->prepare($query);
                     $stmt->bind_param('iss', $messageID, $sentTo[$i], $direction);
                     $stmt->execute();
