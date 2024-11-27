@@ -1,4 +1,4 @@
-<?php session_start(); ?>
+<?php require_once("./initial.php"); ?>
 <!DOCTYPE html>
 <html lang="pl">
 
@@ -39,7 +39,7 @@
                 <?php
                 require("inc/veh.php");
                 if (isset($vehicle))
-                    printCarInfo("Wypożycz", $vehNum, $vehicle, false, 7, true);
+                    printCarInfo("Wypożycz", $vehNum, $vehicle, false, 6, true);
                 else
                     echo '<p class="no-vehicles">Obecnie nie ma pojazdów do rezerwacji</p>';
                 ?>

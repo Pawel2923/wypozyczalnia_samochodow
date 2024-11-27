@@ -1,4 +1,4 @@
-<?php session_start(); ?>
+<?php require_once("./initial.php"); ?>
 <!DOCTYPE html>
 <html lang="pl">
 

@@ -21,7 +21,7 @@ if (!isset($_SESSION['connectionError'])) {
         public $id;
         public $brand;
         public $model;
-        public $price;
+        public $price_per_day;
         public $img_url;
         public $isAvailable;
 
@@ -86,8 +86,8 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = fal
                             <span class="car-name"><?php echo $vehicle[$i]->brand . ' ' . $vehicle[$i]->model ?></span>
                             <div class="divider"></div>
                             <div class="car-price">
-                                <span>1 godz.</span>
-                                <span><?php echo str_replace(".", ",", $vehicle[$i]->price) ?> zł</span>
+                                <span>1 dzień</span>
+                                <span><?php echo str_replace(".", ",", $vehicle[$i]->price_per_day) ?> zł</span>
                             </div>
                             <button class="car-button" value="<?php echo $vehicle[$i]->id ?>"><?php echo $buttonCaption ?></button>
                         </div>
@@ -108,8 +108,8 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = fal
                         <span class="car-name"><?php echo $vehicle[$i]->brand . ' ' . $vehicle[$i]->model ?></span>
                         <div class="divider"></div>
                         <div class="car-price">
-                            <span>1 godz.</span>
-                            <span><?php echo str_replace(".", ",", $vehicle[$i]->price) ?> zł</span>
+                            <span>1 dzień</span>
+                            <span><?php echo str_replace(".", ",", $vehicle[$i]->price_per_day) ?> zł</span>
                         </div>
                         <button class="car-button" value="<?php echo $vehicle[$i]->id ?>">
                             <?php
@@ -144,8 +144,8 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = fal
                             <span class="car-name"><?php echo $vehicle[$i]->brand . ' ' . $vehicle[$i]->model ?></span>
                             <div class="divider"></div>
                             <div class="car-price">
-                                <span>1 godz.</span>
-                                <span><?php echo str_replace(".", ",", $vehicle[$i]->price) ?> zł</span>
+                                <span>1 dzień</span>
+                                <span><?php echo str_replace(".", ",", $vehicle[$i]->price_per_day) ?> zł</span>
                             </div>
                             <button class="car-button" value="<?php echo $vehicle[$i]->id ?>"><?php echo $buttonCaption ?></button>
                         </div>
@@ -166,8 +166,8 @@ function printCarInfo($buttonCaption, $vehNum, $vehicle, $printUnavailable = fal
                         <span class="car-name"><?php echo $vehicle[$i]->brand . ' ' . $vehicle[$i]->model ?></span>
                         <div class="divider"></div>
                         <div class="car-price">
-                            <span>1 godz.</span>
-                            <span><?php echo str_replace(".", ",", $vehicle[$i]->price) ?> zł</span>
+                            <span>1 dzień</span>
+                            <span><?php echo str_replace(".", ",", $vehicle[$i]->price_per_day) ?> zł</span>
                         </div>
                         <button class="car-button" value="<?php echo $vehicle[$i]->id ?>">
                             <?php
@@ -202,7 +202,7 @@ function printCarInfoTable($vehNum, $vehicle, $limit = 0, $printIndex = false)
                 <tr>
                     <?php if ($printIndex) echo '<th>ID</th>'; ?>
                     <th>Nazwa</th>
-                    <th>Cena za 1 godz.</th>
+                    <th>Cena za 1 dzień</th>
                     <th>Dostępność</th>
                 </tr>
                 <?php
@@ -210,7 +210,7 @@ function printCarInfoTable($vehNum, $vehicle, $limit = 0, $printIndex = false)
                     echo '<tr>';
                     if ($printIndex) echo '<td>' . $vehicle[$i]->id . '</td>';
                     echo '<td>' . $vehicle[$i]->brand . ' ' . $vehicle[$i]->model . '</td>';
-                    echo '<td>' . str_replace(".", ",", $vehicle[$i]->price) . '</td>';
+                    echo '<td>' . str_replace(".", ",", $vehicle[$i]->price_per_day) . '</td>';
                     echo '<td>';
                     if ($vehicle[$i]->isAvailable)
                         echo "Dostępny";
@@ -262,9 +262,9 @@ function printCarInfoList($buttonCaption, $vehNum, $vehicle, $printUnavailable =
                             </div>
                             <div class="vehicle-price">
                                 <div>
-                                    <span>1 godz.</span>
+                                    <span>1 dzień</span>
                                     <br>
-                                    <span><?php echo str_replace(".", ",", $vehicle[$i]->price) ?> zł</span>
+                                    <span><?php echo str_replace(".", ",", $vehicle[$i]->price_per_day) ?> zł</span>
                                 </div>
                                 <button class="car-button" value="<?php echo $vehicle[$i]->id ?>">
                                     <?php
@@ -300,9 +300,9 @@ function printCarInfoList($buttonCaption, $vehNum, $vehicle, $printUnavailable =
                         </div>
                         <div class="vehicle-price">
                             <div>
-                                <span>1 godz.</span>
+                                <span>1 dzień</span>
                                 <br>
-                                <span><?php echo str_replace(".", ",", $vehicle[$i]->price) ?> zł</span>
+                                <span><?php echo str_replace(".", ",", $vehicle[$i]->price_per_day) ?> zł</span>
                             </div>
                             <button class="car-button" value="<?php echo $vehicle[$i]->id ?>">
                                 <?php

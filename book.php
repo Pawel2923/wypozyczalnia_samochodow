@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once("./initial.php");
 if (isset($_SESSION['isLogged'])) {
     if (!$_SESSION['isLogged']) {
         header('Location: login.php');
@@ -76,13 +76,13 @@ if (isset($_GET['vehicle-id']) || isset($_SESSION['vehicle-id'])) {
         <section>
             <div class="vehicle">
                 <div class="vehicle-name">
-                    <h2><?php echo $attribute['marka'] . ' ' . $attribute['model']; ?></h2>
+                    <h2><?php echo $attribute['brand'] . ' ' . $attribute['model']; ?></h2>
                 </div>
                 <div class="vehicle-image">
                     <img src="img/cars/<?php echo $attribute['img_url'] ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
                 </div>
                 <div class="description">
-                    <div class="vehicle-price"><?php echo $attribute['cena'] ?>zł za 1 godzinę</div>
+                    <div class="vehicle-price"><?php echo $attribute['price_per_day'] ?>zł za 1 dobę</div>
                 </div>
             </div>
             <div class="message">
@@ -103,7 +103,7 @@ if (isset($_GET['vehicle-id']) || isset($_SESSION['vehicle-id'])) {
             </div>
             <h2>Wypełnij formularz</h2>
             <form action="rentsubmit.php" method="POST">
-                <label for="amount">Ilość godzin wynajmu</label>
+                <label for="amount">Ilość dni wynajmu</label>
                 <input type="number" name="amount" value="1" min="1" required>
                 <label for="date">Data wynajmu</label>
                 <input type="date" name="date" required>
@@ -111,10 +111,10 @@ if (isset($_GET['vehicle-id']) || isset($_SESSION['vehicle-id'])) {
                     <h2>Podsumowanie zamówienia</h2>
                     <div class="carName">
                         Nazwa pojazdu:
-                        <h3><?php echo $attribute['marka'] . ' ' . $attribute['model']; ?></h3>
+                        <h3><?php echo $attribute['brand'] . ' ' . $attribute['model']; ?></h3>
                     </div>
                     <div class="amount">
-                        Liczba godzin wynajmu:
+                        Liczba dni wynajmu:
                         <h3>1</h3>
                     </div>
                     <div class="date">
@@ -123,7 +123,7 @@ if (isset($_GET['vehicle-id']) || isset($_SESSION['vehicle-id'])) {
                     </div>
                     <div class="price">
                         W sumie do zapłaty:
-                        <h3><?php echo $attribute['cena'] ?>zł</h3>
+                        <h3><?php echo $attribute['price_per_day'] ?>zł</h3>
                     </div>
                 </div>
                 <button type="submit">Zarezerwuj</button>
@@ -148,7 +148,7 @@ if (isset($_GET['vehicle-id']) || isset($_SESSION['vehicle-id'])) {
             <div class="bottom-text">&copy;2022 by Paweł Poremba</div>
         </section>
     </footer>
-    <script src="js/book.js" type="module" value="<?php echo $attribute['cena']; ?>"></script>
+    <script src="js/book.js" type="module" value="<?php echo $attribute['price_per_day']; ?>"></script>
     <?php
     include_once('./inc/logged.php');
     if (isset($consoleLog)) {

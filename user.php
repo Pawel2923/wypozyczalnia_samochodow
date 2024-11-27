@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once("./initial.php");
 if (isset($_SESSION['isLogged'])) {
     if (!$_SESSION['isLogged']) {
         header('Location: login.php');
@@ -39,14 +39,14 @@ try {
 
         if (isset($id)) {
             if (!empty($name)) {
-                $query = "UPDATE users SET imie=? WHERE id=?";
+                $query = "UPDATE users SET first_name=? WHERE id=?";
                 $stmt = $db_connection->prepare($query);
                 $stmt->bind_param('si', $name, $id);
                 $stmt->execute();
                 $stmt->close();
             }
             if (!empty($sName)) {
-                $query = "UPDATE users SET nazwisko=? WHERE id=?";
+                $query = "UPDATE users SET last_name=? WHERE id=?";
                 $stmt = $db_connection->prepare($query);
                 $stmt->bind_param('si', $sName, $id);
                 $stmt->execute();
@@ -54,7 +54,7 @@ try {
             }
             if (!empty($tel)) {
                 if (filter_var($tel, FILTER_VALIDATE_INT)) {
-                    $query = "UPDATE users SET telefon=? WHERE id=?";
+                    $query = "UPDATE users SET phone_number=? WHERE id=?";
                     $stmt = $db_connection->prepare($query);
                     $stmt->bind_param('si', $tel, $id);
                     $stmt->execute();
@@ -82,7 +82,7 @@ try {
     }
 
     if (isset($id)) {
-        $query = "SELECT imie, nazwisko, telefon, email FROM users WHERE id=?";
+        $query = "SELECT first_name, last_name, phone_number, email FROM users WHERE id=?";
         $stmt = $db_connection->prepare($query);
         $stmt->bind_param('i', $id);
         $stmt->execute();
@@ -99,7 +99,7 @@ try {
     if (isset($_POST['rentID'])) {
         $rentID = htmlentities($_POST['rentID']);
 
-        $query = "DELETE FROM rezerwacja WHERE id=?";
+        $query = "DELETE FROM reservations WHERE id=?";
         $stmt = $db_connection->prepare($query);
         $stmt->bind_param('i', $rentID);
         $stmt->execute();
@@ -247,7 +247,7 @@ try {
                                 $userId = $result->fetch_row();
                                 $userId = $userId[0];
 
-                                $query = "SELECT rezerwacja.id, marka, model, cena, na_ile, data_rezerwacji FROM vehicles INNER JOIN rezerwacja ON vehicles.id=rezerwacja.id_pojazdu WHERE id_klienta=?";
+                                $query = "SELECT r.id, brand, model, price_per_day, days_count, date FROM vehicles v INNER JOIN reservations r ON v.id=r.vehicle_id WHERE client_id=?";
                                 $stmt = $db_connection->prepare($query);
                                 $stmt->bind_param('i', $userId);
                                 $stmt->execute();
@@ -257,10 +257,10 @@ try {
                                 while ($row = $result->fetch_assoc()) {
                                     echo '<div class="option">';
                                     echo '<form action="" method="POST">';
-                                    echo 'Nazwa samochodu: ' . $row['marka'] . ' ' . $row['model'] . '<br>';
-                                    echo 'Cena: ' . $row['cena'] * $row['na_ile'] . 'zł<br>';
+                                    echo 'Nazwa samochodu: ' . $row['brand'] . ' ' . $row['model'] . '<br>';
+                                    echo 'Cena: ' . $row['price_per_day'] * $row['days_count'] . 'zł<br>';
                                     echo 'Na ile godzin: ' . $row['na_ile'] . '<br>';
-                                    echo 'Data rezerwacji: ' . $row['data_rezerwacji'] . '<br>';
+                                    echo 'Data rezerwacji: ' . $row['date'] . '<br>';
                                     echo '<input type="hidden" name="rentID" value="' . $row['id'] . '">';
                                     echo '<button type="submit">Anuluj</button>';
                                     echo '</form>';
@@ -280,11 +280,11 @@ try {
                             <div class="option edit-profile">
                                 <form action="" method="POST">
                                     <label for="name">Imię</label>
-                                    <input type="text" name="name" value="<?php if (isset($userData['imie'])) echo $userData['imie']; ?>">
+                                    <input type="text" name="name" value="<?php if (isset($userData['first_name'])) echo $userData['first_name']; ?>">
                                     <label for="sName">Nazwisko</label>
-                                    <input type="text" name="sName" value="<?php if (isset($userData['nazwisko'])) echo $userData['nazwisko']; ?>">
+                                    <input type="text" name="sName" value="<?php if (isset($userData['last_name'])) echo $userData['last_name']; ?>">
                                     <label for="tel">Telefon</label>
-                                    <input type="tel" name="tel" value="<?php if (isset($userData['telefon'])) echo $userData['telefon']; ?>">
+                                    <input type="tel" name="tel" value="<?php if (isset($userData['phone_number'])) echo $userData['phone_number']; ?>">
                                     <label for="email">Adres e-mail</label>
                                     <input type="email" name="email" value="<?php if (isset($userData['email'])) echo $userData['email']; ?>">
                                     <div class="buttons">
