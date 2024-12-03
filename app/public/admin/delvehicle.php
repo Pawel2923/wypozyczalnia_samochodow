@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once("../initial.php");
 if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
     if (!$_SESSION['isAdmin']) {
         header('Location: ../index.php');
@@ -9,8 +9,6 @@ if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
     header('Location: ../login.php');
     exit;
 }
-
-include_once("../inc/consoleMessage.php");
 
 if (isset($_POST['vehicle-id'])) {
     $vehicleId = htmlentities($_POST['vehicle-id']);
@@ -31,8 +29,8 @@ if (isset($_POST['vehicle-id'])) {
             } else 
                 throw new Exception(`Wystąpił błąd podczas wysyłania zapytania`);
 
-            ;
-            $db_connection = null;
+            $stmt->close();
+            $db_connection->close();
         } else
             throw new Exception("Błąd połączenia z bazą danych");
     } catch (Exception $error) {
@@ -41,7 +39,7 @@ if (isset($_POST['vehicle-id'])) {
         $consoleLog->show = true;
         $consoleLog->content = $error;
         $consoleLog->is_error = true;
-    } catch (mysqli_sql_exception $error) {
+    } catch (PDOException $error) {
         $consoleLog->show = true;
         $consoleLog->content = $error;
         $consoleLog->is_error = true;

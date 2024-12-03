@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once("./initial.php");
 if (isset($_SESSION['isLogged'])) {
     if (!$_SESSION['isLogged']) {
         header('Location: login.php');
@@ -20,49 +20,48 @@ if (isset($_POST['amount']) && isset($_POST['date']) && isset($_SESSION['vehicle
         try {
             require('db/db_connection.php');
 
-            $query = "SELECT id FROM users WHERE login=?";
+            $query = "SELECT id FROM users WHERE login=:login";
             $stmt = $db_connection->prepare($query);
-            $stmt->bind_param('s', $_SESSION['login']);
+            $stmt->bindParam('login', $_SESSION['login']);
             $stmt->execute();
 
             $result = $stmt->fetch(PDO::FETCH_OBJ);
             $id = $result->fetch(PDO::FETCH_ASSOC);
             $id = $id['id'];
 
-            ;
-
-            $query = "SELECT id_pojazdu FROM rezerwacja WHERE id_pojazdu=? AND data_rezerwacji=?";
+            $query = "SELECT vehicle_id FROM reservations WHERE vehicle_id=:vehId AND date=:date";
             $stmt = $db_connection->prepare($query);
-            $stmt->bind_param('is', $vehicleID, $date);
+            $stmt->bindParam('vehId', $vehicleID);
+            $stmt->bindParam('date', $date);
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_OBJ);
-            ;
             if ($stmt->rowCount() > 0) {
                 $_SESSION['msg'] = 'Podany pojazd w tym dniu jest już zajęty.';
                 $rentError = true;
             } else {
                 if ($date > $today) {
-                    $query = "INSERT INTO rezerwacja (id_pojazdu, id_klienta, data_rezerwacji, na_ile) VALUES(?, ?, ?, ?)";
+                    $query = "INSERT INTO reservations (vehicle_id, client_id, date, days_count) VALUES (:vehId, :clientId, :date, :days)";
                     $stmt = $db_connection->prepare($query);
-                    $stmt->bind_param('iisi', $vehicleID, $id, $date, $amount);
+                    $stmt->bindParam('vehId', $vehicleID);
+                    $stmt->bindParam('clientId', $id);
+                    $stmt->bindParam('date', $date);
+                    $stmt->bindParam('days', $amount);
                     $stmt->execute();
-                    ;
 
-                    $query = "SELECT rented_vehicles FROM users WHERE id=?";
+                    $query = "SELECT rented_vehicles FROM users WHERE id=:id";
                     $stmt = $db_connection->prepare($query);
-                    $stmt->bind_param('i', $id);
+                    $stmt->bindParam('id', $id, PDO::PARAM_INT);
                     $stmt->execute();
                     $rentedVehs = $stmt->fetch(PDO::FETCH_OBJ);
                     $rentedVehs = $rentedVehs->fetch(PDO::FETCH_ASSOC);
                     $rentedVehs = $rentedVehs['rented_vehicles'];
                     $rentedVehs++;
-                    ;
 
-                    $query = "UPDATE users SET rented_vehicles=? WHERE id=?";
+                    $query = "UPDATE users SET rented_vehicles=:vehiclesCount WHERE id=:id";
                     $stmt = $db_connection->prepare($query);
-                    $stmt->bind_param('ii', $rentedVehs, $id);
+                    $stmt->bindParam('vehiclesCount', $rentedVehs);
+                    $stmt->bindParam('id', $id, PDO::PARAM_INT);
                     $stmt->execute();
-                    ;
 
                     $_SESSION['msg'] = 'Dziękujemy za korzystanie z naszych usług!';
                 } else {
@@ -78,7 +77,7 @@ if (isset($_POST['amount']) && isset($_POST['date']) && isset($_SESSION['vehicle
             $consoleLog->show = true;
             $consoleLog->content = $error;
             $consoleLog->is_error = true;
-        } catch (mysqli_sql_exception $error) {
+        } catch (PDOException $error) {
             $consoleLog->show = true;
             $consoleLog->content = $error;
             $consoleLog->is_error = true;

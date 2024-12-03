@@ -1,6 +1,5 @@
 <?php
-session_start();
-include_once("./inc/consoleMessage.php");
+require_once("./initial.php");
 
 if (isset($_POST['name']) && isset($_POST['sName']) && isset($_POST['email']) && isset($_POST['tel']) && isset($_POST['message']) || isset($_SESSION['forgotten-passwd'])) {
     if (isset($_SESSION['forgotten-passwd'])) {
@@ -26,54 +25,49 @@ if (isset($_POST['name']) && isset($_POST['sName']) && isset($_POST['email']) &&
             require('db/db_connection.php');
 
             if (isset($db_connection)) {
-                $query = "SELECT COUNT(id) FROM messages";
-                $stmt = $db_connection->prepare($query);
-                $stmt->execute();
-                $result = $stmt->fetch(PDO::FETCH_OBJ);
-                ;
-                $messageID = $result->fetch();
-                $messageID = $messageID[0] + 1;
-
                 $query = "SELECT login FROM admins";
                 $stmt = $db_connection->prepare($query);
                 $stmt->execute();
-                $result = $stmt->fetch(PDO::FETCH_OBJ);
-                ;
-                $sentTo = $result->fetch();
+                $result = $stmt->fetch();
+                $sentTo = $result["login"];
 
                 $date = date('Y-m-d H:i:s');
 
-                $query = "INSERT INTO messages VALUES(?, ?, ?, ?, ?, ?, ?)";
+                $query = "INSERT INTO messages VALUES(DEFAULT, :message, :name, :sName, :email, :tel, :date)";
                 $stmt = $db_connection->prepare($query);
-                $stmt->bind_param('issssis', $messageID, $message, $name, $sName, $email, $tel, $date);
+                $stmt->bindParam('message', $message);
+                $stmt->bindParam('name', $name);
+                $stmt->bindParam('sName', $sName);
+                $stmt->bindParam('email', $email);
+                $stmt->bindParam('tel', $tel);
+                $stmt->bindParam('date', $date);
                 $stmt->execute();
-                ;
 
-                $query = "SELECT login FROM users WHERE email=?";
+                $query = "SELECT login FROM users WHERE email=:email";
                 $stmt = $db_connection->prepare($query);
-                $stmt->bind_param('s', $email);
+                $stmt->bindParam('email', $email);
                 $stmt->execute();
-                $result = $stmt->fetch(PDO::FETCH_OBJ);
-                ;
-                $username = $result->fetch();
-                $username = $username[0];
+                $result = $stmt->fetch();
+                $username = $result["login"];
 
                 if ($username != '') {
                     $direction = "out";
-                    $query = "INSERT INTO mailboxes VALUES(NULL, ?, ?, ?)";
+                    $query = "INSERT INTO mailboxes VALUES(DEFAULT, :id, :username, :direction)";
                     $stmt = $db_connection->prepare($query);
-                    $stmt->bind_param('iss', $messageID, $username, $direction);
+                    $stmt->bindParam('id', $messageID, PDO::PARAM_INT);
+                    $stmt->bindParam('username', $username);
+                    $stmt->bindParam('direction', $direction);
                     $stmt->execute();
-                    ;
                 }
 
                 for ($i = 0; $i < sizeof($sentTo); $i++) {
                     $direction = "in";
-                    $query = "INSERT INTO mailboxes VALUES(NULL, ?, ?, ?)";
+                    $query = "INSERT INTO mailboxes VALUES(DEFAULT, :id, :username, :direction)";
                     $stmt = $db_connection->prepare($query);
-                    $stmt->bind_param('iss', $messageID, $sentTo[$i], $direction);
+                    $stmt->bindParam('id', $messageID);
+                    $stmt->bindParam('username', $sentTo[$i]);
+                    $stmt->bindParam('direction', $direction);
                     $stmt->execute();
-                    ;
                 }
 
                 $_SESSION['msg'] = 'Dziękujemy za wysłanie wiadomości. Prosimy oczekiwać na odpowiedź. <a href="index.php">Powróć na stronę główną</a>';
@@ -89,7 +83,7 @@ if (isset($_POST['name']) && isset($_POST['sName']) && isset($_POST['email']) &&
             $consoleLog->content = $error;
             $consoleLog->is_error = true;
             $_SESSION['error'] = $error;
-        } catch (mysqli_sql_exception $error) {
+        } catch (PDOException $error) {
             $consoleLog->show = true;
             $consoleLog->content = $error;
             $consoleLog->is_error = true;

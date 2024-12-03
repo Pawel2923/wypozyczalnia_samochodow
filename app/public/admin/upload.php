@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once("../initial.php");
 $allowedExt = array("jpg", "jpeg", "gif", "png", "webp", "avif", "bmp", "xbm");
 
 $dir = '../img/cars/';

@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once($_SERVER['DOCUMENT_ROOT'] . "/initial.php");
 if (isset($_SESSION['isLogged'])) {
     if (!$_SESSION['isLogged']) {
         header('Location: ../login.php');
@@ -10,27 +10,24 @@ if (isset($_SESSION['isLogged'])) {
     exit;
 }
 
-include_once("../inc/consoleMessage.php");
-
 if (isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SESSION['login'])) {
     $newPasswd = htmlentities($_POST['password']);
     $confirmPasswd = htmlentities($_POST['password-confirm']);
 
     try {
         require('../db/db_connection.php');
-        $query = "SELECT id FROM users WHERE login=?";
+        $query = "SELECT id FROM users WHERE login=:login";
         $stmt = $db_connection->prepare($query);
-        $stmt->bind_param('s', $_SESSION['login']);
+        $stmt->bindParam('login', $_SESSION['login']);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_OBJ);
-        ;
         ($stmt->rowCount() == 1) ? $id = $result->fetch() : $_SESSION['error'] = 'Takiego loginu nie ma w bazie danych.';
 
         if (isset($id)) {
             $id = $id[0];
-            $query = "SELECT password FROM users WHERE id=?";
+            $query = "SELECT password FROM users WHERE id=:id";
             $stmt = $db_connection->prepare($query);
-            $stmt->bind_param('i', $id);
+            $stmt->bindParam('id', $id, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_OBJ);
             $hashedPasswd = $result->fetch();
@@ -42,12 +39,13 @@ if (isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SE
             else {
                 if ($newPasswd === $confirmPasswd) {
                     $newHashedPasswd = password_hash($newPasswd, PASSWORD_DEFAULT, array('cost' => 10));
-                    $query = "UPDATE users SET password=? WHERE id=?";
+                    $query = "UPDATE users SET password=:password WHERE id=:id";
                     $stmt = $db_connection->prepare($query);
-                    $stmt->bind_param('si', $newHashedPasswd, $id);
+                    $stmt->bindParam('password', $newHashedPasswd);
+                    $stmt->bindParam('id', $id, PDO::PARAM_INT);
                     $stmt->execute();
 
-                    if ($db_connection->affected_rows == 1) {
+                    if ($stmt->rowCount() == 1) {
                         $_SESSION['msg'] = 'Pomyślnie zmieniono hasło. Za chwilę wystąpi wylogowanie...';
                         echo '<script src="../js/changeLocation.js" class="script-changeLocation" id="5000" value="../logout.php"></script>';
                     } else
@@ -64,7 +62,7 @@ if (isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SE
         $consoleLog->show = true;
         $consoleLog->content = $error;
         $consoleLog->is_error = true;
-    } catch (mysqli_sql_exception $error) {
+    } catch (PDOException $error) {
         $consoleLog->show = true;
         $consoleLog->content = $error;
         $consoleLog->is_error = true;

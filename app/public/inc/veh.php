@@ -56,7 +56,7 @@ function printCard($vehicle, $caption)
         <div class="divider"></div>
         <div class="car-price">
             <span>1 godz.</span>
-            <span>' . str_replace(".", ",", $vehicle->price) . ' zł</span>
+            <span>' . str_replace(".", ",", $vehicle->price_per_day) . ' zł</span>
         </div>
         <button class="car-button" value="' . $vehicle->id . '">' . $buttonCaption . '</button>
     </div>';
@@ -80,7 +80,7 @@ function printList($vehicle, $caption)
                 <div>
                     <span>1 godz.</span>
                     <br>
-                    <span>' . str_replace(".", ",", $vehicle->price) . 'zł</span>
+                    <span>' . str_replace(".", ",", $vehicle->price_per_day) . 'zł</span>
                 </div>
                 <button class="car-button" value="' . $vehicle->id . '">' . $buttonCaption . '</button>
             </div>
@@ -99,7 +99,7 @@ function printTable($vehicle, $index)
         <tr>' .
         (($index) ? '<td>' . $vehicle->id . '</td>' : '') . '
             <td>' . $vehicle->brand . ' ' . $vehicle->model . '</td>
-            <td>' . str_replace('.', ',', $vehicle->price) . '</td>
+            <td>' . str_replace('.', ',', $vehicle->price_per_day) . '</td>
             <td>' . (($vehicle->is_available) ? 'Dostępny' : 'Niedostępny') .
         '</td>
         </tr>';

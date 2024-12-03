@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once("./initial.php");
 if (isset($_SESSION['isLogged'])) {
     if (!$_SESSION['isLogged']) {
         header('Location: login.php');
@@ -19,16 +19,14 @@ if (isset($_POST['theme'])) {
 try {
     require('db/db_connection.php');
 
-    $query = "SELECT id FROM users WHERE login=?";
+    $query = "SELECT id FROM users WHERE login=:login";
     $stmt = $db_connection->prepare($query);
-    $stmt->bind_param('s', $_SESSION['login']);
+    $stmt->bindParam('login', $_SESSION['login']);
     $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_OBJ);
-    ;
+    $result = $stmt->fetch();
 
     if ($stmt->rowCount() == 1) {
-        $id = $result->fetch();
-        $id = $id[0];
+        $id = $result["id"];
     }
 
     if (isset($_POST['name']) && isset($_POST['sName']) && isset($_POST['tel']) && isset($_POST['email'])) {
@@ -39,71 +37,83 @@ try {
 
         if (isset($id)) {
             if (!empty($name)) {
-                $query = "UPDATE users SET imie=? WHERE id=?";
+                $query = "UPDATE users SET first_name=:firstName WHERE id=:id";
                 $stmt = $db_connection->prepare($query);
-                $stmt->bind_param('si', $name, $id);
+                $stmt->bindParam("firstName", $name);
+                $stmt->bindParam("id", $id, PDO::PARAM_INT);
                 $stmt->execute();
-                ;
+
+                if ($stmt->rowCount() > 0)
+                    $_SESSION['msg'] = 'Zmiany zostały zapisane.';
+                else
+                    $_SESSION['error'] = 'Nie udało się wprowadzić zmian.';
             }
             if (!empty($sName)) {
-                $query = "UPDATE users SET nazwisko=? WHERE id=?";
+                $query = "UPDATE users SET last_name=:lastName WHERE id=:id";
                 $stmt = $db_connection->prepare($query);
-                $stmt->bind_param('si', $sName, $id);
+                $stmt->bindParam("lastName", $sName);
+                $stmt->bindParam("id", $id, PDO::PARAM_INT);
                 $stmt->execute();
-                ;
+
+                if ($stmt->rowCount() > 0)
+                    $_SESSION['msg'] = 'Zmiany zostały zapisane.';
+                else
+                    $_SESSION['error'] = 'Nie udało się wprowadzić zmian.';
             }
             if (!empty($tel)) {
                 if (filter_var($tel, FILTER_VALIDATE_INT)) {
-                    $query = "UPDATE users SET telefon=? WHERE id=?";
+                    $query = "UPDATE users SET phone_number=:tel WHERE id=:id";
                     $stmt = $db_connection->prepare($query);
-                    $stmt->bind_param('si', $tel, $id);
+                    $stmt->bindParam("tel", $tel);
+                    $stmt->bindParam("id", $id, PDO::PARAM_INT);
                     $stmt->execute();
-                    ;
+
+                    if ($stmt->rowCount() > 0)
+                        $_SESSION['msg'] = 'Zmiany zostały zapisane.';
+                    else
+                        $_SESSION['error'] = 'Nie udało się wprowadzić zmian.';
                 } else
                     $_SESSION['error'] = 'Wprowadzono niepoprawny numer telefonu';
             }
             if (!empty($email)) {
                 if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    $query = "UPDATE users SET email=? WHERE id=?";
+                    $query = "UPDATE users SET email=:email WHERE id=:id";
                     $stmt = $db_connection->prepare($query);
-                    $stmt->bind_param('si', $email, $id);
+                    $stmt->bindParam("email", $email);
+                    $stmt->bindParam("id", $id, PDO::PARAM_INT);
                     $stmt->execute();
-                    ;
+
+                    if ($stmt->rowCount() > 0)
+                        $_SESSION['msg'] = 'Zmiany zostały zapisane.';
+                    else
+                        $_SESSION['error'] = 'Nie udało się wprowadzić zmian.';
                 } else
                     $_SESSION['error'] = 'Wprowadzono niepoprawny email';
             }
-
-            if ($db_connection->affected_rows > 0)
-                $_SESSION['msg'] = 'Zmiany zostały zapisane.';
-            else
-                $_SESSION['error'] = 'Nie udało się wprowadzić zmian.';
         } else
             $_SESSION['error'] = 'Takiego loginu nie ma w bazie danych.';
     }
 
     if (isset($id)) {
-        $query = "SELECT imie, nazwisko, telefon, email FROM users WHERE id=?";
+        $query = "SELECT first_name, last_name, phone_number, email FROM users WHERE id=:id";
         $stmt = $db_connection->prepare($query);
-        $stmt->bind_param('i', $id);
+        $stmt->bindParam('id', $id, PDO::PARAM_INT);
         $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_OBJ);
-        $userData = $result->fetch(PDO::FETCH_ASSOC);
-        ;
+        $result = $stmt->fetch();
 
-        foreach ($userData as $key => $value) {
+        foreach ($result as $key => $value) {
             if (empty($value))
-                $userData[$key] = 'Brak danych';
+                $result[$key] = 'Brak danych';
         }
     }
 
     if (isset($_POST['rentID'])) {
         $rentID = htmlentities($_POST['rentID']);
 
-        $query = "DELETE FROM rezerwacja WHERE id=?";
+        $query = "DELETE FROM reservations WHERE id:id";
         $stmt = $db_connection->prepare($query);
-        $stmt->bind_param('i', $rentID);
+        $stmt->bindParam('id', $id, PDO::PARAM_INT);
         $stmt->execute();
-        ;
 
         $_SESSION['msg'] = 'Anulowano rezerwację.';
         header('Location: user.php#vehicles');
@@ -116,7 +126,7 @@ try {
     $consoleLog->show = true;
     $consoleLog->content = $error;
     $consoleLog->is_error = true;
-} catch (mysqli_sql_exception $error) {
+} catch (PDOException $error) {
     $consoleLog->show = true;
     $consoleLog->content = $error;
     $consoleLog->is_error = true;
@@ -237,30 +247,27 @@ try {
                                 require('db/db_connection.php');
 
                                 $login = $_SESSION['login'];
-                                $query = "SELECT id FROM users WHERE login=?";
+                                $query = "SELECT id FROM users WHERE login=:login";
                                 $stmt = $db_connection->prepare($query);
-                                $stmt->bind_param('s', $login);
+                                $stmt->bindParam("login", $login);
                                 $stmt->execute();
-                                $result = $stmt->fetch(PDO::FETCH_OBJ);
-                                ;
+                                $result = $stmt->fetch();
 
-                                $userId = $result->fetch();
-                                $userId = $userId[0];
+                                $userId = $result["id"];
 
-                                $query = "SELECT rezerwacja.id, marka, model, cena, na_ile, data_rezerwacji FROM vehicles INNER JOIN rezerwacja ON vehicles.id=rezerwacja.id_pojazdu WHERE id_klienta=?";
+                                $query = "SELECT r.id, brand, model, price_per_day, days_count, date FROM vehicles v INNER JOIN reservations r ON v.id=r.vehicle_id WHERE client_id=:id";
                                 $stmt = $db_connection->prepare($query);
-                                $stmt->bind_param('i', $userId);
+                                $stmt->bindParam('i', $userId, PDO::PARAM_INT);
                                 $stmt->execute();
-                                $result = $stmt->fetch(PDO::FETCH_OBJ);
-                                ;
+                                $result = $stmt->fetch();
 
-                                while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                                foreach ($result as $row) {
                                     echo '<div class="option">';
                                     echo '<form action="" method="POST">';
-                                    echo 'Nazwa samochodu: ' . $row['marka'] . ' ' . $row['model'] . '<br>';
-                                    echo 'Cena: ' . $row['cena'] * $row['na_ile'] . 'zł<br>';
+                                    echo 'Nazwa samochodu: ' . $row['brand'] . ' ' . $row['model'] . '<br>';
+                                    echo 'Cena: ' . $row['price_per_day'] * $row['days_count'] . 'zł<br>';
                                     echo 'Na ile godzin: ' . $row['na_ile'] . '<br>';
-                                    echo 'Data rezerwacji: ' . $row['data_rezerwacji'] . '<br>';
+                                    echo 'Data rezerwacji: ' . $row['date'] . '<br>';
                                     echo '<input type="hidden" name="rentID" value="' . $row['id'] . '">';
                                     echo '<button type="submit">Anuluj</button>';
                                     echo '</form>';
@@ -280,11 +287,11 @@ try {
                             <div class="option edit-profile">
                                 <form action="" method="POST">
                                     <label for="name">Imię</label>
-                                    <input type="text" name="name" value="<?php if (isset($userData['imie'])) echo $userData['imie']; ?>">
+                                    <input type="text" name="name" value="<?php if (isset($userData['first_name'])) echo $userData['first_name']; ?>">
                                     <label for="sName">Nazwisko</label>
-                                    <input type="text" name="sName" value="<?php if (isset($userData['nazwisko'])) echo $userData['nazwisko']; ?>">
+                                    <input type="text" name="sName" value="<?php if (isset($userData['last_name'])) echo $userData['last_name']; ?>">
                                     <label for="tel">Telefon</label>
-                                    <input type="tel" name="tel" value="<?php if (isset($userData['telefon'])) echo $userData['telefon']; ?>">
+                                    <input type="tel" name="tel" value="<?php if (isset($userData['phone_number'])) echo $userData['phone_number']; ?>">
                                     <label for="email">Adres e-mail</label>
                                     <input type="email" name="email" value="<?php if (isset($userData['email'])) echo $userData['email']; ?>">
                                     <div class="buttons">

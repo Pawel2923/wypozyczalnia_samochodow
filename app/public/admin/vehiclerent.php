@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once("../initial.php");
 if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
     if (!$_SESSION['isAdmin']) {
         header('Location: ../index.php');
@@ -9,8 +9,6 @@ if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
     header('Location: ../login.php');
     exit;
 }
-
-include_once("../inc/consoleMessage.php");
 
 if (isset($_POST['id'])) {
     $rentID = htmlentities($_POST['id']);
@@ -27,15 +25,15 @@ if (isset($_POST['id'])) {
             else
                 $_SESSION['msg'] = 'Nie udało się usunąć rezerwacji.';
 
-            ;
-            $db_connection = null;
+            $stmt->close();
+            $db_connection->close();
         } catch (Exception $error) {
             $error = addslashes($error);
             $error = str_replace("\n", "", $error);
             $consoleLog->show = true;
             $consoleLog->content = $error;
             $consoleLog->is_error = true;
-        } catch (mysqli_sql_exception $error) {
+        } catch (PDOException $error) {
             $consoleLog->show = true;
             $consoleLog->content = $error;
             $consoleLog->is_error = true;
@@ -158,8 +156,8 @@ if (isset($_POST['id'])) {
                                     $stmt = $db_connection->prepare($query);
                                     $stmt->execute();
 
-                                    $result = $stmt->fetch(PDO::FETCH_OBJ);
-                                    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                                    $result = $stmt->get_result();
+                                    while ($row = $result->fetch_assoc()) {
                                         echo '<tr>';
                                         echo '<td>' . $row['id'] . '</td>';
                                         echo '<td>' . $row['id_pojazdu'] . '</td>';
@@ -168,8 +166,8 @@ if (isset($_POST['id'])) {
                                         echo '<td>' . $row['na_ile'] . '</td>';
                                         echo '<tr>';
                                     }
-                                    ;
-                                    $db_connection = null;
+                                    $stmt->close();
+                                    $db_connection->close();
                                     ?>
                                 </table>
                             </div>

@@ -1,5 +1,6 @@
 <?php
-session_start();
+global $db_connection, $consoleLog;
+require_once("./initial.php");
 if (isset($_SESSION['isLogged'])) {
     if ($_SESSION['isLogged']) {
         header('Location: index.php');
@@ -30,31 +31,33 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
                 $query = "SELECT `login`, `email` FROM `users` WHERE `login`=:login OR `email`=:email";
 
                 $stmt = $db_connection->prepare($query);
-                $stmt->bindParam('login', $login, PDO::PARAM_STR);
-                $stmt->bindParam('email', $email, PDO::PARAM_STR);
+                $stmt->bindParam('login', $login);
+                $stmt->bindParam('email', $email);
                 $stmt->execute();
 
                 $result = $stmt->fetch(PDO::FETCH_OBJ);
+//                $login = $result->login;
+                $_SESSION["loginTest"] = $result->login;
 
                 if ($result) {
-                    $getPasswd = "SELECT `password`, `is_admin`, `change_passwd` FROM `users` WHERE `login`=:login OR `email`=:email";
+                    $getPasswd = "SELECT `login`, `password`, `is_admin`, `change_passwd` FROM `users` WHERE `login`=:login OR `email`=:email";
 
                     $stmt = $db_connection->prepare($getPasswd);
-                    $stmt->bindParam('login', $login, PDO::PARAM_STR);
-                    $stmt->bindParam('email', $email, PDO::PARAM_STR);
+                    $stmt->bindParam('login', $result->login, PDO::PARAM_STR);
+                    $stmt->bindParam('email', $result->email, PDO::PARAM_STR);
                     $stmt->execute();
 
                     $result2 = $stmt->fetch(PDO::FETCH_OBJ);
 
                     if ($result2->change_passwd) {
-                        $_SESSION['login'] = $login;
+                        $_SESSION['login'] = $result2->login;
                         $_SESSION['isLogged'] = true;
 
                         header('Location: changePasswd.php');
                         exit;
                     } else {
                         if (password_verify($password, $result2->password)) {
-                            $_SESSION['login'] = $login;
+                            $_SESSION['login'] = $result2->login;
                             $_SESSION['isLogged'] = true;
                             $_SESSION['isAdmin'] = $result2->is_admin;
 
@@ -72,16 +75,18 @@ if (isset($_POST['login']) && isset($_POST['password'])) {
             } else {
                 throw new Exception("Błąd połączenia z bazą danych");
             }
+        } catch (PDOException $Exception) {
+            $consoleLog->show = true;
+            $consoleLog->content = $Exception;
+            $consoleLog->is_error = true;
+            var_dump($Exception);
         } catch (Exception $Exception) {
             $Exception = addslashes($Exception);
             $Exception = str_replace("\n", "", $Exception);
             $consoleLog->show = true;
             $consoleLog->content = $Exception;
             $consoleLog->is_error = true;
-        } catch (PDOException $Exception) {
-            $consoleLog->show = true;
-            $consoleLog->content = $Exception;
-            $consoleLog->is_error = true;
+            var_dump($Exception);
         }
     }
 }

@@ -1,5 +1,5 @@
-<?php session_start();
-include_once("./inc/consoleMessage.php");
+<?php 
+    require_once("./initial.php");
 ?>
 <!DOCTYPE html>
 <html lang="pl">

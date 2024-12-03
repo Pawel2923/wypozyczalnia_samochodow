@@ -1,4 +1,4 @@
-<?php session_start(); ?>
+<?php require_once("./initial.php"); ?>
 <!DOCTYPE html>
 <html lang="pl">
 
@@ -26,12 +26,11 @@
             <h2>Wybierz pojazd</h2>
             <div class="cars cars-list">
                 <?php
-                require("inc/veh.php");
-                $options = new PrintOptions('list');
-                $result = printCarInfo($options);
-                if ($result === null) {
-                    echo '<p class="no-vehicles">Obecnie nie ma pojazdów do rezerwacji</p>';
-                }
+                require('inc/veh.php');
+                if (isset($vehicle))
+                    printCarInfo(new PrintOptions("list"));
+                else
+                    echo '<p>Obecnie nie ma pojazdów do wypożyczenia</p>';
                 ?>
             </div>
         </section>

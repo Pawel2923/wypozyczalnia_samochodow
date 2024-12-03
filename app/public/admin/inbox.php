@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once("../initial.php");
 if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
     if (!$_SESSION['isAdmin']) {
         header('Location: ../index.php');
@@ -9,8 +9,6 @@ if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
     header('Location: ../login.php');
     exit;
 }
-
-include_once("../inc/consoleMessage.php");
 
 if (isset($_POST['message-id'])) {
     if ($_POST['message-id'] > 0) {
@@ -23,17 +21,17 @@ if (isset($_POST['message-id'])) {
             $stmt = $db_connection->prepare($query);
             $stmt->bind_param('i', $messageID);
             $stmt->execute();
-            ;
+            $stmt->close();
 
             $query = 'DELETE FROM messages WHERE id=?';
             $stmt = $db_connection->prepare($query);
             $stmt->bind_param('i', $messageID);
             $stmt->execute();
-            ;
+            $stmt->close();
 
             $_SESSION['msg'] = 'Pomyślnie usunięto wiadomość.';
 
-            $db_connection = null;
+            $db_connection->close();
             unset($_POST['message-id']);
         } catch (Exception $error) {
             $error = addslashes($error);
@@ -41,7 +39,7 @@ if (isset($_POST['message-id'])) {
             $consoleLog->show = true;
             $consoleLog->content = $error;
             $consoleLog->is_error = true;
-        } catch (mysqli_sql_exception $error) {
+        } catch (PDOException $error) {
             $consoleLog->show = true;
             $consoleLog->content = $error;
             $consoleLog->is_error = true;
@@ -145,12 +143,12 @@ if (isset($_POST['message-id'])) {
                             $stmt = $db_connection->prepare($query);
                             $stmt->bind_param('s', $_SESSION['login']);
                             $stmt->execute();
-                            $result = $stmt->fetch(PDO::FETCH_OBJ);
-                            ;
+                            $result = $stmt->get_result();
+                            $stmt->close();
 
                             echo '<h3>Odebrane</h3>';
-                            if ($stmt->rowCount() > 0) {
-                                while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
                                     echo '<div class="box-msg">';
                                     echo '<form action="" method="POST">';
                                     echo '<input type="hidden" name="message-id" value="' . $row['id'] . '">';
@@ -177,12 +175,12 @@ if (isset($_POST['message-id'])) {
                             $stmt = $db_connection->prepare($query);
                             $stmt->bind_param('s', $_SESSION['login']);
                             $stmt->execute();
-                            $result = $stmt->fetch(PDO::FETCH_OBJ);
-                            ;
+                            $result = $stmt->get_result();
+                            $stmt->close();
 
                             echo '<h3>Wysłane</h3>';
-                            if ($stmt->rowCount() > 0) {
-                                while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
                                     echo '<div class="box-msg">';
                                     echo '<form action="" method="POST">';
                                     echo '<input type="hidden" name="message-id" value="' . $row['id'] . '">';

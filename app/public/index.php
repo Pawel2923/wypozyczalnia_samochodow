@@ -1,4 +1,4 @@
-<?php session_start(); ?>
+<?php require_once("./initial.php"); ?>
 <!DOCTYPE html>
 <html lang="pl">
 
@@ -34,7 +34,7 @@
             </span>
         </section>
         <section>
-            <h2>Najnowsze samochody</h2>
+            <h2>Najnowsze samochody do rezerwacji</h2>
             <div class="cars">
                 <?php
                 require("inc/veh.php");
@@ -81,6 +81,13 @@
     </footer>
     <script src="js/index.js" type="module"></script>
     <?php include_once('inc/logged.php'); ?>
+    <?php
+    if (isset($_SESSION["loginTest"])) {
+        echo '<script>
+            console.log("login: '. $_SESSION["loginTest"] .'");
+            </script>';
+    }
+    ?>
 </body>
 
 </html>

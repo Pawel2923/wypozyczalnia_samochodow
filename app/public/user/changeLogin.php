@@ -20,31 +20,29 @@ if (isset($_POST['new-login']) && isset($_SESSION['login'])) {
         try {
             require('../db/db_connection.php');
 
-            $query = "SELECT COUNT(id) FROM users WHERE login=?";
+            $query = "SELECT COUNT(id) FROM users WHERE login=:login";
             $stmt = $db_connection->prepare($query);
-            $stmt->bind_param('s', $newLogin);
+            $stmt->bindParam('login', $newLogin);
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_OBJ);
-            ;
             $checkLogin = $result->fetch();
             $checkLogin = $checkLogin[0];
 
             if ($checkLogin != 1) {
-                $query = "SELECT id FROM users WHERE login=?";
+                $query = "SELECT id FROM users WHERE login=:login";
                 $stmt = $db_connection->prepare($query);
-                $stmt->bind_param('s', $_SESSION['login']);
+                $stmt->bindParam('login', $_SESSION['login']);
                 $stmt->execute();
                 $result = $stmt->fetch(PDO::FETCH_OBJ);
-                ;
 
                 if ($stmt->rowCount() == 1) {
                     $id = $result->fetch();
                     $id = $id[0];
-                    $query = "UPDATE users SET login=? WHERE id=?";
+                    $query = "UPDATE users SET login=:login WHERE id=:id";
                     $stmt = $db_connection->prepare($query);
-                    $stmt->bind_param('si', $newLogin, $id);
+                    $stmt->bindParam('login', $newLogin);
+                    $stmt->bindParam('id', $id, PDO::PARAM_INT);
                     $stmt->execute();
-                    ;
 
                     $_SESSION['msg'] = 'Pomyślnie zmieniono login. Za chwilę wystąpi wylogowanie...';
                     echo '<script src="js/changeLocation.js" class="script-changeLocation" id="5000" value="../logout.php"></script>';
@@ -60,7 +58,7 @@ if (isset($_POST['new-login']) && isset($_SESSION['login'])) {
             $consoleLog->show = true;
             $consoleLog->content = $error;
             $consoleLog->is_error = true;
-        } catch (mysqli_sql_exception $error) {
+        } catch (PDOException $error) {
             $consoleLog->show = true;
             $consoleLog->content = $error;
             $consoleLog->is_error = true;
