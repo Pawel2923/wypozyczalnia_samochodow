@@ -47,21 +47,11 @@ if (isset($_GET['view-mode'])) {
         <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="../admin.php">
-                        <li>Home</li>
-                    </a>
-                    <a class="veh-link" href="../admin.php#vehicles">
-                        <li>Pojazdy</li>
-                    </a>
-                    <a class="users-link" href="../admin.php#users">
-                        <li>Użytkownicy</li>
-                    </a>
-                    <a href="../admin/inbox.php">
-                        <li>Wiadomości</li>
-                    </a>
-                    <a class="settings-link" href="../admin.php#settings">
-                        <li>Ustawienia</li>
-                    </a>
+                    <li><a href="../admin.php">Home</a></li>
+                    <li><a class="veh-link" href="../admin.php#vehicles">Pojazdy</a></li>
+                    <li><a class="users-link" href="../admin.php#users">Użytkownicy</a></li>
+                    <li><a href="../admin/inbox.php">Wiadomości</a></li>
+                    <li><a class="settings-link" href="../admin.php#settings">Ustawienia</a></li>
                 </ul>
             </div>
             <div class="back">
@@ -110,11 +100,13 @@ if (isset($_GET['view-mode'])) {
                             <h2>Lista pojazdów</h2>
                         </header>
                         <form class="view" method="GET">
-                            <select name="view-mode">
-                                <option value="cards">Karty</option>
-                                <option value="list">Lista</option>
-                                <option value="table">Tabela</option>
-                            </select>
+                            <label>
+                                <select name="view-mode">
+                                    <option value="cards">Karty</option>
+                                    <option value="list">Lista</option>
+                                    <option value="table">Tabela</option>
+                                </select>
+                            </label>
                             <button type="submit"></button>
                         </form>
                         <section>
@@ -124,21 +116,57 @@ if (isset($_GET['view-mode'])) {
                                 if (isset($vehicle)) {
                                     if (isset($_GET['view-mode'])) {
                                         if ($_GET['view-mode'] == "cards")
-                                            printCarInfo("availabilityCheck", $vehNum, $vehicle, true);
+                                        {
+                                            $options = new PrintOptions();
+                                            $options->index = true;
+                                            $options->available = false;
+                                            printCarInfo($options);
+                                        }
                                         elseif ($_GET['view-mode'] == "list")
-                                            printCarInfoList("availabilityCheck", $vehNum, $vehicle, true);
+                                        {
+                                            $options = new PrintOptions();
+                                            $options->method = PrintMethod::List;
+                                            $options->index = true;
+                                            $options->available = false;
+                                            printCarInfo($options);
+                                        }
                                         elseif ($_GET['view-mode'] == "table")
-                                            printCarInfoTable($vehNum, $vehicle);
+                                        {
+                                            $options = new PrintOptions();
+                                            $options->method = PrintMethod::Table;
+                                            $options->index = true;
+                                            $options->available = false;
+                                            printCarInfo($options);
+                                        }
                                     } else {
                                         if (isset($_COOKIE['vehList-viewMode'])) {
                                             if ($_COOKIE['vehList-viewMode'] == "cards")
-                                                printCarInfo("availabilityCheck", $vehNum, $vehicle, true);
+                                            {
+                                                $options = new PrintOptions();
+                                                $options->index = true;
+                                                $options->available = false;
+                                                printCarInfo($options);
+                                            }
                                             elseif ($_COOKIE['vehList-viewMode'] == "list") {
-                                                printCarInfoList("availabilityCheck", $vehNum, $vehicle, true);
+                                                $options = new PrintOptions();
+                                                $options->method = PrintMethod::List;
+                                                $options->index = true;
+                                                $options->available = false;
+                                                printCarInfo($options);
                                             } elseif ($_COOKIE['vehList-viewMode'] == "table")
-                                                printCarInfoTable($vehNum, $vehicle);
-                                        } else
-                                            printCarInfo("availabilityCheck", $vehNum, $vehicle, true);
+                                            {
+                                                $options = new PrintOptions();
+                                                $options->method = PrintMethod::Table;
+                                                $options->index = true;
+                                                $options->available = false;
+                                                printCarInfo($options);
+                                            }
+                                        } else {
+                                            $options = new PrintOptions();
+                                            $options->index = true;
+                                            $options->available = false;
+                                            printCarInfo($options);
+                                        }
                                     }
                                 } else
                                     echo 'W bazie nie ma żadnych pojazdów.';

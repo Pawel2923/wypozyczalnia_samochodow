@@ -1,8 +1,9 @@
 <?php
-function fetchVehicleData()
+function fetchVehicleData(): ?array
 {
+    global $db_connection;
     $path = $_SERVER['REQUEST_URI'];     // Pobranie ścieżki z URL
-    if (strpos($path, '/admin') !== false)            // Sprawdzenie czy ściezka zawiera '/admin'
+    if (str_contains($path, '/admin'))            // Sprawdzenie czy ściezka zawiera '/admin'
         require('../db/db_connection.php');
     else
         require('db/db_connection.php');
@@ -22,16 +23,23 @@ function fetchVehicleData()
     return null;
 }
 
+enum PrintMethod: string
+{
+    case Card = "card";
+    case Table = "table";
+    case List = "list";
+}
+
 class PrintOptions
 {
-    public $method = 'print method';
-    public $caption = 'button content';
-    public $limit = -1;
-    public $available = true;
-    public $recent = false;
-    public $index = false;
+    public PrintMethod $method = PrintMethod::Card;
+    public string $caption = 'button content';
+    public int $limit = -1;
+    public bool $available = true;
+    public bool $recent = false;
+    public bool $index = false;
 
-    function __construct($method = 'card', $caption = 'Wypożycz', $limit = -1, $available = true, $recent = false, $index = false)
+    function __construct(PrintMethod $method = PrintMethod::Card, $caption = 'Wypożycz', $limit = -1, $available = true, $recent = false, $index = false)
     {
         $this->caption = $caption;
         $this->method = $method;
@@ -40,13 +48,20 @@ class PrintOptions
         $this->limit = $limit;
         $this->index = $index;
     }
-};
+}
 
-function printCard($vehicle, $caption)
+function setImgUrlAndBtnCaption(object $vehicle, string $caption): array
 {
     $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
     $img_url = ((strpos($path, 'admin/') || strpos($path, 'user/')) ?  '../img/cars/' . $vehicle->img_url : 'img/cars/' . $vehicle->img_url);
     $buttonCaption = $caption === "availabilityCheck" ? ($vehicle->is_available ? 'Dostępny' : 'Niedostępny') : $caption;
+
+    return [$img_url, $buttonCaption];
+}
+
+function printCard($vehicle, $caption): void
+{
+    [$img_url, $buttonCaption] = setImgUrlAndBtnCaption($vehicle, $caption);
 
     echo '<div class="car">
     <div class="image-wrapper">
@@ -55,18 +70,16 @@ function printCard($vehicle, $caption)
         <span class="car-name">' . $vehicle->brand . ' ' . $vehicle->model . '</span>
         <div class="divider"></div>
         <div class="car-price">
-            <span>1 godz.</span>
+            <span>1 doba</span>
             <span>' . str_replace(".", ",", $vehicle->price_per_day) . ' zł</span>
         </div>
         <button class="car-button" value="' . $vehicle->id . '">' . $buttonCaption . '</button>
     </div>';
 }
 
-function printList($vehicle, $caption)
+function printList($vehicle, $caption): void
 {
-    $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-    $img_url = ((strpos($path, 'admin/') || strpos($path, 'user/')) ?  '../img/cars/' . $vehicle->img_url : 'img/cars/' . $vehicle->img_url);
-    $buttonCaption = $caption === "availabilityCheck" ? ($vehicle->is_available ? 'Dostępny' : 'Niedostępny') : $caption;
+    [$img_url, $buttonCaption] = setImgUrlAndBtnCaption($vehicle, $caption);
 
     echo '<div class="vehicle">
         <div class="vehicle-name">
@@ -78,7 +91,7 @@ function printList($vehicle, $caption)
             </div>
             <div class="vehicle-price">
                 <div>
-                    <span>1 godz.</span>
+                    <span>1 doba</span>
                     <br>
                     <span>' . str_replace(".", ",", $vehicle->price_per_day) . 'zł</span>
                 </div>
@@ -88,12 +101,12 @@ function printList($vehicle, $caption)
     </div>';
 }
 
-function printTable($vehicle, $index)
+function printTable($vehicle, $index): void
 {
     echo '<tr>
             ' . (($index) ? '<th>ID</th>' : '') . '
             <th>Nazwa</th>
-            <th>Cena za 1 godz.</th>
+            <th>Cena za 1 dobę</th>
             <th>Dostępność</th>
         </tr>
         <tr>' .
@@ -106,7 +119,7 @@ function printTable($vehicle, $index)
 }
 
 //Wyświetlanie informacji o pojazdach jako karty
-function printCarInfo($options = null)
+function printCarInfo($options = null): ?true
 {
     $vehicles = fetchVehicleData();
 
@@ -119,7 +132,7 @@ function printCarInfo($options = null)
             $vehicles = array_reverse($vehicles);
         }
 
-        if ($options->method === 'table') {
+        if ($options->method === PrintMethod::Table) {
             echo '<div class="table">
                     <table>
                         ';
@@ -143,20 +156,12 @@ function printCarInfo($options = null)
                 if ($index >= $options->limit) break;
             }
 
-            if ($options->method === 'card') {
-                if ($options->available && $vehicle->is_available) {
-                    printCard($vehicle, $options->caption);
-                } else {
-                    printCard($vehicle, $options->caption);
-                }
+            if ($options->method === PrintMethod::Card) {
+                printCard($vehicle, $options->caption);
             }
 
-            if ($options->method === 'list') {
-                if ($options->available && $vehicle->is_available) {
-                    printList($vehicle, $options->caption);
-                } else {
-                    printList($vehicle, $options->caption);
-                }
+            if ($options->method === PrintMethod::List) {
+                printList($vehicle, $options->caption);
             }
         }
         return true;

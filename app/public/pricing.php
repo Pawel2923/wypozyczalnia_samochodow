@@ -30,13 +30,23 @@
             <h2>Uzyskaj wycenę</h2>
             <p>Chcesz wypożyczyć pojazd na swoją następną przygodę? Wpisz poniżej swoje dane, a ktoś z naszego zespołu wkrótce skontaktuje się, aby przekazać Ci wycenę.</p>
             <form action="send.php" method="POST">
-                <input type="text" name="name" placeholder="Imię*" required>
-                <input type="text" name="sName" placeholder="Nazwisko*" required>
+                <label>
+                    <input type="text" name="name" placeholder="Imię*" required>
+                </label>
+                <label>
+                    <input type="text" name="sName" placeholder="Nazwisko*" required>
+                </label>
                 <div class="contact">
-                    <input type="email" name="email" placeholder="Adres e-mail*" required>
-                    <input type="tel" name="tel" placeholder="Nr telefonu">
+                    <label>
+                        <input type="email" name="email" placeholder="Adres e-mail*" required>
+                    </label>
+                    <label>
+                        <input type="tel" name="tel" placeholder="Nr telefonu">
+                    </label>
                 </div>
-                <textarea name="message" placeholder="Wiadomość*" required></textarea>
+                <label>
+                    <textarea name="message" placeholder="Wiadomość*" required></textarea>
+                </label>
                 <button type="submit">Wyślij</button>
             </form>
         </section>
@@ -45,7 +55,9 @@
         <section class="subscription-form">
             <form action="newsletter.php" method="POST">
                 <h3>Zapisz się na nasz newsletter</h3>
-                <input type="email" placeholder="Adres e-mail" name="newsletter-mail" required>
+                <label>
+                    <input type="email" placeholder="Adres e-mail" name="newsletter-mail" required>
+                </label>
                 <br>
                 <button type="submit">Zapisz się</button>
             </form>

@@ -15,7 +15,7 @@ require_once("getUserProfile.php");
         <i class="fa-solid fa-tag"></i>
         <span>Wycena</span>
     </a>
-    <a href="#" referrerpolicy="no-referer" class="open">
+    <a href="#" referrerpolicy="no-referrer" class="open">
         <i class="fa-solid fa-circle-user"></i>
         <span>Profil</span>
     </a>
@@ -43,6 +43,9 @@ require_once("getUserProfile.php");
             }
 
             if (isset($_SESSION['login']) && !isset($_SESSION['connectionError'])) {
+                if (!isset($userProfile)) {
+                    $userProfile = new Profile;
+                }
                 echo '
                     <ul>
                         <li>

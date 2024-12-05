@@ -23,12 +23,8 @@ if (!file_exists($targetWebp)) { // Sprawdzenie czy plik istnieje
         if (in_array(end($ext), $allowedExt)) { // Sprawdzenie czy rozszerzenie jest obsługiwane
             $img = NULL;  // Konwersja na webp
             switch ($ext) {
-                case "jpg":
-                    $img = imagecreatefromjpeg($target);
-                    imagewebp($img);
-                    imagedestroy($img);
-                    break;
                 case "jpeg":
+                case "jpg":
                     $img = imagecreatefromjpeg($target);
                     imagewebp($img);
                     imagedestroy($img);
@@ -39,7 +35,7 @@ if (!file_exists($targetWebp)) { // Sprawdzenie czy plik istnieje
                     imagedestroy($img);
                     break;
                 case "png":
-                    $img = imagecreatefromjpeg($target);
+                    $img = imagecreatefrompng($target);
                     imagewebp($img);
                     imagedestroy($img);
                     break;

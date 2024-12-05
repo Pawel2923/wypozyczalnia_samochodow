@@ -1,5 +1,6 @@
-<?php 
-    require_once("./initial.php");
+<?php
+global $consoleLog;
+require_once("./initial.php");
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -35,7 +36,7 @@
                     if (isset($db_connection)) {
                         $query = "SELECT email FROM newsletter WHERE email=:email";
                         $stmt = $db_connection->prepare($query);
-                        $stmt->bindParam('email', $email, PDO::PARAM_STR);
+                        $stmt->bindParam('email', $email);
                         $stmt->execute();
                         $result = $stmt->fetch(PDO::FETCH_OBJ);
 
@@ -45,7 +46,7 @@
                             $query = "INSERT INTO newsletter (email) VALUES (:email)";
                             $stmt = $db_connection->prepare($query);
 
-                            $stmt->bindParam('email', $email, PDO::PARAM_STR);
+                            $stmt->bindParam('email', $email);
                             $stmt->execute();
 
                             $_SESSION['msg'] = 'Dziękujemy za zapisanie się na nasz newsletter!';
@@ -55,14 +56,14 @@
                     } else {
                         throw new Exception("Nie udało połączyć się z bazą danych");
                     }
-                } catch (Exception $Exception) {
-                    $Exception = addslashes($Exception);
-                    $Exception = str_replace("\n", "", $Exception);
+                } catch (PDOException $Exception) {
                     $consoleLog->show = true;
                     $consoleLog->content = $Exception;
                     $consoleLog->is_error = true;
                     $_SESSION["error"] = $Exception;
-                } catch (PDOException $Exception) {
+                } catch (Exception $Exception) {
+                    $Exception = addslashes($Exception);
+                    $Exception = str_replace("\n", "", $Exception);
                     $consoleLog->show = true;
                     $consoleLog->content = $Exception;
                     $consoleLog->is_error = true;

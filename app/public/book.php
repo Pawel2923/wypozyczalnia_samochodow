@@ -1,4 +1,5 @@
 <?php
+global $db_connection, $consoleLog, $attribute;
 require_once("./initial.php");
 if (isset($_SESSION['isLogged'])) {
     if (!$_SESSION['isLogged']) {
@@ -25,19 +26,19 @@ if (isset($_GET['vehicle-id']) || isset($_SESSION['vehicle-id'])) {
         $stmt = $db_connection->prepare($query);
         $stmt->bindParam('vehicleID', $vehicleID, PDO::PARAM_INT);
         $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_OBJ);
+        $result = $stmt->fetch();
 
-        $attribute = $result->fetch(PDO::FETCH_ASSOC);
+        $attribute = $result;
 
         $_SESSION['vehicle-id'] = $vehicleID;
         $db_connection = null;
-    } catch (Exception $Exception) {
-        $Exception = addslashes($Exception);
-        $Exception = str_replace("\n", "", $Exception);
+    } catch (PDOException $Exception) {
         $consoleLog->show = true;
         $consoleLog->content = $Exception;
         $consoleLog->is_error = true;
-    } catch (PDOException $Exception) {
+    } catch (Exception $Exception) {
+        $Exception = addslashes($Exception);
+        $Exception = str_replace("\n", "", $Exception);
         $consoleLog->show = true;
         $consoleLog->content = $Exception;
         $consoleLog->is_error = true;
@@ -75,13 +76,13 @@ if (isset($_GET['vehicle-id']) || isset($_SESSION['vehicle-id'])) {
         <section>
             <div class="vehicle">
                 <div class="vehicle-name">
-                    <h2><?php echo $attribute['marka'] . ' ' . $attribute['model']; ?></h2>
+                    <h2><?php echo $attribute['brand'] . ' ' . $attribute['model']; ?></h2>
                 </div>
                 <div class="vehicle-image">
                     <img src="img/cars/<?php echo $attribute['img_url'] ?>" alt="Zdjęcie samochodu" width="100%" height="100%">
                 </div>
                 <div class="description">
-                    <div class="vehicle-price"><?php echo $attribute['cena'] ?>zł za 1 godzinę</div>
+                    <div class="vehicle-price"><?php echo $attribute['price_per_day'] ?>zł za 1 dobę</div>
                 </div>
             </div>
             <div class="message">
@@ -102,18 +103,18 @@ if (isset($_GET['vehicle-id']) || isset($_SESSION['vehicle-id'])) {
             </div>
             <h2>Wypełnij formularz</h2>
             <form action="rentsubmit.php" method="POST">
-                <label for="amount">Ilość godzin wynajmu</label>
-                <input type="number" name="amount" value="1" min="1" required>
+                <label for="amount">Ilość dni wynajmu</label>
+                <input type="number" name="amount" id="amount" value="1" min="1" required>
                 <label for="date">Data wynajmu</label>
-                <input type="date" name="date" required>
+                <input type="date" name="date" id="date" required>
                 <div class="summary">
                     <h2>Podsumowanie zamówienia</h2>
                     <div class="carName">
                         Nazwa pojazdu:
-                        <h3><?php echo $attribute['marka'] . ' ' . $attribute['model']; ?></h3>
+                        <h3><?php echo $attribute['brand'] . ' ' . $attribute['model']; ?></h3>
                     </div>
                     <div class="amount">
-                        Liczba godzin wynajmu:
+                        Ilość dni wynajmu:
                         <h3>1</h3>
                     </div>
                     <div class="date">
@@ -122,7 +123,7 @@ if (isset($_GET['vehicle-id']) || isset($_SESSION['vehicle-id'])) {
                     </div>
                     <div class="price">
                         W sumie do zapłaty:
-                        <h3><?php echo $attribute['cena'] ?>zł</h3>
+                        <h3><?php echo $attribute['price_per_day'] ?>zł</h3>
                     </div>
                 </div>
                 <button type="submit">Zarezerwuj</button>
@@ -133,7 +134,8 @@ if (isset($_GET['vehicle-id']) || isset($_SESSION['vehicle-id'])) {
         <section class="subscription-form">
             <form action="newsletter.php" method="POST">
                 <h3>Zapisz się na nasz newsletter</h3>
-                <input type="email" placeholder="Adres e-mail" name="newsletter-mail" required>
+                <label for="newsletter-mail"></label>
+                <input type="email" placeholder="Adres e-mail" name="newsletter-mail" id="newsletter-mail" required>
                 <br>
                 <button type="submit">Zapisz się</button>
             </form>
@@ -147,7 +149,7 @@ if (isset($_GET['vehicle-id']) || isset($_SESSION['vehicle-id'])) {
             <div class="bottom-text">&copy;2022 by Paweł Poremba</div>
         </section>
     </footer>
-    <script src="js/book.js" type="module" value="<?php echo $attribute['cena']; ?>"></script>
+    <script src="js/book.js" type="module" value="<?php echo $attribute['price_per_day']; ?>"></script>
     <?php
     include_once('./inc/logged.php');
     if (isset($consoleLog)) {

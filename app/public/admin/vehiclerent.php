@@ -1,4 +1,5 @@
 <?php
+global $db_connection, $consoleLog;
 require_once("../initial.php");
 if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
     if (!$_SESSION['isAdmin']) {
@@ -15,9 +16,9 @@ if (isset($_POST['id'])) {
     if ($rentID > 0) {
         try {
             require('../db/db_connection.php');
-            $query = "DELETE FROM rezerwacja WHERE id=?";
+            $query = "DELETE FROM reservations WHERE id=?";
             $stmt = $db_connection->prepare($query);
-            $stmt->bind_param('i', $rentID);
+            $stmt->bindParam(1, $rentID, PDO::PARAM_INT);
             $stmt->execute();
 
             if ($db_connection->affected_rows > 0)
@@ -25,15 +26,14 @@ if (isset($_POST['id'])) {
             else
                 $_SESSION['msg'] = 'Nie udało się usunąć rezerwacji.';
 
-            $stmt->close();
-            $db_connection->close();
-        } catch (Exception $error) {
-            $error = addslashes($error);
-            $error = str_replace("\n", "", $error);
+            $db_connection = null;
+        } catch (PDOException $error) {
             $consoleLog->show = true;
             $consoleLog->content = $error;
             $consoleLog->is_error = true;
-        } catch (PDOException $error) {
+        } catch (Exception $error) {
+            $error = addslashes($error);
+            $error = str_replace("\n", "", $error);
             $consoleLog->show = true;
             $consoleLog->content = $error;
             $consoleLog->is_error = true;
@@ -68,21 +68,11 @@ if (isset($_POST['id'])) {
         <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="../admin.php">
-                        <li>Home</li>
-                    </a>
-                    <a class="veh-link" href="../admin.php#vehicles">
-                        <li>Pojazdy</li>
-                    </a>
-                    <a class="users-link" href="../admin.php#users">
-                        <li>Użytkownicy</li>
-                    </a>
-                    <a href="../admin/inbox.php">
-                        <li>Wiadomości</li>
-                    </a>
-                    <a class="settings-link" href="../admin.php#settings">
-                        <li>Ustawienia</li>
-                    </a>
+                    <li><a href="../admin.php">Home</a></li>
+                    <li><a class="veh-link" href="../admin.php#vehicles">Pojazdy</a></li>
+                    <li><a class="users-link" href="../admin.php#users">Użytkownicy</a></li>
+                    <li><a href="../admin/inbox.php">Wiadomości</a></li>
+                    <li><a class="settings-link" href="../admin.php#settings">Ustawienia</a></li>
                 </ul>
             </div>
             <div class="back">
@@ -135,7 +125,7 @@ if (isset($_POST['id'])) {
                                 <h3>Usuwanie rezerwacji</h3>
                                 <form action="" method="POST">
                                     <label for="id">Wpisz ID rezerwacji:</label>
-                                    <input type="number" name="id" min="1" required>
+                                    <input type="number" name="id" id="id" min="1" required>
                                     <button type="submit">Usuń</button>
                                 </form>
                             </div>
@@ -151,13 +141,13 @@ if (isset($_POST['id'])) {
                                     </tr>
                                     <?php
                                     require('../db/db_connection.php');
-                                    $query = "SELECT * FROM rezerwacja";
+                                    $query = "SELECT * FROM reservations";
 
                                     $stmt = $db_connection->prepare($query);
                                     $stmt->execute();
 
-                                    $result = $stmt->get_result();
-                                    while ($row = $result->fetch_assoc()) {
+                                    $result = $stmt->fetch();
+                                    foreach ($result as $row) {
                                         echo '<tr>';
                                         echo '<td>' . $row['id'] . '</td>';
                                         echo '<td>' . $row['id_pojazdu'] . '</td>';
@@ -166,8 +156,7 @@ if (isset($_POST['id'])) {
                                         echo '<td>' . $row['na_ile'] . '</td>';
                                         echo '<tr>';
                                     }
-                                    $stmt->close();
-                                    $db_connection->close();
+                                    $db_connection = null;
                                     ?>
                                 </table>
                             </div>

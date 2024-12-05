@@ -1,4 +1,5 @@
 <?php
+global $consoleLog;
 require_once("../initial.php");
 if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
     if (!$_SESSION['isAdmin']) {
@@ -19,7 +20,7 @@ if (isset($_POST['vehicle-id'])) {
             $query = "DELETE FROM vehicles WHERE id=?";
             $stmt = $db_connection->prepare($query);
             if ($stmt) {
-                $stmt->bind_param('i', $vehicleId);
+                $stmt->bindParam(1, $vehicleId, PDO::PARAM_INT);
                 $stmt->execute();
 
                 if ($db_connection->affected_rows > 0)
@@ -29,17 +30,16 @@ if (isset($_POST['vehicle-id'])) {
             } else 
                 throw new Exception(`Wystąpił błąd podczas wysyłania zapytania`);
 
-            $stmt->close();
-            $db_connection->close();
+            $db_connection = null;
         } else
             throw new Exception("Błąd połączenia z bazą danych");
-    } catch (Exception $error) {
-        $error = addslashes($error);
-        $error = str_replace("\n", "", $error);
+    } catch (PDOException $error) {
         $consoleLog->show = true;
         $consoleLog->content = $error;
         $consoleLog->is_error = true;
-    } catch (PDOException $error) {
+    } catch (Exception $error) {
+        $error = addslashes($error);
+        $error = str_replace("\n", "", $error);
         $consoleLog->show = true;
         $consoleLog->content = $error;
         $consoleLog->is_error = true;
@@ -73,21 +73,11 @@ if (isset($_POST['vehicle-id'])) {
         <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="../admin.php">
-                        <li>Home</li>
-                    </a>
-                    <a class="veh-link" href="../admin.php#vehicles">
-                        <li>Pojazdy</li>
-                    </a>
-                    <a class="users-link" href="../admin.php#users">
-                        <li>Użytkownicy</li>
-                    </a>
-                    <a href="../admin/inbox.php">
-                        <li>Wiadomości</li>
-                    </a>
-                    <a class="settings-link" href="../admin.php#settings">
-                        <li>Ustawienia</li>
-                    </a>
+                    <li><a href="../admin.php">Home</a></li>
+                    <li><a class="veh-link" href="../admin.php#vehicles">Pojazdy</a></li>
+                    <li><a class="users-link" href="../admin.php#users">Użytkownicy</a></li>
+                    <li><a href="../admin/inbox.php">Wiadomości</a></li>
+                    <li><a class="settings-link" href="../admin.php#settings">Ustawienia</a></li>
                 </ul>
             </div>
             <div class="back">
@@ -137,10 +127,10 @@ if (isset($_POST['vehicle-id'])) {
                         </header>
                         <section>
                             <form action="" method="POST">
-                                <label>
+                                <label for="vehicle-id">
                                     <h3>Wpisz id pojazdu</h3>
                                 </label>
-                                <input type="number" name="vehicle-id" min="1" required>
+                                <input type="number" name="vehicle-id" id="vehicle-id" min="1" required>
                                 <button type="submit">Usuń pojazd</button>
                             </form>
                         </section>
@@ -149,7 +139,11 @@ if (isset($_POST['vehicle-id'])) {
                                 <?php
                                 require('../inc/veh.php');
                                 if (isset($vehicle))
-                                    printCarInfoTable($vehNum, $vehicle, 0, true);
+                                {
+                                    $options = new PrintOptions();
+                                    $options->method = PrintMethod::Table;
+                                    printCarInfo($options);
+                                }
                                 else
                                     echo 'W bazie nie ma żadnych pojazdów.';
                                 ?>

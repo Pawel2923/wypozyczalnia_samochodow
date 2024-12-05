@@ -1,4 +1,5 @@
 <?php
+global $db_connection, $consoleLog;
 require_once("./initial.php");
 if (isset($_SESSION['isLogged'])) {
     if (!$_SESSION['isLogged']) {
@@ -18,7 +19,7 @@ if (isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SE
         require('db/db_connection.php');
         $query = "SELECT id FROM users WHERE login=:login";
         $stmt = $db_connection->prepare($query);
-        $stmt->bindParam('login', $_SESSION['login'], PDO::PARAM_STR);
+        $stmt->bindParam('login', $_SESSION['login']);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_OBJ);
         ($stmt->rowCount() == 1) ? $id = $result->fetch() : $_SESSION['error'] = 'Takiego loginu nie ma w bazie danych.';
@@ -37,7 +38,7 @@ if (isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SE
                 $newHashedPasswd = password_hash($newPasswd, PASSWORD_DEFAULT, array('cost' => 10));
                 $query = "UPDATE users SET password=:newPasswd, change_passwd=0 WHERE id=:userID";
                 $stmt = $db_connection->prepare($query);
-                $stmt->bindParam('newPasswd', $newHashedPasswd, PDO::PARAM_STR);
+                $stmt->bindParam('newPasswd', $newHashedPasswd);
                 $stmt->bindParam('userID', $id, PDO::PARAM_INT);
                 $stmt->execute();
 
@@ -52,13 +53,13 @@ if (isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SE
         }
 
         $db_connection = null;
-    } catch (Exception $Exception) {
-        $Exception = addslashes($Exception);
-        $Exception = str_replace("\n", "", $Exception);
+    } catch (PDOException $Exception) {
         $consoleLog->show = true;
         $consoleLog->content = $Exception;
         $consoleLog->is_error = true;
-    } catch (PDOException $Exception) {
+    } catch (Exception $Exception) {
+        $Exception = addslashes($Exception);
+        $Exception = str_replace("\n", "", $Exception);
         $consoleLog->show = true;
         $consoleLog->content = $Exception;
         $consoleLog->is_error = true;

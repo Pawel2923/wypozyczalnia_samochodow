@@ -8,86 +8,84 @@ if (isset($_SESSION['isLogged'])) {
     }
 }
 
-if (isset($_POST['login']) && isset($_POST['password'])) {
-    if (!empty($_POST['login']) && !empty($_POST['password'])) { // Sprawdzenie czy zmienne login i password istnieją i nie są puste
-        // Przygotowanie loginu
-        $login = htmlentities(trim($_POST['login']));
-        // Przygotowanie adresu email
-        if (filter_var($login, FILTER_VALIDATE_EMAIL)) { // Sprawdzenie czy login jest adresem email
-            $email = filter_var($login, FILTER_SANITIZE_EMAIL);
-            $login = explode('@', $login);
-            $login = array_shift($login);
-        }
+if (!empty($_POST['login']) && !empty($_POST['password'])) { // Sprawdzenie czy zmienne login i password istnieją i nie są puste
+    // Przygotowanie loginu
+    $login = htmlentities(trim($_POST['login']));
+    // Przygotowanie adresu email
+    if (filter_var($login, FILTER_VALIDATE_EMAIL)) { // Sprawdzenie czy login jest adresem email
+        $email = filter_var($login, FILTER_SANITIZE_EMAIL);
+        $login = explode('@', $login);
+        $login = array_shift($login);
+    }
 
-        // Przygotowanie hasła
-        $password = htmlentities(trim($_POST['password']));
+    // Przygotowanie hasła
+    $password = htmlentities(trim($_POST['password']));
 
-        try {
-            // Połączenie z bazą danych
-            require('db/db_connection.php');
+    try {
+        // Połączenie z bazą danych
+        require('db/db_connection.php');
 
-            if (!isset($_SESSION['connectionError'])) {
-                // Sprawdzenie czy istnieje taki login/email
-                $query = "SELECT `login`, `email` FROM `users` WHERE `login`=:login OR `email`=:email";
+        if (!isset($_SESSION['connectionError'])) {
+            // Sprawdzenie czy istnieje taki login/email
+            $query = "SELECT `login`, `email` FROM `users` WHERE `login`=:login OR `email`=:email";
 
-                $stmt = $db_connection->prepare($query);
-                $stmt->bindParam('login', $login);
-                $stmt->bindParam('email', $email);
+            $stmt = $db_connection->prepare($query);
+            $stmt->bindParam('login', $login);
+            $stmt->bindParam('email', $email);
+            $stmt->execute();
+
+            $result = $stmt->fetch(PDO::FETCH_OBJ);
+//                $login = $result->login;
+            $_SESSION["loginTest"] = $result->login;
+
+            if ($result) {
+                $getPasswd = "SELECT `login`, `password`, `is_admin`, `change_passwd` FROM `users` WHERE `login`=:login OR `email`=:email";
+
+                $stmt = $db_connection->prepare($getPasswd);
+                $stmt->bindParam('login', $result->login);
+                $stmt->bindParam('email', $result->email);
                 $stmt->execute();
 
-                $result = $stmt->fetch(PDO::FETCH_OBJ);
-//                $login = $result->login;
-                $_SESSION["loginTest"] = $result->login;
+                $result2 = $stmt->fetch(PDO::FETCH_OBJ);
 
-                if ($result) {
-                    $getPasswd = "SELECT `login`, `password`, `is_admin`, `change_passwd` FROM `users` WHERE `login`=:login OR `email`=:email";
+                if ($result2->change_passwd) {
+                    $_SESSION['login'] = $result2->login;
+                    $_SESSION['isLogged'] = true;
 
-                    $stmt = $db_connection->prepare($getPasswd);
-                    $stmt->bindParam('login', $result->login, PDO::PARAM_STR);
-                    $stmt->bindParam('email', $result->email, PDO::PARAM_STR);
-                    $stmt->execute();
-
-                    $result2 = $stmt->fetch(PDO::FETCH_OBJ);
-
-                    if ($result2->change_passwd) {
+                    header('Location: changePasswd.php');
+                    exit;
+                } else {
+                    if (password_verify($password, $result2->password)) {
                         $_SESSION['login'] = $result2->login;
                         $_SESSION['isLogged'] = true;
+                        $_SESSION['isAdmin'] = $result2->is_admin;
 
-                        header('Location: changePasswd.php');
+                        $db_connection = null;
+
+                        header('Location: index.php');
                         exit;
-                    } else {
-                        if (password_verify($password, $result2->password)) {
-                            $_SESSION['login'] = $result2->login;
-                            $_SESSION['isLogged'] = true;
-                            $_SESSION['isAdmin'] = $result2->is_admin;
+                    } else
+                        $_SESSION['password-error'] = "Podane hasło jest nieprawidłowe";
+                }
+            } else
+                $_SESSION['login-error'] = "Podany login lub e-mail jest nieprawidłowy";
 
-                            $db_connection = null;
-
-                            header('Location: index.php');
-                            exit;
-                        } else
-                            $_SESSION['password-error'] = "Podane hasło jest nieprawidłowe";
-                    }
-                } else
-                    $_SESSION['login-error'] = "Podany login lub e-mail jest nieprawidłowy";
-
-                $db_connection = null;
-            } else {
-                throw new Exception("Błąd połączenia z bazą danych");
-            }
-        } catch (PDOException $Exception) {
-            $consoleLog->show = true;
-            $consoleLog->content = $Exception;
-            $consoleLog->is_error = true;
-            var_dump($Exception);
-        } catch (Exception $Exception) {
-            $Exception = addslashes($Exception);
-            $Exception = str_replace("\n", "", $Exception);
-            $consoleLog->show = true;
-            $consoleLog->content = $Exception;
-            $consoleLog->is_error = true;
-            var_dump($Exception);
+            $db_connection = null;
+        } else {
+            throw new Exception("Błąd połączenia z bazą danych");
         }
+    } catch (PDOException $Exception) {
+        $consoleLog->show = true;
+        $consoleLog->content = $Exception;
+        $consoleLog->is_error = true;
+        var_dump($Exception);
+    } catch (Exception $Exception) {
+        $Exception = addslashes($Exception);
+        $Exception = str_replace("\n", "", $Exception);
+        $consoleLog->show = true;
+        $consoleLog->content = $Exception;
+        $consoleLog->is_error = true;
+        var_dump($Exception);
     }
 }
 ?>

@@ -1,4 +1,5 @@
 <?php
+global $db_connection, $consoleLog;
 require_once("../initial.php");
 if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
     if (!$_SESSION['isAdmin']) {
@@ -19,27 +20,25 @@ if (isset($_POST['message-id'])) {
 
             $query = 'DELETE FROM mailboxes WHERE message_id=?';
             $stmt = $db_connection->prepare($query);
-            $stmt->bind_param('i', $messageID);
+            $stmt->bindParam(1, $messageID, PDO::PARAM_INT);
             $stmt->execute();
-            $stmt->close();
 
             $query = 'DELETE FROM messages WHERE id=?';
             $stmt = $db_connection->prepare($query);
-            $stmt->bind_param('i', $messageID);
+            $stmt->bindParam(1, $messageID, PDO::PARAM_INT);
             $stmt->execute();
-            $stmt->close();
 
             $_SESSION['msg'] = 'Pomyślnie usunięto wiadomość.';
 
-            $db_connection->close();
+            $db_connection = null;
             unset($_POST['message-id']);
-        } catch (Exception $error) {
-            $error = addslashes($error);
-            $error = str_replace("\n", "", $error);
+        } catch (PDOException $error) {
             $consoleLog->show = true;
             $consoleLog->content = $error;
             $consoleLog->is_error = true;
-        } catch (PDOException $error) {
+        } catch (Exception $error) {
+            $error = addslashes($error);
+            $error = str_replace("\n", "", $error);
             $consoleLog->show = true;
             $consoleLog->content = $error;
             $consoleLog->is_error = true;
@@ -75,21 +74,11 @@ if (isset($_POST['message-id'])) {
         <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="../admin.php">
-                        <li>Home</li>
-                    </a>
-                    <a class="veh-link" href="../admin.php#vehicles">
-                        <li>Pojazdy</li>
-                    </a>
-                    <a class="users-link" href="../admin.php#users">
-                        <li>Użytkownicy</li>
-                    </a>
-                    <a href="inbox.php">
-                        <li>Wiadomości</li>
-                    </a>
-                    <a class="settings-link" href="../admin.php#settings">
-                        <li>Ustawienia</li>
-                    </a>
+                    <li><a href="../admin.php">Home</a></li>
+                    <li><a class="veh-link" href="../admin.php#vehicles">Pojazdy</a></li>
+                    <li><a class="users-link" href="../admin.php#users">Użytkownicy</a></li>
+                    <li><a href="../admin/inbox.php">Wiadomości</a></li>
+                    <li><a class="settings-link" href="../admin.php#settings">Ustawienia</a></li>
                 </ul>
             </div>
             <div class="back">
@@ -141,14 +130,16 @@ if (isset($_POST['message-id'])) {
 
                             $query = "SELECT messages.* FROM messages INNER JOIN mailboxes ON mailboxes.message_id=messages.id WHERE user=? AND direction='in' ORDER BY date DESC";
                             $stmt = $db_connection->prepare($query);
-                            $stmt->bind_param('s', $_SESSION['login']);
+                            $stmt->bindParam(1, $_SESSION['login']);
                             $stmt->execute();
-                            $result = $stmt->get_result();
-                            $stmt->close();
+                            $result = $stmt->fetch();
 
                             echo '<h3>Odebrane</h3>';
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
+                            if ($stmt->rowCount() > 0) {
+                                echo 'Nie masz żadnych wiadomości';
+                            }
+                            else {
+                                foreach ($result as $row) {
                                     echo '<div class="box-msg">';
                                     echo '<form action="" method="POST">';
                                     echo '<input type="hidden" name="message-id" value="' . $row['id'] . '">';
@@ -168,19 +159,20 @@ if (isset($_POST['message-id'])) {
                                     echo '</form>';
                                     echo '</div>';
                                 }
-                            } else
-                                echo 'Nie masz żadnych wiadomości.';
+                            }
 
                             $query = "SELECT messages.*, mailboxes.user FROM messages INNER JOIN mailboxes ON mailboxes.message_id=messages.id WHERE user=? AND direction='out' ORDER BY date DESC";
                             $stmt = $db_connection->prepare($query);
-                            $stmt->bind_param('s', $_SESSION['login']);
+                            $stmt->bindParam(1, $_SESSION['login']);
                             $stmt->execute();
-                            $result = $stmt->get_result();
-                            $stmt->close();
+                            $result = $stmt->fetch();
 
                             echo '<h3>Wysłane</h3>';
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
+                            if ($stmt->rowCount() > 0) {
+                                echo 'Nie wysłałeś żadnych wiadomości';
+                            }
+                            else {
+                                foreach ($result as $row) {
                                     echo '<div class="box-msg">';
                                     echo '<form action="" method="POST">';
                                     echo '<input type="hidden" name="message-id" value="' . $row['id'] . '">';
@@ -194,9 +186,7 @@ if (isset($_POST['message-id'])) {
                                     echo '</form>';
                                     echo '</div>';
                                 }
-                            } else
-                                echo 'Nie wysłałeś żadnych wiadomości.';
-                            ?>
+                            } ?>
                         </section>
                     </div>
                 </main>

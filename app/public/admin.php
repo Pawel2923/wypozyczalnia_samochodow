@@ -1,4 +1,5 @@
 <?php
+global $db_connection, $consoleLog;
 require_once("./initial.php");
 if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
     if (!$_SESSION['isAdmin']) {
@@ -25,25 +26,33 @@ if (isset($_POST['action']) && isset($_POST['user-id'])) {
         $stmt->bindParam('userID', $userID, PDO::PARAM_INT);
         $stmt->execute();
         $db_connection = null;
+    } catch (PDOException $Exception) {
+        $consoleLog->show = true;
+        $consoleLog->content = $Exception;
+        $consoleLog->is_error = true;
     } catch (Exception $Exception) {
         $Exception = addslashes($Exception);
         $Exception = str_replace("\n", "", $Exception);
         $consoleLog->show = true;
         $consoleLog->content = $Exception;
         $consoleLog->is_error = true;
-    } catch (PDOException $Exception) {
-        $consoleLog->show = true;
-        $consoleLog->content = $Exception;
-        $consoleLog->is_error = true;
     }
 }
 
-// Ustawienie pliku cookie dla motywu panelu
-if (isset($_POST['theme'])) {
-    $theme = htmlentities($_POST['theme']);
-    if ($theme == "default" || $theme == "system" || $theme == "dark" || $theme == "light")
-        setcookie('theme', $theme, time() + (5 * 365 * 24 * 60 * 60));
+/**
+ * Ustawienie pliku cookie dla motywu panelu
+ * @return void
+ */
+function setPanelThemeCookie(): void
+{
+    if (isset($_POST['theme'])) {
+        $theme = htmlentities($_POST['theme']);
+        if ($theme == "default" || $theme == "system" || $theme == "dark" || $theme == "light")
+            setcookie('theme', $theme, time() + (5 * 365 * 24 * 60 * 60));
+    }
 }
+
+setPanelThemeCookie();
 
 require('db/db_connection.php');
 ?>
@@ -82,21 +91,11 @@ require('db/db_connection.php');
         <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="admin.php">
-                        <li>Home</li>
-                    </a>
-                    <a class="veh-link" href="admin.php#vehicles">
-                        <li>Pojazdy</li>
-                    </a>
-                    <a class="users-link" href="admin.php#users">
-                        <li>Użytkownicy</li>
-                    </a>
-                    <a href="admin/inbox.php">
-                        <li>Wiadomości</li>
-                    </a>
-                    <a class="settings-link" href="admin.php#settings">
-                        <li>Ustawienia</li>
-                    </a>
+                    <li><a href="admin.php">Home</a></li>
+                    <li><a class="veh-link" href="admin.php#vehicles">Pojazdy</a></li>
+                    <li><a class="users-link" href="admin.php#users">Użytkownicy</a></li>
+                    <li><a href="admin/inbox.php">Wiadomości</a></li>
+                    <li><a class="settings-link" href="admin.php#settings">Ustawienia</a></li>
                 </ul>
             </div>
             <div class="back">
@@ -281,7 +280,9 @@ require('db/db_connection.php');
                             <div class="option">
                                 <h3>Zarządzanie dostępem</h3>
                                 <form action="" method="POST">
-                                    <input type="number" name="user-id" placeholder="Wpisz ID użytkownika">
+                                    <label>
+                                        <input type="number" name="user-id" placeholder="Wpisz ID użytkownika">
+                                    </label>
                                     <div class="access-buttons">
                                         <button type="submit" name="action" value="grant">Nadaj dostęp</button>
                                         <button type="submit" name="action" value="revoke">Usuń dostęp</button>

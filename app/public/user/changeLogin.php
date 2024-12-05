@@ -1,4 +1,5 @@
 <?php
+global $db_connection, $consoleLog;
 session_start();
 if (isset($_SESSION['isLogged'])) {
     if (!$_SESSION['isLogged']) {
@@ -52,13 +53,13 @@ if (isset($_POST['new-login']) && isset($_SESSION['login'])) {
                 $_SESSION['error'] = 'Taki login jest już zajęty.';
 
             $db_connection = null;
-        } catch (Exception $error) {
-            $error = addslashes($error);
-            $error = str_replace("\n", "", $error);
+        } catch (PDOException $error) {
             $consoleLog->show = true;
             $consoleLog->content = $error;
             $consoleLog->is_error = true;
-        } catch (PDOException $error) {
+        } catch (Exception $error) {
+            $error = addslashes($error);
+            $error = str_replace("\n", "", $error);
             $consoleLog->show = true;
             $consoleLog->content = $error;
             $consoleLog->is_error = true;
@@ -102,18 +103,10 @@ if (isset($_POST['new-login']) && isset($_SESSION['login'])) {
         <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="../user.php">
-                        <li>Home</li>
-                    </a>
-                    <a class="veh-link" href="../user.php#vehicles">
-                        <li>Pojazdy</li>
-                    </a>
-                    <a class="profile-link" href="../user.php#profile">
-                        <li>Edytuj profil</li>
-                    </a>
-                    <a class="settings-link" href="../user.php#settings">
-                        <li>Ustawienia</li>
-                    </a>
+                    <li><a href="../user.php">Home</a></li>
+                    <li><a class="veh-link" href="../user.php#vehicles">Pojazdy</a></li>
+                    <li><a class="profile-link" href="../user.php#profile">Edytuj profil</a></li>
+                    <li><a class="settings-link" href="../user.php#settings">Ustawienia</a></li>
                 </ul>
             </div>
             <div class="back">
@@ -167,7 +160,7 @@ if (isset($_POST['new-login']) && isset($_SESSION['login'])) {
                                     <div class="new-login">
                                         <label for="new-login">Wpisz nowy login</label>
                                         <br>
-                                        <input type="text" name="new-login" required>
+                                        <input type="text" name="new-login" id="new-login" required>
                                     </div>
                                     <div class="form-bottom">
                                         <button type="submit">Zmień</button>

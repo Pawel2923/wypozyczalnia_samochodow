@@ -1,4 +1,5 @@
 <?php
+global $db_connection, $consoleLog;
 require_once("../initial.php");
 if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
     if (!$_SESSION['isAdmin']) {
@@ -41,7 +42,12 @@ if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_
             $stmt = $db_connection->prepare($query);
 
             if ($stmt !== false) {
-                $stmt->bind_param('ssdsis', $brand, $model, $price, $img, $avail, $description);
+                $stmt->bindParam(1, $brand);
+                $stmt->bindParam(2, $model);
+                $stmt->bindParam(3, $price);
+                $stmt->bindParam(4, $img);
+                $stmt->bindParam(5, $avail, PDO::PARAM_BOOL);
+                $stmt->bindParam(6, $description);
 
                 if ($stmt->execute())
                     $_SESSION['msg'] = 'Pomyślnie dodano nowy pojazd.';
@@ -52,15 +58,14 @@ if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_
             }
 
             unset($_SESSION['vehicle-img-name']);
-            $stmt->close();
-            $db_connection->close();
-        } catch (Exception $error) {
-            $error = addslashes($error);
-            $error = str_replace("\n", "", $error);
+            $db_connection = null;
+        } catch (PDOException $error) {
             $consoleLog->show = true;
             $consoleLog->content = $error;
             $consoleLog->is_error = true;
-        } catch (PDOException $error) {
+        } catch (Exception $error) {
+            $error = addslashes($error);
+            $error = str_replace("\n", "", $error);
             $consoleLog->show = true;
             $consoleLog->content = $error;
             $consoleLog->is_error = true;
@@ -98,21 +103,11 @@ if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_
         <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="../admin.php">
-                        <li>Home</li>
-                    </a>
-                    <a class="veh-link" href="../admin.php#vehicles">
-                        <li>Pojazdy</li>
-                    </a>
-                    <a class="users-link" href="../admin.php#users">
-                        <li>Użytkownicy</li>
-                    </a>
-                    <a href="../admin/inbox.php">
-                        <li>Wiadomości</li>
-                    </a>
-                    <a class="settings-link" href="../admin.php#settings">
-                        <li>Ustawienia</li>
-                    </a>
+                    <li><a href="../admin.php">Home</a></li>
+                    <li><a class="veh-link" href="../admin.php#vehicles">Pojazdy</a></li>
+                    <li><a class="users-link" href="../admin.php#users">Użytkownicy</a></li>
+                    <li><a href="../admin/inbox.php">Wiadomości</a></li>
+                    <li><a class="settings-link" href="../admin.php#settings">Ustawienia</a></li>
                 </ul>
             </div>
             <div class="back">
@@ -125,7 +120,7 @@ if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_
             <div class="mobile-nav">
                 <div class="open"><i class="fas fa-bars"></i></div>
                 <div class="user">
-                    <a href="login.php" class="login">
+                    <a href="../login.php" class="login">
                         <i class="fas fa-sign-in-alt"></i>
                         <span class="login-caption">Zaloguj się</span>
                     </a>
@@ -185,15 +180,15 @@ if (isset($_POST['vehicle-brand']) && isset($_POST['vehicle-model']) && isset($_
                             </figure>
                             <form action="" method="POST">
                                 <label for="vehicle-brand">Marka pojazdu*</label>
-                                <input type="text" name="vehicle-brand" required>
+                                <input type="text" name="vehicle-brand" id="vehicle-brand" required>
                                 <label for="vehicle-model">Model pojazdu*</label>
-                                <input type="text" name="vehicle-model" required>
+                                <input type="text" name="vehicle-model" id="vehicle-model" required>
                                 <label for="vehicle-price">Cena*</label>
-                                <input type="text" name="vehicle-price" placeholder="np. 59,59" required>
+                                <input type="text" name="vehicle-price" id="vehicle-price" placeholder="np. 59,59" required>
                                 <label for="is-available">Ustaw dostępność do rezerwacji</label>
-                                <input type="text" name="is-available" placeholder="Wpisz 0 jeśli nie lub 1 jeśli tak">
+                                <input type="text" name="is-available" id="is-available" placeholder="Wpisz 0 jeśli nie lub 1 jeśli tak">
                                 <label for="vehicle-description">Dodaj opis pojazdu</label>
-                                <textarea name="vehicle-description"></textarea>
+                                <textarea name="vehicle-description" id="vehicle-description"></textarea>
                                 <button type="submit">Dodaj</button>
                             </form>
                         </section>

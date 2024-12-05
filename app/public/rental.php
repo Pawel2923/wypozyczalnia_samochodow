@@ -27,8 +27,10 @@
             <div class="cars cars-list">
                 <?php
                 require('inc/veh.php');
-                if (isset($vehicle))
-                    printCarInfo(new PrintOptions("list"));
+                $result = printCarInfo(new PrintOptions(PrintMethod::List));
+
+                if ($result !== null)
+                    printCarInfo(new PrintOptions(PrintMethod::List));
                 else
                     echo '<p>Obecnie nie ma pojazdów do wypożyczenia</p>';
                 ?>
@@ -39,7 +41,9 @@
         <section class="subscription-form">
             <form action="newsletter.php" method="POST">
                 <h3>Zapisz się na nasz newsletter</h3>
-                <input type="email" placeholder="Adres e-mail" name="newsletter-mail" required>
+                <label>
+                    <input type="email" placeholder="Adres e-mail" name="newsletter-mail" required>
+                </label>
                 <br>
                 <button type="submit">Zapisz się</button>
             </form>

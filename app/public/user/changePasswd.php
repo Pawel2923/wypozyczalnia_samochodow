@@ -1,4 +1,5 @@
 <?php
+global $db_connection, $consoleLog;
 require_once($_SERVER['DOCUMENT_ROOT'] . "/initial.php");
 if (isset($_SESSION['isLogged'])) {
     if (!$_SESSION['isLogged']) {
@@ -32,7 +33,6 @@ if (isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SE
             $result = $stmt->fetch(PDO::FETCH_OBJ);
             $hashedPasswd = $result->fetch();
             $hashedPasswd = $hashedPasswd[0];
-            ;
 
             if (password_verify($newPasswd, $hashedPasswd))
                 $_SESSION['error'] = 'Nowe hasło nie powinno być takie samo jak stare hasło.';
@@ -56,13 +56,13 @@ if (isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SE
         }
 
         $db_connection = null;
-    } catch (Exception $error) {
-        $error = addslashes($error);
-        $error = str_replace("\n", "", $error);
+    } catch (PDOException $error) {
         $consoleLog->show = true;
         $consoleLog->content = $error;
         $consoleLog->is_error = true;
-    } catch (PDOException $error) {
+    } catch (Exception $error) {
+        $error = addslashes($error);
+        $error = str_replace("\n", "", $error);
         $consoleLog->show = true;
         $consoleLog->content = $error;
         $consoleLog->is_error = true;
@@ -104,18 +104,10 @@ if (isset($_POST['password']) && isset($_POST['password-confirm']) && isset($_SE
         <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="../user.php">
-                        <li>Home</li>
-                    </a>
-                    <a class="veh-link" href="../user.php#vehicles">
-                        <li>Pojazdy</li>
-                    </a>
-                    <a class="profile-link" href="../user.php#profile">
-                        <li>Edytuj profil</li>
-                    </a>
-                    <a class="settings-link" href="../user.php#settings">
-                        <li>Ustawienia</li>
-                    </a>
+                    <li><a href="../user.php">Home</a></li>
+                    <li><a class="veh-link" href="../user.php#vehicles">Pojazdy</a></li>
+                    <li><a class="profile-link" href="../user.php#profile">Edytuj profil</a></li>
+                    <li><a class="settings-link" href="../user.php#settings">Ustawienia</a></li>
                 </ul>
             </div>
             <div class="back">

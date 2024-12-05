@@ -1,4 +1,5 @@
 <?php
+global $consoleLog;
 require_once("./initial.php");
 
 if (isset($_POST['name']) && isset($_POST['sName']) && isset($_POST['email']) && isset($_POST['tel']) && isset($_POST['message']) || isset($_SESSION['forgotten-passwd'])) {
@@ -50,9 +51,16 @@ if (isset($_POST['name']) && isset($_POST['sName']) && isset($_POST['email']) &&
                 $result = $stmt->fetch();
                 $username = $result["login"];
 
+                $query = "SELECT id FROM messages WHERE email=:email";
+                $stmt = $db_connection->prepare($query);
+                $stmt->bindParam('email', $email);
+                $stmt->execute();
+                $result = $stmt->fetch();
+                $messageID = $result["id"];
+
                 if ($username != '') {
                     $direction = "out";
-                    $query = "INSERT INTO mailboxes VALUES(DEFAULT, :id, :username, :direction)";
+                    $query = "INSERT INTO mailboxes VALUES(DEFAULT, :id, :username, :direction, DEFAULT)";
                     $stmt = $db_connection->prepare($query);
                     $stmt->bindParam('id', $messageID, PDO::PARAM_INT);
                     $stmt->bindParam('username', $username);
@@ -62,7 +70,7 @@ if (isset($_POST['name']) && isset($_POST['sName']) && isset($_POST['email']) &&
 
                 for ($i = 0; $i < sizeof($sentTo); $i++) {
                     $direction = "in";
-                    $query = "INSERT INTO mailboxes VALUES(DEFAULT, :id, :username, :direction)";
+                    $query = "INSERT INTO mailboxes VALUES(DEFAULT, :id, :username, :direction, DEFAULT)";
                     $stmt = $db_connection->prepare($query);
                     $stmt->bindParam('id', $messageID);
                     $stmt->bindParam('username', $sentTo[$i]);
@@ -76,14 +84,14 @@ if (isset($_POST['name']) && isset($_POST['sName']) && isset($_POST['email']) &&
             } else {
                 throw new Exception("Nie udało połączyć się z bazą danych");
             }
-        } catch (Exception $error) {
-            $error = addslashes($error);
-            $error = str_replace("\n", "", $error);
+        } catch (PDOException $error) {
             $consoleLog->show = true;
             $consoleLog->content = $error;
             $consoleLog->is_error = true;
             $_SESSION['error'] = $error;
-        } catch (PDOException $error) {
+        } catch (Exception $error) {
+            $error = addslashes($error);
+            $error = str_replace("\n", "", $error);
             $consoleLog->show = true;
             $consoleLog->content = $error;
             $consoleLog->is_error = true;
@@ -102,7 +110,7 @@ if (isset($consoleLog)) {
         }
     }
 }
-?>
+
 
 <?php
 header('Location: pricing.php');

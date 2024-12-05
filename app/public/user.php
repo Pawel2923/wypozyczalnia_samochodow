@@ -1,4 +1,5 @@
 <?php
+global $db_connection, $consoleLog;
 require_once("./initial.php");
 if (isset($_SESSION['isLogged'])) {
     if (!$_SESSION['isLogged']) {
@@ -10,11 +11,7 @@ if (isset($_SESSION['isLogged'])) {
     exit;
 }
 
-if (isset($_POST['theme'])) {
-    $theme = htmlentities($_POST['theme']);
-    if ($theme == "default" || $theme == "system" || $theme == "dark" || $theme == "light")
-        setcookie('theme', $theme, time() + (5 * 365 * 24 * 60 * 60));
-}
+setPanelThemeCookie();
 
 try {
     require('db/db_connection.php');
@@ -120,13 +117,13 @@ try {
         exit;
     }
     $db_connection = null;
-} catch (Exception $error) {
-    $error = addslashes($error);
-    $error = str_replace("\n", "", $error);
+} catch (PDOException $error) {
     $consoleLog->show = true;
     $consoleLog->content = $error;
     $consoleLog->is_error = true;
-} catch (PDOException $error) {
+} catch (Exception $error) {
+    $error = addslashes($error);
+    $error = str_replace("\n", "", $error);
     $consoleLog->show = true;
     $consoleLog->content = $error;
     $consoleLog->is_error = true;
@@ -168,18 +165,10 @@ try {
         <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="user.php">
-                        <li>Home</li>
-                    </a>
-                    <a class="veh-link" href="user.php#vehicles">
-                        <li>Pojazdy</li>
-                    </a>
-                    <a class="profile-link" href="user.php#profile">
-                        <li>Edytuj profil</li>
-                    </a>
-                    <a class="settings-link" href="user.php#settings">
-                        <li>Ustawienia</li>
-                    </a>
+                    <li><a href="user.php">Home</a></li>
+                    <li><a class="veh-link" href="user.php#vehicles">Pojazdy</a></li>
+                    <li><a class="profile-link" href="user.php#profile">Edytuj profil</a></li>
+                    <li><a class="settings-link" href="user.php#settings">Ustawienia</a></li>
                 </ul>
             </div>
             <div class="back">
@@ -287,13 +276,13 @@ try {
                             <div class="option edit-profile">
                                 <form action="" method="POST">
                                     <label for="name">Imię</label>
-                                    <input type="text" name="name" value="<?php if (isset($userData['first_name'])) echo $userData['first_name']; ?>">
+                                    <input type="text" name="name" id="name" value="<?php if (isset($userData['first_name'])) echo $userData['first_name']; ?>">
                                     <label for="sName">Nazwisko</label>
-                                    <input type="text" name="sName" value="<?php if (isset($userData['last_name'])) echo $userData['last_name']; ?>">
+                                    <input type="text" name="sName" id="sName" value="<?php if (isset($userData['last_name'])) echo $userData['last_name']; ?>">
                                     <label for="tel">Telefon</label>
-                                    <input type="tel" name="tel" value="<?php if (isset($userData['phone_number'])) echo $userData['phone_number']; ?>">
+                                    <input type="tel" name="tel" id="tel" value="<?php if (isset($userData['phone_number'])) echo $userData['phone_number']; ?>">
                                     <label for="email">Adres e-mail</label>
-                                    <input type="email" name="email" value="<?php if (isset($userData['email'])) echo $userData['email']; ?>">
+                                    <input type="email" name="email" id="email" value="<?php if (isset($userData['email'])) echo $userData['email']; ?>">
                                     <div class="buttons">
                                         <button type="submit">Potwierdź</button>
                                         <button type="reset">Anuluj zmiany</button>
@@ -312,7 +301,7 @@ try {
                                 <a href="user/changePasswd.php">
                                     <button class="option-button ch-passwd">
                                         <span>Zmień hasło</span>
-                                        <div class="icon"><i class="fas fa-chevron-right"></i></div>
+                                        <span class="icon"><i class="fas fa-chevron-right"></i></span>
                                     </button>
                                 </a>
                             </div>
@@ -326,12 +315,14 @@ try {
                             <div class="option">
                                 <span>Motyw panelu</span>
                                 <form action="" method="POST">
-                                    <select name="theme">
-                                        <option value="default">Domyślny</option>
-                                        <option value="system">Użyj motywu urządzenia</option>
-                                        <option value="light">Jasny</option>
-                                        <option value="dark">Ciemny</option>
-                                    </select>
+                                    <label>
+                                        <select name="theme">
+                                            <option value="default">Domyślny</option>
+                                            <option value="system">Użyj motywu urządzenia</option>
+                                            <option value="light">Jasny</option>
+                                            <option value="dark">Ciemny</option>
+                                        </select>
+                                    </label>
                                     <button type="submit">Zmień</button>
                                 </form>
                             </div>

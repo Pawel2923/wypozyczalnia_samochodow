@@ -20,6 +20,10 @@ section form textarea {
   border: 1px solid #000;
 }
 
+section form label {
+  width: 100%;
+}
+
 section form textarea {
   resize: none;
   font-family: inherit;

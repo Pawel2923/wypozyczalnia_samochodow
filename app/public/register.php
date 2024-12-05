@@ -1,4 +1,5 @@
 <?php
+global $db_connection, $consoleLog;
 require_once("./initial.php");
 if (isset($_SESSION['isLogged'])) {
     if ($_SESSION['isLogged']) {
@@ -7,8 +8,8 @@ if (isset($_SESSION['isLogged'])) {
     }
 }
 
-if (isset($_POST['password']) && isset($_POST['login']) && isset($_POST['password-confirm'])) {
-    if (!empty($_POST['password']) && isset($_POST['login']) && isset($_POST['password-confirm'])) {
+if (isset($_POST['password-confirm'])) {
+    if (!empty($_POST['password']) && isset($_POST['login'])) {
         if ($_POST['password'] === $_POST['password-confirm']) {
             // Przygotowanie loginu
             $login = htmlentities(trim($_POST['login']));
@@ -20,7 +21,7 @@ if (isset($_POST['password']) && isset($_POST['login']) && isset($_POST['passwor
             }
             // Przygotowanie hasła
             $password = htmlentities(trim($_POST['password']));
-            $newHashedPasswd = password_hash($newPasswd, PASSWORD_DEFAULT, array('cost' => 10));
+            $newHashedPasswd = password_hash($password, PASSWORD_DEFAULT, array('cost' => 10));
 
             try {
                 // Połączenie z bazą danych
@@ -58,17 +59,15 @@ if (isset($_POST['password']) && isset($_POST['login']) && isset($_POST['passwor
                             $stmt->bindParam('userID', $userID, PDO::PARAM_INT);
                             $stmt->bindParam('login', $login);
                             $stmt->bindParam('email', $email);
-                            $stmt->bindParam('passwd', $hashedPasswd);
-                            $stmt->execute();
                         } else {
-                            $query = "INSERT INTO `users` (id, login, password) VALUES(:userID, :login, :passwd)";
+                            $query = "INSERT INTO `users` (id, login, email, password) VALUES(:userID, :login, '', :passwd)";
 
                             $stmt = $db_connection->prepare($query);
                             $stmt->bindParam('userID', $userID, PDO::PARAM_INT);
-                            $smtt->bindParam('login', $login);
-                            $smtt->bindParam('passwd', $hashedPasswd);
-                            $stmt->execute();
+                            $stmt->bindParam('login', $login);
                         }
+                        $stmt->bindParam('passwd', $newHashedPasswd);
+                        $stmt->execute();
                         $db_connection = null;
 
                         header('Location: login.php');
@@ -78,13 +77,13 @@ if (isset($_POST['password']) && isset($_POST['login']) && isset($_POST['passwor
                 } else {
                     throw new Exception("Błąd połączenia z bazą danych.");
                 }
-            } catch (Exception $Exception) {
-                $Exception = addslashes($Exception);
-                $Exception = str_replace("\n", "", $Exception);
+            } catch (PDOException $Exception) {
                 $consoleLog->show = true;
                 $consoleLog->content = $Exception;
                 $consoleLog->is_error = true;
-            } catch (PDOException $Exception) {
+            } catch (Exception $Exception) {
+                $Exception = addslashes($Exception);
+                $Exception = str_replace("\n", "", $Exception);
                 $consoleLog->show = true;
                 $consoleLog->content = $Exception;
                 $consoleLog->is_error = true;

@@ -1,4 +1,5 @@
 <?php
+global $db_connection, $consoleLog;
 require_once("../initial.php");
 if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
     if (!$_SESSION['isAdmin']) {
@@ -17,7 +18,7 @@ if (isset($_POST['user-id'])) {
         require('../db/db_connection.php');
         $query = "UPDATE users SET change_passwd=1 WHERE id=? AND is_admin=0";
         $stmt = $db_connection->prepare($query);
-        $stmt->bind_param('i', $userID);
+        $stmt->bindParam(1, $userID, PDO::PARAM_INT);
         $stmt->execute();
 
         if ($db_connection->affected_rows > 0)
@@ -25,15 +26,14 @@ if (isset($_POST['user-id'])) {
         else
             $_SESSION['error'] = 'Nie udało się zresetować hasła. Pamiętaj, że nie można resetować hasła administratorów lub użytkowników, których hasła zostały już zresetowane.';
 
-        $stmt->close();
-        $db_connection->close();
-    } catch (Exception $error) {
-        $error = addslashes($error);
-        $error = str_replace("\n", "", $error);
+        $db_connection = null;
+    } catch (PDOException $error) {
         $consoleLog->show = true;
         $consoleLog->content = $error;
         $consoleLog->is_error = true;
-    } catch (PDOException $error) {
+    } catch (Exception $error) {
+        $error = addslashes($error);
+        $error = str_replace("\n", "", $error);
         $consoleLog->show = true;
         $consoleLog->content = $error;
         $consoleLog->is_error = true;
@@ -67,21 +67,11 @@ if (isset($_POST['user-id'])) {
         <nav class="panel">
             <div class="list-wrapper">
                 <ul>
-                    <a href="../admin.php">
-                        <li>Home</li>
-                    </a>
-                    <a class="veh-link" href="../admin.php#vehicles">
-                        <li>Pojazdy</li>
-                    </a>
-                    <a class="users-link" href="../admin.php#users">
-                        <li>Użytkownicy</li>
-                    </a>
-                    <a href="../admin/inbox.php">
-                        <li>Wiadomości</li>
-                    </a>
-                    <a class="settings-link" href="../admin.php#settings">
-                        <li>Ustawienia</li>
-                    </a>
+                    <li><a href="../admin.php">Home</a></li>
+                    <li><a class="veh-link" href="../admin.php#vehicles">Pojazdy</a></li>
+                    <li><a class="users-link" href="../admin.php#users">Użytkownicy</a></li>
+                    <li><a href="../admin/inbox.php">Wiadomości</a></li>
+                    <li><a class="settings-link" href="../admin.php#settings">Ustawienia</a></li>
                 </ul>
             </div>
             <div class="back">
@@ -131,8 +121,8 @@ if (isset($_POST['user-id'])) {
                         </header>
                         <section>
                             <form action="" method="POST">
-                                <label>ID użytkownika</label>
-                                <input type="number" name="user-id" min="1" required>
+                                <label for="user-id">ID użytkownika</label>
+                                <input type="number" name="user-id" id="user-id" min="1" required>
                                 <button type="submit">Resetuj</button>
                             </form>
                             <h3>Lista użytkowników</h3>
@@ -150,15 +140,14 @@ if (isset($_POST['user-id'])) {
                                     $stmt = $db_connection->prepare($query);
                                     $stmt->execute();
 
-                                    $result = $stmt->get_result();
-                                    while ($row = $result->fetch_assoc()) {
+                                    $result = $stmt->fetch();
+                                    foreach ($result as $row) {
                                         echo '<tr>';
                                         echo '<td>' . $row['id'] . '</td>';
                                         echo '<td>' . $row['login'] . '</td>';
                                         echo '<tr>';
                                     }
-                                    $stmt->close();
-                                    $db_connection->close();
+                                    $db_connection = null;
                                     ?>
                                 </table>
                             </div>
