@@ -1,3 +1,5 @@
 db/wypozyczalnia.sql
 .env
-/vendor
+vendor/
+.idea
+/packages.txt
