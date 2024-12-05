@@ -1,6 +1,6 @@
 <?php
 global $db_connection, $consoleLog;
-session_start();
+require_once("../initial.php");
 if (isset($_SESSION['isLogged'])) {
     if (!$_SESSION['isLogged']) {
         header('Location: ../login.php');
