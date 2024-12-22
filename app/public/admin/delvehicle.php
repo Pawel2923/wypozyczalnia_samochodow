@@ -1,5 +1,5 @@
 <?php
-global $consoleLog;
+global $db_connection;
 require_once("../initial.php");
 if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
     if (!$_SESSION['isAdmin']) {
@@ -11,39 +11,28 @@ if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
     exit;
 }
 
-if (isset($_POST['vehicle-id'])) {
+require("../inc/veh.php");
+$vehicle = fetchVehicleData();
+if (isset($_POST['vehicle-id']) && isset($vehicle)) {
     $vehicleId = htmlentities($_POST['vehicle-id']);
-
-    try {
+    $vehNum = count($vehicle);
+    if ($vehicleId <= $vehNum) {
         require('../db/db_connection.php');
-        if (isset($db_connection)) {
-            $query = "DELETE FROM vehicles WHERE id=?";
-            $stmt = $db_connection->prepare($query);
-            if ($stmt) {
-                $stmt->bindParam(1, $vehicleId, PDO::PARAM_INT);
-                $stmt->execute();
+        $query = "DELETE FROM vehicles WHERE id=?";
+        $stmt = $db_connection->prepare($query);
+        $stmt->bindParam(1, $vehicleId, PDO::PARAM_INT);
+        $stmt->execute();
 
-                if ($db_connection->affected_rows > 0)
-                    $_SESSION['msg'] = 'Udało się usunąć pojazd.';
-                else
-                    $_SESSION['error'] = 'Nie udało się usunąć pojazdu.';
-            } else 
-                throw new Exception(`Wystąpił błąd podczas wysyłania zapytania`);
-
-            $db_connection = null;
+        if ($stmt->rowCount() > 0) {
+            $_SESSION['msg'] = 'Udało się usunąć pojazd.';
+            header('Location: delvehicle.php');
+            exit;
         } else
-            throw new Exception("Błąd połączenia z bazą danych");
-    } catch (PDOException $error) {
-        $consoleLog->show = true;
-        $consoleLog->content = $error;
-        $consoleLog->is_error = true;
-    } catch (Exception $error) {
-        $error = addslashes($error);
-        $error = str_replace("\n", "", $error);
-        $consoleLog->show = true;
-        $consoleLog->content = $error;
-        $consoleLog->is_error = true;
-    }
+            $_SESSION['error'] = 'Nie udało się usunąć pojazdu.';
+
+        $db_connection = null;
+    } else
+        $_SESSION['error'] = 'Wpisano niepoprawne ID.';
 }
 ?>
 <!DOCTYPE html>
@@ -135,17 +124,13 @@ if (isset($_POST['vehicle-id'])) {
                             </form>
                         </section>
                         <section>
-                            <div class="cars">
+                            <div>
                                 <?php
-                                require('../inc/veh.php');
-                                if (isset($vehicle))
-                                {
-                                    $options = new PrintOptions();
-                                    $options->method = PrintMethod::Table;
-                                    printCarInfo($options);
+                                $options = new PrintOptions(PrintMethod::Table, available: false, index: true);
+                                $result = printCarInfo($options);
+                                if ($result === null) {
+                                    echo '<p class="no-vehicles">Nie ma żadnych pojazdów</p>';
                                 }
-                                else
-                                    echo 'W bazie nie ma żadnych pojazdów.';
                                 ?>
                             </div>
                         </section>
@@ -168,15 +153,6 @@ if (isset($_POST['vehicle-id'])) {
     <script src="js/main.js" type="module"></script>
     <?php
     include_once('./inc/logged.php');
-    if (isset($consoleLog)) {
-        if ($consoleLog->show) {
-            if ($consoleLog->is_error) {
-                echo '<script src="../js/log.js" value="' . $consoleLog->content . '" name="error"></script>';
-            } else {
-                echo '<script src="../js/log.js" value="' . $consoleLog->content . '" name="log"></script>';
-            }
-        }
-    }
     ?>
 </body>
 

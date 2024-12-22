@@ -1,5 +1,5 @@
 <?php
-global $db_connection, $consoleLog;
+global $db_connection;
 require_once("./initial.php");
 if (isset($_SESSION['isLogged'])) {
     if ($_SESSION['isLogged']) {
@@ -35,8 +35,6 @@ if (!empty($_POST['login']) && !empty($_POST['password'])) { // Sprawdzenie czy 
             $stmt->execute();
 
             $result = $stmt->fetch(PDO::FETCH_OBJ);
-//                $login = $result->login;
-            $_SESSION["loginTest"] = $result->login;
 
             if ($result) {
                 $getPasswd = "SELECT `login`, `password`, `is_admin`, `change_passwd` FROM `users` WHERE `login`=:login OR `email`=:email";
@@ -75,16 +73,20 @@ if (!empty($_POST['login']) && !empty($_POST['password'])) { // Sprawdzenie czy 
             throw new Exception("Błąd połączenia z bazą danych");
         }
     } catch (PDOException $Exception) {
+        $consoleLog = new ConsoleMessage();
         $consoleLog->show = true;
         $consoleLog->content = $Exception;
         $consoleLog->is_error = true;
+        $_SESSION['connectionError'] = $consoleLog;
         var_dump($Exception);
     } catch (Exception $Exception) {
         $Exception = addslashes($Exception);
         $Exception = str_replace("\n", "", $Exception);
+        $consoleLog = new ConsoleMessage();
         $consoleLog->show = true;
         $consoleLog->content = $Exception;
         $consoleLog->is_error = true;
+        $_SESSION['connectionError'] = $consoleLog;
         var_dump($Exception);
     }
 }
@@ -168,12 +170,12 @@ if (!empty($_POST['login']) && !empty($_POST['password'])) { // Sprawdzenie czy 
     </main>
     <script src="js/loginHandler.js"></script>
     <?php
-    if (isset($consoleLog)) {
-        if ($consoleLog->show) {
-            if ($consoleLog->is_error) {
-                echo '<script src="js/log.js" value="' . $consoleLog->content . '" name="error"></script>';
+    if (isset($_SESSION["connectionError"])) {
+        if ($_SESSION["connectionError"]->show) {
+            if ($_SESSION["connectionError"]->is_error) {
+                echo '<script src="js/log.js" value="' . $_SESSION["connectionError"]->content . '" name="error"></script>';
             } else {
-                echo '<script src="js/log.js" value="' . $consoleLog->content . '" name="log"></script>';
+                echo '<script src="js/log.js" value="' . $_SESSION["connectionError"]->content . '" name="log"></script>';
             }
         }
     }

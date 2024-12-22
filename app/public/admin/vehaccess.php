@@ -11,39 +11,29 @@ if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
     exit;
 }
 
-require('../inc/veh.php');
+require("../inc/veh.php");
+$vehicle = fetchVehicleData();
 if (isset($_POST['vehicle-id']) && isset($vehicle)) {
     $vehId = htmlentities($_POST['vehicle-id']);
     $vehNum = count($vehicle);
     if ($vehId <= $vehNum) {
-        ($vehicle[$vehId - 1]->isAvailable) ? $access = 0 : $access = 1;
+        ($vehicle[$vehId - 1]->is_available) ? $access = 0 : $access = 1;
 
-        try {
-            require('../db/db_connection.php');
-            $query = "UPDATE vehicles SET is_available=? WHERE id=?";
-            $stmt = $db_connection->prepare($query);
-            $stmt->bindParam(1, $access, PDO::PARAM_INT);
-            $stmt->bindParam(2, $vehId, PDO::PARAM_INT);
-            $stmt->execute();
-            if ($db_connection->affected_rows > 0) {
-                $_SESSION['msg'] = 'Udało się zmienić dostępność.';
-                header('Location: vehaccess.php');
-                exit;
-            } else
-                $_SESSION['error'] = 'Nie udało się dokonać zmiany.';
+        require('../db/db_connection.php');
+        $query = "UPDATE vehicles SET is_available=? WHERE id=?";
+        $stmt = $db_connection->prepare($query);
+        $stmt->bindParam(1, $access, PDO::PARAM_INT);
+        $stmt->bindParam(2, $vehId, PDO::PARAM_INT);
+        $stmt->execute();
 
-            $db_connection = null;
-        } catch (PDOException $error) {
-            $consoleLog->show = true;
-            $consoleLog->content = $error;
-            $consoleLog->is_error = true;
-        } catch (Exception $error) {
-            $error = addslashes($error);
-            $error = str_replace("\n", "", $error);
-            $consoleLog->show = true;
-            $consoleLog->content = $error;
-            $consoleLog->is_error = true;
-        }
+        if ($stmt->rowCount() > 0) {
+            $_SESSION['msg'] = 'Udało się zmienić dostępność.';
+            header('Location: vehaccess.php');
+            exit;
+        } else
+            $_SESSION['error'] = 'Nie udało się dokonać zmiany.';
+
+        $db_connection = null;
     } else
         $_SESSION['error'] = 'Wpisano niepoprawne ID.';
 }
@@ -137,17 +127,13 @@ if (isset($_POST['vehicle-id']) && isset($vehicle)) {
                             </form>
                         </section>
                         <section>
-                            <div class="cars">
+                            <div>
                                 <?php
-                                if (isset($vehicle))
-                                {
-                                    $options = new PrintOptions();
-                                    $options->method = PrintMethod::Table;
-                                    $options->recent = true;
-                                    printCarInfo($options);
+                                $options = new PrintOptions(PrintMethod::Table, available: false, index: true);
+                                $result = printCarInfo($options);
+                                if ($result === null) {
+                                    echo '<p class="no-vehicles">Nie ma żadnych pojazdów</p>';
                                 }
-                                else
-                                    echo 'W bazie nie ma żadnych pojazdów.';
                                 ?>
                             </div>
                         </section>

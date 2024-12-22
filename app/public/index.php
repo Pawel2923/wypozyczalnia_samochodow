@@ -82,13 +82,6 @@
     </footer>
     <script src="js/index.js" type="module"></script>
     <?php include_once('inc/logged.php'); ?>
-    <?php
-    if (isset($_SESSION["loginTest"])) {
-        echo '<script>
-            console.log("login: '. $_SESSION["loginTest"] .'");
-            </script>';
-    }
-    ?>
 </body>
 
 </html>
