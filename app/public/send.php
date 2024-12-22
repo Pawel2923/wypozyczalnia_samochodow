@@ -111,7 +111,5 @@ if (isset($consoleLog)) {
     }
 }
 
-
-<?php
 header('Location: pricing.php');
 exit;
