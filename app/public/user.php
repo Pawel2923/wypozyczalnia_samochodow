@@ -13,121 +13,109 @@ if (isset($_SESSION['isLogged'])) {
 
 setPanelThemeCookie();
 
-try {
-    require('db/db_connection.php');
+require('db/db_connection.php');
 
-    $query = "SELECT id FROM users WHERE login=:login";
+$query = "SELECT id FROM users WHERE login=:login";
+$stmt = $db_connection->prepare($query);
+$stmt->bindParam('login', $_SESSION['login']);
+$stmt->execute();
+$result = $stmt->fetch();
+
+if ($stmt->rowCount() == 1) {
+    $id = $result["id"];
+}
+
+if (isset($_POST['name']) && isset($_POST['sName']) && isset($_POST['tel']) && isset($_POST['email'])) {
+    $name = htmlentities($_POST['name']);
+    $sName = htmlentities($_POST['sName']);
+    $tel = htmlentities($_POST['tel']);
+    $email = htmlentities($_POST['email']);
+
+    if (isset($id)) {
+        if (!empty($name)) {
+            $query = "UPDATE users SET first_name=:firstName WHERE id=:id";
+            $stmt = $db_connection->prepare($query);
+            $stmt->bindParam("firstName", $name);
+            $stmt->bindParam("id", $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0)
+                $_SESSION['msg'] = 'Zmiany zostały zapisane.';
+            else
+                $_SESSION['error'] = 'Nie udało się wprowadzić zmian.';
+        }
+        if (!empty($sName)) {
+            $query = "UPDATE users SET last_name=:lastName WHERE id=:id";
+            $stmt = $db_connection->prepare($query);
+            $stmt->bindParam("lastName", $sName);
+            $stmt->bindParam("id", $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0)
+                $_SESSION['msg'] = 'Zmiany zostały zapisane.';
+            else
+                $_SESSION['error'] = 'Nie udało się wprowadzić zmian.';
+        }
+        if (!empty($tel)) {
+            if (filter_var($tel, FILTER_VALIDATE_INT)) {
+                $query = "UPDATE users SET phone_number=:tel WHERE id=:id";
+                $stmt = $db_connection->prepare($query);
+                $stmt->bindParam("tel", $tel);
+                $stmt->bindParam("id", $id, PDO::PARAM_INT);
+                $stmt->execute();
+
+                if ($stmt->rowCount() > 0)
+                    $_SESSION['msg'] = 'Zmiany zostały zapisane.';
+                else
+                    $_SESSION['error'] = 'Nie udało się wprowadzić zmian.';
+            } else
+                $_SESSION['error'] = 'Wprowadzono niepoprawny numer telefonu';
+        }
+        if (!empty($email)) {
+            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $query = "UPDATE users SET email=:email WHERE id=:id";
+                $stmt = $db_connection->prepare($query);
+                $stmt->bindParam("email", $email);
+                $stmt->bindParam("id", $id, PDO::PARAM_INT);
+                $stmt->execute();
+
+                if ($stmt->rowCount() > 0)
+                    $_SESSION['msg'] = 'Zmiany zostały zapisane.';
+                else
+                    $_SESSION['error'] = 'Nie udało się wprowadzić zmian.';
+            } else
+                $_SESSION['error'] = 'Wprowadzono niepoprawny email';
+        }
+    } else
+        $_SESSION['error'] = 'Takiego loginu nie ma w bazie danych.';
+}
+
+if (isset($id)) {
+    $query = "SELECT first_name, last_name, phone_number, email FROM users WHERE id=:id";
     $stmt = $db_connection->prepare($query);
-    $stmt->bindParam('login', $_SESSION['login']);
+    $stmt->bindParam('id', $id, PDO::PARAM_INT);
     $stmt->execute();
     $result = $stmt->fetch();
 
-    if ($stmt->rowCount() == 1) {
-        $id = $result["id"];
+    foreach ($result as $key => $value) {
+        if (empty($value))
+            $result[$key] = 'Brak danych';
     }
-
-    if (isset($_POST['name']) && isset($_POST['sName']) && isset($_POST['tel']) && isset($_POST['email'])) {
-        $name = htmlentities($_POST['name']);
-        $sName = htmlentities($_POST['sName']);
-        $tel = htmlentities($_POST['tel']);
-        $email = htmlentities($_POST['email']);
-
-        if (isset($id)) {
-            if (!empty($name)) {
-                $query = "UPDATE users SET first_name=:firstName WHERE id=:id";
-                $stmt = $db_connection->prepare($query);
-                $stmt->bindParam("firstName", $name);
-                $stmt->bindParam("id", $id, PDO::PARAM_INT);
-                $stmt->execute();
-
-                if ($stmt->rowCount() > 0)
-                    $_SESSION['msg'] = 'Zmiany zostały zapisane.';
-                else
-                    $_SESSION['error'] = 'Nie udało się wprowadzić zmian.';
-            }
-            if (!empty($sName)) {
-                $query = "UPDATE users SET last_name=:lastName WHERE id=:id";
-                $stmt = $db_connection->prepare($query);
-                $stmt->bindParam("lastName", $sName);
-                $stmt->bindParam("id", $id, PDO::PARAM_INT);
-                $stmt->execute();
-
-                if ($stmt->rowCount() > 0)
-                    $_SESSION['msg'] = 'Zmiany zostały zapisane.';
-                else
-                    $_SESSION['error'] = 'Nie udało się wprowadzić zmian.';
-            }
-            if (!empty($tel)) {
-                if (filter_var($tel, FILTER_VALIDATE_INT)) {
-                    $query = "UPDATE users SET phone_number=:tel WHERE id=:id";
-                    $stmt = $db_connection->prepare($query);
-                    $stmt->bindParam("tel", $tel);
-                    $stmt->bindParam("id", $id, PDO::PARAM_INT);
-                    $stmt->execute();
-
-                    if ($stmt->rowCount() > 0)
-                        $_SESSION['msg'] = 'Zmiany zostały zapisane.';
-                    else
-                        $_SESSION['error'] = 'Nie udało się wprowadzić zmian.';
-                } else
-                    $_SESSION['error'] = 'Wprowadzono niepoprawny numer telefonu';
-            }
-            if (!empty($email)) {
-                if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    $query = "UPDATE users SET email=:email WHERE id=:id";
-                    $stmt = $db_connection->prepare($query);
-                    $stmt->bindParam("email", $email);
-                    $stmt->bindParam("id", $id, PDO::PARAM_INT);
-                    $stmt->execute();
-
-                    if ($stmt->rowCount() > 0)
-                        $_SESSION['msg'] = 'Zmiany zostały zapisane.';
-                    else
-                        $_SESSION['error'] = 'Nie udało się wprowadzić zmian.';
-                } else
-                    $_SESSION['error'] = 'Wprowadzono niepoprawny email';
-            }
-        } else
-            $_SESSION['error'] = 'Takiego loginu nie ma w bazie danych.';
-    }
-
-    if (isset($id)) {
-        $query = "SELECT first_name, last_name, phone_number, email FROM users WHERE id=:id";
-        $stmt = $db_connection->prepare($query);
-        $stmt->bindParam('id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        $result = $stmt->fetch();
-
-        foreach ($result as $key => $value) {
-            if (empty($value))
-                $result[$key] = 'Brak danych';
-        }
-    }
-
-    if (isset($_POST['rentID'])) {
-        $rentID = htmlentities($_POST['rentID']);
-
-        $query = "DELETE FROM reservations WHERE id:id";
-        $stmt = $db_connection->prepare($query);
-        $stmt->bindParam('id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-
-        $_SESSION['msg'] = 'Anulowano rezerwację.';
-        header('Location: user.php#vehicles');
-        exit;
-    }
-    $db_connection = null;
-} catch (PDOException $error) {
-    $consoleLog->show = true;
-    $consoleLog->content = $error;
-    $consoleLog->is_error = true;
-} catch (Exception $error) {
-    $error = addslashes($error);
-    $error = str_replace("\n", "", $error);
-    $consoleLog->show = true;
-    $consoleLog->content = $error;
-    $consoleLog->is_error = true;
 }
+
+if (isset($_POST['rentID'])) {
+    $rentID = htmlentities($_POST['rentID']);
+
+    $query = "DELETE FROM reservations WHERE id:id";
+    $stmt = $db_connection->prepare($query);
+    $stmt->bindParam('id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $_SESSION['msg'] = 'Anulowano rezerwację.';
+    header('Location: user.php#vehicles');
+    exit;
+}
+$db_connection = null;
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -246,16 +234,16 @@ try {
 
                                 $query = "SELECT r.id, brand, model, price_per_day, days_count, date FROM vehicles v INNER JOIN reservations r ON v.id=r.vehicle_id WHERE client_id=:id";
                                 $stmt = $db_connection->prepare($query);
-                                $stmt->bindParam('i', $userId, PDO::PARAM_INT);
+                                $stmt->bindParam('id', $userId, PDO::PARAM_INT);
                                 $stmt->execute();
-                                $result = $stmt->fetch();
+                                $result = $stmt->fetchAll();
 
                                 foreach ($result as $row) {
                                     echo '<div class="option">';
-                                    echo '<form action="" method="POST">';
+                                    echo '<form action="user.php" method="POST">';
                                     echo 'Nazwa samochodu: ' . $row['brand'] . ' ' . $row['model'] . '<br>';
                                     echo 'Cena: ' . $row['price_per_day'] * $row['days_count'] . 'zł<br>';
-                                    echo 'Na ile godzin: ' . $row['na_ile'] . '<br>';
+                                    echo 'Liczba dni: ' . $row['days_count'] . '<br>';
                                     echo 'Data rezerwacji: ' . $row['date'] . '<br>';
                                     echo '<input type="hidden" name="rentID" value="' . $row['id'] . '">';
                                     echo '<button type="submit">Anuluj</button>';
@@ -347,16 +335,6 @@ try {
     <?php
     include_once('./inc/theme.php');
     include_once('./inc/logged.php');
-
-    if (isset($consoleLog)) {
-        if ($consoleLog->show) {
-            if ($consoleLog->is_error) {
-                echo '<script src="js/log.js" value="' . $consoleLog->content . '" name="error"></script>';
-            } else {
-                echo '<script src="js/log.js" value="' . $consoleLog->content . '" name="log"></script>';
-            }
-        }
-    }
     ?>
 </body>
 

@@ -1,10 +1,8 @@
-const mainButtons = document.querySelectorAll("main .option-button");
-
 const settings = document.querySelectorAll(".all-settings main>div");
 for (let i = 0; i < settings.length; i++) {
   settings[i].style.display = "none";
 }
-if (settings[0] != undefined) {
+if (settings[0] !== undefined) {
   settings[0].classList.add("visible-settings");
   settings[0].style.display = "block";
 }
@@ -23,7 +21,7 @@ const findSettings = (settingName) => {
   }
 
   for (let i = 0; i < settings.length; i++) {
-    if (settingsName[i] == settingName) {
+    if (settingsName[i] === settingName) {
       if (window.innerWidth < 800) {
         closeMobileNav();
       }
@@ -35,13 +33,13 @@ const findSettings = (settingName) => {
 
 const changeSettings = (settingName) => {
   let open = findSettings(settingName);
-  if (open != "EXIT") {
+  if (open !== "EXIT") {
     let close = 0;
     for (let i = 0; i < settings.length; i++) {
       if (settings[i].className.indexOf("visible-settings") > -1) close = i;
     }
 
-    if (open != close) {
+    if (open !== close) {
       document.querySelector("body").style.overflow = "hidden";
 
       settings[close].classList.remove("visible-settings");
@@ -135,13 +133,13 @@ const homeSettings = () => {
   });
 };
 
-if (window.location.hash == "#vehicles") {
+if (window.location.hash === "#vehicles") {
   changeSettings("vehicles");
-} else if (window.location.hash == "#users") {
+} else if (window.location.hash === "#users") {
   changeSettings("users");
-} else if (window.location.hash == "#settings") {
+} else if (window.location.hash === "#settings") {
   changeSettings("settings");
-} else if (window.location.hash == "#profile") {
+} else if (window.location.hash === "#profile") {
   changeSettings("profile");
 }
 

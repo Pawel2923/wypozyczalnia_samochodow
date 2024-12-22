@@ -139,8 +139,8 @@ if (isset($_POST['user-id'])) {
 
                                     $stmt = $db_connection->prepare($query);
                                     $stmt->execute();
+                                    $result = $stmt->fetchAll();
 
-                                    $result = $stmt->fetch();
                                     foreach ($result as $row) {
                                         echo '<tr>';
                                         echo '<td>' . $row['id'] . '</td>';

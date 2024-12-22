@@ -99,7 +99,7 @@ if (isset($_GET['view-mode'])) {
                             <i class="fas fa-chevron-right"></i>
                             <h2>Lista pojazdów</h2>
                         </header>
-                        <form class="view" method="GET">
+                        <form class="view" action="vehicleslist.php" method="GET">
                             <label>
                                 <select name="view-mode">
                                     <option value="cards">Karty</option>
@@ -112,64 +112,30 @@ if (isset($_GET['view-mode'])) {
                         <section>
                             <div class="cars">
                                 <?php
-                                require('../inc/veh.php');
-                                if (isset($vehicle)) {
-                                    if (isset($_GET['view-mode'])) {
-                                        if ($_GET['view-mode'] == "cards")
-                                        {
-                                            $options = new PrintOptions();
-                                            $options->index = true;
-                                            $options->available = false;
-                                            printCarInfo($options);
-                                        }
-                                        elseif ($_GET['view-mode'] == "list")
-                                        {
-                                            $options = new PrintOptions();
-                                            $options->method = PrintMethod::List;
-                                            $options->index = true;
-                                            $options->available = false;
-                                            printCarInfo($options);
-                                        }
-                                        elseif ($_GET['view-mode'] == "table")
-                                        {
-                                            $options = new PrintOptions();
-                                            $options->method = PrintMethod::Table;
-                                            $options->index = true;
-                                            $options->available = false;
-                                            printCarInfo($options);
-                                        }
-                                    } else {
-                                        if (isset($_COOKIE['vehList-viewMode'])) {
-                                            if ($_COOKIE['vehList-viewMode'] == "cards")
-                                            {
-                                                $options = new PrintOptions();
-                                                $options->index = true;
-                                                $options->available = false;
-                                                printCarInfo($options);
-                                            }
-                                            elseif ($_COOKIE['vehList-viewMode'] == "list") {
-                                                $options = new PrintOptions();
-                                                $options->method = PrintMethod::List;
-                                                $options->index = true;
-                                                $options->available = false;
-                                                printCarInfo($options);
-                                            } elseif ($_COOKIE['vehList-viewMode'] == "table")
-                                            {
-                                                $options = new PrintOptions();
-                                                $options->method = PrintMethod::Table;
-                                                $options->index = true;
-                                                $options->available = false;
-                                                printCarInfo($options);
-                                            }
-                                        } else {
-                                            $options = new PrintOptions();
-                                            $options->index = true;
-                                            $options->available = false;
-                                            printCarInfo($options);
-                                        }
-                                    }
-                                } else
-                                    echo 'W bazie nie ma żadnych pojazdów.';
+                                require("../inc/veh.php");
+                                $printMethodValue = null;
+                                $printMethod = PrintMethod::Card;
+
+                                if (isset($_COOKIE['vehList-viewMode'])) {
+                                    $printMethodValue = $_COOKIE['vehList-viewMode'];
+                                }
+
+                                if (isset($_GET['view-mode'])) {
+                                    $printMethodValue = $_GET['view-mode'];
+                                }
+
+                                if ($printMethodValue === "list") {
+                                    $printMethod = PrintMethod::List;
+                                }
+                                else if ($printMethodValue === "table") {
+                                    $printMethod = PrintMethod::Table;
+                                }
+
+                                $options = new PrintOptions($printMethod, available: false, index: true);
+                                $result = printCarInfo($options);
+                                if ($result === null) {
+                                    echo '<p class="no-vehicles">Nie ma żadnych pojazdów</p>';
+                                }
                                 ?>
                             </div>
                         </section>
@@ -189,11 +155,16 @@ if (isset($_GET['view-mode'])) {
         </div>
     </div>
     <script src="../js/panelHandler.js"></script>
+    <script src="js/viewMode.js"></script>
     <?php
     if (isset($_GET['view-mode']))
-        echo '<script src="js/viewMode.js" type="module" value="' . $_GET['view-mode'] . '"></script>';
+        echo '<script>
+                    changeView("' . $_GET['view-mode'] . '");
+        </script>';
     elseif (isset($_COOKIE['vehList-viewMode']))
-        echo '<script src="js/viewMode.js" type="module" value="' . $_COOKIE['vehList-viewMode'] . '"></script>';
+        echo '<script>
+                    changeView("' . $_COOKIE['vehList-viewMode'] . '");
+        </script>';
     ?>
     <?php include_once('./inc/logged.php'); ?>
 </body>

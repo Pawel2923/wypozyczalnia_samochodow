@@ -132,10 +132,10 @@ if (isset($_POST['message-id'])) {
                             $stmt = $db_connection->prepare($query);
                             $stmt->bindParam(1, $_SESSION['login']);
                             $stmt->execute();
-                            $result = $stmt->fetch();
+                            $result = $stmt->fetchAll();
 
                             echo '<h3>Odebrane</h3>';
-                            if ($stmt->rowCount() > 0) {
+                            if (count($result) === 0) {
                                 echo 'Nie masz żadnych wiadomości';
                             }
                             else {
@@ -165,10 +165,10 @@ if (isset($_POST['message-id'])) {
                             $stmt = $db_connection->prepare($query);
                             $stmt->bindParam(1, $_SESSION['login']);
                             $stmt->execute();
-                            $result = $stmt->fetch();
+                            $result = $stmt->fetchAll();
 
                             echo '<h3>Wysłane</h3>';
-                            if ($stmt->rowCount() > 0) {
+                            if (count($result) === 0) {
                                 echo 'Nie wysłałeś żadnych wiadomości';
                             }
                             else {

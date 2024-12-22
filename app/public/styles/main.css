@@ -54,8 +54,6 @@ nav.desktop-nav a {
 }
 
 .nav-header {
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
   width: fit-content;
   margin-top: 3rem;
   margin-bottom: 3rem;
@@ -154,8 +152,6 @@ nav.desktop-nav .nav-options a:last-child {
 }
 
 .logged-menu li {
-  width: -webkit-max-content;
-  width: -moz-max-content;
   width: max-content;
   margin-bottom: 1rem;
 }
@@ -236,8 +232,6 @@ nav.desktop-nav .nav-options a:last-child {
 
 .user .logged {
   display: none;
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
   width: fit-content;
 }
 
@@ -285,8 +279,6 @@ main .cars .car {
   -ms-flex-align: center;
   align-items: center;
   border: 1px solid #000;
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
   width: fit-content;
   overflow: hidden;
 }
@@ -394,8 +386,6 @@ main .cars-list {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  -webkit-box-pack: space-between;
-  -ms-flex-pack: space-between;
   justify-content: space-between;
   border: 1px solid #000;
 }
@@ -427,8 +417,6 @@ main .cars-list {
 }
 
 .cars-list button {
-  width: -webkit-fit-content;
-  width: -moz-fit-content;
   width: fit-content;
   margin: 0;
 }
@@ -581,11 +569,7 @@ footer .bottom-content .bottom-text {
     color: #000;
   }
   nav.mobile-nav > a {
-    width: -webkit-fit-content;
-    width: -moz-fit-content;
     width: fit-content;
-    height: -webkit-fit-content;
-    height: -moz-fit-content;
     height: fit-content;
     display: -webkit-box;
     display: -ms-flexbox;

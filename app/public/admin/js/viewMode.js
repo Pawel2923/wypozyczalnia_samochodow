@@ -7,12 +7,12 @@ const changeView = (mode) => {
   document
     .querySelector('main select option[value="' + mode + '"]')
     .setAttribute("selected", "selected");
-  if (mode == "list")
+
+  if (mode === "list") {
     document.querySelector(".cars").classList.add("cars-list");
+  }
+
+  if (mode === "table") {
+    document.querySelector(".cars").classList.remove("cars");
+  }
 };
-
-const mode = document
-  .querySelector("script[src='js/viewMode.js']")
-  .getAttribute("value");
-
-changeView(mode);

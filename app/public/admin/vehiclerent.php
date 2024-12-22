@@ -137,7 +137,7 @@ if (isset($_POST['id'])) {
                                         <th>ID pojazdu</th>
                                         <th>ID użytkownika</th>
                                         <th>Data rezerwacji</th>
-                                        <th>Na ile godzin</th>
+                                        <th>Liczba dni</th>
                                     </tr>
                                     <?php
                                     require('../db/db_connection.php');
@@ -146,14 +146,15 @@ if (isset($_POST['id'])) {
                                     $stmt = $db_connection->prepare($query);
                                     $stmt->execute();
 
-                                    $result = $stmt->fetch();
+                                    $result = $stmt->fetchAll();
+
                                     foreach ($result as $row) {
                                         echo '<tr>';
                                         echo '<td>' . $row['id'] . '</td>';
-                                        echo '<td>' . $row['id_pojazdu'] . '</td>';
-                                        echo '<td>' . $row['id_klienta'] . '</td>';
-                                        echo '<td>' . $row['data_rezerwacji'] . '</td>';
-                                        echo '<td>' . $row['na_ile'] . '</td>';
+                                        echo '<td>' . $row['vehicle_id'] . '</td>';
+                                        echo '<td>' . $row['client_id'] . '</td>';
+                                        echo '<td>' . $row['date'] . '</td>';
+                                        echo '<td>' . $row['days_count'] . '</td>';
                                         echo '<tr>';
                                     }
                                     $db_connection = null;

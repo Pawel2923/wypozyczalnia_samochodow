@@ -4,8 +4,7 @@ function fetchVehicleData(): ?array
     global $db_connection;
     $path = $_SERVER['REQUEST_URI'];     // Pobranie ścieżki z URL
     if (str_contains($path, '/admin'))            // Sprawdzenie czy ściezka zawiera '/admin'
-        require('../db/db_connection.php');
-    else
+        require('../db/db_connection.php'); else
         require('db/db_connection.php');
 
     if (!isset($_SESSION['connectionError'])) {
@@ -53,7 +52,7 @@ class PrintOptions
 function setImgUrlAndBtnCaption(object $vehicle, string $caption): array
 {
     $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-    $img_url = ((strpos($path, 'admin/') || strpos($path, 'user/')) ?  '../img/cars/' . $vehicle->img_url : 'img/cars/' . $vehicle->img_url);
+    $img_url = ((strpos($path, 'admin/') || strpos($path, 'user/')) ? '../img/cars/' . $vehicle->img_url : 'img/cars/' . $vehicle->img_url);
     $buttonCaption = $caption === "availabilityCheck" ? ($vehicle->is_available ? 'Dostępny' : 'Niedostępny') : $caption;
 
     return [$img_url, $buttonCaption];
@@ -101,21 +100,33 @@ function printList($vehicle, $caption): void
     </div>';
 }
 
-function printTable($vehicle, $index): void
+function printTable(array $vehicles, object $options): void
 {
-    echo '<tr>
-            ' . (($index) ? '<th>ID</th>' : '') . '
+    echo '<div class="table">
+                    <table>
+                        <tr>
+            <th>ID</th>
             <th>Nazwa</th>
             <th>Cena za 1 dobę</th>
             <th>Dostępność</th>
         </tr>
+                        ';
+    foreach ($vehicles as $index => $vehicle) {
+        //Ustawienie liczby pojazdów do wyświetlenia
+        if ($options->limit >= 0 && $options->limit <= sizeof($vehicles)) { // Sprawdzenie czy limit został nadany i jest poprawny
+            if ($index >= $options->limit) break;
+        }
+
+        echo '
         <tr>' .
-        (($index) ? '<td>' . $vehicle->id . '</td>' : '') . '
+            (($index + 1) ? ('<td>' . $vehicle->id . '</td>') : '') . '
             <td>' . $vehicle->brand . ' ' . $vehicle->model . '</td>
             <td>' . str_replace('.', ',', $vehicle->price_per_day) . '</td>
-            <td>' . (($vehicle->is_available) ? 'Dostępny' : 'Niedostępny') .
-        '</td>
+            <td>' . (($vehicle->is_available) ? 'Dostępny' : 'Niedostępny') . '</td>
         </tr>';
+    }
+    echo ' </table>
+            </div>';
 }
 
 //Wyświetlanie informacji o pojazdach jako karty
@@ -133,19 +144,7 @@ function printCarInfo($options = null): ?true
         }
 
         if ($options->method === PrintMethod::Table) {
-            echo '<div class="table">
-                    <table>
-                        ';
-            foreach ($vehicles as $index => $vehicle) {
-                //Ustawienie liczby pojazdów do wyświetlenia
-                if ($options->limit > 0 && $options->limit <= sizeof($vehicles)) { // Sprawdzenie czy limit został nadany i jest poprawny
-                    if ($index >= $options->limit) break;
-                }
-
-                printTable($vehicle, $options->index);
-            }
-            echo ' </table>
-            </div>';
+            printTable($vehicles, $options);
 
             return true;
         }

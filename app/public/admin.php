@@ -1,6 +1,7 @@
 <?php
-global $db_connection, $consoleLog;
+global $db_connection;
 require_once("./initial.php");
+$consoleLog = new ConsoleMessage();
 if (isset($_SESSION['isLogged']) && isset($_SESSION['isAdmin'])) {
     if (!$_SESSION['isAdmin']) {
         header('Location: index.php');
@@ -38,18 +39,10 @@ if (isset($_POST['action']) && isset($_POST['user-id'])) {
         $consoleLog->is_error = true;
     }
 }
-
-/**
- * Ustawienie pliku cookie dla motywu panelu
- * @return void
- */
-function setPanelThemeCookie(): void
-{
-    if (isset($_POST['theme'])) {
-        $theme = htmlentities($_POST['theme']);
-        if ($theme == "default" || $theme == "system" || $theme == "dark" || $theme == "light")
-            setcookie('theme', $theme, time() + (5 * 365 * 24 * 60 * 60));
-    }
+else {
+    $consoleLog->show = true;
+    $consoleLog->content = "No action provided";
+    $consoleLog->is_error = true;
 }
 
 setPanelThemeCookie();
@@ -241,9 +234,9 @@ require('db/db_connection.php');
 
                                     $stmt = $db_connection->prepare($query);
                                     $stmt->execute();
+                                    $result = $stmt->fetchAll();
 
-                                    $result = $stmt->fetch(PDO::FETCH_OBJ);
-                                    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                                    foreach ($result as $row) {
                                         echo '<tr>';
                                         echo '<td>' . $row['id'] . '</td>';
                                         echo '<td>' . $row['login'] . '</td>';
@@ -303,9 +296,9 @@ require('db/db_connection.php');
 
                                             $stmt = $db_connection->prepare($query);
                                             $stmt->execute();
+                                            $result = $stmt->fetchAll();
 
-                                            $result = $stmt->fetch(PDO::FETCH_OBJ);
-                                            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                                            foreach ($result as $row) {
                                                 echo '<tr>';
                                                 echo '<td>' . $row['id'] . '</td>';
                                                 echo '<td>' . $row['login'] . '</td>';
